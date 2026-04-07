@@ -1,0 +1,26 @@
+### Footprint positions - created on 2026-04-05T19:06:28 ###
+### Printed by KiCad version 10.0.0
+## Unit = mm, Angle = deg.
+## Side : All
+# Ref     Val                Package                                       PosX       PosY       Rot  Side
+BT1       Battery_Cell       JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal    87.0000   -55.9500  180.0000  top
+C1        10uF               C_0805_2012Metric                          81.5000   -64.0000    0.0000  top
+C2        10uF               C_0805_2012Metric                          81.0000   -56.4500   90.0000  top
+C3        0.1uF              C_0805_2012Metric                          89.0000   -67.5000    0.0000  top
+C4        10uF               C_0805_2012Metric                          89.0000   -65.5000  180.0000  top
+C5        47pF               C_0402_1005Metric                         106.2800   -55.2000  180.0000  top
+C6        4.7uF              C_0805_2012Metric                          85.3563   -67.2750  180.0000  top
+C7        4.7uF              C_0805_2012Metric                          85.9062   -59.0000  180.0000  top
+D1        LED                LED_0805_2012Metric                        89.0625   -61.0000    0.0000  top
+J1        Conn_Coaxial       U.FL_Molex_MCRF_73412-0110_Vertical       110.8000   -55.2000  -90.0000  top
+L1        27nH               L_0402_1005Metric                         107.8000   -53.7000  -90.0000  top
+R1        10k                R_0805_2012Metric                          81.0000   -67.4125   90.0000  top
+R2        10k                R_0805_2012Metric                          81.0000   -52.9125  -90.0000  top
+R3        2k                 R_0805_2012Metric                          85.4062   -65.2750  180.0000  top
+R4        1k                 R_0805_2012Metric                          89.0875   -63.5000  180.0000  top
+R5        10k                R_0805_2012Metric                         107.0000   -61.0000    0.0000  top
+U1        XIAO-nRF52840-SMD  XIAO-nRF52840-SMD                          78.7631   -69.2000   90.0000  top
+U2        NEO-M9V-20B        XCVR_NEO-M9V-20B                           98.1950   -61.2000  180.0000  top
+U3        AP2112K-3.3        SOT-23-5                                   81.5500   -60.6375   90.0000  top
+U4        MCP73831-2-OT      SOT-23-5                                   85.3563   -62.1375  -90.0000  top
+## End
