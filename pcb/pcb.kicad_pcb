@@ -217,7 +217,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C88373"
+		(property "LCSC" "U.FL-R-SMT-1(10)"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -240,7 +240,7 @@
 				(pins "1" "2")
 			)
 		)
-		(attr smd exclude_from_bom)
+		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start -1.5 1.5)
@@ -635,7 +635,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1779"
+		(property "LCSC" "CL21A475KAQNNNE"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -832,7 +832,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C34499"
+		(property "LCSC" "150080VS75000"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1067,7 +1067,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C115488"
+		(property "LCSC" "LQG15HN27NJ02D"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1341,7 +1341,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C114572"
+		(property "LCSC" "RC0805FR-072KL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1525,7 +1525,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C95781"
+		(property "LCSC" "RC0805FR-071KL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1709,7 +1709,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C76970"
+		(property "LCSC" "GRM1555C1H470JA01D"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1893,7 +1893,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C49678"
+		(property "LCSC" "C0805C104K5RACTU"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2077,7 +2077,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C162319"
+		(property "LCSC" "GRM21BC71C106KE11L"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2261,7 +2261,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C424093"
+		(property "LCSC" "MCP73831T-2ACI/OT"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2737,7 +2737,7 @@
 				(pins "1" "2")
 			)
 		)
-		(attr through_hole exclude_from_bom dnp)
+		(attr through_hole dnp)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start 4.06 6.36)
@@ -3174,7 +3174,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C1779"
+		(property "LCSC" "CL21A475KAQNNNE"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3358,7 +3358,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C51118"
+		(property "LCSC" "AP2112K-3.3TRG1"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3786,7 +3786,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C162319"
+		(property "LCSC" "GRM21BC71C106KE11L"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3970,7 +3970,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C84376"
+		(property "LCSC" "RC0805FR-0710KL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -4320,7 +4320,7 @@
 				)
 			)
 		)
-		(attr smd exclude_from_bom dnp)
+		(attr smd dnp)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start 6.1 8)
@@ -4508,9 +4508,9 @@
 			(at -5.895 -7 180)
 			(size 1.44 0.8)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net "Net-(U2-~{RESET})")
+			(net "unconnected-(U2-~{SAFEBOOT}-Pad1)")
 			(pinfunction "~{SAFEBOOT}_1")
-			(pintype "input")
+			(pintype "input+no_connect")
 			(solder_mask_margin 0.102)
 			(uuid "e2ee89dc-36cb-4669-b003-339ba80883d2")
 		)
@@ -4821,7 +4821,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C162319"
+		(property "LCSC" "GRM21BC71C106KE11L"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -4950,6 +4950,7 @@
 		(property "Value" "10k"
 			(at 0 1.65 0)
 			(layer "F.Fab")
+			(hide yes)
 			(uuid "be40cfe5-6d8f-48de-ac5d-f1077f2d2883")
 			(effects
 				(font
@@ -5005,7 +5006,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C84376"
+		(property "LCSC" "RC0805FR-0710KL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5204,7 +5205,7 @@
 				)
 			)
 		)
-		(attr exclude_from_bom dnp)
+		(attr dnp)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start 4.898728 -22.547)
@@ -5704,7 +5705,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C84376"
+		(property "LCSC" "RC0805FR-0710KL"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7091,36 +7092,12 @@
 		(uuid "e41c1141-f6f4-4ec0-a95e-218c54b8bd53")
 	)
 	(segment
-		(start 105.11 63.065)
-		(end 105.11 68.1)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "Net-(U2-~{RESET})")
-		(uuid "238408ec-3a40-40db-96ac-89d1c797c32f")
-	)
-	(segment
 		(start 105.18 61)
 		(end 104.09 59.91)
 		(width 0.2)
 		(layer "F.Cu")
 		(net "Net-(U2-~{RESET})")
 		(uuid "26853d4d-19f5-45c9-b8fd-1f43496f0235")
-	)
-	(segment
-		(start 105.01 68.2)
-		(end 104.09 68.2)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "Net-(U2-~{RESET})")
-		(uuid "373f6d0d-b7b3-455a-9e8f-15e418492c1a")
-	)
-	(segment
-		(start 106.0875 62.0875)
-		(end 106.0875 61)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "Net-(U2-~{RESET})")
-		(uuid "40cc9445-d13f-4830-ace4-f7c69d657452")
 	)
 	(segment
 		(start 104.09 59.91)
@@ -7131,28 +7108,12 @@
 		(uuid "430d810a-2e97-40d3-8e63-0887693b4911")
 	)
 	(segment
-		(start 105.11 68.1)
-		(end 105.01 68.2)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "Net-(U2-~{RESET})")
-		(uuid "7c4651b7-702e-4a9f-a52b-fb3706b4a84b")
-	)
-	(segment
 		(start 104.09 58.6)
 		(end 104.09 59.91)
 		(width 0.2)
 		(layer "F.Cu")
 		(net "Net-(U2-~{RESET})")
 		(uuid "901262c5-d371-4abd-9766-73fb06fc2141")
-	)
-	(segment
-		(start 105.11 63.065)
-		(end 106.0875 62.0875)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "Net-(U2-~{RESET})")
-		(uuid "a54e53d6-04d3-45c2-8d51-1d79797eaa0a")
 	)
 	(segment
 		(start 106.0875 61)
