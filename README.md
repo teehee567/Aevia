@@ -3,7 +3,7 @@ gnss module collecting track data
 
 v1 pcb
 
-![image](./data/IMG_4411.jpg)
+![image](./data/IMG_4424.jpg)
 ![image](./data/Screenshot%202026-04-05%20222620.png)
 
 # todo
