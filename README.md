@@ -1,6 +1,19 @@
 # open-race
 gnss module collecting track data
 
+v2 pcb
+- move to stm?
+- Needs to support
+  - much faster to drive slint
+  - on board nand flash
+  - much faster batteyr charging 2000ma
+  - maybe micro sd card slot
+  - bluetooth to phone
+  - 5 inch 1000nit display maybe touchscreen?
+  - extra buttons
+  - extra leds
+  - ublox m10s
+
 v1 pcb
 
 ![image](./data/IMG_4424.jpg)
