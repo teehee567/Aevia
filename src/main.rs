@@ -8,7 +8,7 @@ mod led;
 use embassy_executor::Spawner;
 use embassy_nrf::{Peri, gpio::{Level, Output, OutputDrive, Pin}};
 use embassy_time::{Duration, Timer};
-use embedded_alloc::LlffHeap as Heap;
+use embedded_alloc::TlsfHeap as Heap;
 use panic_halt as _;
 
 #[global_allocator]
@@ -22,10 +22,8 @@ fn disable_xiao_charging<P: Pin>(pin: Peri<'static, P>) {
 
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
-    {
-        use core::mem::MaybeUninit;
-        static mut HEAP_MEM: [MaybeUninit<u8>; HEAP_SIZE] = [MaybeUninit::uninit(); HEAP_SIZE];
-        unsafe { HEAP.init(core::ptr::addr_of_mut!(HEAP_MEM) as usize, HEAP_SIZE) }
+    unsafe {
+        embedded_alloc::init!(HEAP, HEAP_SIZE);
     }
 
     let peripherals = embassy_nrf::init(Default::default());
