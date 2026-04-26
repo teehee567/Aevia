@@ -1,6 +1,29 @@
 [package]
 name = "open-race"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
+embassy-executor = { version = "0.10", features = ["platform-cortex-m", "executor-thread"] }
+embassy-nrf      = { version = "0.10", features = ["nrf52840", "time-driver-rtc1", "gpiote"] }
+embassy-time     = { version = "0.5" }
+embassy-sync     = { version = "0.8" }
+embassy-futures  = { version = "0.1" }
+
+cortex-m         = { version = "0.7", features = ["critical-section-single-core"] }
+cortex-m-rt      = "0.7"
+static_cell      = "2"
+panic-halt       = "1"
+embedded-alloc   = "0.7"
+
+[profile.dev]
+opt-level     = "s"
+debug         = true
+lto           = false
+codegen-units = 1
+
+[profile.release]
+opt-level     = "s"
+debug         = true
+lto           = "fat"
+codegen-units = 1
