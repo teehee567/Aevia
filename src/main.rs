@@ -6,7 +6,7 @@ extern crate alloc;
 mod led;
 
 use embassy_executor::Spawner;
-use embassy_nrf::gpio::{Level, Output, OutputDrive};
+use embassy_nrf::{Peri, gpio::{Level, Output, OutputDrive, Pin}};
 use embassy_time::{Duration, Timer};
 use embedded_alloc::LlffHeap as Heap;
 use panic_halt as _;
@@ -16,6 +16,10 @@ static HEAP: Heap = Heap::empty();
 
 const HEAP_SIZE: usize = 16 * 1024;
 
+fn disable_xiao_charging<P: Pin>(pin: Peri<'static, P>) {
+    let _ = Output::new(pin, Level::High, OutputDrive::Standard);
+}
+
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {
     {
@@ -24,10 +28,12 @@ async fn main(spawner: Spawner) {
         unsafe { HEAP.init(core::ptr::addr_of_mut!(HEAP_MEM) as usize, HEAP_SIZE) }
     }
 
-    let p = embassy_nrf::init(Default::default());
+    let peripherals = embassy_nrf::init(Default::default());
 
-    let red = Output::new(p.P0_26, Level::High, OutputDrive::Standard);
-    let green = Output::new(p.P0_30, Level::High, OutputDrive::Standard);
+    disable_xiao_charging(peripherals.P0_13);
+
+    let red = Output::new(peripherals.P0_26, Level::High, OutputDrive::Standard);
+    let green = Output::new(peripherals.P0_30, Level::High, OutputDrive::Standard);
 
     spawner.spawn(led::blink(red).unwrap());
     Timer::after(Duration::from_millis(125)).await;
