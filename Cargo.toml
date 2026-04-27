@@ -18,6 +18,8 @@ cortex-m-rt = "0.7"
 static_cell = "2"
 embedded-alloc = "0.7"
 embedded-hal = "1.0.0"
+ublox = { version = "0.10.0", default-features = false, features = ["ubx_proto27"] }
+chrono = { version = "0.4", default-features = false, features = ["alloc"] }
 
 [profile.dev]
 opt-level = "s"

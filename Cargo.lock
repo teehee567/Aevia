@@ -97,6 +97,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 
 [[package]]
+name = "chrono"
+version = "0.4.44"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c673075a2e0e5f4a1dde27ce9dee1ea4558c7ffe648f576438a20ca1d2acc4b0"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "const-default"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -719,6 +728,7 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 name = "open-race"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "cortex-m",
  "cortex-m-rt",
  "embassy-executor",
@@ -732,6 +742,7 @@ dependencies = [
  "embedded-hal 1.0.0",
  "log",
  "static_cell",
+ "ublox",
 ]
 
 [[package]]
@@ -1033,6 +1044,29 @@ name = "typenum"
 version = "1.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40ce102ab67701b8526c123c1bab5cbe42d7040ccfd0f64af1a385808d2f43de"
+
+[[package]]
+name = "ublox"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5bcc96bd937066775fb87034e1dbf6d7165a8975c74ddec1105e31b4a050538b"
+dependencies = [
+ "bitflags",
+ "chrono",
+ "num-traits",
+ "ublox_derive",
+]
+
+[[package]]
+name = "ublox_derive"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f5eda7d1c1151a40ae85c7c065a19959909573535034e18e1015b738993cd2c0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
 
 [[package]]
 name = "unicode-ident"
