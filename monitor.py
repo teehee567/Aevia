@@ -4,11 +4,15 @@ from serial.tools import list_ports
 
 APP_VIDS = (0xC0DE, 0x2886)
 
-def wait_for_app_port(exclude=()):
+def wait_for_app_port():
     while True:
         for p in list_ports.comports():
-            if p.vid in APP_VIDS and p.device not in exclude:
-                return p.device
+            if p.vid in APP_VIDS:
+                try:
+                    serial.Serial(p.device).close()
+                    return p.device
+                except (serial.SerialException, OSError):
+                    pass
         time.sleep(0.25)
 
 def open_serial(port, baud=115200, timeout_s=10.0):

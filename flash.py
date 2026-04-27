@@ -17,7 +17,6 @@ def find_drive():
             pass
     return None
 
-pre_ports = {p.device for p in list_ports.comports() if p.vid in XIAO_VIDS}
 drive = find_drive()
 if drive is None:
     p = next(p for p in list_ports.comports() if p.vid in XIAO_VIDS)
@@ -34,8 +33,4 @@ subprocess.check_call([sys.executable, str(here / "uf2conv.py"), elf + ".hex", "
 shutil.copyfile(uf2, drive / Path(uf2).name)
 print(f"flash.py: copied {uf2} -> {drive}")
 
-while find_drive() is not None:
-    time.sleep(0.25)
-time.sleep(0.5)
-
-monitor.monitor(monitor.wait_for_app_port(exclude=pre_ports))
+monitor.monitor(monitor.wait_for_app_port())
