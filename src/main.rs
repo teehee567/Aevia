@@ -3,13 +3,14 @@
 
 extern crate alloc;
 
+mod driver;
 mod led;
 
 use embassy_executor::Spawner;
 use embassy_nrf::{Peri, gpio::{Level, Output, OutputDrive, Pin}};
 use embassy_time::{Duration, Timer};
 use embedded_alloc::TlsfHeap as Heap;
-use panic_halt as _;
+use log::info;
 
 #[global_allocator]
 static HEAP: Heap = Heap::empty();
@@ -28,6 +29,8 @@ async fn main(spawner: Spawner) {
 
     let peripherals = embassy_nrf::init(Default::default());
 
+    driver::init(&spawner, peripherals.USBD);
+
     disable_xiao_charging(peripherals.P0_13);
 
     let red = Output::new(peripherals.P0_26, Level::High, OutputDrive::Standard);
@@ -36,4 +39,11 @@ async fn main(spawner: Spawner) {
     spawner.spawn(led::blink(red).unwrap());
     Timer::after(Duration::from_millis(125)).await;
     spawner.spawn(led::blink(green).unwrap());
+
+    let mut n = 0u32;
+    loop {
+        info!("tickc {}", n);
+        n += 1;
+        Timer::after(Duration::from_secs(1)).await;
+    }
 }
