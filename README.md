@@ -2,17 +2,18 @@
 gnss module collecting track data
 
 v2 pcb
-- move to stm?
+- move to stm32h7 some sort of that
 - Needs to support
   - much faster to drive slint
   - on board nand flash
+  - extra ram for stm32h7
   - much faster batteyr charging 2000ma
   - maybe micro sd card slot
   - bluetooth to phone
   - 5 inch 1000nit display maybe touchscreen?
   - extra buttons
   - extra leds
-  - ublox m10s
+  - unicore um980 module
 
 v1 pcb
 

@@ -113,6 +113,10 @@ impl<'d> Gps<'d> {
     pub async fn poll<F: FnMut(UbxPacket<'_>)>(&mut self, mut on_packet: F) {
         let mut chunk = [0u8; 64];
         if let Ok(n) = self.uart.read(&mut chunk).await {
+            if n > 0 {
+                let now = embassy_time::Instant::now();
+                crate::status::update(|s| s.last_uart = Some(now));
+            }
             let mut it = self.parser.consume_ubx(&chunk[..n]);
             while let Some(Ok(pkt)) = it.next() {
                 on_packet(pkt);
