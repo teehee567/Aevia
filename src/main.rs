@@ -36,9 +36,9 @@ async fn main(spawner: Spawner) {
     let red = Output::new(peripherals.P0_26, Level::High, OutputDrive::Standard);
     let green = Output::new(peripherals.P0_30, Level::High, OutputDrive::Standard);
 
-    spawner.spawn(led::blink(red).unwrap());
+    spawner.spawn(led::blink(red, Duration::from_millis(250)).unwrap());
     Timer::after(Duration::from_millis(125)).await;
-    spawner.spawn(led::blink(green).unwrap());
+    spawner.spawn(led::blink(green, Duration::from_millis(250)).unwrap());
 
     let mut n = 0u32;
     loop {

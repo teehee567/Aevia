@@ -729,6 +729,7 @@ dependencies = [
  "embassy-usb",
  "embassy-usb-logger",
  "embedded-alloc",
+ "embedded-hal 1.0.0",
  "log",
  "static_cell",
 ]
