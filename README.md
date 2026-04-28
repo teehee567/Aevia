@@ -40,7 +40,7 @@ v2 pcb
     - APS6404L-3SQR-SN
   - much faster batteyr charging 1C atleast
     - must have usb pd 
-    - 21700 battery form factor?
+    - get 21700 form factor maybe do 1c charging
   - maybe micro sd card slot?? maybe not
   - bluetooth to phone
   - 5 inch 1000nit display maybe touchscreen?
