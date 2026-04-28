@@ -37,23 +37,26 @@ v2 pcb
   - on board nand flash
     - emmc flash: Samsung KLMAG1JETD-B041 (16GB)
   - extra ram for stm32h7
-    - APS6404L-3SQR-SN
+    - APS6408L-3OBM-BA
   - much faster batteyr charging 1C atleast
     - must have usb pd 
     - get 21700 form factor maybe do 1c charging
-  - maybe micro sd card slot?? maybe not
+    - BQ25895 for charging
+    - MAX17260 to guage battery %
   - bluetooth to phone
   - 5 inch 1000nit display maybe touchscreen?
   - extra buttons
+    - something super high quality and tactile?
   - extra leds
+    - rgb smd
   - unicore um980 module
     - 20hz multi constellation spp fixes
     - 50hz rtk based fixes using 1hz spp. Rtk hard to work with? on standalone pcb not worth, probably need phone connection
     - maybe best in price range m10s and others dont have 20hz multi constellation, only single constellation, 
-  - buzzer
+  - buzzer, speaker probably overkill
   - esp32s3 to handle bluetooth and smaller less important things like leds to save stm pins for important stuff
     - ability ot have random bluetooth sensors around the car? maybe not car very noisy
-    - 
+    - use this to run the leds
 
 v1 pcb
 
