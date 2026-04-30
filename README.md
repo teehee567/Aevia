@@ -83,6 +83,7 @@ Antennas: most off the shelf trackers use a ceramic patch. patch gain points str
 
 How that compares to off the shelf products:
 - Dragy Pro (ublox neo m10s): 10hz multi gnss, 20hz single constellation, L1 only
+
 Above are the only products i could find the actual module of, however i *highly* doubt that any of the products that claim 25hz + multi gnss + 10cm accuracy are actually 25hz + multi gnss + 10cm at the *same* time, simply because i cant find a single reference to a module that can actually output that. [All my gps research](./data/gps_module_research.md)
 
 GNSS modules considered:
