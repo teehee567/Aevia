@@ -20,10 +20,10 @@ v2 pcb
             - HSE: NDK NX2016SA-24MHZ-EXS00A-CS10820
             - LSE: NDK NX2012SA-32.768KHZ-EXS00A-MU00527
     - external XiP NOR flash: Macronix MX66UW1G45GXDI00 (1 Gb OctoSPI, 1.8V, 200 MHz DTR)
-    - emmc flash: Samsung KLMAG1JETD-B041 (16GB)
+    - flash:
+        - MX66UW1G45GXDI00 128MB
     - extra ram for stm32h7
-        - AP Memory APS256XXN-OBR-BG (256 Mb xSPI PSRAM, 1.8V, BGA) — pick speed grade to match XSPI clock
-        - (was: APS6408L-3OBM-BA, 64 Mb — superseded)
+        - AP Memory APS256XXN-OBR-BG still need to pick speed grade to match XSPI clock
     - much faster batteyr charging 1C atleast
         - must have usb pd 
         - AP33772S pd controller, i2c
