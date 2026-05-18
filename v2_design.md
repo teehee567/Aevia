@@ -13,12 +13,17 @@ considering STM32H7S7I8T6 for much better performance
 
 v2 pcb
 - Needs to support
-    - move to stm32h7: STM32H747IIT6
+    - move to stm32h7: STM32H7S7L8H6H (TFBGA225)
         - much faster to drive slint
         - on board nand flash
+        - clocks:
+            - HSE: NDK NX2016SA-24MHZ-EXS00A-CS10820
+            - LSE: NDK NX2012SA-32.768KHZ-EXS00A-MU00527
+    - external XiP NOR flash: Macronix MX66UW1G45GXDI00 (1 Gb OctoSPI, 1.8V, 200 MHz DTR)
     - emmc flash: Samsung KLMAG1JETD-B041 (16GB)
     - extra ram for stm32h7
-        - APS6408L-3OBM-BA
+        - AP Memory APS256XXN-OBR-BG (256 Mb xSPI PSRAM, 1.8V, BGA) — pick speed grade to match XSPI clock
+        - (was: APS6408L-3OBM-BA, 64 Mb — superseded)
     - much faster batteyr charging 1C atleast
         - must have usb pd 
         - AP33772S pd controller, i2c
