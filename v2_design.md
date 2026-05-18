@@ -7,7 +7,7 @@ left to right, have a cm or 2 between digital sensitive to reduce signal interfe
 
 v2 pcb
 - Needs to support
-    - move to stm32h7: STM32H743ZIT6
+    - move to stm32h7: STM32H747IIT6
         - much faster to drive slint
         - on board nand flash
     - emmc flash: Samsung KLMAG1JETD-B041 (16GB)
