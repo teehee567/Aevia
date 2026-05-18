@@ -27,7 +27,12 @@ v2 pcb
             - 5V boost for buzzer (optional, TBD)
             - LED boost driver for display backlight (TBD, pick after display)
     - TDK IIM-42652 imu
+    - leds:
+        - for on board small dev indicators, Lite-On LTST-C190
+        - APA102-2020-256-8 for brigther led
     - 5 inch 1000nit display maybe touchscreen?
+        - use panelook.com
+        - [search](https://www.panelook.com/modelsearch.php?op=advancedsearch&order=panel_id&inch_low=490&inch_high=680&signal_type_category=140&brightness_low=11501&sunlight_readable=1)
     - extra buttons
         - something super high quality and tactile?
     - extra leds
