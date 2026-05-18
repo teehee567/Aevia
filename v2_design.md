@@ -26,6 +26,9 @@ v2 pcb
             - TPS62A02: 1.8V @ 2A buck (PSRAM, eMMC VCCQ, VDDIO2/OCTOSPI)
             - 5V boost for buzzer (optional, TBD)
             - LED boost driver for display backlight (TBD, pick after display)
+        - ldos:
+            - gnss LT3045EDD#TRPBF
+            - imu TI TPS7A02
     - TDK IIM-42652 imu
     - USB C protection - TI TPD8S300A
     - leds:
