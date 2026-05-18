@@ -26,7 +26,7 @@ v2 pcb
             - TPS62A02: 1.8V @ 2A buck (PSRAM, eMMC VCCQ, VDDIO2/OCTOSPI)
             - 5V boost for buzzer (optional, TBD)
             - LED boost driver for display backlight (TBD, pick after display)
-    - bluetooth to phone
+    - TDK IIM-42652 imu
     - 5 inch 1000nit display maybe touchscreen?
     - extra buttons
         - something super high quality and tactile?
