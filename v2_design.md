@@ -9,6 +9,8 @@ left to right, have a cm or 2 between digital sensitive to reduce signal interfe
 check this pcb to see if bga is possible
 https://www.st.com/en/evaluation-tools/stm32h7s78-dk.html#cad-resources
 
+considering STM32H7S7I8T6 for much better performance
+
 v2 pcb
 - Needs to support
     - move to stm32h7: STM32H747IIT6
