@@ -15,9 +15,17 @@ v2 pcb
         - APS6408L-3OBM-BA
     - much faster batteyr charging 1C atleast
         - must have usb pd 
+        - AP33772S pd controller, i2c
         - get 21700 form factor maybe do 1c charging
         - BQ25895 for charging
         - MAX17260 to guage battery %
+        - bucks/boosts off SYS rail
+            - TPS63802: 3.3V @ 2A buck-boost, clean rail (STM32H7, eMMC VCC, UM980 LDO, IMU, touch, peripherals)
+            - TPS62A02: 3.3V @ 2A buck, RGB LEDs
+            - TPS63802: 3.3V @ 1A buck-boost, dedicated for ESP32-C6
+            - TPS62A02: 1.8V @ 2A buck (PSRAM, eMMC VCCQ, VDDIO2/OCTOSPI)
+            - 5V boost for buzzer (optional, TBD)
+            - LED boost driver for display backlight (TBD, pick after display)
     - bluetooth to phone
     - 5 inch 1000nit display maybe touchscreen?
     - extra buttons
@@ -36,3 +44,50 @@ v2 pcb
         - ability ot have random bluetooth sensors around the car? maybe not car very noisy
         - use this to run the leds
         - flashing over uart
+
+
+### Power Tree
+```mermaid
+flowchart TD;
+    USB[USBC]
+    PD[PD sink<br/>I2C to STM32]
+    BQ[buck charger<br/>+ power path]
+    BAT[21700 Li-ion]
+    FG[fuel gauge]
+    SYS((SYS rail<br/>3.5–4.4V))
+
+    BL[LED boost driver<br/>backlight]
+    B33[Buck-boost -> 3.3V @ 2A<br/>clean rail]
+    B33L[Buck -> 3.3V @ 2A<br/>RGB LEDs<br/>may sag at low batt]
+    BESP[Buck-boost -> 3.3V @ 1A<br/>ESP32-C6 dedicated]
+    B18[Buck -> 1.8V @ 2A]
+    B5[Boost -> 5V<br/>optional, for buzzer]
+
+    L33[STM32H743 VDD/VDDA<br/>eMMC VCC<br/>random peripherals]
+    LLED[RGB LEDs]
+    LESP[ESP32-C6]
+    L18[RAM<br/>eMMC VCCQ<br/>STM32H7 VDDIO2 / OCTOSPI]
+    CORE[STM32H7 1.2V core<br/>via internal LDO]
+
+    USB -->|5–20V pd| PD
+    PD -->|VBUS_PD<br/>request 9V default| BQ
+    BQ <-->|charge / discharge| BAT
+    BAT --- FG
+    BQ -->|power-path output| SYS
+
+    SYS --> BL
+    SYS --> B33
+    SYS --> B33L
+    SYS --> BESP
+    SYS --> B18
+    SYS --> B5
+
+    B33 --> L33
+    B33L --> LLED
+    BESP --> LESP
+    B18 --> L18
+    L33 --> CORE
+
+    L33 -->|ldo| imu
+    L33 -->|ldo| um980
+```
