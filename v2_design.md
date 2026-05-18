@@ -5,6 +5,10 @@ build pcb with this layout:
 ESP+Power | Digital+STM+RAM | GNSS+IMU
 left to right, have a cm or 2 between digital sensitive to reduce signal interference
 
+
+check this pcb to see if bga is possible
+https://www.st.com/en/evaluation-tools/stm32h7s78-dk.html#cad-resources
+
 v2 pcb
 - Needs to support
     - move to stm32h7: STM32H747IIT6
