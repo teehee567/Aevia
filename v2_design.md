@@ -27,6 +27,7 @@ v2 pcb
             - 5V boost for buzzer (optional, TBD)
             - LED boost driver for display backlight (TBD, pick after display)
     - TDK IIM-42652 imu
+    - USB C protection - TI TPD8S300A
     - leds:
         - for on board small dev indicators, Lite-On LTST-C190
         - APA102-2020-256-8 for brigther led
