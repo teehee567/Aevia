@@ -9,16 +9,12 @@ left to right, have a cm or 2 between digital sensitive to reduce signal interfe
 check this pcb to see if bga is possible
 https://www.st.com/en/evaluation-tools/stm32h7s78-dk.html#cad-resources
 
-considering STM32H7S7I8T6 for much better performance
-
 v2 pcb
 - Needs to support
-    - move to stm32h7: STM32H7S7L8H6H (TFBGA225)
-        - much faster to drive slint
-        - on board nand flash
-        - clocks:
-            - HSE: NDK NX2016SA-24MHZ-EXS00A-CS10820
-            - LSE: NDK NX2012SA-32.768KHZ-EXS00A-MU00527
+    - move to STM32N645I0
+    - clocks:
+        - HSE: NDK NX2016SA-24MHZ-EXS00A-CS10820
+        - LSE: NDK NX2012SA-32.768KHZ-EXS00A-MU00527
     - flash:
         - MX66UW1G45GXDI00 128MB
     - extra ram for stm32h7
@@ -59,7 +55,7 @@ v2 pcb
         - Beitian BT-T076
     - buzzer, speaker probably overkill
     - esp32-c6 to handle bluetooth/wifi and smaller less important things like leds to save stm pins for important stuff
-        - stm32-c6-mini-1
+        - esp32-c6-mini-1
         - ability ot have random bluetooth sensors around the car? maybe not car very noisy
         - use this to run the leds
         - flashing over uart
