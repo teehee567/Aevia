@@ -19,7 +19,6 @@ v2 pcb
         - clocks:
             - HSE: NDK NX2016SA-24MHZ-EXS00A-CS10820
             - LSE: NDK NX2012SA-32.768KHZ-EXS00A-MU00527
-    - external XiP NOR flash: Macronix MX66UW1G45GXDI00 (1 Gb OctoSPI, 1.8V, 200 MHz DTR)
     - flash:
         - MX66UW1G45GXDI00 128MB
     - extra ram for stm32h7
