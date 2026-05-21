@@ -59,6 +59,8 @@ v2 pcb
         - ability ot have random bluetooth sensors around the car? maybe not car very noisy
         - use this to run the leds
         - flashing over uart
+    - deal with usb protection later
+    - deal with debugging access later
 
 
 ### Power Tree
