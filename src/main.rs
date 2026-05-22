@@ -4,10 +4,8 @@
 extern crate alloc;
 
 mod driver;
-mod gnss;
 mod gps;
 mod led;
-mod run;
 mod status;
 
 use embassy_executor::Spawner;
@@ -19,9 +17,9 @@ use embassy_time::{Duration, Timer};
 use embedded_alloc::TlsfHeap as Heap;
 use log::info;
 
-use gnss::{GnssReceiver, GnssUpdate};
 use gps::Gps;
-use run::{RunConfig, RunDetector, RunEvent};
+use race_core::gnss::{GnssReceiver, GnssUpdate, Um980Receiver};
+use race_core::run::{RunConfig, RunDetector, RunEvent};
 
 #[global_allocator]
 static HEAP: Heap = Heap::empty();
@@ -47,10 +45,8 @@ async fn main(spawner: Spawner) {
     Timer::after(Duration::from_secs(3)).await;
     info!("Boot");
 
-    #[cfg(feature = "um980")]
-    let receiver = gnss::Um980Receiver::new();
-    #[cfg(not(feature = "um980"))]
-    let receiver = gnss::UbloxReceiver::new();
+    let receiver = Um980Receiver::new();
+    // let receiver = race_core::gnss::UbloxReceiver::new();
 
     let uart = gps::uart(
         peripherals.UARTE0,
