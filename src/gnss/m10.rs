@@ -88,6 +88,7 @@ impl GnssReceiver for UbloxReceiver {
                         speed_mps: vel.speed as f32,
                         heading_deg: vel.heading as f32,
                         has_fix,
+                        ..Default::default()
                     }));
                 }
                 PacketRef::NavSat(sat) => {

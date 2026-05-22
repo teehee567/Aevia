@@ -24,6 +24,10 @@ pub struct Fix {
     pub alt_m: f64,
     pub speed_mps: f32,
     pub heading_deg: f32,
+    pub speed_std_mps: f32,
+    pub vel_latency_s: f32,
+    pub gps_week: u16,
+    pub tow_ms: u32,
     pub has_fix: bool,
 }
 

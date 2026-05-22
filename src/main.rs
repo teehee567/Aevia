@@ -7,6 +7,7 @@ mod driver;
 mod gnss;
 mod gps;
 mod led;
+mod run;
 mod status;
 
 use embassy_executor::Spawner;
@@ -20,6 +21,7 @@ use log::info;
 
 use gnss::{GnssReceiver, GnssUpdate};
 use gps::Gps;
+use run::{RunConfig, RunDetector, RunEvent};
 
 #[global_allocator]
 static HEAP: Heap = Heap::empty();
@@ -71,19 +73,33 @@ async fn main(spawner: Spawner) {
 
     gps.configure().await;
 
+    let mut detector = RunDetector::new(RunConfig::default());
+
     loop {
         gps.poll(|update| match update {
             GnssUpdate::Fix(fix) => {
                 status::update(|s| s.has_fix = fix.has_fix);
+                let event = detector.update(&fix);
                 if fix.has_fix {
                     info!(
                         "Latitude: {:.5} Longitude: {:.5} Altitude: {:.2}m",
                         fix.lat, fix.lon, fix.alt_m
                     );
                     info!(
-                        "Speed: {:.2} m/s Heading: {:.2} degrees",
-                        fix.speed_mps, fix.heading_deg
+                        "Speed: {:.2} km/h Accel: {:.2} m/s^2 Heading: {:.2} degrees",
+                        fix.speed_mps * 3.6,
+                        detector.accel_mps2,
+                        fix.heading_deg
                     );
+                }
+                match event {
+                    Some(RunEvent::Armed) => info!("Armed — waiting for launch"),
+                    Some(RunEvent::Launched) => info!("Launch! timing..."),
+                    Some(RunEvent::Finished { time_s, distance_m }) => {
+                        info!("0-target in {:.3} s over {:.1} m", time_s, distance_m)
+                    }
+                    Some(RunEvent::Aborted) => info!("Run aborted"),
+                    None => {}
                 }
             }
             GnssUpdate::Sats { count, best_cno } => {
