@@ -11,7 +11,11 @@ fn main() {
     let port_name = serialport::available_ports()
         .unwrap()
         .into_iter()
-        .next()
+        .find(|p| match &p.port_type {
+            serialport::SerialPortType::UsbPort(_) => true,
+            _ => p.port_name.to_lowercase().contains("usb") || p.port_name.to_lowercase().contains("ttyacm"),
+        })
+        .or_else(|| serialport::available_ports().unwrap().into_iter().next())
         .expect("no serial ports found")
         .port_name;
     println!("Using {port_name} @ {baud}");
@@ -35,7 +39,7 @@ fn main() {
         receiver.consume(&chunk[..n], &mut |update| match update {
             GnssUpdate::Fix(fix) => {
                 let event = detector.update(&fix);
-                if fix.has_fix {
+                if fix.has_fix && false {
                     println!(
                         "Latitude: {:.5} Longitude: {:.5} Altitude: {:.2}m",
                         fix.lat, fix.lon, fix.alt_m
