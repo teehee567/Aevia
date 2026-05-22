@@ -5,7 +5,7 @@ use embassy_nrf::uarte::{self, Baudrate, Config};
 use embassy_nrf::{bind_interrupts, Peri};
 use embedded_io_async::{Read, Write};
 
-use crate::gnss::{GnssReceiver, GnssUpdate};
+use race_core::gnss::{GnssReceiver, GnssUpdate};
 
 bind_interrupts!(struct Irqs {
     UARTE0 => buffered_uarte::InterruptHandler<UARTE0>;

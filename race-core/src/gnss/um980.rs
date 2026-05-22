@@ -2,7 +2,7 @@ use alloc::vec::Vec;
 
 use super::{Fix, GnssReceiver, GnssUpdate};
 
-const BAUD: u32 = 921600;
+const BAUD: u32 = 115200;
 
 #[derive(Default)]
 pub struct Um980Receiver {
