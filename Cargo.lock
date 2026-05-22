@@ -728,7 +728,6 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 name = "open-race"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "cortex-m",
  "cortex-m-rt",
  "embassy-executor",
@@ -740,6 +739,7 @@ dependencies = [
  "embassy-usb-logger",
  "embedded-alloc",
  "embedded-hal 1.0.0",
+ "embedded-io-async 0.7.0",
  "log",
  "static_cell",
  "ublox",
