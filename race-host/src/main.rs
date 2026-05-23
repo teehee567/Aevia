@@ -54,8 +54,8 @@ fn main() {
                 match event {
                     Some(RunEvent::Armed) => println!("Armed — waiting for launch"),
                     Some(RunEvent::Launched) => println!("Launch! timing..."),
-                    Some(RunEvent::Finished { time_s, distance_m }) => {
-                        println!("0-target in {time_s:.3} s over {distance_m:.1} m")
+                    Some(RunEvent::Finished { time_s, distance_m, target}) => {
+                        println!("0-{target} in {time_s:.3} s over {distance_m:.1} m")
                     }
                     Some(RunEvent::Aborted) => println!("Run aborted"),
                     None => {}
