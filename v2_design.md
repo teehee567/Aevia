@@ -35,7 +35,7 @@ v2 pcb
         - ldos:
             - gnss LT3045EDD#TRPBF
             - imu TI TPS7A02
-    - TDK IIM-42652 imu
+    - TDK IAM-20680HT imu
     - USB C protection - TI TPD8S300A
     - leds:
         - for on board small dev indicators, Lite-On LTST-C190
