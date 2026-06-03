@@ -11,14 +11,14 @@ https://www.st.com/en/evaluation-tools/stm32h7s78-dk.html#cad-resources
 
 v2 pcb
 - Needs to support
-    - move to STM32N645I0
+    - move to STM32N657X0H3Q
     - clocks:
         - HSE: NDK NX2016SA-24MHZ-EXS00A-CS10820
         - LSE: NDK NX2012SA-32.768KHZ-EXS00A-MU00527
     - flash:
         - MX66UW1G45GXDI00 128MB
     - extra ram for stm32h7
-        - AP Memory APS256XXN-OBR-BG still need to pick speed grade to match XSPI clock
+        - AP Memory APS512XXN-OB9-BG still need to pick speed grade to match XSPI clock
     - much faster batteyr charging 1C atleast
         - must have usb pd 
         - AP33772S pd controller, i2c
