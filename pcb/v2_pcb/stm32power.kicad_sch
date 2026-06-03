@@ -6217,12 +6217,6 @@
 		(uuid "7c3d46fc-f646-491d-a36d-0f0fcd908bc5")
 	)
 	(junction
-		(at 50.8 171.45)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7dfa4487-2c5d-434c-807a-9ae31ab9913b")
-	)
-	(junction
 		(at 71.12 133.35)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7110,6 +7104,16 @@
 		)
 		(uuid "2c4a5909-a58b-4653-9dc4-ee8410938051")
 	)
+	(bus
+		(pts
+			(xy 41.91 171.45) (xy 50.8 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c4f5fbe-0933-4a57-b6f4-1335a2c54bba")
+	)
 	(wire
 		(pts
 			(xy 210.82 107.95) (xy 218.44 107.95)
@@ -7189,16 +7193,6 @@
 			(type default)
 		)
 		(uuid "331f4d6e-7209-431b-ad64-d63c4d8b4c94")
-	)
-	(wire
-		(pts
-			(xy 41.91 171.45) (xy 50.8 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3415e524-5984-4127-a972-fdf311a8784f")
 	)
 	(wire
 		(pts
@@ -7982,6 +7976,16 @@
 	)
 	(wire
 		(pts
+			(xy 50.8 171.45) (xy 69.85 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8a7ea7c7-f93b-435c-857a-9bc5a3bb4816")
+	)
+	(wire
+		(pts
 			(xy 82.55 41.91) (xy 85.09 41.91)
 		)
 		(stroke
@@ -8309,6 +8313,16 @@
 			(type default)
 		)
 		(uuid "a99386bc-3244-498d-9b1b-c02cf65a855f")
+	)
+	(bus
+		(pts
+			(xy 50.8 168.91) (xy 50.8 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "acf0baac-1ea3-45a0-b331-8a16b1bbfca0")
 	)
 	(wire
 		(pts
@@ -8922,16 +8936,6 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 168.91) (xy 50.8 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ec4d9562-1888-42d3-98e6-26a7dee166cb")
-	)
-	(wire
-		(pts
 			(xy 140.97 146.05) (xy 143.51 146.05)
 		)
 		(stroke
@@ -8969,16 +8973,6 @@
 			(type default)
 		)
 		(uuid "f3e84e58-92e8-4af4-bf35-0ee7a66ec8cf")
-	)
-	(wire
-		(pts
-			(xy 50.8 171.45) (xy 69.85 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f3f4deb9-e6e9-47f9-8f49-217e8343ed1c")
 	)
 	(wire
 		(pts
@@ -9141,52 +9135,52 @@
 		(uuid "ffc5b886-c4f0-4c32-8c4f-e070c9b9f4da")
 	)
 	(label "I_SENS_VDDCORE_P"
-		(at 234.95 34.29 0)
+		(at 252.73 34.29 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "0e51daac-b0cc-4d83-be3d-8a9b943bc77e")
 	)
 	(label "I_SENS_VDDCORE_N"
-		(at 154.94 57.15 0)
+		(at 172.72 57.15 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "1537c7e8-de65-4bb5-930b-33ffdbb18e89")
 	)
 	(label "I_SENS_VDDCORE_P"
-		(at 52.07 168.91 0)
+		(at 69.85 168.91 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "18d921c4-2d18-412a-8468-c1aa635b375c")
 	)
 	(label "I_SENS_VDDCORE_N"
-		(at 52.07 171.45 0)
+		(at 69.85 171.45 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "5a379df5-746b-44a5-9c58-2e67dab9b1b2")
 	)
 	(label "I_SENS_VDDCORE_P"
-		(at 167.64 44.45 0)
+		(at 186.69 44.45 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "bce5d0df-20b2-44bd-835e-1b7395388034")
 	)

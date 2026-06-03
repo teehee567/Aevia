@@ -5514,6 +5514,186 @@
 		(at 271.78 200.66)
 		(uuid "de280180-6ffc-46c5-a7b3-16cf47756ec1")
 	)
+	(bus_entry
+		(at 320.04 66.04)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0157fbbc-335b-4814-b28e-c21c9c629cbe")
+	)
+	(bus_entry
+		(at 320.04 93.98)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "252b1b44-a2ec-4872-acab-e6a05aa01192")
+	)
+	(bus_entry
+		(at 320.04 111.76)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "267dcd36-6bec-413d-bc96-ad66a05c002d")
+	)
+	(bus_entry
+		(at 320.04 73.66)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27929232-1f3c-4baa-b6c4-f7d22494427a")
+	)
+	(bus_entry
+		(at 320.04 71.12)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2fef368a-ccb8-44a8-a49a-244a425994de")
+	)
+	(bus_entry
+		(at 320.04 68.58)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3a1660db-5e7a-4527-83bc-7418b7640ea1")
+	)
+	(bus_entry
+		(at 320.04 109.22)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ac50fd9-5531-40e3-a94a-7c5f6cb0c332")
+	)
+	(bus_entry
+		(at 320.04 99.06)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "41af761b-9f73-491b-9524-91a9b206a28e")
+	)
+	(bus_entry
+		(at 320.04 78.74)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "545241c5-4ebe-46ec-800c-cc909a31db07")
+	)
+	(bus_entry
+		(at 320.04 86.36)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "628b9f5b-33c5-4a10-ac55-a326bf9727ee")
+	)
+	(bus_entry
+		(at 320.04 101.6)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c93172c-8920-4fb8-bad5-2c825b574396")
+	)
+	(bus_entry
+		(at 320.04 76.2)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ef04a92-5c86-45a3-971a-1e93d50ad3b7")
+	)
+	(bus_entry
+		(at 320.04 114.3)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "788aaf74-e42c-4cd5-9c2f-d2a73e8596bd")
+	)
+	(bus_entry
+		(at 320.04 96.52)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8effe217-0b7e-43c1-a712-c8c32b70403c")
+	)
+	(bus_entry
+		(at 320.04 104.14)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "911f4802-0803-486e-8d97-d52b148a07f6")
+	)
+	(bus_entry
+		(at 320.04 81.28)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8015b4d-dfb9-41b8-b1ae-27d3407d0a53")
+	)
+	(bus_entry
+		(at 320.04 88.9)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "afd18605-4472-42fd-b8f0-b87b97a961b7")
+	)
+	(bus_entry
+		(at 320.04 91.44)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d8ad2b8d-4dbf-430f-a216-35166b30572b")
+	)
+	(bus_entry
+		(at 320.04 83.82)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb6600d8-7a2a-4cc7-b7d9-71ca3b2067a5")
+	)
+	(bus_entry
+		(at 320.04 106.68)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f98cf142-a8be-4b16-912f-d64e019ecbed")
+	)
 	(wire
 		(pts
 			(xy 205.74 165.1) (xy 193.04 165.1)
@@ -5523,6 +5703,16 @@
 			(type default)
 		)
 		(uuid "0050497a-24c7-4828-8ad4-342ee8b07ba6")
+	)
+	(wire
+		(pts
+			(xy 193.04 55.88) (xy 205.74 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "006bee2c-96ff-4d7d-8fad-127d794891f9")
 	)
 	(wire
 		(pts
@@ -5546,16 +5736,6 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 60.96) (xy 246.38 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0210f04a-33ab-46f3-afc5-33da093670fa")
-	)
-	(wire
-		(pts
 			(xy 142.24 215.9) (xy 154.94 215.9)
 		)
 		(stroke
@@ -5566,13 +5746,13 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 58.42) (xy 246.38 58.42)
+			(xy 292.1 106.68) (xy 304.8 106.68)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "091b76fe-3f58-4dce-a17e-106185174d25")
+		(uuid "07a7ebbc-ed33-402f-ab89-aad44c5d3d5f")
 	)
 	(wire
 		(pts
@@ -5583,6 +5763,17 @@
 			(type default)
 		)
 		(uuid "09ad134f-42d1-49c2-a5b9-bc1e0ed59218")
+	)
+	(bus
+		(pts
+			(xy 325.12 68.58) (xy 325.12 91.44)
+		)
+		(stroke
+			(width 0.508)
+			(type default)
+			(color 173 188 231 1)
+		)
+		(uuid "09be6b06-c022-437d-85c9-53af3189bdfd")
 	)
 	(wire
 		(pts
@@ -5616,16 +5807,6 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 241.3) (xy 86.36 241.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0b270bcb-6a0e-4af2-9c8d-8e24d1299a52")
-	)
-	(wire
-		(pts
 			(xy 73.66 213.36) (xy 86.36 213.36)
 		)
 		(stroke
@@ -5636,6 +5817,16 @@
 	)
 	(wire
 		(pts
+			(xy 292.1 109.22) (xy 304.8 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0bc53d4a-c183-41d7-9bf4-ff762627d932")
+	)
+	(wire
+		(pts
 			(xy 73.66 223.52) (xy 86.36 223.52)
 		)
 		(stroke
@@ -5643,16 +5834,6 @@
 			(type default)
 		)
 		(uuid "0be54a35-3ddf-4e50-b401-9841b0ff7af5")
-	)
-	(wire
-		(pts
-			(xy 193.04 60.96) (xy 205.74 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0e5846cd-0573-44dc-8a1f-818e62025c01")
 	)
 	(wire
 		(pts
@@ -5686,13 +5867,13 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 99.06) (xy 85.09 99.06)
+			(xy 320.04 111.76) (xy 309.88 111.76)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "12673463-4f9e-429a-bab6-e23e9981ebc8")
+		(uuid "11312ea1-238d-47c6-b430-ac903c654219")
 	)
 	(wire
 		(pts
@@ -5706,13 +5887,23 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 50.8) (xy 246.38 50.8)
+			(xy 246.38 66.04) (xy 259.08 66.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "14813fb7-6331-4cba-8a02-186bc721d4c0")
+		(uuid "13f5d604-a6db-4fcd-bb4d-f65a44db3371")
+	)
+	(wire
+		(pts
+			(xy 73.66 241.3) (xy 86.36 241.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1779a37f-b731-447a-bc44-491a95e10ecc")
 	)
 	(wire
 		(pts
@@ -5723,6 +5914,46 @@
 			(type default)
 		)
 		(uuid "18abe8a7-346d-45dd-9568-89889aaa84f0")
+	)
+	(wire
+		(pts
+			(xy 309.88 99.06) (xy 320.04 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18e82be3-9db4-4e4f-9ab1-8f0fd21e15d2")
+	)
+	(wire
+		(pts
+			(xy 72.39 116.84) (xy 85.09 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18f32d98-a7b5-4feb-acbd-51032c059b8e")
+	)
+	(wire
+		(pts
+			(xy 309.88 104.14) (xy 320.04 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "19779066-9cb8-49a5-831f-1ff6434a7810")
+	)
+	(wire
+		(pts
+			(xy 246.38 93.98) (xy 259.08 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "19c4e87e-eb4a-42fb-af1f-ee634268cf42")
 	)
 	(wire
 		(pts
@@ -5756,6 +5987,16 @@
 	)
 	(wire
 		(pts
+			(xy 246.38 53.34) (xy 259.08 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ca9e486-19b3-4ebb-b568-f68e886d965c")
+	)
+	(wire
+		(pts
 			(xy 142.24 187.96) (xy 154.94 187.96)
 		)
 		(stroke
@@ -5763,6 +6004,16 @@
 			(type default)
 		)
 		(uuid "1ddc8d73-bcb7-44cd-8b63-33699676fe3d")
+	)
+	(wire
+		(pts
+			(xy 72.39 48.26) (xy 85.09 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ed6ad0e-602a-4ec8-bb85-568eea96b155")
 	)
 	(wire
 		(pts
@@ -5776,16 +6027,6 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 71.12) (xy 85.09 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1f29fa31-24ac-4d72-b8b3-440b16c9d073")
-	)
-	(wire
-		(pts
 			(xy 146.05 45.72) (xy 158.75 45.72)
 		)
 		(stroke
@@ -5796,13 +6037,23 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 76.2) (xy 85.09 76.2)
+			(xy 320.04 68.58) (xy 309.88 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "25cf32f3-f257-460f-8de7-14702714943b")
+		(uuid "22c3835b-2c1d-4e68-bed0-92671a817c3f")
+	)
+	(wire
+		(pts
+			(xy 246.38 86.36) (xy 259.08 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27a87ed5-807a-4f1c-bea9-19fcac9218c4")
 	)
 	(wire
 		(pts
@@ -5816,13 +6067,23 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 66.04) (xy 246.38 66.04)
+			(xy 193.0129 177.8) (xy 205.74 177.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "29d6a8a5-1bed-4728-acd8-1249f4deacab")
+		(uuid "2ab5a0bc-d066-4042-b220-040400e13f27")
+	)
+	(wire
+		(pts
+			(xy 246.38 76.2) (xy 259.08 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ac5fcff-1b72-4398-9912-1054f5c763be")
 	)
 	(wire
 		(pts
@@ -5836,23 +6097,23 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 81.28) (xy 246.38 81.28)
+			(xy 292.1 83.82) (xy 304.8 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2d125302-95c3-41de-954b-507aa1cc4b95")
+		(uuid "2bc7dc9b-3280-456b-b16d-9282cd851c30")
 	)
 	(wire
 		(pts
-			(xy 73.66 226.06) (xy 86.36 226.06)
+			(xy 246.38 88.9) (xy 259.08 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2de86972-b3e9-4956-8a06-270754a3c8e8")
+		(uuid "2e0f793e-d780-4591-b722-4b8575e04baa")
 	)
 	(wire
 		(pts
@@ -5896,33 +6157,13 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 48.26) (xy 205.74 48.26)
+			(xy 320.04 76.2) (xy 309.88 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "36408da7-bac8-4630-be0f-81fe9ebc0e6d")
-	)
-	(wire
-		(pts
-			(xy 193.04 185.42) (xy 205.74 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3709c5ff-2dd5-4c6e-ade3-1089f2422e72")
-	)
-	(wire
-		(pts
-			(xy 193.04 68.58) (xy 205.74 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "374e0caf-9e53-4fa3-8d48-5f3316992eb8")
+		(uuid "37baa41b-9550-4ebd-955b-b13589c1687a")
 	)
 	(wire
 		(pts
@@ -5943,16 +6184,6 @@
 			(type default)
 		)
 		(uuid "387a494d-88cf-4beb-a2ab-a09d0490412e")
-	)
-	(wire
-		(pts
-			(xy 259.08 78.74) (xy 246.38 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "396152d4-2406-4b15-a076-aa6b3cb57c59")
 	)
 	(wire
 		(pts
@@ -5986,6 +6217,16 @@
 	)
 	(wire
 		(pts
+			(xy 193.04 66.04) (xy 205.74 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c1e2603-6702-4e6b-9ff7-e6574d77cc5a")
+	)
+	(wire
+		(pts
 			(xy 146.05 111.76) (xy 158.75 111.76)
 		)
 		(stroke
@@ -6006,6 +6247,16 @@
 	)
 	(wire
 		(pts
+			(xy 193.04 71.12) (xy 205.74 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f8da7f6-5472-4bdf-8636-e221d6da2a82")
+	)
+	(wire
+		(pts
 			(xy 72.39 91.44) (xy 85.09 91.44)
 		)
 		(stroke
@@ -6016,13 +6267,13 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 104.14) (xy 85.09 104.14)
+			(xy 246.38 48.26) (xy 259.08 48.26)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "403157a5-337c-44c6-95b5-06932b1a9175")
+		(uuid "3fe597e3-a654-416c-8a5d-6cb1318b12f7")
 	)
 	(wire
 		(pts
@@ -6036,33 +6287,53 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 193.04) (xy 205.74 193.04)
+			(xy 72.39 68.58) (xy 85.09 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "458cad70-cfa4-4771-a3cc-06778cda2cb0")
+		(uuid "439f007e-8510-44b2-87f7-88807d9df74e")
 	)
 	(wire
 		(pts
-			(xy 193.04 71.12) (xy 205.74 71.12)
+			(xy 246.38 58.42) (xy 259.08 58.42)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "46f0081b-36bb-48eb-825f-8169145dfa89")
+		(uuid "451d1c02-9f44-435d-8891-a9c4abfda0c1")
 	)
 	(wire
 		(pts
-			(xy 259.08 48.26) (xy 246.38 48.26)
+			(xy 292.1 78.74) (xy 304.8 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "492a412c-1920-40b0-a55d-de71af5e8ffd")
+		(uuid "458646a1-9f4d-48c8-bc09-697515cbb026")
+	)
+	(wire
+		(pts
+			(xy 320.04 78.74) (xy 309.88 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4744983a-4b6c-4202-af67-8ead23bde0b7")
+	)
+	(wire
+		(pts
+			(xy 320.04 71.12) (xy 309.88 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4cfb8349-1bce-48c7-a004-7661b324a390")
 	)
 	(wire
 		(pts
@@ -6076,13 +6347,33 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 68.58) (xy 85.09 68.58)
+			(xy 193.04 68.58) (xy 205.74 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5408698d-c6d2-47a7-98bb-b22e16c9354a")
+		(uuid "4f04a152-9777-43c3-8cb0-9ef52a1e4177")
+	)
+	(wire
+		(pts
+			(xy 72.39 121.92) (xy 85.09 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f49081d-7037-49b5-8fdc-4d3f0d9e5a68")
+	)
+	(wire
+		(pts
+			(xy 72.39 50.8) (xy 85.09 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fcfbffb-5ff2-49ec-8465-58d4516e0bfc")
 	)
 	(wire
 		(pts
@@ -6096,6 +6387,26 @@
 	)
 	(wire
 		(pts
+			(xy 246.38 91.44) (xy 259.08 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "571ef285-7dfe-41c5-8280-9dc25b42ea2d")
+	)
+	(wire
+		(pts
+			(xy 320.04 88.9) (xy 309.88 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5733ecc0-aa38-4f5a-8a5d-60c8129b7da4")
+	)
+	(wire
+		(pts
 			(xy 193.04 213.36) (xy 196.85 213.36)
 		)
 		(stroke
@@ -6106,13 +6417,13 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 119.38) (xy 85.09 119.38)
+			(xy 72.39 104.14) (xy 85.09 104.14)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "58e9b30f-b6b3-4316-89d5-1b23a30ddfde")
+		(uuid "58c4ac6d-4414-493d-b39f-8ed96377c6c7")
 	)
 	(wire
 		(pts
@@ -6123,6 +6434,16 @@
 			(type default)
 		)
 		(uuid "5c0257b9-2e53-43c4-97c3-8e9ca7dccf13")
+	)
+	(wire
+		(pts
+			(xy 320.04 86.36) (xy 309.88 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5c882000-0119-4ce4-8c29-3aed157e2234")
 	)
 	(wire
 		(pts
@@ -6146,13 +6467,13 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 73.66) (xy 246.38 73.66)
+			(xy 292.1 111.76) (xy 304.8 111.76)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5eece5ad-bba3-46b2-b4e3-52a7795ae126")
+		(uuid "5e2d66f6-392a-4381-96f2-08cb6e3ff2fc")
 	)
 	(wire
 		(pts
@@ -6186,33 +6507,13 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 81.28) (xy 85.09 81.28)
+			(xy 292.1 96.52) (xy 304.8 96.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6248933e-cf3a-419e-b184-6c269552ad52")
-	)
-	(wire
-		(pts
-			(xy 259.08 86.36) (xy 246.38 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6249c919-5320-4214-9a7f-a0c157c5ca8d")
-	)
-	(wire
-		(pts
-			(xy 193.04 45.72) (xy 205.74 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "64134600-ecd7-41d5-91b4-7d4e48249230")
+		(uuid "6420d795-b88b-402b-9bd8-011ffbbc25c1")
 	)
 	(wire
 		(pts
@@ -6236,6 +6537,26 @@
 	)
 	(wire
 		(pts
+			(xy 320.04 73.66) (xy 309.88 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66342245-af71-4948-a335-72fc36075473")
+	)
+	(wire
+		(pts
+			(xy 246.38 104.14) (xy 259.08 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66734c13-87c6-4b6f-a72b-f0716c14d7dc")
+	)
+	(wire
+		(pts
 			(xy 193.04 83.82) (xy 205.74 83.82)
 		)
 		(stroke
@@ -6246,13 +6567,24 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 83.82) (xy 246.38 83.82)
+			(xy 292.1 86.36) (xy 304.8 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "686e81ed-80ec-40f9-a478-38319b16f1ea")
+		(uuid "693786dc-45a2-483a-a254-1a3e26c1dbb8")
+	)
+	(bus
+		(pts
+			(xy 322.58 68.58) (xy 325.12 68.58)
+		)
+		(stroke
+			(width 0.508)
+			(type default)
+			(color 173 188 231 1)
+		)
+		(uuid "6a495cca-64dc-4dce-bc3c-fa7226c7b2a5")
 	)
 	(wire
 		(pts
@@ -6266,13 +6598,13 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 109.22) (xy 85.09 109.22)
+			(xy 246.38 60.96) (xy 259.08 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6acd59fc-d470-4ca7-9720-f867c5e135b9")
+		(uuid "6aa99a55-8086-4119-ba16-dcd8ca6f9b6e")
 	)
 	(wire
 		(pts
@@ -6286,13 +6618,13 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 43.18) (xy 246.38 43.18)
+			(xy 193.0129 175.26) (xy 205.74 175.26)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6d5ea1e6-57be-4e49-8998-49d7534e614b")
+		(uuid "6c4a346d-cd03-494c-9cb1-d460df1232d3")
 	)
 	(wire
 		(pts
@@ -6306,6 +6638,16 @@
 	)
 	(wire
 		(pts
+			(xy 292.1 93.98) (xy 304.8 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f19389b-524c-4ad3-8a79-31888f5286d0")
+	)
+	(wire
+		(pts
 			(xy 142.24 238.76) (xy 154.94 238.76)
 		)
 		(stroke
@@ -6316,13 +6658,23 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 63.5) (xy 85.09 63.5)
+			(xy 73.66 180.34) (xy 86.36 180.34)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "710632a2-a1c6-4645-b109-a39d5a7cb4ee")
+		(uuid "71b7a8c4-f18d-47e5-82ac-ebdc93964807")
+	)
+	(wire
+		(pts
+			(xy 72.39 43.18) (xy 85.09 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71f95224-0a2b-40cb-9070-4b94c799260f")
 	)
 	(wire
 		(pts
@@ -6356,13 +6708,23 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 58.42) (xy 85.09 58.42)
+			(xy 193.04 48.26) (xy 205.74 48.26)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "74f658e9-c5bc-4423-a9c7-3d905a78cd31")
+		(uuid "74854a4a-77d7-4285-9324-35aece254ab7")
+	)
+	(wire
+		(pts
+			(xy 193.04 45.72) (xy 205.74 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "750e050f-2bf2-4649-9018-cf1e76f6e936")
 	)
 	(wire
 		(pts
@@ -6404,15 +6766,26 @@
 		)
 		(uuid "7b21429c-8154-466a-8d55-b62bd4a879c1")
 	)
+	(bus
+		(pts
+			(xy 340.36 91.44) (xy 325.12 91.44)
+		)
+		(stroke
+			(width 0.508)
+			(type solid)
+			(color 173 188 231 1)
+		)
+		(uuid "7bd921ad-0504-465d-af19-31d6aaccf720")
+	)
 	(wire
 		(pts
-			(xy 193.04 53.34) (xy 205.74 53.34)
+			(xy 193.0129 182.88) (xy 205.74 182.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7e283445-5642-4fa4-8179-ee958c0c2b4a")
+		(uuid "7ca4890b-3701-446d-b848-3428b4231c95")
 	)
 	(wire
 		(pts
@@ -6426,13 +6799,13 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 190.5) (xy 205.74 190.5)
+			(xy 320.04 91.44) (xy 309.88 91.44)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7ec3334e-d0c2-4b5b-a624-b153bfe63f28")
+		(uuid "80812325-274b-4707-8370-b995d2e09e4b")
 	)
 	(wire
 		(pts
@@ -6446,6 +6819,16 @@
 	)
 	(wire
 		(pts
+			(xy 246.38 101.6) (xy 259.08 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "833b1b25-8c34-4c66-b7ac-937c27feb1c3")
+	)
+	(wire
+		(pts
 			(xy 201.93 210.82) (xy 205.74 210.82)
 		)
 		(stroke
@@ -6456,13 +6839,13 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 63.5) (xy 205.74 63.5)
+			(xy 246.38 68.58) (xy 259.08 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "88dca7ec-9356-4051-8ca4-609e9cb14f96")
+		(uuid "85902e14-7dde-49c1-bde7-ff907cf0d3bc")
 	)
 	(wire
 		(pts
@@ -6506,23 +6889,23 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 45.72) (xy 246.38 45.72)
+			(xy 246.38 73.66) (xy 259.08 73.66)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8cd43ba4-ef8f-4ff6-8406-e96d00cbfb1a")
+		(uuid "8b7949ee-c724-456c-8b78-e08cae7dcfec")
 	)
 	(wire
 		(pts
-			(xy 85.09 43.18) (xy 72.39 43.18)
+			(xy 193.0129 203.2) (xy 205.74 203.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8cda208e-84f4-4042-afd5-dede9e2aa072")
+		(uuid "8cf60f89-ea86-462e-90f1-2190d7d8d3f5")
 	)
 	(wire
 		(pts
@@ -6546,13 +6929,13 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 121.92) (xy 85.09 121.92)
+			(xy 320.04 81.28) (xy 309.88 81.28)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9005eda1-6525-49a9-acc9-999777fd56af")
+		(uuid "90ec4987-542c-4201-aa5f-64e9460e4a68")
 	)
 	(wire
 		(pts
@@ -6576,6 +6959,16 @@
 	)
 	(wire
 		(pts
+			(xy 193.0129 185.42) (xy 205.74 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9415f778-bfa0-4368-9af7-1b21e0fbf276")
+	)
+	(wire
+		(pts
 			(xy 146.05 48.26) (xy 158.75 48.26)
 		)
 		(stroke
@@ -6583,6 +6976,16 @@
 			(type default)
 		)
 		(uuid "95e615a6-e2dd-4266-a4f5-e28849253304")
+	)
+	(wire
+		(pts
+			(xy 292.1 88.9) (xy 304.8 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "974a2d8d-28ec-4029-9a86-7fac637f5e2f")
 	)
 	(wire
 		(pts
@@ -6596,6 +6999,16 @@
 	)
 	(wire
 		(pts
+			(xy 320.04 101.6) (xy 309.88 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "97d52ff7-211c-47ec-8da8-5e23da5ba892")
+	)
+	(wire
+		(pts
 			(xy 142.24 213.36) (xy 154.94 213.36)
 		)
 		(stroke
@@ -6603,6 +7016,37 @@
 			(type default)
 		)
 		(uuid "9818c567-b87d-4190-88f6-09ba1d713ff2")
+	)
+	(wire
+		(pts
+			(xy 72.39 45.72) (xy 85.09 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9861dada-cbf7-4877-8ef9-d049cfbcd5d0")
+	)
+	(bus
+		(pts
+			(xy 322.58 68.58) (xy 322.58 116.84)
+		)
+		(stroke
+			(width 0.508)
+			(type default)
+			(color 173 188 231 1)
+		)
+		(uuid "9956bea9-e5b5-4181-82dc-d4676866a2bf")
+	)
+	(wire
+		(pts
+			(xy 193.0129 193.04) (xy 205.74 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9a471dc9-9517-4520-a6e8-caa1bceea8bd")
 	)
 	(wire
 		(pts
@@ -6636,13 +7080,73 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 48.26) (xy 72.39 48.26)
+			(xy 309.88 66.04) (xy 320.04 66.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9f8220aa-e9cc-48b3-a896-db5bd6f92517")
+		(uuid "9c44e879-d186-4b28-ad76-bc4113ec563f")
+	)
+	(wire
+		(pts
+			(xy 320.04 83.82) (xy 309.88 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c7f7c4b-59d5-4352-b165-dfc23c2e8a23")
+	)
+	(wire
+		(pts
+			(xy 292.1 76.2) (xy 304.8 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9d7870d6-97e0-453a-94c3-e0263949cb73")
+	)
+	(wire
+		(pts
+			(xy 292.1 81.28) (xy 304.8 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e3f03a1-6427-4165-a6e0-09213aead0ed")
+	)
+	(wire
+		(pts
+			(xy 320.04 93.98) (xy 309.88 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e7ba83e-9f11-4182-b217-35b2b244ff5a")
+	)
+	(wire
+		(pts
+			(xy 193.0129 190.5) (xy 205.74 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e87dad5-f7ed-4763-935f-584499fa6534")
+	)
+	(wire
+		(pts
+			(xy 193.04 58.42) (xy 205.74 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9fdd2f2d-1fcd-4e96-baa6-909a113de321")
 	)
 	(wire
 		(pts
@@ -6656,13 +7160,13 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 91.44) (xy 246.38 91.44)
+			(xy 292.1 91.44) (xy 304.8 91.44)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a2b45cc3-eb4e-4f46-a6c9-7395330f368d")
+		(uuid "a1341186-65cb-46a6-9451-b0704deb7cb3")
 	)
 	(wire
 		(pts
@@ -6676,13 +7180,43 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 99.06) (xy 246.38 99.06)
+			(xy 72.39 73.66) (xy 85.09 73.66)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a831df12-d4e0-43d8-83dc-dfd242324612")
+		(uuid "a7e50f37-1ba7-4dcc-9a40-ab7dd50d8619")
+	)
+	(wire
+		(pts
+			(xy 292.1 114.3) (xy 304.8 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a7e9f950-9441-4f44-a66b-54ddb336f6b7")
+	)
+	(wire
+		(pts
+			(xy 72.39 96.52) (xy 85.09 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8c96382-033d-47d3-9f5c-7ddf1a3a647c")
+	)
+	(wire
+		(pts
+			(xy 292.1 99.06) (xy 304.8 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a92b6c1a-53ee-46cb-86a6-860be471508b")
 	)
 	(wire
 		(pts
@@ -6716,33 +7250,13 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 45.72) (xy 72.39 45.72)
+			(xy 246.38 55.88) (xy 259.08 55.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "aaee1beb-0f93-4a5b-8ba9-dc5e6ed15e0b")
-	)
-	(wire
-		(pts
-			(xy 259.08 88.9) (xy 246.38 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "adcbac3f-03c4-465f-accb-d2316287ba38")
-	)
-	(wire
-		(pts
-			(xy 259.08 104.14) (xy 246.38 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ae218fbc-26cb-4315-a6f5-24224cf40f42")
+		(uuid "abd82761-e3f6-49b1-81c3-e90462c0f05a")
 	)
 	(wire
 		(pts
@@ -6756,23 +7270,13 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 93.98) (xy 246.38 93.98)
+			(xy 292.1 101.6) (xy 304.8 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b008136a-62fc-4c6c-8ad0-ffee17f6cc63")
-	)
-	(wire
-		(pts
-			(xy 193.04 55.88) (xy 205.74 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b01ea80a-a3f5-4cd9-ba29-f6364010587e")
+		(uuid "af8b47c0-1a03-404d-b775-7bdd443a1e23")
 	)
 	(wire
 		(pts
@@ -6796,16 +7300,6 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 58.42) (xy 205.74 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b0b33ce2-822d-49d3-a5df-b60c85ab6bdf")
-	)
-	(wire
-		(pts
 			(xy 146.05 63.5) (xy 158.75 63.5)
 		)
 		(stroke
@@ -6826,13 +7320,23 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 182.88) (xy 205.74 182.88)
+			(xy 193.04 53.34) (xy 205.74 53.34)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b52a2996-a88e-4de9-9200-166f83273e9a")
+		(uuid "b447720f-2d80-441f-998c-125f910e287c")
+	)
+	(wire
+		(pts
+			(xy 246.38 78.74) (xy 259.08 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4efa8b3-3005-4309-b638-93500aab20aa")
 	)
 	(wire
 		(pts
@@ -6846,6 +7350,16 @@
 	)
 	(wire
 		(pts
+			(xy 320.04 96.52) (xy 309.88 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b6c3298d-6a07-4023-8cae-040b97e21b18")
+	)
+	(wire
+		(pts
 			(xy 146.05 73.66) (xy 158.75 73.66)
 		)
 		(stroke
@@ -6853,6 +7367,16 @@
 			(type default)
 		)
 		(uuid "b6cdb56f-32f9-4625-98c1-5e9d0e137eeb")
+	)
+	(wire
+		(pts
+			(xy 72.39 53.34) (xy 85.09 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b7c83c2a-b7d8-42ee-86a7-c649d31fe607")
 	)
 	(wire
 		(pts
@@ -6876,6 +7400,16 @@
 	)
 	(wire
 		(pts
+			(xy 193.04 60.96) (xy 205.74 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b9aff4c1-e9fa-4928-a895-2341f334534c")
+	)
+	(wire
+		(pts
 			(xy 146.05 58.42) (xy 158.75 58.42)
 		)
 		(stroke
@@ -6896,23 +7430,33 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 96.52) (xy 246.38 96.52)
+			(xy 246.38 83.82) (xy 259.08 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bf0cdd35-a995-4563-b7ea-9527b7960bbc")
+		(uuid "bf7566df-a43f-4aae-8b23-331b85e55879")
 	)
 	(wire
 		(pts
-			(xy 72.39 106.68) (xy 85.09 106.68)
+			(xy 72.39 99.06) (xy 85.09 99.06)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c1ebbd0d-898d-4ddf-918c-6ed10336d8ec")
+		(uuid "bf912dc7-a9f5-4c88-8834-4a96b08a9360")
+	)
+	(wire
+		(pts
+			(xy 72.39 76.2) (xy 85.09 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c15fb8c1-6bf8-4c43-b2f0-e9ed1c8cb8d2")
 	)
 	(wire
 		(pts
@@ -6926,13 +7470,13 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 50.8) (xy 205.74 50.8)
+			(xy 246.38 50.8) (xy 259.08 50.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c3b14570-9eb9-463f-b682-546049baa1f9")
+		(uuid "c3da686a-038e-4fb2-83f2-bc894f3dccb7")
 	)
 	(wire
 		(pts
@@ -6966,6 +7510,16 @@
 	)
 	(wire
 		(pts
+			(xy 73.66 238.76) (xy 86.36 238.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cad49157-686e-44dc-b69b-5ec2fe50e075")
+	)
+	(wire
+		(pts
 			(xy 142.24 200.66) (xy 154.94 200.66)
 		)
 		(stroke
@@ -6976,13 +7530,43 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 238.76) (xy 86.36 238.76)
+			(xy 193.04 50.8) (xy 205.74 50.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cd0b6f03-faeb-47ed-91e3-fd9e1a4a4eb8")
+		(uuid "ce03dff8-386f-41f8-9897-e11465ea2bd1")
+	)
+	(wire
+		(pts
+			(xy 72.39 63.5) (xy 85.09 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce90d2ad-ffa5-484d-8f8d-88c68ea72053")
+	)
+	(wire
+		(pts
+			(xy 309.88 114.3) (xy 320.04 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cfd513a8-2ffe-450e-96bc-18a92a0a46de")
+	)
+	(wire
+		(pts
+			(xy 72.39 109.22) (xy 85.09 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cfec6f19-5c3b-4e60-9ae0-e37fd7b1e847")
 	)
 	(wire
 		(pts
@@ -6996,23 +7580,43 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 50.8) (xy 72.39 50.8)
+			(xy 72.39 106.68) (xy 85.09 106.68)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d11afa63-1cf0-40f1-8cf6-78d5fbac5b5f")
+		(uuid "d13fc1d6-f82a-46c3-b320-35f66c1c06bc")
 	)
 	(wire
 		(pts
-			(xy 259.08 76.2) (xy 246.38 76.2)
+			(xy 292.1 104.14) (xy 304.8 104.14)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d2d50737-cd43-492b-a557-8749c65f7587")
+		(uuid "d1c253bb-c616-4732-835a-0049248be749")
+	)
+	(wire
+		(pts
+			(xy 246.38 45.72) (xy 259.08 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4547c48-e2dc-48e0-b6b3-4699e5100cfd")
+	)
+	(wire
+		(pts
+			(xy 246.38 99.06) (xy 259.08 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d51b1012-a654-4c67-bc2a-457ee080928d")
 	)
 	(wire
 		(pts
@@ -7026,13 +7630,23 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 175.26) (xy 205.74 175.26)
+			(xy 292.1 68.58) (xy 304.8 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d681b639-5d49-4b29-8567-00f8b7877912")
+		(uuid "d656ff18-10b9-44fe-a245-0b5408ae8c37")
+	)
+	(wire
+		(pts
+			(xy 193.04 63.5) (xy 205.74 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d6d82e50-1327-4947-88f6-e3408a41c9d3")
 	)
 	(wire
 		(pts
@@ -7046,16 +7660,6 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 203.2) (xy 205.74 203.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "db0867ef-df01-467e-8b99-5526c65a1330")
-	)
-	(wire
-		(pts
 			(xy 142.24 193.04) (xy 154.94 193.04)
 		)
 		(stroke
@@ -7063,6 +7667,16 @@
 			(type default)
 		)
 		(uuid "dbd6c0c0-5fa4-4d83-a576-3c7d1a826b3e")
+	)
+	(wire
+		(pts
+			(xy 72.39 71.12) (xy 85.09 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dcad8cf9-a984-4785-91db-9fae480f67ff")
 	)
 	(wire
 		(pts
@@ -7096,6 +7710,16 @@
 	)
 	(wire
 		(pts
+			(xy 72.39 58.42) (xy 85.09 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "df02e662-9db5-4a6d-8f5d-324d86a598c2")
+	)
+	(wire
+		(pts
 			(xy 73.66 208.28) (xy 86.36 208.28)
 		)
 		(stroke
@@ -7106,13 +7730,13 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 177.8) (xy 205.74 177.8)
+			(xy 72.39 111.76) (xy 85.09 111.76)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e288e4a2-e026-4881-b423-25c84cc5de29")
+		(uuid "e125fffe-06f0-4102-afb8-650d9d8a43b2")
 	)
 	(wire
 		(pts
@@ -7136,23 +7760,23 @@
 	)
 	(wire
 		(pts
-			(xy 72.39 96.52) (xy 85.09 96.52)
+			(xy 292.1 71.12) (xy 304.8 71.12)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e401254d-f62f-46ac-a523-d0ddfc270cc0")
+		(uuid "e51f4b74-521d-434a-b748-4ce01358b5ba")
 	)
 	(wire
 		(pts
-			(xy 259.08 68.58) (xy 246.38 68.58)
+			(xy 320.04 106.68) (xy 309.88 106.68)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e4769a59-b566-4eb2-87aa-58bd241b0f93")
+		(uuid "e55f0141-6e50-4896-9fbd-2a2621d24cbe")
 	)
 	(wire
 		(pts
@@ -7176,13 +7800,13 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 53.34) (xy 246.38 53.34)
+			(xy 292.1 66.04) (xy 304.8 66.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e8400488-7f51-415f-a90c-e6f96fb6ac86")
+		(uuid "e6520fa8-e03b-4087-9194-96067f408cdb")
 	)
 	(wire
 		(pts
@@ -7196,13 +7820,23 @@
 	)
 	(wire
 		(pts
-			(xy 259.08 101.6) (xy 246.38 101.6)
+			(xy 73.66 226.06) (xy 86.36 226.06)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "eaab0c9c-2608-48f5-8d49-5f19fb29e02d")
+		(uuid "ea0b91ad-5579-44ba-ae69-2f000ac99b36")
+	)
+	(wire
+		(pts
+			(xy 72.39 119.38) (xy 85.09 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ec4c24db-66a3-4beb-9710-3adda80c97ee")
 	)
 	(wire
 		(pts
@@ -7236,13 +7870,13 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 180.34) (xy 86.36 180.34)
+			(xy 246.38 96.52) (xy 259.08 96.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ee683a55-0c6b-4def-9afc-12aee4a72316")
+		(uuid "ee362cce-3622-4e47-872a-673f8f9b693c")
 	)
 	(wire
 		(pts
@@ -7253,56 +7887,6 @@
 			(type default)
 		)
 		(uuid "ef801537-75b1-4c5e-b1c9-55f59aea73a5")
-	)
-	(wire
-		(pts
-			(xy 72.39 116.84) (xy 85.09 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f01d117e-7f8d-4eff-8d56-fd44f7980d79")
-	)
-	(wire
-		(pts
-			(xy 72.39 73.66) (xy 85.09 73.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f04a51f6-48a6-4fd5-a37a-f4f5198e549f")
-	)
-	(wire
-		(pts
-			(xy 259.08 55.88) (xy 246.38 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f10273e8-3b0e-417b-8629-7068106a2943")
-	)
-	(wire
-		(pts
-			(xy 72.39 53.34) (xy 85.09 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f239d44e-ab7f-4732-8cce-39e941d705a4")
-	)
-	(wire
-		(pts
-			(xy 72.39 111.76) (xy 85.09 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f24eebbd-b87c-4bfd-a66d-1d43f4b081e7")
 	)
 	(wire
 		(pts
@@ -7326,6 +7910,16 @@
 	)
 	(wire
 		(pts
+			(xy 246.38 43.18) (xy 259.08 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3fe086b-d38e-42ed-a3f8-04f1ec81862a")
+	)
+	(wire
+		(pts
 			(xy 146.05 71.12) (xy 158.75 71.12)
 		)
 		(stroke
@@ -7336,36 +7930,66 @@
 	)
 	(wire
 		(pts
+			(xy 320.04 109.22) (xy 309.88 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f5d64bfb-53a1-416d-8392-0aaacef11055")
+	)
+	(wire
+		(pts
+			(xy 246.38 81.28) (xy 259.08 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f84e2fd8-e5ff-434d-ab85-ebb667d5b95e")
+	)
+	(wire
+		(pts
+			(xy 292.1 73.66) (xy 304.8 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8f9a1c7-c70a-4357-9e68-578e67f7ac9e")
+	)
+	(wire
+		(pts
+			(xy 246.38 71.12) (xy 259.08 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9563773-eddd-423b-a6f6-b7a92c5d998e")
+	)
+	(wire
+		(pts
 			(xy 72.39 124.46) (xy 85.09 124.46)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f7883282-ad18-4a52-b7c3-4f48b33c3783")
+		(uuid "faad9bd7-0182-4fc5-85a1-67cb7945e88e")
 	)
 	(wire
 		(pts
-			(xy 259.08 71.12) (xy 246.38 71.12)
+			(xy 72.39 81.28) (xy 85.09 81.28)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "fa013ccf-e9c6-4285-94db-4d34be9f87ed")
-	)
-	(wire
-		(pts
-			(xy 193.04 66.04) (xy 205.74 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fa29f1d4-c90c-4f0e-a7dc-17712c8d06d8")
+		(uuid "fd8b5050-6685-4df0-90c0-f25ade49c01a")
 	)
 	(label "PE1"
-		(at 76.2 165.1 0)
+		(at 73.66 165.1 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7375,7 +7999,7 @@
 		(uuid "02d7f89c-d747-4694-9a43-db46e3cd2a01")
 	)
 	(label "PA14"
-		(at 74.93 78.74 0)
+		(at 72.39 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7385,7 +8009,7 @@
 		(uuid "031547c6-fae2-478b-9297-af20b3663bbd")
 	)
 	(label "PF3"
-		(at 76.2 213.36 0)
+		(at 73.66 213.36 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7395,17 +8019,17 @@
 		(uuid "052db78c-2915-4a65-91d7-688ad1426e02")
 	)
 	(label "PG13"
-		(at 147.32 210.82 0)
+		(at 154.94 210.82 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "081a3b2e-5b1f-46f0-9284-efcd5aa2169e")
 	)
 	(label "PF11"
-		(at 76.2 233.68 0)
+		(at 73.66 233.68 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7414,8 +8038,18 @@
 		)
 		(uuid "0aadae1c-9799-410d-8431-a8bac9dd3bfa")
 	)
+	(label "PP5"
+		(at 292.1 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0be9ea09-bea0-400c-bfb6-0f7ffc7976b5")
+	)
 	(label "PF13"
-		(at 76.2 238.76 0)
+		(at 73.66 238.76 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7424,28 +8058,38 @@
 		)
 		(uuid "0c33f582-7fd6-4a59-8bfe-af185abda50d")
 	)
-	(label "PD12"
-		(at 151.13 50.8 0)
+	(label "PO2"
+		(at 292.1 109.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
+		)
+		(uuid "0c3dc839-4b1b-4b71-b279-17ecfef2309f")
+	)
+	(label "PD12"
+		(at 158.75 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
 		)
 		(uuid "0f8ce2c6-4b3e-4bfe-aeb9-0f86670c4cda")
 	)
 	(label "PH3"
-		(at 147.32 193.04 0)
+		(at 154.94 193.04 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "116ed408-5e9b-4de8-99b6-eb6340650db1")
 	)
 	(label "PB2"
-		(at 74.93 91.44 0)
+		(at 72.39 91.44 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7455,17 +8099,17 @@
 		(uuid "116f48c3-77f0-4146-8491-e054935d3298")
 	)
 	(label "PD5"
-		(at 151.13 68.58 0)
+		(at 158.75 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "142934c9-eaa3-4d3f-9163-e054d21e7f07")
 	)
 	(label "PE10"
-		(at 76.2 187.96 0)
+		(at 73.66 187.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7475,17 +8119,17 @@
 		(uuid "1531e675-086d-4faa-945c-3ab5cdca9373")
 	)
 	(label "PD13"
-		(at 151.13 48.26 0)
+		(at 158.75 48.26 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "16c9cef3-df63-4bf7-bec0-5a4f78964627")
 	)
 	(label "CSI_D1N"
-		(at 195.58 185.42 0)
+		(at 193.0129 185.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7495,27 +8139,27 @@
 		(uuid "177fbcad-90da-4f09-8f07-8a7f4fb110c4")
 	)
 	(label "PQ3"
-		(at 251.46 53.34 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "189444b2-53d4-4c28-ab43-9e92ff8229fc")
-	)
-	(label "BOOT0"
-		(at 201.93 170.18 180)
+		(at 259.08 53.34 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
+		(uuid "189444b2-53d4-4c28-ab43-9e92ff8229fc")
+	)
+	(label "BOOT0"
+		(at 193.04 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
 		(uuid "18a39282-1500-45d3-b54c-83de19b9ecf9")
 	)
 	(label "PF12"
-		(at 76.2 236.22 0)
+		(at 73.66 236.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7525,17 +8169,17 @@
 		(uuid "19c634cb-ff86-4f7d-9185-3683276c499b")
 	)
 	(label "PC14"
-		(at 151.13 88.9 0)
+		(at 158.75 88.9 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "1f25cfc4-d30d-4f99-ac0c-25bc5c8a1ce2")
 	)
 	(label "PN11"
-		(at 195.58 71.12 0)
+		(at 193.04 71.12 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7545,17 +8189,17 @@
 		(uuid "1f5a15eb-3e98-4f4a-a617-bc20a4b5d773")
 	)
 	(label "PG12"
-		(at 147.32 213.36 0)
+		(at 154.94 213.36 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "201bef57-2cc1-4189-946e-dfd293d902fb")
 	)
 	(label "CSI_D1P"
-		(at 195.58 193.04 0)
+		(at 193.0129 193.04 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7565,7 +8209,7 @@
 		(uuid "216cad0a-7fd0-406d-965f-eebb67da29a5")
 	)
 	(label "PA13"
-		(at 74.93 76.2 0)
+		(at 72.39 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7574,18 +8218,28 @@
 		)
 		(uuid "2272fa05-7cae-4118-b958-ce70f3718aee")
 	)
-	(label "PG0"
-		(at 147.32 243.84 0)
+	(label "PP13"
+		(at 292.1 71.12 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
+		(uuid "2359c421-af89-4743-9bbe-5690d291a556")
+	)
+	(label "PG0"
+		(at 154.94 243.84 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
 		(uuid "2401bb99-9a4f-4dd2-88e9-1275f7b3ce89")
 	)
 	(label "PE2"
-		(at 76.2 167.64 0)
+		(at 73.66 167.64 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7594,18 +8248,28 @@
 		)
 		(uuid "249a63aa-4b3e-4ae0-86a4-e6bff850a935")
 	)
-	(label "PP2"
-		(at 251.46 99.06 0)
+	(label "PP12"
+		(at 292.1 73.66 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
+		(uuid "24e8aec9-7e90-4579-ab22-ca190b764d7a")
+	)
+	(label "PP2"
+		(at 259.08 99.06 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
 		(uuid "2970689a-4347-45ee-bdc0-7f3c181bbe49")
 	)
 	(label "PB1"
-		(at 74.93 88.9 0)
+		(at 72.39 88.9 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7615,7 +8279,7 @@
 		(uuid "2a64d13d-3807-494d-9f1f-9946ea0c4408")
 	)
 	(label "PF0"
-		(at 76.2 205.74 0)
+		(at 73.66 205.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7625,7 +8289,7 @@
 		(uuid "2a78bfd9-e130-4b0e-8457-cd916ad2394f")
 	)
 	(label "PE0"
-		(at 76.2 162.56 0)
+		(at 73.66 162.56 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7635,7 +8299,7 @@
 		(uuid "2e708f69-80cf-4ae2-a7aa-fdfc12d24879")
 	)
 	(label "PA2"
-		(at 74.93 48.26 0)
+		(at 72.39 48.26 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7644,18 +8308,28 @@
 		)
 		(uuid "2f19ba11-3200-4ac7-8adc-8b65eb2b3f00")
 	)
-	(label "PH2"
-		(at 147.32 195.58 0)
+	(label "PP0"
+		(at 292.1 106.68 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
+		(uuid "308077d2-6d4d-4fca-976a-c0e787713ece")
+	)
+	(label "PH2"
+		(at 154.94 195.58 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
 		(uuid "309e4084-7f01-4918-ae79-5aac2014d00d")
 	)
 	(label "PB11"
-		(at 74.93 114.3 0)
+		(at 72.39 114.3 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7665,17 +8339,17 @@
 		(uuid "31f93b4d-9194-4bae-8aa2-7cb02bf6642a")
 	)
 	(label "PG8"
-		(at 147.32 223.52 0)
+		(at 154.94 223.52 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "324ad86d-2e04-49e2-a679-8de14641df6e")
 	)
 	(label "CSI_CKN"
-		(at 195.58 175.26 0)
+		(at 193.0129 175.26 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7685,17 +8359,17 @@
 		(uuid "346284dc-11ff-491d-862d-1b603a2a9251")
 	)
 	(label "PD8"
-		(at 151.13 60.96 0)
+		(at 158.75 60.96 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "35c41473-1667-41c1-9047-fc1a589ad1dd")
 	)
 	(label "PB0"
-		(at 74.93 86.36 0)
+		(at 72.39 86.36 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7705,27 +8379,27 @@
 		(uuid "364503e5-a668-46ab-bda0-e0fe5482b12a")
 	)
 	(label "PH5"
-		(at 147.32 187.96 0)
+		(at 154.94 187.96 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "3883c274-aa0d-4da2-931f-17130edeaf55")
 	)
 	(label "PP9"
-		(at 251.46 81.28 0)
+		(at 259.08 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "3946223a-2b69-42b9-a75e-c8840a15b5cd")
 	)
 	(label "PB9"
-		(at 74.93 109.22 0)
+		(at 72.39 109.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7735,17 +8409,17 @@
 		(uuid "3973b599-72d5-4d2d-b824-2df7896462cd")
 	)
 	(label "PH6"
-		(at 147.32 185.42 0)
+		(at 154.94 185.42 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "3bfddef7-dc15-4c55-b0c1-fe708799e7d3")
 	)
 	(label "PN6"
-		(at 195.58 58.42 0)
+		(at 193.04 58.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7755,7 +8429,7 @@
 		(uuid "3e830fbd-984f-4485-ad7e-052afd12367a")
 	)
 	(label "PB12"
-		(at 74.93 116.84 0)
+		(at 72.39 116.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7765,17 +8439,17 @@
 		(uuid "41feadf1-3e12-4c41-bae3-892216afb067")
 	)
 	(label "PP11"
-		(at 251.46 76.2 0)
+		(at 259.08 76.2 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "436c4805-350e-4566-8624-31fa4a38e3e5")
 	)
 	(label "PO0"
-		(at 195.58 78.74 0)
+		(at 193.04 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7785,7 +8459,7 @@
 		(uuid "47e73457-f838-41dd-9ef9-a59cadd2a506")
 	)
 	(label "PN8"
-		(at 195.58 63.5 0)
+		(at 193.04 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7794,38 +8468,58 @@
 		)
 		(uuid "499e517e-c462-430b-98a4-53373f3a6efd")
 	)
-	(label "PQ2"
-		(at 251.46 55.88 0)
+	(label "PP6"
+		(at 292.1 91.44 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
+		(uuid "4a46b41d-8d2f-48e7-94d1-fc985d2511d4")
+	)
+	(label "PQ2"
+		(at 259.08 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
 		(uuid "4a51e853-961e-491d-8fd6-822425c44609")
 	)
-	(label "PG15"
-		(at 147.32 205.74 0)
+	(label "PP8"
+		(at 292.1 83.82 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
+		)
+		(uuid "505e5f8d-6a93-408c-9674-c045528dc3e6")
+	)
+	(label "PG15"
+		(at 154.94 205.74 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
 		)
 		(uuid "50abb5d3-e336-4294-a50d-549fc0c91c15")
 	)
 	(label "PH0"
-		(at 147.32 200.66 0)
+		(at 154.94 200.66 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "512d0fa9-6db2-43f1-99b6-2f9f5b6ef206")
 	)
 	(label "PE13"
-		(at 76.2 195.58 0)
+		(at 73.66 195.58 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7835,27 +8529,27 @@
 		(uuid "51d674fb-f8e3-47f6-a0b8-823e84b5ebe2")
 	)
 	(label "PD3"
-		(at 151.13 73.66 0)
+		(at 158.75 73.66 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "5226e43b-da26-4e14-b044-4657a142cc12")
 	)
 	(label "PP4"
-		(at 251.46 93.98 0)
+		(at 259.08 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "580e261e-ee28-4e74-a708-f20be36cbea7")
 	)
 	(label "PB13"
-		(at 74.93 119.38 0)
+		(at 72.39 119.38 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7865,7 +8559,7 @@
 		(uuid "591f4535-f1e5-4acf-acc2-df55d1573ec1")
 	)
 	(label "PE5"
-		(at 76.2 175.26 0)
+		(at 73.66 175.26 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7875,27 +8569,27 @@
 		(uuid "5930fcde-230e-4d90-8b2e-0ab5f65993c3")
 	)
 	(label "PG1"
-		(at 147.32 241.3 0)
+		(at 154.94 241.3 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "5a2e0b99-b60e-4a23-ae92-364c1421479a")
 	)
 	(label "PC2"
-		(at 151.13 119.38 0)
+		(at 158.75 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "5ad4dc6f-ab95-4416-85ae-9ea384be2bce")
 	)
 	(label "PB14"
-		(at 74.93 121.92 0)
+		(at 72.39 121.92 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7905,7 +8599,7 @@
 		(uuid "5d240d03-831b-400d-b8ac-3758a504b55c")
 	)
 	(label "PE14"
-		(at 76.2 198.12 0)
+		(at 73.66 198.12 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7915,7 +8609,7 @@
 		(uuid "5e6c63f1-55a5-4c04-adb0-757b9c5a45b3")
 	)
 	(label "PA15"
-		(at 74.93 81.28 0)
+		(at 72.39 81.28 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7924,8 +8618,28 @@
 		)
 		(uuid "601634f7-c270-40f3-96e6-89ff74e202fc")
 	)
+	(label "PP11"
+		(at 292.1 76.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "607bbcc8-251d-4243-8828-ec912b944707")
+	)
+	(label "PO3"
+		(at 292.1 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "62cb407d-73a6-40ca-ad38-40d16a5ba114")
+	)
 	(label "PN4"
-		(at 195.58 53.34 0)
+		(at 193.04 53.34 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7935,7 +8649,7 @@
 		(uuid "632c7d78-9a28-44f1-b049-63daca8697dc")
 	)
 	(label "PE12"
-		(at 76.2 193.04 0)
+		(at 73.66 193.04 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7945,7 +8659,7 @@
 		(uuid "6409ec03-7c04-48c9-b408-62432625d332")
 	)
 	(label "PB7"
-		(at 74.93 104.14 0)
+		(at 72.39 104.14 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7955,17 +8669,27 @@
 		(uuid "647fad96-e6f6-48aa-939f-b5a2eedb4ea0")
 	)
 	(label "PG11"
-		(at 147.32 215.9 0)
+		(at 154.94 215.9 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "656adb1d-64ca-4f67-a207-ef624b7801c2")
+	)
+	(label "PP10"
+		(at 292.1 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "656adb1d-64ca-4f67-a207-ef624b7801c2")
+		(uuid "65b2a76d-75be-4ff6-a919-fbcf2af37d8c")
 	)
 	(label "CSI_D0P"
-		(at 195.58 190.5 0)
+		(at 193.0129 190.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7975,17 +8699,17 @@
 		(uuid "66a1519f-c124-4a10-8ef9-e2a143ff5e4c")
 	)
 	(label "PC4"
-		(at 151.13 114.3 0)
+		(at 158.75 114.3 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "67317d6c-0fe4-4c3b-8fad-7a2c27364aa5")
 	)
 	(label "PO2"
-		(at 195.58 83.82 0)
+		(at 193.04 83.82 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7995,7 +8719,7 @@
 		(uuid "6925dd3a-1fba-41a0-bb80-450bd9ea4b72")
 	)
 	(label "PF1"
-		(at 76.2 208.28 0)
+		(at 73.66 208.28 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8005,7 +8729,7 @@
 		(uuid "6e109e46-8903-4bbd-8017-afe479f13d55")
 	)
 	(label "PO1"
-		(at 195.58 81.28 0)
+		(at 193.04 81.28 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8015,17 +8739,17 @@
 		(uuid "6eae8109-ca36-40c6-901e-98a94f25cac2")
 	)
 	(label "PD11"
-		(at 151.13 53.34 0)
+		(at 158.75 53.34 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "7052434f-f9b2-4fcd-81dd-c4ffc98cd7ca")
 	)
 	(label "PN3"
-		(at 195.58 50.8 0)
+		(at 193.04 50.8 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8035,7 +8759,7 @@
 		(uuid "707db7b8-f78b-4dc0-a955-7a3f37b9851f")
 	)
 	(label "CSI_D0N"
-		(at 195.58 182.88 0)
+		(at 193.0129 182.88 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8045,17 +8769,17 @@
 		(uuid "7785597f-befb-456e-b40b-98e2d8c56111")
 	)
 	(label "PC10"
-		(at 151.13 99.06 0)
+		(at 158.75 99.06 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "77a9f5b4-c76d-40ce-949e-eed44f6b86ba")
 	)
 	(label "PB4"
-		(at 74.93 96.52 0)
+		(at 72.39 96.52 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8064,28 +8788,38 @@
 		)
 		(uuid "77c0a647-3458-40c6-a492-21e1b0177a65")
 	)
-	(label "PC7"
-		(at 151.13 106.68 0)
+	(label "PP15"
+		(at 292.1 66.04 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
+		)
+		(uuid "77cb68f1-40bc-4e58-aca8-56fbf96346b2")
+	)
+	(label "PC7"
+		(at 158.75 106.68 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
 		)
 		(uuid "782d310a-4d1f-4b3c-9bd5-4d4ba385d230")
 	)
 	(label "PH1"
-		(at 147.32 198.12 0)
+		(at 154.94 198.12 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "7bd855ca-2661-404c-83fc-b49a097a13b8")
 	)
 	(label "PB6"
-		(at 74.93 101.6 0)
+		(at 72.39 101.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8095,7 +8829,7 @@
 		(uuid "7c52ccad-a02e-4c44-b478-ec119283a7e4")
 	)
 	(label "PB5"
-		(at 74.93 99.06 0)
+		(at 72.39 99.06 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8105,17 +8839,17 @@
 		(uuid "7d0d5a97-664c-4dfc-ad61-908a16f68f23")
 	)
 	(label "PP13"
-		(at 251.46 71.12 0)
+		(at 259.08 71.12 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "7fee5657-9c31-457d-8b5d-d39b26418aef")
 	)
 	(label "PB3"
-		(at 74.93 93.98 0)
+		(at 72.39 93.98 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8125,17 +8859,17 @@
 		(uuid "817e5500-fa9c-4e65-8ee0-63789a9ca211")
 	)
 	(label "PD15"
-		(at 151.13 43.18 0)
+		(at 158.75 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "84918eb5-9853-4453-85a7-e10f5349c019")
 	)
 	(label "CSI_CKP"
-		(at 195.58 177.8 0)
+		(at 193.0129 177.8 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8145,37 +8879,37 @@
 		(uuid "862a0402-f3eb-41cb-9c0c-1473d4378283")
 	)
 	(label "PG3"
-		(at 147.32 236.22 0)
+		(at 154.94 236.22 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "86c5a861-c228-4e69-8e46-9543d19d0792")
 	)
 	(label "PD1"
-		(at 151.13 78.74 0)
+		(at 158.75 78.74 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8901e655-0852-4cf8-87d7-40481570a3d5")
 	)
 	(label "PG14"
-		(at 147.32 208.28 0)
+		(at 154.94 208.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8a2b5714-df18-4fb8-aae8-0dda71947db4")
 	)
 	(label "UCPD1_CC2"
-		(at 195.6071 205.74 0)
+		(at 193.04 205.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8184,8 +8918,18 @@
 		)
 		(uuid "8a5aa72f-6f12-4858-9ed5-5e9d0cfbfde0")
 	)
+	(label "PP9"
+		(at 292.1 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8b36a5da-2384-4705-a4f7-b51c6e22e442")
+	)
 	(label "PN5"
-		(at 195.58 55.88 0)
+		(at 193.04 55.88 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8195,37 +8939,37 @@
 		(uuid "8c394600-6dbf-4826-bf72-12e65490bde9")
 	)
 	(label "PH9"
-		(at 147.32 177.8 0)
+		(at 154.94 177.8 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8ce03c51-7f0f-49da-95d7-e289dc1587c9")
 	)
 	(label "PG5"
-		(at 147.32 231.14 0)
+		(at 154.94 231.14 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8dd1ff89-9557-478d-ab45-1c23b21563cd")
 	)
 	(label "PD6"
-		(at 151.13 66.04 0)
+		(at 158.75 66.04 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "8ec78aa0-be50-49fd-9a43-99137c9d18c2")
 	)
 	(label "PO3"
-		(at 195.58 86.36 0)
+		(at 193.04 86.36 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8234,8 +8978,28 @@
 		)
 		(uuid "9097d802-6fe3-4716-a7ea-0b028ffb00d9")
 	)
+	(label "PO4"
+		(at 292.1 111.76 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "914b07ab-d2cf-48bb-ad87-460c3c746898")
+	)
+	(label "{HEXASPI}"
+		(at 337.82 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "927845c6-a191-4629-9d5b-f04da7099095")
+	)
 	(label "PE11"
-		(at 76.2 190.5 0)
+		(at 73.66 190.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8245,7 +9009,7 @@
 		(uuid "930d806c-09a2-4e99-b76d-01fc9eb97b10")
 	)
 	(label "PF15"
-		(at 76.2 243.84 0)
+		(at 73.66 243.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8255,27 +9019,27 @@
 		(uuid "94438193-67fe-4c01-b3ba-56bcecc68d55")
 	)
 	(label "PP8"
-		(at 251.46 83.82 0)
+		(at 259.08 83.82 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9a021dc4-fc4c-44f8-b9c5-2e12ef682e95")
 	)
 	(label "PG7"
-		(at 147.32 226.06 0)
+		(at 154.94 226.06 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9b47f1ea-898e-4625-9a76-8ec2f893bbae")
 	)
 	(label "PO4"
-		(at 195.58 88.9 0)
+		(at 193.04 88.9 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8285,57 +9049,67 @@
 		(uuid "9bc7b018-3f42-4243-93c0-dc637c206862")
 	)
 	(label "PC11"
-		(at 151.13 96.52 0)
+		(at 158.75 96.52 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9bcdfcea-852b-49af-8df8-5df71edd26fa")
 	)
 	(label "PC5"
-		(at 151.13 111.76 0)
+		(at 158.75 111.76 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9bd96a99-3244-4bdb-bba8-f38f3a8c6cd3")
 	)
 	(label "PP15"
-		(at 251.46 66.04 0)
+		(at 259.08 66.04 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9bf2d15b-9e05-4621-85af-69accfeab228")
 	)
 	(label "PD14"
-		(at 151.13 45.72 0)
+		(at 158.75 45.72 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "9c6d7ba4-1776-41d8-a523-dfc0f5f54e8c")
 	)
 	(label "PP1"
-		(at 251.46 101.6 0)
+		(at 259.08 101.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9e52e163-220d-40e4-93c5-fcac5b7f2797")
+	)
+	(label "PP2"
+		(at 292.1 101.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "9e52e163-220d-40e4-93c5-fcac5b7f2797")
+		(uuid "a2b43b81-567b-440e-a0d3-37430c34ff9f")
 	)
 	(label "PA5"
-		(at 74.93 55.88 0)
+		(at 72.39 55.88 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8345,27 +9119,27 @@
 		(uuid "a367ece9-a0dd-47d4-87d5-ae8e730be6d9")
 	)
 	(label "PH4"
-		(at 147.32 190.5 0)
+		(at 154.94 190.5 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "a381f87a-0e8e-4c62-bf1f-0983f926b422")
 	)
 	(label "PQ5"
-		(at 251.46 48.26 0)
+		(at 259.08 48.26 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "a7df5d60-c0d2-45a0-90ca-87e7b45019c3")
 	)
 	(label "UCPD1_CC1"
-		(at 195.58 203.2 0)
+		(at 193.0129 203.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8375,7 +9149,7 @@
 		(uuid "a8a5d7c4-ae73-42f7-9a8e-2b4d6d793c57")
 	)
 	(label "PN0"
-		(at 195.58 43.18 0)
+		(at 193.04 43.18 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8384,38 +9158,48 @@
 		)
 		(uuid "a9c95441-0b42-4016-aa58-443e680f703d")
 	)
-	(label "PQ7"
-		(at 251.46 43.18 0)
+	(label "PO0"
+		(at 292.1 114.3 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
+		)
+		(uuid "ab357a85-ae66-425b-9ae3-9b674e914073")
+	)
+	(label "PQ7"
+		(at 259.08 43.18 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
 		)
 		(uuid "abf3e4c5-0480-4d98-872e-bd8f9fe5d7d4")
 	)
 	(label "PQ6"
-		(at 251.46 45.72 0)
+		(at 259.08 45.72 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ac68aea3-cc70-4c87-88fd-41e4a1b79b11")
 	)
 	(label "PD4"
-		(at 151.13 71.12 0)
+		(at 158.75 71.12 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ad29c8ed-4a16-4909-bcfa-f24a316fb4ee")
 	)
 	(label "PN12"
-		(at 195.58 73.66 0)
+		(at 193.04 73.66 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8425,17 +9209,17 @@
 		(uuid "af3299b6-6d53-4d30-a600-13ac6997b5b5")
 	)
 	(label "PP0"
-		(at 251.46 104.14 0)
+		(at 259.08 104.14 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "b0f104e6-ad4d-4d9b-98d4-efc098d60092")
 	)
 	(label "PN1"
-		(at 195.58 45.72 0)
+		(at 193.04 45.72 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8445,27 +9229,27 @@
 		(uuid "b1fd5a27-1854-4364-8f37-2ce78bdc0f99")
 	)
 	(label "PC12"
-		(at 151.13 93.98 0)
+		(at 158.75 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "b509789a-59af-49e0-bfd5-33b83126f2f0")
 	)
 	(label "PG9"
-		(at 147.32 220.98 0)
+		(at 154.94 220.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "b529b1ce-7e8c-4ddb-8e28-a96eb0f8f54d")
 	)
 	(label "PA7"
-		(at 74.93 60.96 0)
+		(at 72.39 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8475,7 +9259,7 @@
 		(uuid "b5777a7d-9b65-40b7-884d-262cbab9638e")
 	)
 	(label "PA1"
-		(at 74.93 45.72 0)
+		(at 72.39 45.72 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8485,7 +9269,7 @@
 		(uuid "b63a5b37-0e9f-4afd-ba98-6fc6be8f3a61")
 	)
 	(label "PF6"
-		(at 76.2 220.98 0)
+		(at 73.66 220.98 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8495,7 +9279,7 @@
 		(uuid "b64f6581-4b8f-4a61-871e-eef682760746")
 	)
 	(label "PA0"
-		(at 74.93 43.18 0)
+		(at 72.39 43.18 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8505,17 +9289,27 @@
 		(uuid "b708ea27-fd04-4bef-abff-76e558a209e0")
 	)
 	(label "PD7"
-		(at 151.13 63.5 0)
+		(at 158.75 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ba955553-d630-43ac-89b7-b32a7dbd1d2a")
+	)
+	(label "PP7"
+		(at 292.1 88.9 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "ba955553-d630-43ac-89b7-b32a7dbd1d2a")
+		(uuid "baf0726d-2d78-4266-beaf-8cb31ee5070e")
 	)
 	(label "PB10"
-		(at 74.93 111.76 0)
+		(at 72.39 111.76 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8525,7 +9319,7 @@
 		(uuid "bc1f2c7b-dd92-43ea-84e0-443b39004950")
 	)
 	(label "PE9"
-		(at 76.2 185.42 0)
+		(at 73.66 185.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8534,28 +9328,38 @@
 		)
 		(uuid "bcd7b27c-92e6-4575-8626-b70177b3bad3")
 	)
-	(label "PD0"
-		(at 151.13 81.28 0)
+	(label "PP14"
+		(at 292.1 68.58 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
+		)
+		(uuid "be7c93d9-6910-4a6d-9080-a8e15b434b17")
+	)
+	(label "PD0"
+		(at 158.75 81.28 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
 		)
 		(uuid "bf8358e8-e42d-420a-bf3c-3a1271ce1364")
 	)
 	(label "OTG1_HSDM"
-		(at 273.05 195.58 0)
+		(at 284.48 195.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "bfea4755-07eb-4583-a854-a8f0d4e4c6d5")
 	)
 	(label "PO5"
-		(at 195.58 91.44 0)
+		(at 193.04 91.44 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8565,7 +9369,7 @@
 		(uuid "c0354103-b097-4bbf-9c94-3931c34901be")
 	)
 	(label "PA4"
-		(at 74.93 53.34 0)
+		(at 72.39 53.34 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8575,27 +9379,27 @@
 		(uuid "c0535dea-becb-4cfd-b8f7-b45dd9d1fa7f")
 	)
 	(label "PC13"
-		(at 151.13 91.44 0)
+		(at 158.75 91.44 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c1d07e80-9bba-41f9-8a54-4aa49acfe103")
 	)
 	(label "PC6"
-		(at 151.13 109.22 0)
+		(at 158.75 109.22 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c1fa55d6-7384-444b-81ef-074c5b473a6e")
 	)
 	(label "PE3"
-		(at 76.2 170.18 0)
+		(at 73.66 170.18 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8605,17 +9409,17 @@
 		(uuid "c35b4113-a873-48c4-b0c4-1d9ca29b6ffe")
 	)
 	(label "PP3"
-		(at 251.46 96.52 0)
+		(at 259.08 96.52 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c3c92760-956f-4734-92b5-3444b6805ada")
 	)
 	(label "PA9"
-		(at 74.93 66.04 0)
+		(at 72.39 66.04 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8625,17 +9429,17 @@
 		(uuid "c42108cf-702c-4d06-b092-7b2e116e14f5")
 	)
 	(label "PG2"
-		(at 147.32 238.76 0)
+		(at 154.94 238.76 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c59238eb-7b56-4056-a70e-7b8bb842f447")
 	)
 	(label "PF4"
-		(at 76.2 215.9 0)
+		(at 73.66 215.9 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8645,7 +9449,7 @@
 		(uuid "c5abf6fa-b01d-4ddb-ba78-5b1bc6b4438f")
 	)
 	(label "PE7"
-		(at 76.2 180.34 0)
+		(at 73.66 180.34 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8655,17 +9459,17 @@
 		(uuid "c756c2c2-4ba9-4be2-b2f5-ed2a3737c9c6")
 	)
 	(label "PQ0"
-		(at 251.46 60.96 0)
+		(at 259.08 60.96 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "c763ef18-424a-4935-8652-d0cacac1c619")
 	)
 	(label "PF14"
-		(at 76.2 241.3 0)
+		(at 73.66 241.3 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8675,7 +9479,7 @@
 		(uuid "c7997c55-8438-4847-84b8-779d7562a2ca")
 	)
 	(label "PN7"
-		(at 195.58 60.96 0)
+		(at 193.04 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8685,17 +9489,17 @@
 		(uuid "c90bbcf2-c744-4193-98bb-bdef8dd452ec")
 	)
 	(label "PC0"
-		(at 151.13 124.46 0)
+		(at 158.75 124.46 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ca4525e1-c082-4c12-b5f9-973f419b213c")
 	)
 	(label "PA8"
-		(at 74.93 63.5 0)
+		(at 72.39 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8705,7 +9509,7 @@
 		(uuid "cd322113-1f3d-4a1c-bb4c-5e4d588ad5ca")
 	)
 	(label "PE4"
-		(at 76.2 172.72 0)
+		(at 73.66 172.72 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8715,17 +9519,17 @@
 		(uuid "ce242dc7-f8b8-4a99-8801-31a7e9c8b3e3")
 	)
 	(label "PP10"
-		(at 251.46 78.74 0)
+		(at 259.08 78.74 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ce25905b-568f-484c-9ccf-8fc8bb9eb622")
 	)
 	(label "PF5"
-		(at 76.2 218.44 0)
+		(at 73.66 218.44 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8735,7 +9539,7 @@
 		(uuid "d181c37b-3995-4b2f-8134-452bab92ab33")
 	)
 	(label "PN9"
-		(at 195.58 66.04 0)
+		(at 193.04 66.04 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8745,37 +9549,47 @@
 		(uuid "d30ddd7a-7940-4075-a2a9-a714faf2b74b")
 	)
 	(label "PD2"
-		(at 151.13 76.2 0)
+		(at 158.75 76.2 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "d513ead9-e33b-4aca-8652-0581404587fa")
 	)
 	(label "PH7"
-		(at 147.32 182.88 0)
+		(at 154.94 182.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d5dc24ad-e920-42c6-a7c3-23191385d41a")
+	)
+	(label "PP4"
+		(at 292.1 96.52 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "d5dc24ad-e920-42c6-a7c3-23191385d41a")
+		(uuid "d75cba0f-7719-4d50-851b-912bd624351d")
 	)
 	(label "PP14"
-		(at 251.46 68.58 0)
+		(at 259.08 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "d884ed90-8ba4-431f-8b44-2ee956a1f76f")
 	)
 	(label "PN10"
-		(at 195.58 68.58 0)
+		(at 193.04 68.58 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8785,17 +9599,17 @@
 		(uuid "d902b867-9f50-4ac6-a612-b1fd92c81aa4")
 	)
 	(label "PD10"
-		(at 151.13 55.88 0)
+		(at 158.75 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "da2e33b7-ae40-4309-9d62-9fea028ae0dc")
 	)
 	(label "PF8"
-		(at 76.2 226.06 0)
+		(at 73.66 226.06 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8805,17 +9619,17 @@
 		(uuid "daa37dca-4a56-4b5b-9fcf-d00af518fc7c")
 	)
 	(label "PP7"
-		(at 251.46 86.36 0)
+		(at 259.08 86.36 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "dba5b2ed-68fb-455a-9404-08c16fbd8214")
 	)
 	(label "PE15"
-		(at 76.2 200.66 0)
+		(at 73.66 200.66 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8825,27 +9639,27 @@
 		(uuid "ddb51141-fcff-4ef0-82f6-68ba9ddbf180")
 	)
 	(label "PC3"
-		(at 151.13 116.84 0)
+		(at 158.75 116.84 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "df1a1f7f-b207-491c-9c8c-655336c451af")
 	)
 	(label "PP12"
-		(at 251.46 73.66 0)
+		(at 259.08 73.66 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "df870580-864c-4eb0-8b8f-877c4895b7b2")
 	)
 	(label "PE6"
-		(at 76.2 177.8 0)
+		(at 73.66 177.8 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8855,7 +9669,7 @@
 		(uuid "e04e4731-d450-4b39-bb4c-5c3684f8871d")
 	)
 	(label "PA3"
-		(at 74.93 50.8 0)
+		(at 72.39 50.8 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8865,7 +9679,7 @@
 		(uuid "e09b2934-762e-46d7-a40f-f012b0b45987")
 	)
 	(label "PB8"
-		(at 74.93 106.68 0)
+		(at 72.39 106.68 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8875,17 +9689,17 @@
 		(uuid "e10e550b-f032-4e17-818b-dddaf10abe30")
 	)
 	(label "PC15"
-		(at 151.13 86.36 0)
+		(at 158.75 86.36 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "e277e180-0966-41c8-b015-23e20daaa3e1")
 	)
 	(label "PA11"
-		(at 74.93 71.12 0)
+		(at 72.39 71.12 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8894,48 +9708,68 @@
 		)
 		(uuid "e2c83471-77b3-48db-9e0b-361c2fbcdbd4")
 	)
-	(label "PG4"
-		(at 147.32 233.68 0)
+	(label "PP1"
+		(at 292.1 104.14 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
+		(uuid "e2d2c2ed-5354-4e99-a4a4-352d3a52c17f")
+	)
+	(label "PG4"
+		(at 154.94 233.68 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
 		(uuid "e323e346-8f31-48eb-bfcd-bee07f5a16f7")
 	)
-	(label "PQ1"
-		(at 251.46 58.42 0)
+	(label "PP3"
+		(at 292.1 99.06 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
+		)
+		(uuid "e576088b-240a-4acc-bb00-ad58fef6be23")
+	)
+	(label "PQ1"
+		(at 259.08 58.42 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
 		)
 		(uuid "e645ce71-b5a0-4eeb-8831-eda793e99fd1")
 	)
 	(label "PD9"
-		(at 151.13 58.42 0)
+		(at 158.75 58.42 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "e71ac542-f7e2-418b-ae24-a81b407af5d5")
 	)
 	(label "PP5"
-		(at 251.46 91.44 0)
+		(at 259.08 91.44 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "e8233f3f-0b58-4f49-a73e-9d57d56c922d")
 	)
 	(label "PF9"
-		(at 76.2 228.6 0)
+		(at 73.66 228.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8945,37 +9779,37 @@
 		(uuid "e8531871-15ff-43fe-a71d-5d740551b0cf")
 	)
 	(label "PG10"
-		(at 147.32 218.44 0)
+		(at 154.94 218.44 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ea66b099-b38a-4f3f-ba90-11df5ffa3400")
 	)
 	(label "PC1"
-		(at 151.13 121.92 0)
+		(at 158.75 121.92 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "eb6badb3-ee41-47ed-b19a-e629cdb9063a")
 	)
 	(label "OTG1_HSDP"
-		(at 273.05 187.96 0)
+		(at 284.48 187.96 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ef23efb9-7414-4164-bc28-30020c237bc4")
 	)
 	(label "PA6"
-		(at 74.93 58.42 0)
+		(at 72.39 58.42 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8985,17 +9819,17 @@
 		(uuid "ef240a05-f462-4abc-a80f-7ff7226fe851")
 	)
 	(label "PC9"
-		(at 151.13 101.6 0)
+		(at 158.75 101.6 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f0c9a8b8-5a33-4074-a950-67f309208ba4")
 	)
 	(label "PA12"
-		(at 74.93 73.66 0)
+		(at 72.39 73.66 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9005,17 +9839,17 @@
 		(uuid "f185c7ce-4675-4ede-b512-19e835f3113f")
 	)
 	(label "PH8"
-		(at 147.32 180.34 0)
+		(at 154.94 180.34 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f3c48788-beb7-43c0-b3fd-53015bcbb298")
 	)
 	(label "PA10"
-		(at 74.93 68.58 0)
+		(at 72.39 68.58 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9025,7 +9859,7 @@
 		(uuid "f4686864-ce82-42ac-9b4b-11c0fcccb3d7")
 	)
 	(label "PF10"
-		(at 76.2 231.14 0)
+		(at 73.66 231.14 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9035,17 +9869,17 @@
 		(uuid "f4b9d4de-a7b5-4c2d-8b4f-f56a28b24521")
 	)
 	(label "PQ4"
-		(at 251.46 50.8 0)
+		(at 259.08 50.8 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f609e16f-036a-47ab-82e2-be9571c80671")
 	)
 	(label "PF2"
-		(at 76.2 210.82 0)
+		(at 73.66 210.82 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9055,27 +9889,27 @@
 		(uuid "f6c0cce9-3915-405d-add7-792ff9ee5bb2")
 	)
 	(label "PG6"
-		(at 147.32 228.6 0)
+		(at 154.94 228.6 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f78692ce-3535-4df9-b61c-6ef63e9e5a8d")
 	)
 	(label "PP6"
-		(at 251.46 88.9 0)
+		(at 259.08 88.9 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "f92aa350-d0ce-4908-8d97-95a3249d8c91")
 	)
 	(label "PB15"
-		(at 74.93 124.46 0)
+		(at 72.39 124.46 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9085,7 +9919,7 @@
 		(uuid "fa63c0e5-f471-4f88-8815-96ed156fdfd9")
 	)
 	(label "PN2"
-		(at 195.58 48.26 0)
+		(at 193.04 48.26 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9095,7 +9929,7 @@
 		(uuid "fcb04536-5f16-43fc-8788-1ff62fc4f8ec")
 	)
 	(label "PF7"
-		(at 76.2 223.52 0)
+		(at 73.66 223.52 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9105,17 +9939,17 @@
 		(uuid "fd3035cd-36b3-4665-8478-369f25b5bdde")
 	)
 	(label "PC8"
-		(at 151.13 104.14 0)
+		(at 158.75 104.14 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "fe5089ca-e015-451d-b8e5-b61927d0cc09")
 	)
 	(label "PE8"
-		(at 76.2 182.88 0)
+		(at 73.66 182.88 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9123,6 +9957,17 @@
 			(justify left bottom)
 		)
 		(uuid "ff2c408a-aab7-49c2-ae25-f4c89e48fd3e")
+	)
+	(hierarchical_label "HEXASPI{HEXASPI}"
+		(shape passive)
+		(at 340.36 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3b5a9e66-26fd-4cfd-ab3e-6cb9e879fa8b")
 	)
 	(hierarchical_label "NRST"
 		(shape input)
@@ -9145,6 +9990,1611 @@
 			(justify left)
 		)
 		(uuid "de2bba38-a94a-4ef7-8d0b-bced37496e00")
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 81.28 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "04c91a62-d949-423d-aa06-b2067138ed2f")
+		(property "Reference" "R63"
+			(at 305.816 81.026 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 81.026 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "e7c7532f-c0cc-4966-947e-3e6abaf2ce9e")
+		)
+		(pin "1"
+			(uuid "a8c51922-487e-4500-ade2-27a6b16e0833")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R63")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 99.06 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "07bc058b-0a43-4713-96c0-bdde7740ea47")
+		(property "Reference" "R57"
+			(at 305.816 98.806 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 98.806 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "e1155795-adb9-48f4-870e-47ddfe21af44")
+		)
+		(pin "1"
+			(uuid "35f5ba56-30cb-4ee5-88ca-95e20241dd7a")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R57")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 104.14 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "1994c3f1-0b24-446c-96cd-6e77d0ada91b")
+		(property "Reference" "R47"
+			(at 305.816 103.886 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 103.886 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "5a5a063b-cb61-4634-b435-16e6a8394497")
+		)
+		(pin "1"
+			(uuid "81d1af63-7315-4c6d-8d89-b34f6fc2354b")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R47")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 73.66 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "1ce89088-8690-4058-aae8-496572ead453")
+		(property "Reference" "R60"
+			(at 305.816 73.406 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 73.406 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "7a90592b-d270-4890-a4b4-da91c3809813")
+		)
+		(pin "2"
+			(uuid "d1b92bd6-a1d4-49dd-bcb2-acb5c70bca3b")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R60")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 83.82 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3788d93f-a5a1-4526-9fad-8e026e5a3bc8")
+		(property "Reference" "R64"
+			(at 305.816 83.566 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 83.566 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "8c4ab630-3a0d-4764-b702-e5cf365ad6f3")
+		)
+		(pin "2"
+			(uuid "ee60956d-cfc9-4dff-999a-8749beebf282")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R64")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
@@ -9227,6 +11677,1290 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
+		(at 307.34 101.6 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3b930d06-efed-493a-b9c5-3c24c472cf83")
+		(property "Reference" "R45"
+			(at 305.816 101.346 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 101.346 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 101.6 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "94e0cc14-3b5b-4020-a726-957a61834c14")
+		)
+		(pin "2"
+			(uuid "4d394d68-3e5a-4001-a10b-5b256c502dfc")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R45")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 76.2 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3c529642-b7fd-45bf-aa60-b663850d3010")
+		(property "Reference" "R49"
+			(at 305.816 75.946 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 75.946 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "6fb6fd6e-e643-463c-953d-552e222f71a5")
+		)
+		(pin "1"
+			(uuid "d41933d1-60e3-4230-a2bd-a569464d36e1")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R49")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 109.22 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "40aae44f-caf6-4819-93a9-b8b6a9a52493")
+		(property "Reference" "R56"
+			(at 305.816 108.966 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 108.966 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "b82c97fd-12a9-4292-a1e9-58ab5518af51")
+		)
+		(pin "1"
+			(uuid "a4007714-a0fb-4c5e-8709-6dacc29ee5ce")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R56")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 88.9 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4acf161c-ccf1-45a7-a14e-78bd57e9e237")
+		(property "Reference" "R51"
+			(at 305.816 88.646 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 88.646 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "3906b3fe-f5ba-44c0-b0a2-8549c5cdee17")
+		)
+		(pin "2"
+			(uuid "279ed0dc-fc5e-4f03-a09a-fb47b86e9cee")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R51")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
 		(at 199.39 210.82 90)
 		(unit 1)
 		(body_style 1)
@@ -9299,6 +13033,969 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
 					(reference "R32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 106.68 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "62939b45-6efa-4003-a2cb-3bd15fad77b1")
+		(property "Reference" "R55"
+			(at 305.816 106.426 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 104.14 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 106.426 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 106.68 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "d7ee57f5-e6bb-496f-a9b2-c988ffa6fb78")
+		)
+		(pin "2"
+			(uuid "13f84fec-ad20-4409-9a26-fc27ab57a75c")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R55")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 91.44 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "694d7d25-f87a-4c9e-8330-ada745729b4f")
+		(property "Reference" "R53"
+			(at 305.816 91.186 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 91.186 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "69534491-f0e4-4114-9dae-171d0900c5d5")
+		)
+		(pin "1"
+			(uuid "33714859-4c8a-4f9a-afc2-6e10509328f2")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R53")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 68.58 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "69e7703a-4893-401b-9db6-fcf4a96ea5b3")
+		(property "Reference" "R46"
+			(at 305.816 68.326 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 68.326 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "ceeec9ae-6c50-456e-9ca7-867a87b68703")
+		)
+		(pin "2"
+			(uuid "7f5a7ad7-b541-46aa-84b0-bcb5d06e1017")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R46")
 					(unit 1)
 				)
 			)
@@ -10252,6 +14949,648 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 114.3 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6d24d3bb-8ec9-4fe2-a6e9-0fcf4d0dc132")
+		(property "Reference" "R62"
+			(at 305.816 114.046 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 114.046 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 116.84 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "7b087ccc-edfc-4174-8151-71c2f8862d5a")
+		)
+		(pin "1"
+			(uuid "f1bee606-5b38-48d3-9705-18906b908892")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R62")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 71.12 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "739f1810-63ae-44a4-81ca-06ef2a5760a2")
+		(property "Reference" "R48"
+			(at 305.816 70.866 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 70.866 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 73.66 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 71.12 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "f5ba77c5-ccfc-44d9-8b42-6db087bf1f35")
+		)
+		(pin "2"
+			(uuid "ab6386e8-27ec-43f6-8a44-2e663152811e")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R48")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 193.04 198.12 270)
 		(unit 1)
@@ -10325,6 +15664,648 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
 					(reference "#PWR021")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 96.52 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "7b513f28-8f22-4314-b2e4-fb20bd7d36f8")
+		(property "Reference" "R44"
+			(at 305.816 96.266 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 96.266 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "b88b89f8-ad26-4036-a1b3-c23a4d6551a8")
+		)
+		(pin "1"
+			(uuid "d8a8cd04-7309-4839-a702-7693b629aeb8")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R44")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 66.04 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8e7d97b6-860a-44cc-b55c-7af05989405e")
+		(property "Reference" "R61"
+			(at 305.816 65.786 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 63.5 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 65.786 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 68.58 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 66.04 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "946da729-3af8-414e-8b7c-18be50bf6e0f")
+		)
+		(pin "1"
+			(uuid "9f8b9646-d505-411d-b9c8-d2054133a6da")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R61")
 					(unit 1)
 				)
 			)
@@ -11194,6 +17175,327 @@
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
 					(reference "U1")
 					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 111.76 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a4061155-d03c-4a5b-96be-4cdad4f97028")
+		(property "Reference" "R58"
+			(at 305.816 111.506 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 111.506 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 111.76 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "30b2bae4-e715-41ad-bd1b-762c9fa52023")
+		)
+		(pin "2"
+			(uuid "a939d6b9-a723-4255-8678-11996261961c")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R58")
+					(unit 1)
 				)
 			)
 		)
@@ -12304,6 +18606,648 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 86.36 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "eacb52a3-8da0-4552-a353-57f05f5070fe")
+		(property "Reference" "R59"
+			(at 305.816 86.106 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 86.106 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 88.9 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 86.36 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "a99d64e2-a59c-45a9-8dd0-c2ae6c1ab478")
+		)
+		(pin "2"
+			(uuid "1dc27960-9ea3-4b47-81e0-b118c2e95950")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R59")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 78.74 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ee83f9c7-2111-447d-b8c0-90d06c395b70")
+		(property "Reference" "R50"
+			(at 305.816 78.486 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 76.2 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 78.486 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 81.28 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 78.74 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "1"
+			(uuid "66ce8597-7827-4a68-8c1e-c6f3bb24df8b")
+		)
+		(pin "2"
+			(uuid "fc5b4a8a-6e70-4e7f-b2ec-b8e989ada849")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R50")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "noob:STM32N657X0H3Q")
 		(at 85.09 43.18 0)
 		(unit 1)
@@ -13166,6 +20110,327 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
 					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 307.34 93.98 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "fff15d7b-dba7-4299-b4dd-9d39554e7043")
+		(property "Reference" "R54"
+			(at 305.816 93.726 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Value" "Resistor"
+			(at 302.26 91.44 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "Footprint" "Library:R0402"
+			(at 307.34 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 307.34 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "INTERNAL_PART_NUMBER" "MCD-00052"
+			(at 310.388 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTIUM_VALUE" "0R"
+			(at 311.404 93.726 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "STATUS" "Released"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_TYPE" "Resistor"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PART_PREFERENCE" "Recommended"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER" "YAGEO"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" "RC0402JR-070RL"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PACKAGE" "0402"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENTLINK1URL" "http://tunmcdsvn.tun.st.com/Component_Documentation_Library/Trunk/Resistor/YAGEO_RC_L_Series"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_DIGIKEY" "311-0.0JRCT-ND"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_FARNELL" "9232516RL"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ORDER_CODE_RS" "9232516RL"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "COMPONENT_COUNTRY_OF_ORIGIN" "China"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "SHOWFIELDS" "YES"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ID" "2540"
+			(at 310.388 96.52 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "ALTERNATE_EMS" ""
+			(at 312.42 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "BMS_PART_NUMBER" ""
+			(at 312.42 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "FULL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "MANUFACTURER_HQ_COO" ""
+			(at 312.42 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(property "PARTIAL_ALTERNATE_INTERNAL_PART_NUMBER" ""
+			(at 312.42 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right bottom)
+			)
+		)
+		(pin "2"
+			(uuid "3bd561f7-27fa-4d4c-80b1-c4762e3725c5")
+		)
+		(pin "1"
+			(uuid "3b4a30a1-41b1-4bf1-82ca-5685a1ad4b3a")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/57594d98-d9e7-4dd9-8bfb-43dd30470ece"
+					(reference "R54")
 					(unit 1)
 				)
 			)
