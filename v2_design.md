@@ -15,15 +15,21 @@ v2 pcb
     - clocks:
         - HSE: NDK NX2016SA-24MHZ-EXS00A-CS10820
         - LSE: NDK NX2012SA-32.768KHZ-EXS00A-MU00527
-    - flash:
-        - MX66UW1G45GXDI00 128MB
+    - flash (boot/code only, XIP — N6 is flashless, do NOT log data here):
+        - MX66UW1G45GXDI00 - original octo spi, switch to cheaper quad spi flash under.
+        - MX25U51279GXDR00
+    - data storage (telemetry log, separate from boot flash):
+        - eMMC on SDMMC peripheral (8-bit), NOT on the XSPI bus (busy with boot flash + PSRAM)
+        - KIOXIA THGBMNG5D1LBAIL 4GB eMMC 5.1, 153-ball FBGA — easy integrate, fast, plenty of headroom (~40-70MB/hour of logging)
+        - alt: Micron MTFC8GAKAJCN 8GB eMMC 5.1 (industrial temp, good for in-car vibration/heat)
+        - expose over USB-MSC for desktop export (or push via ESP32-C6 wifi)
     - extra ram for stm32h7
         - AP Memory APS512XXN-OB9-BG still need to pick speed grade to match XSPI clock
     - much faster batteyr charging 1C atleast
         - must have usb pd 
         - AP33772S pd controller, i2c
-        - get 21700 form factor maybe do 1c charging
-        - BQ25895 for charging
+        - battery is 1s lipo that is rated for >1c charging
+        - BQ25750 for charging privdes direct power path, and 70v input max
         - MAX17260 to guage battery %
         - bucks/boosts off SYS rail
             - TPS63802: 3.3V @ 2A buck-boost, clean rail (STM32H7, eMMC VCC, UM980 LDO, IMU, touch, peripherals)
