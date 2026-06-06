@@ -71,11 +71,11 @@ v2 pcb
 ```mermaid
 flowchart TD;
     USB[USBC]
-    PD[PD sink<br/>I2C to STM32]
-    BQ[buck charger<br/>+ power path]
-    BAT[21700 Li-ion]
-    FG[fuel gauge]
-    SYS((SYS rail<br/>3.5–4.4V))
+    PD[AP33772S PD sink<br/>I2C to STM32]
+    BQ[BQ25750 buck-boost charger<br/>direct power path<br/>4.2–70V in]
+    BAT[1S LiPo ~16Ah / 60Wh<br/>rated >1C charge]
+    FG[MAX17260 fuel gauge<br/>reports SoC %]
+    SYS((SYS rail<br/>3.0–4.2V))
 
     BL[LED boost driver<br/>backlight]
     B33[Buck-boost -> 3.3V @ 2A<br/>clean rail]
@@ -84,15 +84,15 @@ flowchart TD;
     B18[Buck -> 1.8V @ 2A]
     B5[Boost -> 5V<br/>optional, for buzzer]
 
-    L33[STM32H743 VDD/VDDA<br/>eMMC VCC<br/>random peripherals]
+    L33[STM32N657 VDD/VDDA<br/>eMMC VCC<br/>random peripherals]
     LLED[RGB LEDs]
     LESP[ESP32-C6]
-    L18[RAM<br/>eMMC VCCQ<br/>STM32H7 VDDIO2 / OCTOSPI]
-    CORE[STM32H7 1.2V core<br/>via internal LDO]
+    L18[RAM<br/>eMMC VCCQ<br/>STM32N6 VDDIO2 / XSPI]
+    CORE[STM32N6 core<br/>via internal regulator]
 
     USB -->|5–20V pd| PD
-    PD -->|VBUS_PD<br/>request 9V default| BQ
-    BQ <-->|charge / discharge| BAT
+    PD -->|VBUS_PD<br/>5V default, up to 20V via I2C| BQ
+    BQ <-->|charge ~1C / discharge| BAT
     BAT --- FG
     BQ -->|power-path output| SYS
 
