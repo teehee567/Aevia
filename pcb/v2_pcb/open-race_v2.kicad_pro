@@ -632,7 +632,7 @@
         "uuid": "1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
       }
     ],
-    "used_designators": "U1,U3-4,#PWR21-24,#FLG28-29,R1,R33-35,R44-51,R53-64,C1,C143-145",
+    "used_designators": "",
     "variants": [
       {
         "name": "N6570"
@@ -658,6 +658,10 @@
     [
       "80f34340-29b9-446b-8079-3559d68f1fbd",
       "HexaSPI_PSRAM"
+    ],
+    [
+      "75f87715-f8d8-4db5-8e4d-2bcd184f549a",
+      "OctoSPI_FLASH"
     ]
   ],
   "text_variables": {},
