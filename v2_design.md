@@ -19,10 +19,8 @@ v2 pcb
         - MX66UW1G45GXDI00 - original octo spi, switch to cheaper quad spi flash under.
         - MX25U51279GXDR00
     - data storage (telemetry log, separate from boot flash):
-        - eMMC on SDMMC peripheral (8-bit), NOT on the XSPI bus (busy with boot flash + PSRAM)
-        - KIOXIA THGBMNG5D1LBAIL 4GB eMMC 5.1, 153-ball FBGA — easy integrate, fast, plenty of headroom (~40-70MB/hour of logging)
-        - alt: Micron MTFC8GAKAJCN 8GB eMMC 5.1 (industrial temp, good for in-car vibration/heat)
-        - expose over USB-MSC for desktop export (or push via ESP32-C6 wifi)
+        - KIOXIA THGBMNG5D1LBAIL 4GB eMMC 5.1, 153-ball FBGA
+        - alt: Micron MTFC8GAKAJCN 8GB eMMC 5.1
     - extra ram for stm32h7
         - AP Memory APS512XXN-OB9-BG still need to pick speed grade to match XSPI clock
     - much faster batteyr charging 1C atleast
