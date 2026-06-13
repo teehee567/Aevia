@@ -632,7 +632,7 @@
         "uuid": "1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
       }
     ],
-    "used_designators": "",
+    "used_designators": "U5-6,C1,C90,D1,#PWR25-26,J1,R1,#FLG30-32",
     "variants": [
       {
         "name": "N6570"
@@ -662,6 +662,10 @@
     [
       "75f87715-f8d8-4db5-8e4d-2bcd184f549a",
       "OctoSPI_FLASH"
+    ],
+    [
+      "1c8ed5b4-70c4-4a28-8843-29110648d24f",
+      "Debug"
     ]
   ],
   "text_variables": {},

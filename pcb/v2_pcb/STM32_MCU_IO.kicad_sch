@@ -5587,6 +5587,15 @@
 		(uuid "41af761b-9f73-491b-9524-91a9b206a28e")
 	)
 	(bus_entry
+		(at 316.23 144.78)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d276f45-3518-48ec-ad24-13eaa2dbb58b")
+	)
+	(bus_entry
 		(at 320.04 78.74)
 		(size 2.54 2.54)
 		(stroke
@@ -5621,6 +5630,15 @@
 			(type default)
 		)
 		(uuid "6ef04a92-5c86-45a3-971a-1e93d50ad3b7")
+	)
+	(bus_entry
+		(at 316.23 139.7)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "709e66c0-4603-4016-bd6d-526aeca65dba")
 	)
 	(bus_entry
 		(at 320.04 114.3)
@@ -5666,6 +5684,15 @@
 			(type default)
 		)
 		(uuid "afd18605-4472-42fd-b8f0-b87b97a961b7")
+	)
+	(bus_entry
+		(at 316.23 142.24)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c150251a-7e0d-4004-bfc3-c840edef2b16")
 	)
 	(bus_entry
 		(at 320.04 91.44)
@@ -6104,6 +6131,16 @@
 			(type default)
 		)
 		(uuid "2bc7dc9b-3280-456b-b16d-9282cd851c30")
+	)
+	(bus
+		(pts
+			(xy 318.77 148.59) (xy 318.77 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2cbe97fd-d7de-44bd-a632-01898dad6c12")
 	)
 	(wire
 		(pts
@@ -6969,6 +7006,16 @@
 	)
 	(wire
 		(pts
+			(xy 300.99 139.7) (xy 316.23 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "950a2d53-c9cf-4fd2-a01d-b039855a2f6c")
+	)
+	(wire
+		(pts
 			(xy 146.05 48.26) (xy 158.75 48.26)
 		)
 		(stroke
@@ -7137,6 +7184,16 @@
 			(type default)
 		)
 		(uuid "9e87dad5-f7ed-4763-935f-584499fa6534")
+	)
+	(wire
+		(pts
+			(xy 300.99 144.78) (xy 316.23 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f681587-09cb-49a0-9189-7489cbeb5ba1")
 	)
 	(wire
 		(pts
@@ -7650,6 +7707,16 @@
 	)
 	(wire
 		(pts
+			(xy 300.99 142.24) (xy 316.23 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d7b2998e-4abd-4569-b323-592a8c2e6c3b")
+	)
+	(wire
+		(pts
 			(xy 73.66 205.74) (xy 86.36 205.74)
 		)
 		(stroke
@@ -8068,6 +8135,16 @@
 		)
 		(uuid "0c3dc839-4b1b-4b71-b279-17ecfef2309f")
 	)
+	(label "SWCLK"
+		(at 316.23 139.7 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0e48c839-ad4e-425b-8fd1-10edb0176b9a")
+	)
 	(label "PD12"
 		(at 158.75 50.8 180)
 		(effects
@@ -8207,6 +8284,16 @@
 			(justify left bottom)
 		)
 		(uuid "216cad0a-7fd0-406d-965f-eebb67da29a5")
+	)
+	(label "PA13"
+		(at 300.99 142.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "21d5f9c4-8369-4d7f-b4d1-aaf81d572d36")
 	)
 	(label "PA13"
 		(at 72.39 76.2 0)
@@ -8427,6 +8514,16 @@
 			(justify left bottom)
 		)
 		(uuid "3e830fbd-984f-4485-ad7e-052afd12367a")
+	)
+	(label "DEBUGPROBE{SWCLK SWDIO SWO}"
+		(at 318.77 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "400ab7c4-a496-45ce-a598-4ed1773761b5")
 	)
 	(label "PB12"
 		(at 72.39 116.84 0)
@@ -8758,6 +8855,16 @@
 		)
 		(uuid "707db7b8-f78b-4dc0-a955-7a3f37b9851f")
 	)
+	(label "PB3"
+		(at 300.99 144.78 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "75ec960b-12a6-40af-92d6-82000906421b")
+	)
 	(label "CSI_D0N"
 		(at 193.0129 182.88 0)
 		(effects
@@ -9017,6 +9124,16 @@
 			(justify left bottom)
 		)
 		(uuid "94438193-67fe-4c01-b3ba-56bcecc68d55")
+	)
+	(label "SWO"
+		(at 316.23 144.78 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "96317ddd-6ae1-42a2-b51f-597fbe6e150b")
 	)
 	(label "PP8"
 		(at 259.08 83.82 180)
@@ -9548,6 +9665,16 @@
 		)
 		(uuid "d30ddd7a-7940-4075-a2a9-a714faf2b74b")
 	)
+	(label "PA14"
+		(at 300.99 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d43b9402-2007-4768-aee2-1a1ede295cc6")
+	)
 	(label "PD2"
 		(at 158.75 76.2 180)
 		(effects
@@ -9938,6 +10065,16 @@
 		)
 		(uuid "fd3035cd-36b3-4665-8478-369f25b5bdde")
 	)
+	(label "SWDIO"
+		(at 316.23 142.24 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "fd3a1360-1aae-44e5-bd82-97d0d282ead5")
+	)
 	(label "PC8"
 		(at 158.75 104.14 180)
 		(effects
@@ -9990,6 +10127,17 @@
 			(justify left)
 		)
 		(uuid "de2bba38-a94a-4ef7-8d0b-bced37496e00")
+	)
+	(hierarchical_label "DEBUGPROBE"
+		(shape input)
+		(at 318.77 148.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ef0fca5a-3857-44fa-b6c0-85faa81c84ed")
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
