@@ -632,7 +632,7 @@
         "uuid": "1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
       }
     ],
-    "used_designators": "U5-6,C1,C90,D1,#PWR25-26,J1,R1,#FLG30-32",
+    "used_designators": "#FLG33-35,R1-5,IC1,J2,U4,#PWR27-40,C2-6,TH1,Q1-2,D1",
     "variants": [
       {
         "name": "N6570"
@@ -666,6 +666,14 @@
     [
       "1c8ed5b4-70c4-4a28-8843-29110648d24f",
       "Debug"
+    ],
+    [
+      "3d335ef5-a898-4ee3-ac02-304e9e08b5b1",
+      "USB"
+    ],
+    [
+      "f75a094f-afff-47fb-af28-3f9eed6a2864",
+      "Power"
     ]
   ],
   "text_variables": {},

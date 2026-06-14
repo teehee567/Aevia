@@ -52,6 +52,52 @@
 		)
 	)
 	(sheet
+		(at 55.88 102.87)
+		(size 43.18 10.16)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "3d335ef5-a898-4ee3-ac02-304e9e08b5b1")
+		(property "Sheetname" "USB"
+			(at 55.88 102.1584 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "USB.kicad_sch"
+			(at 55.88 113.6146 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 116.84 17.78)
 		(size 57.15 161.29)
 		(exclude_from_sim no)
@@ -241,6 +287,52 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
 					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 55.88 121.92)
+		(size 43.18 10.16)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "f75a094f-afff-47fb-af28-3f9eed6a2864")
+		(property "Sheetname" "Power"
+			(at 55.88 121.2084 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Power.kicad_sch"
+			(at 55.88 132.6646 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
+					(page "8")
 				)
 			)
 		)
