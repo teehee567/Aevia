@@ -26,8 +26,8 @@ v2 pcb
     - much faster batteyr charging 1C atleast
         - must have usb pd 
         - AP33772S pd controller, i2c
-        - battery is 1s lipo that is rated for >1c charging
-        - BQ25750 for charging privdes direct power path, and 70v input max
+        - battery is 2s 21700 cells
+        - BQ25792 for charging privdes direct power path, 5a charging max
         - MAX17320 to guage battery % and protection
         - bucks/boosts off SYS rail
             - TPS63802: 3.3V @ 2A buck-boost, clean rail (STM32H7, eMMC VCC, UM980 LDO, IMU, touch, peripherals)
