@@ -28,7 +28,7 @@ v2 pcb
         - AP33772S pd controller, i2c
         - battery is 1s lipo that is rated for >1c charging
         - BQ25750 for charging privdes direct power path, and 70v input max
-        - MAX17260 to guage battery %
+        - MAX17320 to guage battery % and protection
         - bucks/boosts off SYS rail
             - TPS63802: 3.3V @ 2A buck-boost, clean rail (STM32H7, eMMC VCC, UM980 LDO, IMU, touch, peripherals)
             - TPS62A02: 3.3V @ 2A buck, RGB LEDs
