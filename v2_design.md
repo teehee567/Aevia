@@ -23,22 +23,23 @@ v2 pcb
         - alt: Micron MTFC8GAKAJCN 8GB eMMC 5.1
     - extra ram for stm32h7
         - AP Memory APS512XXN-OB9-BG still need to pick speed grade to match XSPI clock
-    - much faster batteyr charging 1C atleast
-        - must have usb pd 
-        - AP33772S pd controller, i2c
-        - battery is 1s lipo that is rated for >1c charging
-        - BQ25750 for charging privdes direct power path, and 70v input max
-        - MAX17260 to guage battery %
-        - bucks/boosts off SYS rail
-            - TPS63802: 3.3V @ 2A buck-boost, clean rail (STM32H7, eMMC VCC, UM980 LDO, IMU, touch, peripherals)
-            - TPS62A02: 3.3V @ 2A buck, RGB LEDs
-            - TPS63802: 3.3V @ 1A buck-boost, dedicated for ESP32-C6
-            - TPS62A02: 1.8V @ 2A buck (PSRAM, eMMC VCCQ, VDDIO2/OCTOSPI)
-            - 5V boost for buzzer (optional, TBD)
-            - LED boost driver for display backlight (TBD, pick after display)
+    - fast battery charging, 1C, USB-PD powered
+        - AP33772S USB-PD sink, I2C to STM32 via level shifter, negotiate <=20V
+        - battery: 2S Li-ion (2x 21700) or 2S LiPo, 7.4V, 5Ah, 37Wh, >=1C charge
+        - BQ25798 buck-boost charger: single inductor + internal FETs, up to 5A, 3.6-24V VBUS, I2C, ADC, MPPT, power path to SYS
+        - PD only needs ~45W (e.g. 15V/3A or 20V/2.25A)
+        - MAX17320 at the pack: 2S gauge + protection + balancing, I2C SoC %
+        - SYS is the 2S system rail (6.0-8.4V), set charger UVLO/min-system for 2S
+        - point-of-load bucks off SYS (Vin up to 8.4V):
+            - 3.3V @ 2A, clean rail (STM32N6 VDD/VDDA/VDD33USB, eMMC VCC, IMU LDO, peripherals) - TPS62130
+            - 3.3V @ 2A, RGB LEDs - TPS62130
+            - 3.3V @ 1A, ESP32-C6 - TPS62160
+            - 1.8V @ 2A, base 1.8V rail (VDDA18AON early, then gate the 1.8V RUN branch via STM32 PWR_ON for PSRAM, eMMC VCCQ, boot flash, VDDIO banks, VDDSMPS) - TPS62913
+            - 5V buck: GNSS LDO input + buzzer
+            - LED boost for display backlight (pick after display)
         - ldos:
-            - gnss LT3045EDD#TRPBF
-            - imu TI TPS7A02
+            - gnss LT3045EDD#TRPBF from 5V rail, output 3.3V to UM980 + antenna bias
+            - imu TI TPS7A02 from 3.3V rail, output 3.0V to BMI088
     - BOSCH BMI088 imu
     - USB C protection - TI TPD8S300A
     - leds:
@@ -70,31 +71,39 @@ v2 pcb
 ### Power Tree
 ```mermaid
 flowchart TD;
-    USB[USBC]
-    PD[AP33772S PD sink<br/>I2C to STM32]
-    BQ[BQ25750 buck-boost charger<br/>direct power path<br/>4.2–70V in]
-    BAT[1S LiPo ~16Ah / 60Wh<br/>rated >1C charge]
-    FG[MAX17260 fuel gauge<br/>reports SoC %]
-    SYS((SYS rail<br/>3.0–4.2V))
+    USB[USB-C]
+    PD[AP33772S USB-PD sink]
+    BQ[BQ25798 buck-boost charger]
+    BAT["2S Li-ion — 7.4V, 5Ah, 37Wh"]
+    BAT["2S Li-ion — 7.4V, 5Ah, 37Wh"]
+    FG[MAX17320 gauge + protection + balancing]
+    SYS(("SYS rail 6-8.4V"))
 
-    BL[LED boost driver<br/>backlight]
-    B33[Buck-boost -> 3.3V @ 2A<br/>clean rail]
-    B33L[Buck -> 3.3V @ 2A<br/>RGB LEDs<br/>may sag at low batt]
-    BESP[Buck-boost -> 3.3V @ 1A<br/>ESP32-C6 dedicated]
-    B18[Buck -> 1.8V @ 2A]
-    B5[Boost -> 5V<br/>optional, for buzzer]
+    BL[LED boost — backlight]
+    B33[buck 3.3V — clean rail]
+    B33L[buck 3.3V — RGB LEDs]
+    BESP[buck 3.3V — ESP32-C6]
+    B18[buck 1.8V]
+    S18[1.8V RUN switch]
+    B5[buck 5V — GNSS]
 
-    L33[STM32N657 VDD/VDDA<br/>eMMC VCC<br/>random peripherals]
+    L33["STM32N6 3.3V / eMMC VCC / peripherals"]
     LLED[RGB LEDs]
     LESP[ESP32-C6]
-    L18[RAM<br/>eMMC VCCQ<br/>STM32N6 VDDIO2 / XSPI]
-    CORE[STM32N6 core<br/>via internal regulator]
+    L18A[early 1.8V — VDDA18AON]
+    L18["1.8V RUN — PSRAM, eMMC VCCQ, boot flash, VDDSMPS"]
+    CORE[STM32N6 VDDCORE — internal SMPS]
+    GNSS[UM980 GNSS]
+    ANT[GNSS antenna bias]
+    IMU[BMI088 IMU @ 3.0V]
+    LDOG[LT3045 LDO 3.3V]
+    LDOI[TPS7A02 LDO 3.0V]
 
-    USB -->|5–20V pd| PD
-    PD -->|VBUS_PD<br/>5V default, up to 20V via I2C| BQ
-    BQ <-->|charge ~1C / discharge| BAT
+    USB -->|PD| PD
+    PD -->|VBUS| BQ
+    BQ <--> BAT
     BAT --- FG
-    BQ -->|power-path output| SYS
+    BQ -->|power path| SYS
 
     SYS --> BL
     SYS --> B33
@@ -106,9 +115,13 @@ flowchart TD;
     B33 --> L33
     B33L --> LLED
     BESP --> LESP
-    B18 --> L18
-    L33 --> CORE
-
-    L33 -->|ldo| imu
-    L33 -->|ldo| um980
+    B18 --> L18A
+    B18 --> S18
+    S18 -->|PWR_ON gated| L18
+    S18 -->|VDDSMPS| CORE
+    B5 --> LDOG
+    L33 --> LDOI
+    LDOG --> GNSS
+    LDOG --> ANT
+    LDOI --> IMU
 ```
