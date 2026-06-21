@@ -632,7 +632,7 @@
         "uuid": "1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
       }
     ],
-    "used_designators": "C42,C49,C53,C56,C62,C81-88,C91-92,D2,#PWR65-75,R23-26,R28-31,Q3,TP1",
+    "used_designators": "C42,C49,C53,C56,C62,C81-88,C91-92,D2,#PWR44-45,#PWR65-75,R23-26,R28-31,R35,Q3,TP1",
     "variants": [
       {
         "name": "N6570"
