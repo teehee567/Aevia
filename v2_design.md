@@ -19,15 +19,14 @@ v2 pcb
         - MX66UW1G45GXDI00 - original octo spi, switch to cheaper quad spi flash under.
         - MX25U51279GXDR00
     - data storage (telemetry log, separate from boot flash):
-        - KIOXIA THGBMNG5D1LBAIL 4GB eMMC 5.1, 153-ball FBGA
-        - alt: Micron MTFC8GAKAJCN 8GB eMMC 5.1
+        - microSD card via socket (Hirose DM3CS-SF), 3.3V, SDIO/SPI
     - extra ram for stm32h7
-        - AP Memory APS512XXN-OB9-BG still need to pick speed grade to match XSPI clock
+        - Infineon S80KS5122GABHV020 (HyperRAM), match speed grade to XSPI clock
     - much faster batteyr charging 1C atleast
         - must have usb pd 
         - AP33772S pd controller, i2c
         - battery is 2s 21700 cells
-        - BQ25792 for charging privdes direct power path, 5a charging max
+        - BQ25798 for charging privdes direct power path, 5a charging max
         - MAX17320 to guage battery % and protection
         - bucks/boosts off SYS rail
             - TPS63802: 3.3V @ 2A buck-boost, clean rail (STM32H7, eMMC VCC, UM980 LDO, IMU, touch, peripherals)
@@ -39,7 +38,7 @@ v2 pcb
         - ldos:
             - gnss LT3045EDD#TRPBF
             - imu TI TPS7A02
-    - BOSCH BMI088 imu
+    - Murata SCH16T-K01/K20 imu most ikelye K01, k20 not available yet easily
     - USB C protection - TI TPD8S300A
     - leds:
         - for on board small dev indicators, Lite-On LTST-C190
@@ -72,10 +71,10 @@ v2 pcb
 flowchart TD;
     USB[USBC]
     PD[AP33772S PD sink<br/>I2C to STM32]
-    BQ[BQ25750 buck-boost charger<br/>direct power path<br/>4.2–70V in]
-    BAT[1S LiPo ~16Ah / 60Wh<br/>rated >1C charge]
-    FG[MAX17260 fuel gauge<br/>reports SoC %]
-    SYS((SYS rail<br/>3.0–4.2V))
+    BQ[BQ25798 buck-boost charger<br/>direct power path]
+    BAT[2S 21700 cells<br/>rated >1C charge]
+    FG[MAX17320 fuel gauge + protection<br/>reports SoC %]
+    SYS((SYS rail<br/>6.0–8.4V))
 
     BL[LED boost driver<br/>backlight]
     B33[Buck-boost -> 3.3V @ 2A<br/>clean rail]
@@ -84,10 +83,10 @@ flowchart TD;
     B18[Buck -> 1.8V @ 2A]
     B5[Boost -> 5V<br/>optional, for buzzer]
 
-    L33[STM32N657 VDD/VDDA<br/>eMMC VCC<br/>random peripherals]
+    L33[STM32N657 VDD/VDDA<br/>microSD<br/>random peripherals]
     LLED[RGB LEDs]
     LESP[ESP32-C6]
-    L18[RAM<br/>eMMC VCCQ<br/>STM32N6 VDDIO2 / XSPI]
+    L18[RAM<br/>STM32N6 VDDIO2 / XSPI]
     CORE[STM32N6 core<br/>via internal regulator]
 
     USB -->|5–20V pd| PD
