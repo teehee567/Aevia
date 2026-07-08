@@ -19,28 +19,26 @@ v2 pcb
         - MX66UW1G45GXDI00 - original octo spi, switch to cheaper quad spi flash under.
         - MX25U51279GXDR00
     - data storage (telemetry log, separate from boot flash):
-        - KIOXIA THGBMNG5D1LBAIL 4GB eMMC 5.1, 153-ball FBGA
-        - alt: Micron MTFC8GAKAJCN 8GB eMMC 5.1
+        - microSD card via socket (Hirose DM3CS-SF), 3.3V, SDIO/SPI
     - extra ram for stm32h7
-        - AP Memory APS512XXN-OB9-BG still need to pick speed grade to match XSPI clock
-    - fast battery charging, 1C, USB-PD powered
-        - AP33772S USB-PD sink, I2C to STM32 via level shifter, negotiate <=20V
-        - battery: 2S Li-ion (2x 21700) or 2S LiPo, 7.4V, 5Ah, 37Wh, >=1C charge
-        - BQ25798 buck-boost charger: single inductor + internal FETs, up to 5A, 3.6-24V VBUS, I2C, ADC, MPPT, power path to SYS
-        - PD only needs ~45W (e.g. 15V/3A or 20V/2.25A)
-        - MAX17320 at the pack: 2S gauge + protection + balancing, I2C SoC %
-        - SYS is the 2S system rail (6.0-8.4V), set charger UVLO/min-system for 2S
-        - point-of-load bucks off SYS (Vin up to 8.4V):
-            - 3.3V @ 2A, clean rail (STM32N6 VDD/VDDA/VDD33USB, eMMC VCC, IMU LDO, peripherals) - TPS62130
-            - 3.3V @ 2A, RGB LEDs - TPS62130
-            - 3.3V @ 1A, ESP32-C6 - TPS62160
-            - 1.8V @ 2A, base 1.8V rail (VDDA18AON early, then gate the 1.8V RUN branch via STM32 PWR_ON for PSRAM, eMMC VCCQ, boot flash, VDDIO banks, VDDSMPS) - TPS62913
-            - 5V buck: GNSS LDO input + buzzer
-            - LED boost for display backlight (pick after display)
+        - Infineon S80KS5122GABHV020 (HyperRAM), match speed grade to XSPI clock
+    - much faster batteyr charging 1C atleast
+        - must have usb pd 
+        - AP33772S pd controller, i2c
+        - battery is 2s 21700 cells
+        - BQ25798 for charging privdes direct power path, 5a charging max
+        - MAX17320 to guage battery % and protection
+        - bucks/boosts off SYS rail
+            - TPS63802: 3.3V @ 2A buck-boost, clean rail (STM32H7, eMMC VCC, UM980 LDO, IMU, touch, peripherals)
+            - TPS62A02: 3.3V @ 2A buck, RGB LEDs
+            - TPS63802: 3.3V @ 1A buck-boost, dedicated for ESP32-C6
+            - TPS62A02: 1.8V @ 2A buck (PSRAM, eMMC VCCQ, VDDIO2/OCTOSPI)
+            - 5V boost for buzzer (optional, TBD)
+            - LED boost driver for display backlight (TBD, pick after display)
         - ldos:
-            - gnss LT3045EDD#TRPBF from 5V rail, output 3.3V to UM980 + antenna bias
-            - imu TI TPS7A02 from 3.3V rail, output 3.0V to BMI088
-    - BOSCH BMI088 imu
+            - gnss LT3045EDD#TRPBF
+            - imu TI TPS7A02
+    - Murata SCH16T-K01/K20 imu most ikelye K01, k20 not available yet easily
     - USB C protection - TI TPD8S300A
     - leds:
         - for on board small dev indicators, Lite-On LTST-C190
@@ -71,13 +69,12 @@ v2 pcb
 ### Power Tree
 ```mermaid
 flowchart TD;
-    USB[USB-C]
-    PD[AP33772S USB-PD sink]
-    BQ[BQ25798 buck-boost charger]
-    BAT["2S Li-ion — 7.4V, 5Ah, 37Wh"]
-    BAT["2S Li-ion — 7.4V, 5Ah, 37Wh"]
-    FG[MAX17320 gauge + protection + balancing]
-    SYS(("SYS rail 6-8.4V"))
+    USB[USBC]
+    PD[AP33772S PD sink<br/>I2C to STM32]
+    BQ[BQ25798 buck-boost charger<br/>direct power path]
+    BAT[2S 21700 cells<br/>rated >1C charge]
+    FG[MAX17320 fuel gauge + protection<br/>reports SoC %]
+    SYS((SYS rail<br/>6.0–8.4V))
 
     BL[LED boost — backlight]
     B33[buck 3.3V — clean rail]
@@ -87,17 +84,11 @@ flowchart TD;
     S18[1.8V RUN switch]
     B5[buck 5V — GNSS]
 
-    L33["STM32N6 3.3V / eMMC VCC / peripherals"]
+    L33[STM32N657 VDD/VDDA<br/>microSD<br/>random peripherals]
     LLED[RGB LEDs]
     LESP[ESP32-C6]
-    L18A[early 1.8V — VDDA18AON]
-    L18["1.8V RUN — PSRAM, eMMC VCCQ, boot flash, VDDSMPS"]
-    CORE[STM32N6 VDDCORE — internal SMPS]
-    GNSS[UM980 GNSS]
-    ANT[GNSS antenna bias]
-    IMU[BMI088 IMU @ 3.0V]
-    LDOG[LT3045 LDO 3.3V]
-    LDOI[TPS7A02 LDO 3.0V]
+    L18[RAM<br/>STM32N6 VDDIO2 / XSPI]
+    CORE[STM32N6 core<br/>via internal regulator]
 
     USB -->|PD| PD
     PD -->|VBUS| BQ
