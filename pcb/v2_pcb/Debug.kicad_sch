@@ -738,7 +738,7 @@
 		)
 		(uuid "242e2367-20c1-4580-a79b-37835c4f25ae")
 	)
-	(label "DEBUGPROBE{SWCLK SWDIO SWO}"
+	(label "{SWCLK SWDIO SWO}"
 		(at 91.44 73.66 180)
 		(effects
 			(font
