@@ -98,6 +98,52 @@
 		)
 	)
 	(sheet
+		(at 55.88 137.16)
+		(size 43.18 9.525)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "4e99b39d-19ed-4d7e-8221-338d133844bd")
+		(property "Sheetname" "MicroSD"
+			(at 55.88 136.4484 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "MicroSD.kicad_sch"
+			(at 55.88 147.2696 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 116.84 17.78)
 		(size 57.15 161.29)
 		(exclude_from_sim no)
