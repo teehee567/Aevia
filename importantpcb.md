@@ -8,3 +8,9 @@ C5: TPD8S300 vias dcap 0.1uF 50V X7R
 
 ### IMU temp gradient
 to protect imu temp gradient, put a small box of eva foam arund top and have large area of copper under
+
+
+remember to control ipedance, stackup, parallel, length matching
+
+
+watch which resistors/capacitors see if they ahve a required voltage rating

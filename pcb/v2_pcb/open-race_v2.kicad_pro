@@ -632,7 +632,7 @@
         "uuid": "1cc14db4-4207-4c76-b5f6-6a2491c5fa6b"
       }
     ],
-    "used_designators": "C7,C42,C49,C53,C56,C62,C81-88,C91-92,D2,#PWR44-46,#PWR65-75,R6-11,R23-26,R28-31,R35,Q3-5,TP1,U7",
+    "used_designators": "R14-19,J3,#PWR53-57",
     "variants": [
       {
         "name": "N6570"
@@ -674,6 +674,10 @@
     [
       "f75a094f-afff-47fb-af28-3f9eed6a2864",
       "Power"
+    ],
+    [
+      "4e99b39d-19ed-4d7e-8221-338d133844bd",
+      "MicroSD"
     ]
   ],
   "text_variables": {},
