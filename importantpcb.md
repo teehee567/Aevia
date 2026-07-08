@@ -1,5 +1,6 @@
 R5: TPD8S300 flt pin pull up resistor, 10k
 C5: TPD8S300 vias dcap 0.1uF 50V X7R
+MAX17320 TH1: connect to battery NTC (NCP15XH103F03RC) to GND, with 10k pull-up from the TH1/NTC node to 3V3
 
 
 

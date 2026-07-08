@@ -28,6 +28,7 @@ v2 pcb
         - battery is 2s 21700 cells
         - BQ25798 for charging privdes direct power path, 5a charging max
         - MAX17320 to guage battery % and protection
+            - NTC thermistor: NCP15XH103F03RC
         - bucks/boosts off SYS rail
             - TPS63802: 3.3V @ 2A buck-boost, clean rail (STM32H7, eMMC VCC, UM980 LDO, IMU, touch, peripherals)
             - TPS62A02: 3.3V @ 2A buck, RGB LEDs
