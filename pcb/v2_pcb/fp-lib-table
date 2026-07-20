@@ -1,0 +1,9 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "open-race-v2")(type "KiCad")(uri "${KIPRJMOD}/open-race-v2.pretty")(options "")(descr "Open Race v2 project footprints"))
+  (lib (name "noob")(type "KiCad")(uri "${KIPRJMOD}/noob.pretty")(options "")(descr "Existing Open Race imported footprints"))
+  (lib (name "APS512XXN-OB9-BG")(type "KiCad")(uri "${KIPRJMOD}/noob.pretty")(options "")(descr "Compatibility mapping for legacy APS512 footprint reference"))
+  (lib (name "MX66UW1G45GXDI00")(type "KiCad")(uri "${KIPRJMOD}/noob.pretty")(options "")(descr "Compatibility mapping for flash footprint reference"))
+  (lib (name "BQ25798RQMR")(type "KiCad")(uri "${KIPRJMOD}/noob.pretty")(options "")(descr "Compatibility mapping for charger footprint reference"))
+  (lib (name "AP33772SDKZ13FA01")(type "KiCad")(uri "${KIPRJMOD}/noob.pretty")(options "")(descr "Compatibility mapping for PD-controller footprint reference"))
+)
