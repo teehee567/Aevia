@@ -10,7 +10,7 @@ check this pcb to see if bga is possible
 https://www.st.com/en/evaluation-tools/stm32h7s78-dk.html#cad-resources
 
 v2 pcb
-- Needs to support
+    - Needs to support
     - move to STM32N657X0H3Q
     - clocks:
         - HSE: NDK NX2016SA-24MHZ-EXS00A-CS10820
