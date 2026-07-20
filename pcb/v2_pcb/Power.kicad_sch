@@ -1998,7 +1998,7 @@
 					)
 				)
 				(pin input line
-					(at -22.86 15.24 0)
+					(at -22.86 25.4 0)
 					(length 5.08)
 					(name "VAC2"
 						(effects
@@ -2016,7 +2016,7 @@
 					)
 				)
 				(pin input line
-					(at -22.86 12.7 0)
+					(at -22.86 22.86 0)
 					(length 5.08)
 					(name "VAC1"
 						(effects
@@ -2034,7 +2034,7 @@
 					)
 				)
 				(pin input line
-					(at -22.86 25.4 0)
+					(at -22.86 15.24 0)
 					(length 5.08)
 					(name "ACDRV2"
 						(effects
@@ -2052,7 +2052,7 @@
 					)
 				)
 				(pin input line
-					(at -22.86 22.86 0)
+					(at -22.86 12.7 0)
 					(length 5.08)
 					(name "ACDRV1"
 						(effects
@@ -3493,10 +3493,10 @@
 		(uuid "02b6570f-caac-4d5e-983e-bb7052711c51")
 	)
 	(junction
-		(at 162.56 71.12)
+		(at 182.88 152.4)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "046944b7-9e65-4061-ad77-71e0b8fa23fe")
+		(uuid "08b70222-7383-459f-96ce-2e0c55ea7359")
 	)
 	(junction
 		(at 154.94 53.34)
@@ -3509,12 +3509,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "09837941-b67b-4559-942b-2451238c3078")
-	)
-	(junction
-		(at 182.88 152.4)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "11921a83-aa75-43f2-834e-c59dc8283a47")
 	)
 	(junction
 		(at 138.43 53.34)
@@ -3671,6 +3665,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6cb80ce2-041e-465d-a088-55b005012798")
+	)
+	(junction
+		(at 162.56 71.12)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7304d6b1-de30-49cb-899d-a3ae7769f5a7")
 	)
 	(junction
 		(at 59.69 111.76)
@@ -4714,7 +4714,7 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 58.42) (xy 177.8 58.42)
+			(xy 162.56 58.42) (xy 240.03 58.42)
 		)
 		(stroke
 			(width 0)
@@ -5054,6 +5054,16 @@
 	)
 	(wire
 		(pts
+			(xy 162.56 71.12) (xy 182.88 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8b53c5e-a105-4d89-850a-a3cd948ab190")
+	)
+	(wire
+		(pts
 			(xy 160.02 168.91) (xy 160.02 166.37)
 		)
 		(stroke
@@ -5184,16 +5194,6 @@
 	)
 	(wire
 		(pts
-			(xy 182.88 152.4) (xy 218.44 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b702d0dc-9751-4b34-be35-eb897e35550a")
-	)
-	(wire
-		(pts
 			(xy 191.77 194.31) (xy 215.9 194.31)
 		)
 		(stroke
@@ -5294,16 +5294,6 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 71.12) (xy 218.44 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c1822f7f-c6b2-4167-8f5f-d9ed2588a343")
-	)
-	(wire
-		(pts
 			(xy 132.08 199.39) (xy 133.35 199.39)
 		)
 		(stroke
@@ -5394,7 +5384,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 71.12) (xy 218.44 152.4)
+			(xy 182.88 71.12) (xy 182.88 152.4)
 		)
 		(stroke
 			(width 0)
@@ -6216,7 +6206,7 @@
 		(uuid "7c2a2386-eb2a-480c-9e9d-80318fe681bf")
 	)
 	(label "vpack+"
-		(at 180.34 71.12 180)
+		(at 172.72 71.12 180)
 		(effects
 			(font
 				(size 1.27 1.27)
