@@ -797,7 +797,7 @@
 					)
 				)
 				(pin power_in line
-					(at 17.78 -17.78 180)
+					(at 17.78 15.24 180)
 					(length 5.08)
 					(hide yes)
 					(name "VSS"
@@ -1741,6 +1741,16 @@
 		)
 		(uuid "c3c5b966-8844-4ea3-919a-c2fc567b02d0")
 	)
+	(wire
+		(pts
+			(xy 173.99 93.98) (xy 173.99 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ccca3daa-c1f3-42c2-a087-1099afec6e17")
+	)
 	(bus
 		(pts
 			(xy 45.72 96.52) (xy 60.96 96.52)
@@ -2497,7 +2507,7 @@
 				)
 			)
 		)
-		(property "Value" "VDD_HEXASPI_M"
+		(property "Value" "+1V8_RUN"
 			(at 214.63 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
