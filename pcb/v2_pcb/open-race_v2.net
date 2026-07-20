@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "C:\\Users\\me\\Documents\\Github\\open-race\\pcb\\v2_pcb\\open-race_v2.kicad_sch")
-		(date "2026-06-14T23:26:58")
+		(date "2026-07-08T23:58:09")
 		(tool "Eeschema 10.0.0")
 		(sheet
 			(number "1")
@@ -350,6 +350,54 @@
 				(rev)
 				(date)
 				(source "Power.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "9")
+			(name "/MicroSD/")
+			(tstamps "/4e99b39d-19ed-4d7e-8221-338d133844bd/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "MicroSD.kicad_sch")
 				(comment
 					(number "1")
 					(value "")
@@ -11176,6 +11224,3845 @@
 				)
 			)
 		)
+		(comp
+			(ref "BT1")
+			(value "Battery_Cell")
+			(description "Single-cell battery")
+			(fields
+				(field
+					(name "Sim.Device") "V")
+				(field
+					(name "Sim.Type") "DC")
+				(field
+					(name "Sim.Pins") "1=+ 2=-")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Single-cell battery")
+			)
+			(libsource
+				(lib "Device")
+				(part "Battery_Cell")
+				(description "Single-cell battery")
+			)
+			(property
+				(name "Sim.Device")
+				(value "V")
+			)
+			(property
+				(name "Sim.Type")
+				(value "DC")
+			)
+			(property
+				(name "Sim.Pins")
+				(value "1=+ 2=-")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "battery cell")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "ae185432-9595-4192-a549-daa030806201")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "BT2")
+			(value "Battery_Cell")
+			(description "Single-cell battery")
+			(fields
+				(field
+					(name "Sim.Device") "V")
+				(field
+					(name "Sim.Type") "DC")
+				(field
+					(name "Sim.Pins") "1=+ 2=-")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Single-cell battery")
+			)
+			(libsource
+				(lib "Device")
+				(part "Battery_Cell")
+				(description "Single-cell battery")
+			)
+			(property
+				(name "Sim.Device")
+				(value "V")
+			)
+			(property
+				(name "Sim.Type")
+				(value "DC")
+			)
+			(property
+				(name "Sim.Pins")
+				(value "1=+ 2=-")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "battery cell")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "6143a5af-9ffd-4153-99cf-39cec2c1628d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C7")
+			(value "100nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "7729bd3c-8945-4f61-bf8a-40f787be6fef")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C8")
+			(value "10nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "74a01270-7e5a-4228-b81d-2a9639734e94")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C9")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "762bb454-44d0-46ff-afad-70ee03ad6300")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C10")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "6cddcca4-85e2-4115-a018-a2521bfa697d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C11")
+			(value "100nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "39b305af-2fc8-4c0c-93a8-b7bcfe435664")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C12")
+			(value "10nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "ef4c127a-3a34-45f1-9991-d671044ee5dd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C13")
+			(value "100nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "5265a4b6-4c1f-4348-80f6-5662990052ca")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C14")
+			(value "100nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "bf401905-4ce0-4541-afef-f54f6328454d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C15")
+			(value "470nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "c2659be2-c66d-4ed7-80bd-26bf45ba1f3a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C16")
+			(value "470nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "9f27560e-9aaa-4115-9a56-158d70d06852")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C17")
+			(value "470nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "1d600cb9-c9d8-43ea-b2d5-a3e6512b13a4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C42")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "ef839dd5-0889-4ca1-a920-f4f57a21c5e0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C49")
+			(value "47nF, 10v+ ceram")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "df212bfb-6e95-4244-b90a-5fa7483dd8e8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C53")
+			(value "47nF, 10v+ ceram")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "de68ab60-204d-4ff1-9754-dd42cace66bf")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C56")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "52dc4e48-83bc-4d02-bfcb-c5ff3a036fa2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C62")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "97530232-e81a-4424-81bc-f8755351fc79")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C81")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "091cf9a4-b666-4ae9-a138-f3aafdb65504")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C82")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "1d1091c1-5751-4166-be9d-11edcb59073d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C83")
+			(value "100nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "a0e77d82-93d9-4543-adf4-f745da0c9927")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C84")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "9508c177-ee16-41fd-b45c-c82fac69bfe8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C85")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "0a0bd0f0-3ed7-4384-b053-8acb4d1be77d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C86")
+			(value "100nF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "994dd66a-ec65-461e-9552-d3f91c73bc83")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C87")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "f0e0062d-c642-4a38-abf0-3177d0032f0f")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C88")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "60f174c4-a99c-4a2d-bea8-aebd39ef4d2e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C91")
+			(value "10uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "9f24f976-94b9-4cb3-ac1d-0ba914c2ea13")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C92")
+			(value "4.7uF")
+			(description "Unpolarized capacitor, small symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor, small symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Small")
+				(description "Unpolarized capacitor, small symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "capacitor cap")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "50bdf43b-155f-40b6-a11f-2bd6ed2fe1b6")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D2")
+			(value "LED")
+			(description "Light emitting diode")
+			(fields
+				(field
+					(name "Sim.Pins") "1=K 2=A")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Light emitting diode")
+			)
+			(libsource
+				(lib "Device")
+				(part "LED")
+				(description "Light emitting diode")
+			)
+			(property
+				(name "Sim.Pins")
+				(value "1=K 2=A")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "LED diode")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "LED* LED_SMD:* LED_THT:*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "45232285-7319-4d91-900e-a5e66a4e7c10")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "L1")
+			(value "L")
+			(description "Inductor")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Inductor")
+			)
+			(libsource
+				(lib "Device")
+				(part "L")
+				(description "Inductor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "inductor choke coil reactor magnetic")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Choke_* *Coil* Inductor_* L_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "0d6b9270-fbcf-4582-890b-74ebcda4aa10")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "NTC1")
+			(value "NCP15XH103F03RC")
+			(description "Battery NTC for MAX17320 TH1")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Battery NTC for MAX17320 TH1")
+			)
+			(libsource
+				(lib "Device")
+				(part "Thermistor_NTC")
+				(description "Temperature dependent resistor, negative temperature coefficient")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "thermistor NTC resistor sensor RTD")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_* RV_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "61132758-01ea-4412-94d4-241003d2e6c9")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q3")
+			(value "NMOS")
+			(datasheet "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs")
+			(description "N-MOSFET transistor, drain/source/gate")
+			(fields
+				(field
+					(name "Sim.Device") "NMOS")
+				(field
+					(name "Sim.Type") "VDMOS")
+				(field
+					(name "Sim.Pins") "1=D 2=G 3=S")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet") "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs")
+				(field
+					(name "Description") "N-MOSFET transistor, drain/source/gate")
+			)
+			(libsource
+				(lib "Simulation_SPICE")
+				(part "NMOS")
+				(description "N-MOSFET transistor, drain/source/gate")
+			)
+			(property
+				(name "Sim.Device")
+				(value "NMOS")
+			)
+			(property
+				(name "Sim.Type")
+				(value "VDMOS")
+			)
+			(property
+				(name "Sim.Pins")
+				(value "1=D 2=G 3=S")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "transistor NMOS N-MOS N-MOSFET simulation")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "e68d2594-ead6-4b47-8796-8ae9d266b6b5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q4")
+			(value "NMOS")
+			(datasheet "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs")
+			(description "N-MOSFET transistor, drain/source/gate")
+			(fields
+				(field
+					(name "Sim.Device") "NMOS")
+				(field
+					(name "Sim.Type") "VDMOS")
+				(field
+					(name "Sim.Pins") "1=D 2=G 3=S")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet") "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs")
+				(field
+					(name "Description") "N-MOSFET transistor, drain/source/gate")
+			)
+			(libsource
+				(lib "Simulation_SPICE")
+				(part "NMOS")
+				(description "N-MOSFET transistor, drain/source/gate")
+			)
+			(property
+				(name "Sim.Device")
+				(value "NMOS")
+			)
+			(property
+				(name "Sim.Type")
+				(value "VDMOS")
+			)
+			(property
+				(name "Sim.Pins")
+				(value "1=D 2=G 3=S")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "transistor NMOS N-MOS N-MOSFET simulation")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "4b0af970-f301-428f-9db1-1200463ac62b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q5")
+			(value "NMOS")
+			(datasheet "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs")
+			(description "N-MOSFET transistor, drain/source/gate")
+			(fields
+				(field
+					(name "Sim.Device") "NMOS")
+				(field
+					(name "Sim.Type") "VDMOS")
+				(field
+					(name "Sim.Pins") "1=D 2=G 3=S")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet") "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs")
+				(field
+					(name "Description") "N-MOSFET transistor, drain/source/gate")
+			)
+			(libsource
+				(lib "Simulation_SPICE")
+				(part "NMOS")
+				(description "N-MOSFET transistor, drain/source/gate")
+			)
+			(property
+				(name "Sim.Device")
+				(value "NMOS")
+			)
+			(property
+				(name "Sim.Type")
+				(value "VDMOS")
+			)
+			(property
+				(name "Sim.Pins")
+				(value "1=D 2=G 3=S")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "transistor NMOS N-MOS N-MOSFET simulation")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "5b89037c-e376-40b4-8d27-acb9447658f5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R6")
+			(value "1k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "ff8944b5-e36f-4224-bb1d-5bbdc88a6d31")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R7")
+			(value "100")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "d3988fd3-326b-4159-aa11-aef0914c9930")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R8")
+			(value "100")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "e7b43004-7342-4486-981a-4166b8e20a95")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R9")
+			(value "1k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "737e7424-3801-44fa-9bae-da856132f57b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R10")
+			(value "10")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "bafa90d7-c6a0-4419-8b7d-be3d86f04375")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R11")
+			(value "68")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "dc6e498a-784b-4b01-87d1-970d09ce58c2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R12")
+			(value "68")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "9f88fb4f-0856-4433-8d65-4d9cd6100696")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R13")
+			(value "5m")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "5a6c1c46-707d-40ed-beb7-7c89bc8a5266")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R23")
+			(value "100")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "491d35a7-a049-48c8-9748-983c6cea32b7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R24")
+			(value "10k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "15aeeb7a-17b0-4951-9a2d-5b2435877263")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R25")
+			(value "8.2k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "3a129cd6-c3f7-4f42-b49f-03c6ccd2f880")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R26")
+			(value "10k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "68c3be64-6baa-4ff7-ac67-6da585a7775b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R28")
+			(value "2k2")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "4217d36f-4289-475a-b500-1739e823a39e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R29")
+			(value "10k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "a806f64f-7c73-4133-997a-e588ba5df7c7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R30")
+			(value "10k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "227ac484-08a8-4cc4-ab85-6b558672fe2c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R31")
+			(value "10k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "fbede772-57b7-4d2a-89f7-fe851888153d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R35")
+			(value "8.2k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "35a44655-a500-4455-9543-16df2567a0b9")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R36")
+			(value "10k")
+			(description "MAX17320 TH1 pull-up")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "MAX17320 TH1 pull-up")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "f5e301a4-4835-42e8-8f7c-8a0dc52f30d1")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R37")
+			(value "10k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "75cd0bb0-7211-4a98-b61a-5288f1cc2598")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R38")
+			(value "10k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "c9ff85f5-ff22-48fc-b1d7-110dd6e4a1f8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R39")
+			(value "10k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "a2f8a3b7-a324-4704-b217-0415818d40eb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP1")
+			(value "TestPoint_Small")
+			(description "test point")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "Connector")
+				(part "TestPoint_Small")
+				(description "test point")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "fc1ff51a-5136-4cf2-b357-f4967d39ed87")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U6")
+			(value "BQ25798RQMR")
+			(footprint "BQ25798RQMR:IC_BQ25798RQMR")
+			(description "I²C controlled, 1-4-cell, 5-A buck-boost solar battery charger with dual-input selector and MPPT")
+			(fields
+				(field
+					(name "MF") "Texas Instruments")
+				(field
+					(name "MAXIMUM_PACKAGE_HEIGHT") "1.0mm")
+				(field
+					(name "Package") "VFQFN-29 Texas Instruments")
+				(field
+					(name "Price") "None")
+				(field
+					(name "Check_prices") "https://www.snapeda.com/parts/BQ25798RQMR/Texas+Instruments/view-part/?ref=eda")
+				(field
+					(name "STANDARD") "Manufacturer Recommendations")
+				(field
+					(name "PARTREV") "B")
+				(field
+					(name "SnapEDA_Link") "https://www.snapeda.com/parts/BQ25798RQMR/Texas+Instruments/view-part/?ref=snap")
+				(field
+					(name "MP") "BQ25798RQMR")
+				(field
+					(name "MANUFACTURER") "Texas Instruments")
+				(field
+					(name "Availability") "In Stock")
+				(field
+					(name "SNAPEDA_PN") "BQ25798RQMR")
+				(field
+					(name "Footprint") "BQ25798RQMR:IC_BQ25798RQMR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "I²C controlled, 1-4-cell, 5-A buck-boost solar battery charger with dual-input selector and MPPT")
+			)
+			(libsource
+				(lib "noob")
+				(part "BQ25798RQMR")
+				(description "I²C controlled, 1-4-cell, 5-A buck-boost solar battery charger with dual-input selector and MPPT")
+			)
+			(property
+				(name "MF")
+				(value "Texas Instruments")
+			)
+			(property
+				(name "MAXIMUM_PACKAGE_HEIGHT")
+				(value "1.0mm")
+			)
+			(property
+				(name "Package")
+				(value "VFQFN-29 Texas Instruments")
+			)
+			(property
+				(name "Price")
+				(value "None")
+			)
+			(property
+				(name "Check_prices")
+				(value "https://www.snapeda.com/parts/BQ25798RQMR/Texas+Instruments/view-part/?ref=eda")
+			)
+			(property
+				(name "STANDARD")
+				(value "Manufacturer Recommendations")
+			)
+			(property
+				(name "PARTREV")
+				(value "B")
+			)
+			(property
+				(name "SnapEDA_Link")
+				(value "https://www.snapeda.com/parts/BQ25798RQMR/Texas+Instruments/view-part/?ref=snap")
+			)
+			(property
+				(name "MP")
+				(value "BQ25798RQMR")
+			)
+			(property
+				(name "MANUFACTURER")
+				(value "Texas Instruments")
+			)
+			(property
+				(name "Availability")
+				(value "In Stock")
+			)
+			(property
+				(name "SNAPEDA_PN")
+				(value "BQ25798RQMR")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "7b0c676e-057e-43fa-865e-a256ea45526e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "28")
+						)
+						(pin
+							(num "26")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "25")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "29")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "27")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U7")
+			(value "MAX17320G22+")
+			(footprint "21-0139I_T2444-4_MXM")
+			(datasheet "MAX17320G22+")
+			(fields
+				(field
+					(name "Footprint") "21-0139I_T2444-4_MXM")
+				(field
+					(name "Datasheet") "MAX17320G22+")
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "noob")
+				(part "MAX17320G22+")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Power")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Power.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "MAX17320G22+")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "21-0139I_T2444-4_MXM 21-0139I_T2444-4_MXM-M 21-0139I_T2444-4_MXM-L")
+			)
+			(sheetpath
+				(names "/Power/")
+				(tstamps "/f75a094f-afff-47fb-af28-3f9eed6a2864/")
+			)
+			(tstamps "1908bcc1-d05e-4a9e-a6fe-b44144608d73")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "25")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "10")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J3")
+			(value "DM3CS-SF")
+			(footprint "DM3CS-SF_HIR")
+			(datasheet "DM3CS-SF")
+			(fields
+				(field
+					(name "Footprint") "DM3CS-SF_HIR")
+				(field
+					(name "Datasheet") "DM3CS-SF")
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "noob")
+				(part "DM3CS-SF")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "MicroSD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MicroSD.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "DM3CS-SF")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "DM3CS-SF_HIR")
+			)
+			(sheetpath
+				(names "/MicroSD/")
+				(tstamps "/4e99b39d-19ed-4d7e-8221-338d133844bd/")
+			)
+			(tstamps "39b265c6-de33-4f04-9e3d-8db64c9807d8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "7")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R14")
+			(value "47k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "MicroSD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MicroSD.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/MicroSD/")
+				(tstamps "/4e99b39d-19ed-4d7e-8221-338d133844bd/")
+			)
+			(tstamps "ada7b20e-f4da-456c-95d6-4b4156f0fc2d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R15")
+			(value "47k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "MicroSD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MicroSD.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/MicroSD/")
+				(tstamps "/4e99b39d-19ed-4d7e-8221-338d133844bd/")
+			)
+			(tstamps "0cbf0918-4735-4d84-bd54-6e0d40c0d6eb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R16")
+			(value "47k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "MicroSD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MicroSD.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/MicroSD/")
+				(tstamps "/4e99b39d-19ed-4d7e-8221-338d133844bd/")
+			)
+			(tstamps "b6ff1aac-b655-4a7d-9416-09aa7ced099e")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R17")
+			(value "47k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "MicroSD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MicroSD.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/MicroSD/")
+				(tstamps "/4e99b39d-19ed-4d7e-8221-338d133844bd/")
+			)
+			(tstamps "6449e462-d24d-449c-8901-ff04fb31f080")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R18")
+			(value "47k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "MicroSD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MicroSD.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/MicroSD/")
+				(tstamps "/4e99b39d-19ed-4d7e-8221-338d133844bd/")
+			)
+			(tstamps "f6623a96-c31e-4970-907b-bdad0307e813")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R19")
+			(value "47k")
+			(description "Resistor, small US symbol")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor, small US symbol")
+			)
+			(libsource
+				(lib "Device")
+				(part "R_Small_US")
+				(description "Resistor, small US symbol")
+			)
+			(property
+				(name "Sheetname")
+				(value "MicroSD")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MicroSD.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "r resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/MicroSD/")
+				(tstamps "/4e99b39d-19ed-4d7e-8221-338d133844bd/")
+			)
+			(tstamps "7619a8af-944c-490f-a0be-382f52c7ed1c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
 	)
 	(groups)
 	(variants
@@ -11237,6 +15124,36 @@
 					(num "6")
 					(name "SWO")
 					(type "input")
+				)
+			)
+		)
+		(libpart
+			(lib "Connector")
+			(part "TestPoint_Small")
+			(description "test point")
+			(footprints
+				(fp "Pin*")
+				(fp "Test*")
+			)
+			(fields
+				(field
+					(name "Reference") "TP")
+				(field
+					(name "Value") "TestPoint_Small")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
 				)
 			)
 		)
@@ -11351,6 +15268,43 @@
 		)
 		(libpart
 			(lib "Device")
+			(part "Battery_Cell")
+			(description "Single-cell battery")
+			(fields
+				(field
+					(name "Reference") "BT")
+				(field
+					(name "Value") "Battery_Cell")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Single-cell battery")
+				(field
+					(name "Sim.Device") "V")
+				(field
+					(name "Sim.Type") "DC")
+				(field
+					(name "Sim.Pins") "1=+ 2=-")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "+")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "-")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
 			(part "C_Small")
 			(description "Unpolarized capacitor, small symbol")
 			(footprints
@@ -11420,6 +15374,43 @@
 				(pin
 					(num "2")
 					(name "A")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "L")
+			(description "Inductor")
+			(footprints
+				(fp "Choke_*")
+				(fp "*Coil*")
+				(fp "Inductor_*")
+				(fp "L_*")
+			)
+			(fields
+				(field
+					(name "Reference") "L")
+				(field
+					(name "Value") "L")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Inductor")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
 					(type "passive")
 				)
 			)
@@ -12071,6 +16062,433 @@
 				(pin
 					(num "E5")
 					(name "VSS")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "noob")
+			(part "BQ25798RQMR")
+			(description "I²C controlled, 1-4-cell, 5-A buck-boost solar battery charger with dual-input selector and MPPT")
+			(fields
+				(field
+					(name "Reference") "U6")
+				(field
+					(name "Value") "BQ25798RQMR")
+				(field
+					(name "Footprint") "BQ25798RQMR:IC_BQ25798RQMR")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "I²C controlled, 1-4-cell, 5-A buck-boost solar battery charger with dual-input selector and MPPT")
+				(field
+					(name "MF") "Texas Instruments")
+				(field
+					(name "MAXIMUM_PACKAGE_HEIGHT") "1.0mm")
+				(field
+					(name "Package") "VFQFN-29 Texas Instruments")
+				(field
+					(name "Price") "None")
+				(field
+					(name "Check_prices") "https://www.snapeda.com/parts/BQ25798RQMR/Texas+Instruments/view-part/?ref=eda")
+				(field
+					(name "STANDARD") "Manufacturer Recommendations")
+				(field
+					(name "PARTREV") "B")
+				(field
+					(name "SnapEDA_Link") "https://www.snapeda.com/parts/BQ25798RQMR/Texas+Instruments/view-part/?ref=snap")
+				(field
+					(name "MP") "BQ25798RQMR")
+				(field
+					(name "MANUFACTURER") "Texas Instruments")
+				(field
+					(name "Availability") "In Stock")
+				(field
+					(name "SNAPEDA_PN") "BQ25798RQMR")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "STAT")
+					(type "output")
+				)
+				(pin
+					(num "2")
+					(name "VBUS")
+					(type "input")
+				)
+				(pin
+					(num "3")
+					(name "VBUS")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "BTST1")
+					(type "input")
+				)
+				(pin
+					(num "5")
+					(name "REGN")
+					(type "output")
+				)
+				(pin
+					(num "6")
+					(name "D+")
+					(type "bidirectional")
+				)
+				(pin
+					(num "7")
+					(name "D-")
+					(type "bidirectional")
+				)
+				(pin
+					(num "8")
+					(name "VAC2")
+					(type "input")
+				)
+				(pin
+					(num "9")
+					(name "VAC1")
+					(type "input")
+				)
+				(pin
+					(num "10")
+					(name "ACDRV2")
+					(type "input")
+				)
+				(pin
+					(num "11")
+					(name "ACDRV1")
+					(type "input")
+				)
+				(pin
+					(num "12")
+					(name "~{QON}")
+					(type "input")
+				)
+				(pin
+					(num "13")
+					(name "~{CE}")
+					(type "input")
+				)
+				(pin
+					(num "14")
+					(name "SCL")
+					(type "input")
+				)
+				(pin
+					(num "15")
+					(name "SDA")
+					(type "bidirectional")
+				)
+				(pin
+					(num "16")
+					(name "TS")
+					(type "input")
+				)
+				(pin
+					(num "17")
+					(name "ILIM_HIZ")
+					(type "input")
+				)
+				(pin
+					(num "18")
+					(name "BATP")
+					(type "power_in")
+				)
+				(pin
+					(num "19")
+					(name "BTST2")
+					(type "output")
+				)
+				(pin
+					(num "20")
+					(name "PROG")
+					(type "input")
+				)
+				(pin
+					(num "21")
+					(name "~{INT}")
+					(type "output")
+				)
+				(pin
+					(num "22")
+					(name "BAT")
+					(type "power_in")
+				)
+				(pin
+					(num "23")
+					(name "BAT")
+					(type "power_in")
+				)
+				(pin
+					(num "24")
+					(name "SDRV")
+					(type "output")
+				)
+				(pin
+					(num "25")
+					(name "SYS")
+					(type "output")
+				)
+				(pin
+					(num "26")
+					(name "SW2")
+					(type "passive")
+				)
+				(pin
+					(num "27")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "28")
+					(name "SW1")
+					(type "passive")
+				)
+				(pin
+					(num "29")
+					(name "PMID")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "noob")
+			(part "DM3CS-SF")
+			(docs "DM3CS-SF")
+			(footprints
+				(fp "DM3CS-SF_HIR")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "DM3CS-SF")
+				(field
+					(name "Footprint") "DM3CS-SF_HIR")
+				(field
+					(name "Datasheet") "DM3CS-SF")
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "DAT2")
+					(type "bidirectional")
+				)
+				(pin
+					(num "2")
+					(name "CD/DAT3")
+					(type "unspecified")
+				)
+				(pin
+					(num "3")
+					(name "CMD")
+					(type "unspecified")
+				)
+				(pin
+					(num "4")
+					(name "VDD")
+					(type "power_in")
+				)
+				(pin
+					(num "5")
+					(name "CLK")
+					(type "unspecified")
+				)
+				(pin
+					(num "6")
+					(name "VSS")
+					(type "power_out")
+				)
+				(pin
+					(num "7")
+					(name "DAT0")
+					(type "bidirectional")
+				)
+				(pin
+					(num "8")
+					(name "DAT1")
+					(type "bidirectional")
+				)
+				(pin
+					(num "9")
+					(name "CDS")
+					(type "unspecified")
+				)
+				(pin
+					(num "10")
+					(name "GND1")
+					(type "power_out")
+				)
+				(pin
+					(num "11")
+					(name "GND2")
+					(type "power_out")
+				)
+				(pin
+					(num "12")
+					(name "GND3")
+					(type "power_out")
+				)
+				(pin
+					(num "13")
+					(name "GND4")
+					(type "power_out")
+				)
+			)
+		)
+		(libpart
+			(lib "noob")
+			(part "MAX17320G22+")
+			(docs "MAX17320G22+")
+			(footprints
+				(fp "21-0139I_T2444-4_MXM")
+				(fp "21-0139I_T2444-4_MXM-M")
+				(fp "21-0139I_T2444-4_MXM-L")
+			)
+			(fields
+				(field
+					(name "Reference") "U7")
+				(field
+					(name "Value") "MAX17320G22+")
+				(field
+					(name "Footprint") "21-0139I_T2444-4_MXM")
+				(field
+					(name "Datasheet") "MAX17320G22+")
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "IN")
+					(type "input")
+				)
+				(pin
+					(num "2")
+					(name "CP")
+					(type "output")
+				)
+				(pin
+					(num "3")
+					(name "CHG")
+					(type "unspecified")
+				)
+				(pin
+					(num "4")
+					(name "DIS")
+					(type "unspecified")
+				)
+				(pin
+					(num "5")
+					(name "ZVC")
+					(type "unspecified")
+				)
+				(pin
+					(num "6")
+					(name "PCKP")
+					(type "unspecified")
+				)
+				(pin
+					(num "7")
+					(name "ALRT")
+					(type "output")
+				)
+				(pin
+					(num "8")
+					(name "SCL/OD")
+					(type "input")
+				)
+				(pin
+					(num "9")
+					(name "SDA/DQ")
+					(type "bidirectional")
+				)
+				(pin
+					(num "10")
+					(name "TH1")
+					(type "input")
+				)
+				(pin
+					(num "11")
+					(name "PFAIL")
+					(type "unspecified")
+				)
+				(pin
+					(num "12")
+					(name "AOLDO")
+					(type "unspecified")
+				)
+				(pin
+					(num "13")
+					(name "REG3")
+					(type "output")
+				)
+				(pin
+					(num "14")
+					(name "CSN")
+					(type "unspecified")
+				)
+				(pin
+					(num "15")
+					(name "CSP")
+					(type "unspecified")
+				)
+				(pin
+					(num "16")
+					(name "TH2")
+					(type "input")
+				)
+				(pin
+					(num "17")
+					(name "REG2")
+					(type "output")
+				)
+				(pin
+					(num "18")
+					(name "TH3")
+					(type "input")
+				)
+				(pin
+					(num "19")
+					(name "TH4")
+					(type "input")
+				)
+				(pin
+					(num "20")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "21")
+					(name "CELL1")
+					(type "unspecified")
+				)
+				(pin
+					(num "22")
+					(name "CELL2")
+					(type "unspecified")
+				)
+				(pin
+					(num "23")
+					(name "CELL3")
+					(type "unspecified")
+				)
+				(pin
+					(num "24")
+					(name "BATTS")
+					(type "unspecified")
+				)
+				(pin
+					(num "25")
+					(name "EPAD")
 					(type "power_in")
 				)
 			)
@@ -13575,7 +17993,105 @@
 	)
 	(nets
 		(net
-			(code "21")
+			(code "11")
+			(name "+3V3")
+			(class "Default")
+			(node
+				(ref "C6")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D2")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "4")
+				(pinfunction "VDD_4")
+				(pintype "power_in")
+			)
+			(node
+				(ref "R14")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R15")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R16")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R17")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R18")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R19")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R29")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R30")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R31")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R36")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R37")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R38")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R39")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R5")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U4")
+				(pin "10")
+				(pinfunction "VPWR_10")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "12")
 			(name "/Debug/NRST")
 			(class "Default")
 			(node
@@ -13586,7 +18102,7 @@
 			)
 		)
 		(net
-			(code "22")
+			(code "13")
 			(name "/Debug/SWCLK")
 			(class "Default")
 			(node
@@ -13597,7 +18113,7 @@
 			)
 		)
 		(net
-			(code "23")
+			(code "14")
 			(name "/Debug/SWDIO")
 			(class "Default")
 			(node
@@ -13608,7 +18124,7 @@
 			)
 		)
 		(net
-			(code "24")
+			(code "15")
 			(name "/Debug/SWO")
 			(class "Default")
 			(node
@@ -13619,7 +18135,7 @@
 			)
 		)
 		(net
-			(code "26")
+			(code "18")
 			(name "/HexaSPI_PSRAM/HEXASPI_CLK")
 			(class "Default")
 			(node
@@ -13630,7 +18146,7 @@
 			)
 		)
 		(net
-			(code "27")
+			(code "19")
 			(name "/HexaSPI_PSRAM/HEXASPI_DQS0")
 			(class "Default")
 			(node
@@ -13641,7 +18157,7 @@
 			)
 		)
 		(net
-			(code "28")
+			(code "20")
 			(name "/HexaSPI_PSRAM/HEXASPI_DQS1")
 			(class "Default")
 			(node
@@ -13652,7 +18168,7 @@
 			)
 		)
 		(net
-			(code "29")
+			(code "21")
 			(name "/HexaSPI_PSRAM/HEXASPI_IO0")
 			(class "Default")
 			(node
@@ -13669,7 +18185,7 @@
 			)
 		)
 		(net
-			(code "30")
+			(code "22")
 			(name "/HexaSPI_PSRAM/HEXASPI_IO1")
 			(class "Default")
 			(node
@@ -13686,7 +18202,7 @@
 			)
 		)
 		(net
-			(code "31")
+			(code "23")
 			(name "/HexaSPI_PSRAM/HEXASPI_IO2")
 			(class "Default")
 			(node
@@ -13703,7 +18219,7 @@
 			)
 		)
 		(net
-			(code "32")
+			(code "24")
 			(name "/HexaSPI_PSRAM/HEXASPI_IO3")
 			(class "Default")
 			(node
@@ -13720,7 +18236,7 @@
 			)
 		)
 		(net
-			(code "33")
+			(code "25")
 			(name "/HexaSPI_PSRAM/HEXASPI_IO4")
 			(class "Default")
 			(node
@@ -13737,7 +18253,7 @@
 			)
 		)
 		(net
-			(code "34")
+			(code "26")
 			(name "/HexaSPI_PSRAM/HEXASPI_IO5")
 			(class "Default")
 			(node
@@ -13754,7 +18270,7 @@
 			)
 		)
 		(net
-			(code "35")
+			(code "27")
 			(name "/HexaSPI_PSRAM/HEXASPI_IO6")
 			(class "Default")
 			(node
@@ -13771,7 +18287,7 @@
 			)
 		)
 		(net
-			(code "44")
+			(code "36")
 			(name "/HexaSPI_PSRAM/HEXASPI_NCS")
 			(class "Default")
 			(node
@@ -13779,6 +18295,113 @@
 				(pin "A3")
 				(pinfunction "~{CE}_A3")
 				(pintype "input")
+			)
+		)
+		(net
+			(code "37")
+			(name "/MicroSD/SDMMC_CDS")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "9")
+				(pinfunction "CDS_9")
+				(pintype "unspecified")
+			)
+			(node
+				(ref "R14")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "38")
+			(name "/MicroSD/SDMMC_CK")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "5")
+				(pinfunction "CLK_5")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "39")
+			(name "/MicroSD/SDMMC_CMD")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "3")
+				(pinfunction "CMD_3")
+				(pintype "unspecified")
+			)
+			(node
+				(ref "R17")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "40")
+			(name "/MicroSD/SDMMC_D0")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "7")
+				(pinfunction "DAT0_7")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "R16")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "41")
+			(name "/MicroSD/SDMMC_D1")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "8")
+				(pinfunction "DAT1_8")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "R15")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "42")
+			(name "/MicroSD/SDMMC_D2")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "1")
+				(pinfunction "DAT2_1")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "R19")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "43")
+			(name "/MicroSD/SDMMC_D3")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "2")
+				(pinfunction "CD/DAT3_2")
+				(pintype "unspecified")
+			)
+			(node
+				(ref "R18")
+				(pin "2")
+				(pintype "passive")
 			)
 		)
 		(net
@@ -13793,8 +18416,8 @@
 			)
 		)
 		(net
-			(code "47")
-			(name "/OctoSPI_FLASH/OCTOSPI_CLK")
+			(code "46")
+			(name "/OctoSPI_FLASH/QUADSPI_CLK")
 			(class "Default")
 			(node
 				(ref "U5")
@@ -13804,8 +18427,8 @@
 			)
 		)
 		(net
-			(code "48")
-			(name "/OctoSPI_FLASH/OCTOSPI_IO0")
+			(code "47")
+			(name "/OctoSPI_FLASH/QUADSPI_I00")
 			(class "Default")
 			(node
 				(ref "U5")
@@ -13815,8 +18438,19 @@
 			)
 		)
 		(net
-			(code "50")
-			(name "/OctoSPI_FLASH/OCTOSPI_IO2")
+			(code "48")
+			(name "/OctoSPI_FLASH/QUADSPI_I01")
+			(class "Default")
+			(node
+				(ref "U5")
+				(pin "D2")
+				(pinfunction "SO/SIO1_D2")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "49")
+			(name "/OctoSPI_FLASH/QUADSPI_I02")
 			(class "Default")
 			(node
 				(ref "U5")
@@ -13826,8 +18460,8 @@
 			)
 		)
 		(net
-			(code "51")
-			(name "/OctoSPI_FLASH/OCTOSPI_IO3")
+			(code "50")
+			(name "/OctoSPI_FLASH/QUADSPI_I03")
 			(class "Default")
 			(node
 				(ref "U5")
@@ -13837,8 +18471,8 @@
 			)
 		)
 		(net
-			(code "52")
-			(name "/OctoSPI_FLASH/OCTOSPI_NCS")
+			(code "51")
+			(name "/OctoSPI_FLASH/QUADSPI_NCS")
 			(class "Default")
 			(node
 				(ref "U5")
@@ -13849,6 +18483,161 @@
 		)
 		(net
 			(code "53")
+			(name "/Power/BAT_ALRT")
+			(class "Default")
+			(node
+				(ref "R37")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "7")
+				(pinfunction "ALRT_7")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "54")
+			(name "/Power/BAT_SCL")
+			(class "Default")
+			(node
+				(ref "R39")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "8")
+				(pinfunction "SCL/OD_8")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "55")
+			(name "/Power/BAT_SDA")
+			(class "Default")
+			(node
+				(ref "R38")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "9")
+				(pinfunction "SDA/DQ_9")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "56")
+			(name "/Power/CHG_INT")
+			(class "Default")
+			(node
+				(ref "R31")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "21")
+				(pinfunction "~{INT}_21")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "57")
+			(name "/Power/CHG_SCL")
+			(class "Default")
+			(node
+				(ref "R30")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "14")
+				(pinfunction "SCL_14")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "58")
+			(name "/Power/CHG_SDA")
+			(class "Default")
+			(node
+				(ref "R29")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "15")
+				(pinfunction "SDA_15")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "59")
+			(name "/Power/REGN")
+			(class "Default")
+			(node
+				(ref "C92")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R24")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R25")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "5")
+				(pinfunction "REGN_5")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "60")
+			(name "/Power/vpack+")
+			(class "Default")
+			(node
+				(ref "Q3")
+				(pin "1")
+				(pinfunction "D_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q5")
+				(pin "3")
+				(pinfunction "S_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R23")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R6")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "5")
+				(pinfunction "ZVC_5")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "62")
 			(name "/STM32_MCU_IO/BOOT0")
 			(class "Default")
 			(node
@@ -13859,7 +18648,7 @@
 			)
 		)
 		(net
-			(code "54")
+			(code "63")
 			(name "/STM32_MCU_IO/CSI_CKN")
 			(class "Default")
 			(node
@@ -13870,7 +18659,7 @@
 			)
 		)
 		(net
-			(code "55")
+			(code "64")
 			(name "/STM32_MCU_IO/CSI_CKP")
 			(class "Default")
 			(node
@@ -13881,7 +18670,7 @@
 			)
 		)
 		(net
-			(code "56")
+			(code "65")
 			(name "/STM32_MCU_IO/CSI_D0N")
 			(class "Default")
 			(node
@@ -13892,7 +18681,7 @@
 			)
 		)
 		(net
-			(code "57")
+			(code "66")
 			(name "/STM32_MCU_IO/CSI_D0P")
 			(class "Default")
 			(node
@@ -13903,7 +18692,7 @@
 			)
 		)
 		(net
-			(code "58")
+			(code "67")
 			(name "/STM32_MCU_IO/CSI_D1N")
 			(class "Default")
 			(node
@@ -13914,7 +18703,7 @@
 			)
 		)
 		(net
-			(code "59")
+			(code "68")
 			(name "/STM32_MCU_IO/CSI_D1P")
 			(class "Default")
 			(node
@@ -13925,7 +18714,7 @@
 			)
 		)
 		(net
-			(code "61")
+			(code "70")
 			(name "/STM32_MCU_IO/NRST")
 			(class "Default")
 			(node
@@ -13936,7 +18725,7 @@
 			)
 		)
 		(net
-			(code "62")
+			(code "71")
 			(name "/STM32_MCU_IO/OTG1_HSDM")
 			(class "Default")
 			(node
@@ -13947,7 +18736,7 @@
 			)
 		)
 		(net
-			(code "63")
+			(code "72")
 			(name "/STM32_MCU_IO/OTG1_HSDP")
 			(class "Default")
 			(node
@@ -13958,7 +18747,7 @@
 			)
 		)
 		(net
-			(code "64")
+			(code "73")
 			(name "/STM32_MCU_IO/PA0")
 			(class "Default")
 			(node
@@ -13969,7 +18758,7 @@
 			)
 		)
 		(net
-			(code "65")
+			(code "74")
 			(name "/STM32_MCU_IO/PA1")
 			(class "Default")
 			(node
@@ -13980,7 +18769,7 @@
 			)
 		)
 		(net
-			(code "66")
+			(code "75")
 			(name "/STM32_MCU_IO/PA2")
 			(class "Default")
 			(node
@@ -13991,7 +18780,7 @@
 			)
 		)
 		(net
-			(code "67")
+			(code "76")
 			(name "/STM32_MCU_IO/PA3")
 			(class "Default")
 			(node
@@ -14002,7 +18791,7 @@
 			)
 		)
 		(net
-			(code "68")
+			(code "77")
 			(name "/STM32_MCU_IO/PA4")
 			(class "Default")
 			(node
@@ -14013,7 +18802,7 @@
 			)
 		)
 		(net
-			(code "69")
+			(code "78")
 			(name "/STM32_MCU_IO/PA5")
 			(class "Default")
 			(node
@@ -14024,7 +18813,7 @@
 			)
 		)
 		(net
-			(code "70")
+			(code "79")
 			(name "/STM32_MCU_IO/PA6")
 			(class "Default")
 			(node
@@ -14035,7 +18824,7 @@
 			)
 		)
 		(net
-			(code "71")
+			(code "80")
 			(name "/STM32_MCU_IO/PA7")
 			(class "Default")
 			(node
@@ -14046,7 +18835,7 @@
 			)
 		)
 		(net
-			(code "72")
+			(code "81")
 			(name "/STM32_MCU_IO/PA8")
 			(class "Default")
 			(node
@@ -14057,7 +18846,7 @@
 			)
 		)
 		(net
-			(code "73")
+			(code "82")
 			(name "/STM32_MCU_IO/PA9")
 			(class "Default")
 			(node
@@ -14068,7 +18857,7 @@
 			)
 		)
 		(net
-			(code "74")
+			(code "83")
 			(name "/STM32_MCU_IO/PA10")
 			(class "Default")
 			(node
@@ -14079,7 +18868,7 @@
 			)
 		)
 		(net
-			(code "75")
+			(code "84")
 			(name "/STM32_MCU_IO/PA11")
 			(class "Default")
 			(node
@@ -14090,7 +18879,7 @@
 			)
 		)
 		(net
-			(code "76")
+			(code "85")
 			(name "/STM32_MCU_IO/PA12")
 			(class "Default")
 			(node
@@ -14101,7 +18890,7 @@
 			)
 		)
 		(net
-			(code "77")
+			(code "86")
 			(name "/STM32_MCU_IO/PA13")
 			(class "Default")
 			(node
@@ -14112,7 +18901,7 @@
 			)
 		)
 		(net
-			(code "78")
+			(code "87")
 			(name "/STM32_MCU_IO/PA14")
 			(class "Default")
 			(node
@@ -14123,7 +18912,7 @@
 			)
 		)
 		(net
-			(code "79")
+			(code "88")
 			(name "/STM32_MCU_IO/PA15")
 			(class "Default")
 			(node
@@ -14134,7 +18923,7 @@
 			)
 		)
 		(net
-			(code "80")
+			(code "89")
 			(name "/STM32_MCU_IO/PB0")
 			(class "Default")
 			(node
@@ -14145,7 +18934,7 @@
 			)
 		)
 		(net
-			(code "81")
+			(code "90")
 			(name "/STM32_MCU_IO/PB1")
 			(class "Default")
 			(node
@@ -14156,7 +18945,7 @@
 			)
 		)
 		(net
-			(code "82")
+			(code "91")
 			(name "/STM32_MCU_IO/PB2")
 			(class "Default")
 			(node
@@ -14167,7 +18956,7 @@
 			)
 		)
 		(net
-			(code "83")
+			(code "92")
 			(name "/STM32_MCU_IO/PB3")
 			(class "Default")
 			(node
@@ -14178,7 +18967,7 @@
 			)
 		)
 		(net
-			(code "84")
+			(code "93")
 			(name "/STM32_MCU_IO/PB4")
 			(class "Default")
 			(node
@@ -14189,7 +18978,7 @@
 			)
 		)
 		(net
-			(code "85")
+			(code "94")
 			(name "/STM32_MCU_IO/PB5")
 			(class "Default")
 			(node
@@ -14200,7 +18989,7 @@
 			)
 		)
 		(net
-			(code "86")
+			(code "95")
 			(name "/STM32_MCU_IO/PB6")
 			(class "Default")
 			(node
@@ -14211,7 +19000,7 @@
 			)
 		)
 		(net
-			(code "87")
+			(code "96")
 			(name "/STM32_MCU_IO/PB7")
 			(class "Default")
 			(node
@@ -14222,7 +19011,7 @@
 			)
 		)
 		(net
-			(code "88")
+			(code "97")
 			(name "/STM32_MCU_IO/PB8")
 			(class "Default")
 			(node
@@ -14233,7 +19022,7 @@
 			)
 		)
 		(net
-			(code "89")
+			(code "98")
 			(name "/STM32_MCU_IO/PB9")
 			(class "Default")
 			(node
@@ -14244,7 +19033,7 @@
 			)
 		)
 		(net
-			(code "90")
+			(code "99")
 			(name "/STM32_MCU_IO/PB10")
 			(class "Default")
 			(node
@@ -14255,7 +19044,7 @@
 			)
 		)
 		(net
-			(code "91")
+			(code "100")
 			(name "/STM32_MCU_IO/PB11")
 			(class "Default")
 			(node
@@ -14266,7 +19055,7 @@
 			)
 		)
 		(net
-			(code "92")
+			(code "101")
 			(name "/STM32_MCU_IO/PB12")
 			(class "Default")
 			(node
@@ -14277,7 +19066,7 @@
 			)
 		)
 		(net
-			(code "93")
+			(code "102")
 			(name "/STM32_MCU_IO/PB13")
 			(class "Default")
 			(node
@@ -14288,7 +19077,7 @@
 			)
 		)
 		(net
-			(code "94")
+			(code "103")
 			(name "/STM32_MCU_IO/PB14")
 			(class "Default")
 			(node
@@ -14299,7 +19088,7 @@
 			)
 		)
 		(net
-			(code "95")
+			(code "104")
 			(name "/STM32_MCU_IO/PB15")
 			(class "Default")
 			(node
@@ -14310,7 +19099,7 @@
 			)
 		)
 		(net
-			(code "96")
+			(code "105")
 			(name "/STM32_MCU_IO/PC0")
 			(class "Default")
 			(node
@@ -14321,7 +19110,7 @@
 			)
 		)
 		(net
-			(code "97")
+			(code "106")
 			(name "/STM32_MCU_IO/PC1")
 			(class "Default")
 			(node
@@ -14332,7 +19121,7 @@
 			)
 		)
 		(net
-			(code "98")
+			(code "107")
 			(name "/STM32_MCU_IO/PC2")
 			(class "Default")
 			(node
@@ -14343,7 +19132,7 @@
 			)
 		)
 		(net
-			(code "99")
+			(code "108")
 			(name "/STM32_MCU_IO/PC3")
 			(class "Default")
 			(node
@@ -14354,7 +19143,7 @@
 			)
 		)
 		(net
-			(code "100")
+			(code "109")
 			(name "/STM32_MCU_IO/PC4")
 			(class "Default")
 			(node
@@ -14365,7 +19154,7 @@
 			)
 		)
 		(net
-			(code "101")
+			(code "110")
 			(name "/STM32_MCU_IO/PC5")
 			(class "Default")
 			(node
@@ -14376,7 +19165,7 @@
 			)
 		)
 		(net
-			(code "102")
+			(code "111")
 			(name "/STM32_MCU_IO/PC6")
 			(class "Default")
 			(node
@@ -14387,7 +19176,7 @@
 			)
 		)
 		(net
-			(code "103")
+			(code "112")
 			(name "/STM32_MCU_IO/PC7")
 			(class "Default")
 			(node
@@ -14398,7 +19187,7 @@
 			)
 		)
 		(net
-			(code "104")
+			(code "113")
 			(name "/STM32_MCU_IO/PC8")
 			(class "Default")
 			(node
@@ -14409,7 +19198,7 @@
 			)
 		)
 		(net
-			(code "105")
+			(code "114")
 			(name "/STM32_MCU_IO/PC9")
 			(class "Default")
 			(node
@@ -14420,7 +19209,7 @@
 			)
 		)
 		(net
-			(code "106")
+			(code "115")
 			(name "/STM32_MCU_IO/PC10")
 			(class "Default")
 			(node
@@ -14431,7 +19220,7 @@
 			)
 		)
 		(net
-			(code "107")
+			(code "116")
 			(name "/STM32_MCU_IO/PC11")
 			(class "Default")
 			(node
@@ -14442,7 +19231,7 @@
 			)
 		)
 		(net
-			(code "108")
+			(code "117")
 			(name "/STM32_MCU_IO/PC12")
 			(class "Default")
 			(node
@@ -14453,7 +19242,7 @@
 			)
 		)
 		(net
-			(code "109")
+			(code "118")
 			(name "/STM32_MCU_IO/PC13")
 			(class "Default")
 			(node
@@ -14464,7 +19253,7 @@
 			)
 		)
 		(net
-			(code "110")
+			(code "119")
 			(name "/STM32_MCU_IO/PC14")
 			(class "Default")
 			(node
@@ -14475,7 +19264,7 @@
 			)
 		)
 		(net
-			(code "111")
+			(code "120")
 			(name "/STM32_MCU_IO/PC15")
 			(class "Default")
 			(node
@@ -14486,7 +19275,7 @@
 			)
 		)
 		(net
-			(code "112")
+			(code "121")
 			(name "/STM32_MCU_IO/PD0")
 			(class "Default")
 			(node
@@ -14497,7 +19286,7 @@
 			)
 		)
 		(net
-			(code "113")
+			(code "122")
 			(name "/STM32_MCU_IO/PD1")
 			(class "Default")
 			(node
@@ -14508,7 +19297,7 @@
 			)
 		)
 		(net
-			(code "114")
+			(code "123")
 			(name "/STM32_MCU_IO/PD2")
 			(class "Default")
 			(node
@@ -14519,7 +19308,7 @@
 			)
 		)
 		(net
-			(code "115")
+			(code "124")
 			(name "/STM32_MCU_IO/PD3")
 			(class "Default")
 			(node
@@ -14530,7 +19319,7 @@
 			)
 		)
 		(net
-			(code "116")
+			(code "125")
 			(name "/STM32_MCU_IO/PD4")
 			(class "Default")
 			(node
@@ -14541,7 +19330,7 @@
 			)
 		)
 		(net
-			(code "117")
+			(code "126")
 			(name "/STM32_MCU_IO/PD5")
 			(class "Default")
 			(node
@@ -14552,7 +19341,7 @@
 			)
 		)
 		(net
-			(code "118")
+			(code "127")
 			(name "/STM32_MCU_IO/PD6")
 			(class "Default")
 			(node
@@ -14563,7 +19352,7 @@
 			)
 		)
 		(net
-			(code "119")
+			(code "128")
 			(name "/STM32_MCU_IO/PD7")
 			(class "Default")
 			(node
@@ -14574,7 +19363,7 @@
 			)
 		)
 		(net
-			(code "120")
+			(code "129")
 			(name "/STM32_MCU_IO/PD8")
 			(class "Default")
 			(node
@@ -14585,7 +19374,7 @@
 			)
 		)
 		(net
-			(code "121")
+			(code "130")
 			(name "/STM32_MCU_IO/PD9")
 			(class "Default")
 			(node
@@ -14596,7 +19385,7 @@
 			)
 		)
 		(net
-			(code "122")
+			(code "131")
 			(name "/STM32_MCU_IO/PD10")
 			(class "Default")
 			(node
@@ -14607,7 +19396,7 @@
 			)
 		)
 		(net
-			(code "123")
+			(code "132")
 			(name "/STM32_MCU_IO/PD11")
 			(class "Default")
 			(node
@@ -14618,7 +19407,7 @@
 			)
 		)
 		(net
-			(code "124")
+			(code "133")
 			(name "/STM32_MCU_IO/PD12")
 			(class "Default")
 			(node
@@ -14629,7 +19418,7 @@
 			)
 		)
 		(net
-			(code "125")
+			(code "134")
 			(name "/STM32_MCU_IO/PD13")
 			(class "Default")
 			(node
@@ -14640,7 +19429,7 @@
 			)
 		)
 		(net
-			(code "126")
+			(code "135")
 			(name "/STM32_MCU_IO/PD14")
 			(class "Default")
 			(node
@@ -14651,7 +19440,7 @@
 			)
 		)
 		(net
-			(code "127")
+			(code "136")
 			(name "/STM32_MCU_IO/PD15")
 			(class "Default")
 			(node
@@ -14662,7 +19451,7 @@
 			)
 		)
 		(net
-			(code "128")
+			(code "137")
 			(name "/STM32_MCU_IO/PE0")
 			(class "Default")
 			(node
@@ -14673,7 +19462,7 @@
 			)
 		)
 		(net
-			(code "129")
+			(code "138")
 			(name "/STM32_MCU_IO/PE1")
 			(class "Default")
 			(node
@@ -14684,7 +19473,7 @@
 			)
 		)
 		(net
-			(code "130")
+			(code "139")
 			(name "/STM32_MCU_IO/PE2")
 			(class "Default")
 			(node
@@ -14695,7 +19484,7 @@
 			)
 		)
 		(net
-			(code "131")
+			(code "140")
 			(name "/STM32_MCU_IO/PE3")
 			(class "Default")
 			(node
@@ -14706,7 +19495,7 @@
 			)
 		)
 		(net
-			(code "132")
+			(code "141")
 			(name "/STM32_MCU_IO/PE4")
 			(class "Default")
 			(node
@@ -14717,7 +19506,7 @@
 			)
 		)
 		(net
-			(code "133")
+			(code "142")
 			(name "/STM32_MCU_IO/PE5")
 			(class "Default")
 			(node
@@ -14728,7 +19517,7 @@
 			)
 		)
 		(net
-			(code "134")
+			(code "143")
 			(name "/STM32_MCU_IO/PE6")
 			(class "Default")
 			(node
@@ -14739,7 +19528,7 @@
 			)
 		)
 		(net
-			(code "135")
+			(code "144")
 			(name "/STM32_MCU_IO/PE7")
 			(class "Default")
 			(node
@@ -14750,7 +19539,7 @@
 			)
 		)
 		(net
-			(code "136")
+			(code "145")
 			(name "/STM32_MCU_IO/PE8")
 			(class "Default")
 			(node
@@ -14761,7 +19550,7 @@
 			)
 		)
 		(net
-			(code "137")
+			(code "146")
 			(name "/STM32_MCU_IO/PE9")
 			(class "Default")
 			(node
@@ -14772,7 +19561,7 @@
 			)
 		)
 		(net
-			(code "138")
+			(code "147")
 			(name "/STM32_MCU_IO/PE10")
 			(class "Default")
 			(node
@@ -14783,7 +19572,7 @@
 			)
 		)
 		(net
-			(code "139")
+			(code "148")
 			(name "/STM32_MCU_IO/PE11")
 			(class "Default")
 			(node
@@ -14794,7 +19583,7 @@
 			)
 		)
 		(net
-			(code "140")
+			(code "149")
 			(name "/STM32_MCU_IO/PE12")
 			(class "Default")
 			(node
@@ -14805,7 +19594,7 @@
 			)
 		)
 		(net
-			(code "141")
+			(code "150")
 			(name "/STM32_MCU_IO/PE13")
 			(class "Default")
 			(node
@@ -14816,7 +19605,7 @@
 			)
 		)
 		(net
-			(code "142")
+			(code "151")
 			(name "/STM32_MCU_IO/PE14")
 			(class "Default")
 			(node
@@ -14827,7 +19616,7 @@
 			)
 		)
 		(net
-			(code "143")
+			(code "152")
 			(name "/STM32_MCU_IO/PE15")
 			(class "Default")
 			(node
@@ -14838,7 +19627,7 @@
 			)
 		)
 		(net
-			(code "144")
+			(code "153")
 			(name "/STM32_MCU_IO/PF0")
 			(class "Default")
 			(node
@@ -14849,7 +19638,7 @@
 			)
 		)
 		(net
-			(code "145")
+			(code "154")
 			(name "/STM32_MCU_IO/PF1")
 			(class "Default")
 			(node
@@ -14860,7 +19649,7 @@
 			)
 		)
 		(net
-			(code "146")
+			(code "155")
 			(name "/STM32_MCU_IO/PF2")
 			(class "Default")
 			(node
@@ -14871,7 +19660,7 @@
 			)
 		)
 		(net
-			(code "147")
+			(code "156")
 			(name "/STM32_MCU_IO/PF3")
 			(class "Default")
 			(node
@@ -14882,7 +19671,7 @@
 			)
 		)
 		(net
-			(code "148")
+			(code "157")
 			(name "/STM32_MCU_IO/PF4")
 			(class "Default")
 			(node
@@ -14893,7 +19682,7 @@
 			)
 		)
 		(net
-			(code "149")
+			(code "158")
 			(name "/STM32_MCU_IO/PF5")
 			(class "Default")
 			(node
@@ -14904,7 +19693,7 @@
 			)
 		)
 		(net
-			(code "150")
+			(code "159")
 			(name "/STM32_MCU_IO/PF6")
 			(class "Default")
 			(node
@@ -14915,7 +19704,7 @@
 			)
 		)
 		(net
-			(code "151")
+			(code "160")
 			(name "/STM32_MCU_IO/PF7")
 			(class "Default")
 			(node
@@ -14926,7 +19715,7 @@
 			)
 		)
 		(net
-			(code "152")
+			(code "161")
 			(name "/STM32_MCU_IO/PF8")
 			(class "Default")
 			(node
@@ -14937,7 +19726,7 @@
 			)
 		)
 		(net
-			(code "153")
+			(code "162")
 			(name "/STM32_MCU_IO/PF9")
 			(class "Default")
 			(node
@@ -14948,7 +19737,7 @@
 			)
 		)
 		(net
-			(code "154")
+			(code "163")
 			(name "/STM32_MCU_IO/PF10")
 			(class "Default")
 			(node
@@ -14959,7 +19748,7 @@
 			)
 		)
 		(net
-			(code "155")
+			(code "164")
 			(name "/STM32_MCU_IO/PF11")
 			(class "Default")
 			(node
@@ -14970,7 +19759,7 @@
 			)
 		)
 		(net
-			(code "156")
+			(code "165")
 			(name "/STM32_MCU_IO/PF12")
 			(class "Default")
 			(node
@@ -14981,7 +19770,7 @@
 			)
 		)
 		(net
-			(code "157")
+			(code "166")
 			(name "/STM32_MCU_IO/PF13")
 			(class "Default")
 			(node
@@ -14992,7 +19781,7 @@
 			)
 		)
 		(net
-			(code "158")
+			(code "167")
 			(name "/STM32_MCU_IO/PF14")
 			(class "Default")
 			(node
@@ -15003,7 +19792,7 @@
 			)
 		)
 		(net
-			(code "159")
+			(code "168")
 			(name "/STM32_MCU_IO/PF15")
 			(class "Default")
 			(node
@@ -15014,7 +19803,7 @@
 			)
 		)
 		(net
-			(code "160")
+			(code "169")
 			(name "/STM32_MCU_IO/PG0")
 			(class "Default")
 			(node
@@ -15025,7 +19814,7 @@
 			)
 		)
 		(net
-			(code "161")
+			(code "170")
 			(name "/STM32_MCU_IO/PG1")
 			(class "Default")
 			(node
@@ -15036,7 +19825,7 @@
 			)
 		)
 		(net
-			(code "162")
+			(code "171")
 			(name "/STM32_MCU_IO/PG2")
 			(class "Default")
 			(node
@@ -15047,7 +19836,7 @@
 			)
 		)
 		(net
-			(code "163")
+			(code "172")
 			(name "/STM32_MCU_IO/PG3")
 			(class "Default")
 			(node
@@ -15058,7 +19847,7 @@
 			)
 		)
 		(net
-			(code "164")
+			(code "173")
 			(name "/STM32_MCU_IO/PG4")
 			(class "Default")
 			(node
@@ -15069,7 +19858,7 @@
 			)
 		)
 		(net
-			(code "165")
+			(code "174")
 			(name "/STM32_MCU_IO/PG5")
 			(class "Default")
 			(node
@@ -15080,7 +19869,7 @@
 			)
 		)
 		(net
-			(code "166")
+			(code "175")
 			(name "/STM32_MCU_IO/PG6")
 			(class "Default")
 			(node
@@ -15091,7 +19880,7 @@
 			)
 		)
 		(net
-			(code "167")
+			(code "176")
 			(name "/STM32_MCU_IO/PG7")
 			(class "Default")
 			(node
@@ -15102,7 +19891,7 @@
 			)
 		)
 		(net
-			(code "168")
+			(code "177")
 			(name "/STM32_MCU_IO/PG8")
 			(class "Default")
 			(node
@@ -15113,7 +19902,7 @@
 			)
 		)
 		(net
-			(code "169")
+			(code "178")
 			(name "/STM32_MCU_IO/PG9")
 			(class "Default")
 			(node
@@ -15124,7 +19913,7 @@
 			)
 		)
 		(net
-			(code "170")
+			(code "179")
 			(name "/STM32_MCU_IO/PG10")
 			(class "Default")
 			(node
@@ -15135,7 +19924,7 @@
 			)
 		)
 		(net
-			(code "171")
+			(code "180")
 			(name "/STM32_MCU_IO/PG11")
 			(class "Default")
 			(node
@@ -15146,7 +19935,7 @@
 			)
 		)
 		(net
-			(code "172")
+			(code "181")
 			(name "/STM32_MCU_IO/PG12")
 			(class "Default")
 			(node
@@ -15157,7 +19946,7 @@
 			)
 		)
 		(net
-			(code "173")
+			(code "182")
 			(name "/STM32_MCU_IO/PG13")
 			(class "Default")
 			(node
@@ -15168,7 +19957,7 @@
 			)
 		)
 		(net
-			(code "174")
+			(code "183")
 			(name "/STM32_MCU_IO/PG14")
 			(class "Default")
 			(node
@@ -15179,7 +19968,7 @@
 			)
 		)
 		(net
-			(code "175")
+			(code "184")
 			(name "/STM32_MCU_IO/PG15")
 			(class "Default")
 			(node
@@ -15190,7 +19979,7 @@
 			)
 		)
 		(net
-			(code "176")
+			(code "185")
 			(name "/STM32_MCU_IO/PH0")
 			(class "Default")
 			(node
@@ -15201,7 +19990,7 @@
 			)
 		)
 		(net
-			(code "177")
+			(code "186")
 			(name "/STM32_MCU_IO/PH1")
 			(class "Default")
 			(node
@@ -15212,7 +20001,7 @@
 			)
 		)
 		(net
-			(code "178")
+			(code "187")
 			(name "/STM32_MCU_IO/PH2")
 			(class "Default")
 			(node
@@ -15223,7 +20012,7 @@
 			)
 		)
 		(net
-			(code "179")
+			(code "188")
 			(name "/STM32_MCU_IO/PH3")
 			(class "Default")
 			(node
@@ -15234,7 +20023,7 @@
 			)
 		)
 		(net
-			(code "180")
+			(code "189")
 			(name "/STM32_MCU_IO/PH4")
 			(class "Default")
 			(node
@@ -15245,7 +20034,7 @@
 			)
 		)
 		(net
-			(code "181")
+			(code "190")
 			(name "/STM32_MCU_IO/PH5")
 			(class "Default")
 			(node
@@ -15256,7 +20045,7 @@
 			)
 		)
 		(net
-			(code "182")
+			(code "191")
 			(name "/STM32_MCU_IO/PH6")
 			(class "Default")
 			(node
@@ -15267,7 +20056,7 @@
 			)
 		)
 		(net
-			(code "183")
+			(code "192")
 			(name "/STM32_MCU_IO/PH7")
 			(class "Default")
 			(node
@@ -15278,7 +20067,7 @@
 			)
 		)
 		(net
-			(code "184")
+			(code "193")
 			(name "/STM32_MCU_IO/PH8")
 			(class "Default")
 			(node
@@ -15289,7 +20078,7 @@
 			)
 		)
 		(net
-			(code "185")
+			(code "194")
 			(name "/STM32_MCU_IO/PH9")
 			(class "Default")
 			(node
@@ -15300,7 +20089,7 @@
 			)
 		)
 		(net
-			(code "186")
+			(code "195")
 			(name "/STM32_MCU_IO/PN0")
 			(class "Default")
 			(node
@@ -15311,7 +20100,7 @@
 			)
 		)
 		(net
-			(code "187")
+			(code "196")
 			(name "/STM32_MCU_IO/PN1")
 			(class "Default")
 			(node
@@ -15322,7 +20111,7 @@
 			)
 		)
 		(net
-			(code "188")
+			(code "197")
 			(name "/STM32_MCU_IO/PN2")
 			(class "Default")
 			(node
@@ -15333,7 +20122,7 @@
 			)
 		)
 		(net
-			(code "189")
+			(code "198")
 			(name "/STM32_MCU_IO/PN3")
 			(class "Default")
 			(node
@@ -15344,7 +20133,7 @@
 			)
 		)
 		(net
-			(code "190")
+			(code "199")
 			(name "/STM32_MCU_IO/PN4")
 			(class "Default")
 			(node
@@ -15355,7 +20144,7 @@
 			)
 		)
 		(net
-			(code "191")
+			(code "200")
 			(name "/STM32_MCU_IO/PN5")
 			(class "Default")
 			(node
@@ -15366,7 +20155,7 @@
 			)
 		)
 		(net
-			(code "192")
+			(code "201")
 			(name "/STM32_MCU_IO/PN6")
 			(class "Default")
 			(node
@@ -15377,7 +20166,7 @@
 			)
 		)
 		(net
-			(code "193")
+			(code "202")
 			(name "/STM32_MCU_IO/PN7")
 			(class "Default")
 			(node
@@ -15388,7 +20177,7 @@
 			)
 		)
 		(net
-			(code "194")
+			(code "203")
 			(name "/STM32_MCU_IO/PN8")
 			(class "Default")
 			(node
@@ -15399,7 +20188,7 @@
 			)
 		)
 		(net
-			(code "195")
+			(code "204")
 			(name "/STM32_MCU_IO/PN9")
 			(class "Default")
 			(node
@@ -15410,7 +20199,7 @@
 			)
 		)
 		(net
-			(code "196")
+			(code "205")
 			(name "/STM32_MCU_IO/PN10")
 			(class "Default")
 			(node
@@ -15421,7 +20210,7 @@
 			)
 		)
 		(net
-			(code "197")
+			(code "206")
 			(name "/STM32_MCU_IO/PN11")
 			(class "Default")
 			(node
@@ -15432,7 +20221,7 @@
 			)
 		)
 		(net
-			(code "198")
+			(code "207")
 			(name "/STM32_MCU_IO/PN12")
 			(class "Default")
 			(node
@@ -15443,7 +20232,7 @@
 			)
 		)
 		(net
-			(code "199")
+			(code "208")
 			(name "/STM32_MCU_IO/PO0")
 			(class "Default")
 			(node
@@ -15459,7 +20248,7 @@
 			)
 		)
 		(net
-			(code "200")
+			(code "209")
 			(name "/STM32_MCU_IO/PO1")
 			(class "Default")
 			(node
@@ -15470,7 +20259,7 @@
 			)
 		)
 		(net
-			(code "201")
+			(code "210")
 			(name "/STM32_MCU_IO/PO2")
 			(class "Default")
 			(node
@@ -15486,7 +20275,7 @@
 			)
 		)
 		(net
-			(code "202")
+			(code "211")
 			(name "/STM32_MCU_IO/PO3")
 			(class "Default")
 			(node
@@ -15502,7 +20291,7 @@
 			)
 		)
 		(net
-			(code "203")
+			(code "212")
 			(name "/STM32_MCU_IO/PO4")
 			(class "Default")
 			(node
@@ -15518,7 +20307,7 @@
 			)
 		)
 		(net
-			(code "204")
+			(code "213")
 			(name "/STM32_MCU_IO/PO5")
 			(class "Default")
 			(node
@@ -15529,7 +20318,7 @@
 			)
 		)
 		(net
-			(code "205")
+			(code "214")
 			(name "/STM32_MCU_IO/PP0")
 			(class "Default")
 			(node
@@ -15545,7 +20334,7 @@
 			)
 		)
 		(net
-			(code "206")
+			(code "215")
 			(name "/STM32_MCU_IO/PP1")
 			(class "Default")
 			(node
@@ -15561,7 +20350,7 @@
 			)
 		)
 		(net
-			(code "207")
+			(code "216")
 			(name "/STM32_MCU_IO/PP2")
 			(class "Default")
 			(node
@@ -15577,7 +20366,7 @@
 			)
 		)
 		(net
-			(code "208")
+			(code "217")
 			(name "/STM32_MCU_IO/PP3")
 			(class "Default")
 			(node
@@ -15593,7 +20382,7 @@
 			)
 		)
 		(net
-			(code "209")
+			(code "218")
 			(name "/STM32_MCU_IO/PP4")
 			(class "Default")
 			(node
@@ -15609,7 +20398,7 @@
 			)
 		)
 		(net
-			(code "210")
+			(code "219")
 			(name "/STM32_MCU_IO/PP5")
 			(class "Default")
 			(node
@@ -15625,7 +20414,7 @@
 			)
 		)
 		(net
-			(code "211")
+			(code "220")
 			(name "/STM32_MCU_IO/PP6")
 			(class "Default")
 			(node
@@ -15641,7 +20430,7 @@
 			)
 		)
 		(net
-			(code "212")
+			(code "221")
 			(name "/STM32_MCU_IO/PP7")
 			(class "Default")
 			(node
@@ -15657,7 +20446,7 @@
 			)
 		)
 		(net
-			(code "213")
+			(code "222")
 			(name "/STM32_MCU_IO/PP8")
 			(class "Default")
 			(node
@@ -15673,7 +20462,7 @@
 			)
 		)
 		(net
-			(code "214")
+			(code "223")
 			(name "/STM32_MCU_IO/PP9")
 			(class "Default")
 			(node
@@ -15689,7 +20478,7 @@
 			)
 		)
 		(net
-			(code "215")
+			(code "224")
 			(name "/STM32_MCU_IO/PP10")
 			(class "Default")
 			(node
@@ -15705,7 +20494,7 @@
 			)
 		)
 		(net
-			(code "216")
+			(code "225")
 			(name "/STM32_MCU_IO/PP11")
 			(class "Default")
 			(node
@@ -15721,7 +20510,7 @@
 			)
 		)
 		(net
-			(code "217")
+			(code "226")
 			(name "/STM32_MCU_IO/PP12")
 			(class "Default")
 			(node
@@ -15737,7 +20526,7 @@
 			)
 		)
 		(net
-			(code "218")
+			(code "227")
 			(name "/STM32_MCU_IO/PP13")
 			(class "Default")
 			(node
@@ -15753,7 +20542,7 @@
 			)
 		)
 		(net
-			(code "219")
+			(code "228")
 			(name "/STM32_MCU_IO/PP14")
 			(class "Default")
 			(node
@@ -15769,7 +20558,7 @@
 			)
 		)
 		(net
-			(code "220")
+			(code "229")
 			(name "/STM32_MCU_IO/PP15")
 			(class "Default")
 			(node
@@ -15785,7 +20574,7 @@
 			)
 		)
 		(net
-			(code "221")
+			(code "230")
 			(name "/STM32_MCU_IO/PQ0")
 			(class "Default")
 			(node
@@ -15796,7 +20585,7 @@
 			)
 		)
 		(net
-			(code "222")
+			(code "231")
 			(name "/STM32_MCU_IO/PQ1")
 			(class "Default")
 			(node
@@ -15807,7 +20596,7 @@
 			)
 		)
 		(net
-			(code "223")
+			(code "232")
 			(name "/STM32_MCU_IO/PQ2")
 			(class "Default")
 			(node
@@ -15818,7 +20607,7 @@
 			)
 		)
 		(net
-			(code "224")
+			(code "233")
 			(name "/STM32_MCU_IO/PQ3")
 			(class "Default")
 			(node
@@ -15829,7 +20618,7 @@
 			)
 		)
 		(net
-			(code "225")
+			(code "234")
 			(name "/STM32_MCU_IO/PQ4")
 			(class "Default")
 			(node
@@ -15840,7 +20629,7 @@
 			)
 		)
 		(net
-			(code "226")
+			(code "235")
 			(name "/STM32_MCU_IO/PQ5")
 			(class "Default")
 			(node
@@ -15851,7 +20640,7 @@
 			)
 		)
 		(net
-			(code "227")
+			(code "236")
 			(name "/STM32_MCU_IO/PQ6")
 			(class "Default")
 			(node
@@ -15862,7 +20651,7 @@
 			)
 		)
 		(net
-			(code "228")
+			(code "237")
 			(name "/STM32_MCU_IO/PQ7")
 			(class "Default")
 			(node
@@ -15873,7 +20662,7 @@
 			)
 		)
 		(net
-			(code "229")
+			(code "238")
 			(name "/STM32_MCU_IO/PWR_ON")
 			(class "Default")
 			(node
@@ -15884,7 +20673,7 @@
 			)
 		)
 		(net
-			(code "230")
+			(code "239")
 			(name "/STM32_MCU_IO/UCPD1_CC1")
 			(class "Default")
 			(node
@@ -15895,7 +20684,7 @@
 			)
 		)
 		(net
-			(code "231")
+			(code "240")
 			(name "/STM32_MCU_IO/UCPD1_CC2")
 			(class "Default")
 			(node
@@ -15906,7 +20695,7 @@
 			)
 		)
 		(net
-			(code "238")
+			(code "247")
 			(name "/STM32_MCU_PWR/I_SENS_VDDCORE_N")
 			(class "Default")
 			(node
@@ -15937,7 +20726,7 @@
 			)
 		)
 		(net
-			(code "239")
+			(code "248")
 			(name "/STM32_MCU_PWR/I_SENS_VDDCORE_P")
 			(class "Default")
 			(node
@@ -15982,7 +20771,7 @@
 			)
 		)
 		(net
-			(code "241")
+			(code "250")
 			(name "/USB/USBPD_INT")
 			(class "Default")
 			(node
@@ -15993,7 +20782,7 @@
 			)
 		)
 		(net
-			(code "242")
+			(code "251")
 			(name "/USB/USBPD_SCL")
 			(class "Default")
 			(node
@@ -16004,7 +20793,7 @@
 			)
 		)
 		(net
-			(code "243")
+			(code "252")
 			(name "/USB/USBPD_SDA")
 			(class "Default")
 			(node
@@ -16015,7 +20804,7 @@
 			)
 		)
 		(net
-			(code "245")
+			(code "253")
 			(name "/USB/USB_DN")
 			(class "Default")
 			(node
@@ -16044,7 +20833,7 @@
 			)
 		)
 		(net
-			(code "246")
+			(code "254")
 			(name "/USB/USB_DP")
 			(class "Default")
 			(node
@@ -16073,7 +20862,7 @@
 			)
 		)
 		(net
-			(code "247")
+			(code "255")
 			(name "/USB/USB_TPD8S_FLT")
 			(class "Default")
 			(node
@@ -16089,12 +20878,55 @@
 			)
 		)
 		(net
-			(code "248")
+			(code "257")
+			(name "BAT")
+			(class "Default")
+			(node
+				(ref "C84")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C85")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q3")
+				(pin "3")
+				(pinfunction "S_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "22")
+				(pinfunction "BAT_22")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U6")
+				(pin "23")
+				(pinfunction "BAT_23")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "258")
 			(name "GND")
 			(class "Default")
 			(node
 				(ref "C1")
 				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C10")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C11")
+				(pin "1")
 				(pintype "passive")
 			)
 			(node
@@ -16208,6 +21040,11 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "C42")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
 				(ref "C43")
 				(pin "1")
 				(pintype "passive")
@@ -16268,6 +21105,11 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "C56")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
 				(ref "C57")
 				(pin "1")
 				(pintype "passive")
@@ -16294,6 +21136,11 @@
 			)
 			(node
 				(ref "C61")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C62")
 				(pin "1")
 				(pintype "passive")
 			)
@@ -16388,13 +21235,68 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "C81")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C82")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C83")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C84")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C85")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C86")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C87")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C88")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
 				(ref "C89")
 				(pin "2")
 				(pintype "passive")
 			)
 			(node
+				(ref "C9")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
 				(ref "C90")
 				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C91")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C92")
+				(pin "1")
 				(pintype "passive")
 			)
 			(node
@@ -16446,6 +21348,56 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "J3")
+				(pin "10")
+				(pinfunction "GND1_10")
+				(pintype "power_out")
+			)
+			(node
+				(ref "J3")
+				(pin "11")
+				(pinfunction "GND2_11")
+				(pintype "power_out")
+			)
+			(node
+				(ref "J3")
+				(pin "12")
+				(pinfunction "GND3_12")
+				(pintype "power_out")
+			)
+			(node
+				(ref "J3")
+				(pin "13")
+				(pinfunction "GND4_13")
+				(pintype "power_out")
+			)
+			(node
+				(ref "J3")
+				(pin "6")
+				(pinfunction "VSS_6")
+				(pintype "power_out")
+			)
+			(node
+				(ref "NTC1")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R13")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R24")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R26")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
 				(ref "R32")
 				(pin "1")
 				(pintype "passive")
@@ -16457,6 +21409,11 @@
 			)
 			(node
 				(ref "R34")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R35")
 				(pin "1")
 				(pintype "passive")
 			)
@@ -16663,9 +21620,181 @@
 				(pinfunction "GND_B3")
 				(pintype "power_in")
 			)
+			(node
+				(ref "U6")
+				(pin "13")
+				(pinfunction "~{CE}_13")
+				(pintype "input")
+			)
+			(node
+				(ref "U6")
+				(pin "17")
+				(pinfunction "ILIM_HIZ_17")
+				(pintype "input")
+			)
+			(node
+				(ref "U6")
+				(pin "27")
+				(pinfunction "GND_27")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U6")
+				(pin "8")
+				(pinfunction "VAC2_8")
+				(pintype "input")
+			)
+			(node
+				(ref "U6")
+				(pin "9")
+				(pinfunction "VAC1_9")
+				(pintype "input")
+			)
+			(node
+				(ref "U7")
+				(pin "14")
+				(pinfunction "CSN_14")
+				(pintype "unspecified")
+			)
+			(node
+				(ref "U7")
+				(pin "16")
+				(pinfunction "TH2_16")
+				(pintype "input")
+			)
+			(node
+				(ref "U7")
+				(pin "18")
+				(pinfunction "TH3_18")
+				(pintype "input")
+			)
+			(node
+				(ref "U7")
+				(pin "19")
+				(pinfunction "TH4_19")
+				(pintype "input")
+			)
 		)
 		(net
-			(code "249")
+			(code "259")
+			(name "GND1")
+			(class "Default")
+			(node
+				(ref "BT2")
+				(pin "2")
+				(pinfunction "-_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C12")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C14")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C15")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C16")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C17")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R13")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R9")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "15")
+				(pinfunction "CSP_15")
+				(pintype "unspecified")
+			)
+			(node
+				(ref "U7")
+				(pin "20")
+				(pinfunction "GND_20")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U7")
+				(pin "25")
+				(pinfunction "EPAD_25")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "260")
+			(name "Net-(BT1-+)")
+			(class "Default")
+			(node
+				(ref "BT1")
+				(pin "1")
+				(pinfunction "+_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C7")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q4")
+				(pin "3")
+				(pinfunction "S_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R10")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R11")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "261")
+			(name "Net-(BT1--)")
+			(class "Default")
+			(node
+				(ref "BT1")
+				(pin "2")
+				(pinfunction "-_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "BT2")
+				(pin "1")
+				(pinfunction "+_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R12")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "262")
 			(name "Net-(C29-Pad1)")
 			(class "Default")
 			(node
@@ -16741,7 +21870,7 @@
 			)
 		)
 		(net
-			(code "250")
+			(code "263")
 			(name "Net-(C36-Pad2)")
 			(class "Default")
 			(node
@@ -16751,7 +21880,7 @@
 			)
 		)
 		(net
-			(code "251")
+			(code "264")
 			(name "Net-(C37-Pad1)")
 			(class "Default")
 			(node
@@ -16766,7 +21895,7 @@
 			)
 		)
 		(net
-			(code "252")
+			(code "265")
 			(name "Net-(C38-Pad2)")
 			(class "Default")
 			(node
@@ -16781,7 +21910,7 @@
 			)
 		)
 		(net
-			(code "253")
+			(code "266")
 			(name "Net-(C40-Pad2)")
 			(class "Default")
 			(node
@@ -16791,7 +21920,7 @@
 			)
 		)
 		(net
-			(code "254")
+			(code "267")
 			(name "Net-(C44-Pad2)")
 			(class "Default")
 			(node
@@ -16846,7 +21975,7 @@
 			)
 		)
 		(net
-			(code "255")
+			(code "268")
 			(name "Net-(C46-Pad2)")
 			(class "Default")
 			(node
@@ -16901,7 +22030,7 @@
 			)
 		)
 		(net
-			(code "256")
+			(code "269")
 			(name "Net-(C55-Pad2)")
 			(class "Default")
 			(node
@@ -16946,7 +22075,7 @@
 			)
 		)
 		(net
-			(code "257")
+			(code "270")
 			(name "Net-(C59-Pad2)")
 			(class "Default")
 			(node
@@ -16961,7 +22090,7 @@
 			)
 		)
 		(net
-			(code "258")
+			(code "271")
 			(name "Net-(D1-A)")
 			(class "Default")
 			(node
@@ -16977,7 +22106,23 @@
 			)
 		)
 		(net
-			(code "259")
+			(code "272")
+			(name "Net-(D2-K)")
+			(class "Default")
+			(node
+				(ref "D2")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R28")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "273")
 			(name "Net-(D4-A)")
 			(class "Default")
 			(node
@@ -16999,7 +22144,7 @@
 			)
 		)
 		(net
-			(code "260")
+			(code "274")
 			(name "Net-(IC1-CC1)")
 			(class "Default")
 			(node
@@ -17016,7 +22161,7 @@
 			)
 		)
 		(net
-			(code "261")
+			(code "275")
 			(name "Net-(IC1-CC2)")
 			(class "Default")
 			(node
@@ -17033,7 +22178,7 @@
 			)
 		)
 		(net
-			(code "262")
+			(code "276")
 			(name "Net-(IC1-IFB)")
 			(class "Default")
 			(node
@@ -17049,7 +22194,7 @@
 			)
 		)
 		(net
-			(code "263")
+			(code "277")
 			(name "Net-(IC1-ISENP)")
 			(class "Default")
 			(node
@@ -17089,7 +22234,7 @@
 			)
 		)
 		(net
-			(code "264")
+			(code "278")
 			(name "Net-(IC1-LED)")
 			(class "Default")
 			(node
@@ -17105,7 +22250,7 @@
 			)
 		)
 		(net
-			(code "265")
+			(code "279")
 			(name "Net-(IC1-OTP)")
 			(class "Default")
 			(node
@@ -17121,7 +22266,7 @@
 			)
 		)
 		(net
-			(code "266")
+			(code "280")
 			(name "Net-(IC1-PWR_EN)")
 			(class "Default")
 			(node
@@ -17137,7 +22282,7 @@
 			)
 		)
 		(net
-			(code "267")
+			(code "281")
 			(name "Net-(IC1-V5V)")
 			(class "Default")
 			(node
@@ -17153,7 +22298,7 @@
 			)
 		)
 		(net
-			(code "268")
+			(code "282")
 			(name "Net-(IC1-V18)")
 			(class "Default")
 			(node
@@ -17169,7 +22314,7 @@
 			)
 		)
 		(net
-			(code "269")
+			(code "283")
 			(name "Net-(IC1-VCC)")
 			(class "Default")
 			(node
@@ -17191,7 +22336,7 @@
 			)
 		)
 		(net
-			(code "270")
+			(code "284")
 			(name "Net-(IC1-VOUT)")
 			(class "Default")
 			(node
@@ -17207,7 +22352,7 @@
 			)
 		)
 		(net
-			(code "271")
+			(code "285")
 			(name "Net-(J1-GND)")
 			(class "Default")
 			(node
@@ -17223,7 +22368,7 @@
 			)
 		)
 		(net
-			(code "272")
+			(code "286")
 			(name "Net-(J1-VCC)")
 			(class "Default")
 			(node
@@ -17234,7 +22379,7 @@
 			)
 		)
 		(net
-			(code "273")
+			(code "287")
 			(name "Net-(J2-CC1)")
 			(class "Default")
 			(node
@@ -17257,7 +22402,7 @@
 			)
 		)
 		(net
-			(code "274")
+			(code "288")
 			(name "Net-(J2-CC2)")
 			(class "Default")
 			(node
@@ -17280,7 +22425,7 @@
 			)
 		)
 		(net
-			(code "275")
+			(code "289")
 			(name "Net-(J2-SBU1)")
 			(class "Default")
 			(node
@@ -17297,7 +22442,7 @@
 			)
 		)
 		(net
-			(code "276")
+			(code "290")
 			(name "Net-(J2-SBU2)")
 			(class "Default")
 			(node
@@ -17314,7 +22459,7 @@
 			)
 		)
 		(net
-			(code "277")
+			(code "291")
 			(name "Net-(L4-Pad1)")
 			(class "Default")
 			(node
@@ -17324,7 +22469,7 @@
 			)
 		)
 		(net
-			(code "278")
+			(code "292")
 			(name "Net-(L7-Pad1)")
 			(class "Default")
 			(node
@@ -17375,7 +22520,7 @@
 			)
 		)
 		(net
-			(code "279")
+			(code "293")
 			(name "Net-(L8-Pad1)")
 			(class "Default")
 			(node
@@ -17385,7 +22530,7 @@
 			)
 		)
 		(net
-			(code "280")
+			(code "294")
 			(name "Net-(L8-Pad2)")
 			(class "Default")
 			(node
@@ -17395,7 +22540,7 @@
 			)
 		)
 		(net
-			(code "281")
+			(code "295")
 			(name "Net-(Q1-D)")
 			(class "Default")
 			(node
@@ -17412,7 +22557,7 @@
 			)
 		)
 		(net
-			(code "282")
+			(code "296")
 			(name "Net-(Q1-G)")
 			(class "Default")
 			(node
@@ -17434,7 +22579,7 @@
 			)
 		)
 		(net
-			(code "283")
+			(code "297")
 			(name "Net-(Q2-S)")
 			(class "Default")
 			(node
@@ -17450,17 +22595,78 @@
 			)
 		)
 		(net
-			(code "284")
-			(name "Net-(R5-Pad2)")
+			(code "298")
+			(name "Net-(Q3-G)")
 			(class "Default")
 			(node
-				(ref "R5")
+				(ref "Q3")
 				(pin "2")
+				(pinfunction "G_2")
+				(pintype "input")
+			)
+			(node
+				(ref "U6")
+				(pin "24")
+				(pinfunction "SDRV_24")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "299")
+			(name "Net-(Q4-D)")
+			(class "Default")
+			(node
+				(ref "Q4")
+				(pin "1")
+				(pinfunction "D_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q5")
+				(pin "1")
+				(pinfunction "D_1")
 				(pintype "passive")
 			)
 		)
 		(net
-			(code "285")
+			(code "300")
+			(name "Net-(Q4-G)")
+			(class "Default")
+			(node
+				(ref "C7")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q4")
+				(pin "2")
+				(pinfunction "G_2")
+				(pintype "input")
+			)
+			(node
+				(ref "R7")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "301")
+			(name "Net-(Q5-G)")
+			(class "Default")
+			(node
+				(ref "Q5")
+				(pin "2")
+				(pinfunction "G_2")
+				(pintype "input")
+			)
+			(node
+				(ref "R8")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "302")
 			(name "Net-(R22-Pad1)")
 			(class "Default")
 			(node
@@ -17470,7 +22676,7 @@
 			)
 		)
 		(net
-			(code "286")
+			(code "303")
 			(name "Net-(R27-Pad1)")
 			(class "Default")
 			(node
@@ -17480,7 +22686,7 @@
 			)
 		)
 		(net
-			(code "287")
+			(code "304")
 			(name "Net-(R27-Pad2)")
 			(class "Default")
 			(node
@@ -17490,7 +22696,7 @@
 			)
 		)
 		(net
-			(code "288")
+			(code "305")
 			(name "Net-(R140-Pad1)")
 			(class "Default")
 			(node
@@ -17500,7 +22706,7 @@
 			)
 		)
 		(net
-			(code "289")
+			(code "306")
 			(name "Net-(R148-Pad1)")
 			(class "Default")
 			(node
@@ -17510,7 +22716,7 @@
 			)
 		)
 		(net
-			(code "290")
+			(code "307")
 			(name "Net-(R159-Pad1)")
 			(class "Default")
 			(node
@@ -17520,7 +22726,7 @@
 			)
 		)
 		(net
-			(code "291")
+			(code "308")
 			(name "Net-(R173-Pad1)")
 			(class "Default")
 			(node
@@ -17530,7 +22736,7 @@
 			)
 		)
 		(net
-			(code "292")
+			(code "309")
 			(name "Net-(R173-Pad2)")
 			(class "Default")
 			(node
@@ -17540,7 +22746,7 @@
 			)
 		)
 		(net
-			(code "293")
+			(code "310")
 			(name "Net-(U1D-CSI_REXT)")
 			(class "Default")
 			(node
@@ -17556,7 +22762,7 @@
 			)
 		)
 		(net
-			(code "294")
+			(code "311")
 			(name "Net-(U1D-OTG1_TXRTUNE)")
 			(class "Default")
 			(node
@@ -17572,7 +22778,7 @@
 			)
 		)
 		(net
-			(code "295")
+			(code "312")
 			(name "Net-(U1D-OTG2_TXRTUNE)")
 			(class "Default")
 			(node
@@ -17588,7 +22794,7 @@
 			)
 		)
 		(net
-			(code "296")
+			(code "313")
 			(name "Net-(U1D-PDR_ON)")
 			(class "Default")
 			(node
@@ -17599,7 +22805,7 @@
 			)
 		)
 		(net
-			(code "297")
+			(code "314")
 			(name "Net-(U2E-V08CAP)")
 			(class "Default")
 			(node
@@ -17615,7 +22821,7 @@
 			)
 		)
 		(net
-			(code "298")
+			(code "315")
 			(name "Net-(U2E-VBAT)")
 			(class "Default")
 			(node
@@ -17631,7 +22837,7 @@
 			)
 		)
 		(net
-			(code "299")
+			(code "316")
 			(name "Net-(U2E-VDD-PadG13)")
 			(class "Default")
 			(node
@@ -17672,7 +22878,7 @@
 			)
 		)
 		(net
-			(code "300")
+			(code "317")
 			(name "Net-(U2E-VDD33USB)")
 			(class "Default")
 			(node
@@ -17693,7 +22899,7 @@
 			)
 		)
 		(net
-			(code "301")
+			(code "318")
 			(name "Net-(U2E-VDDA18ADC)")
 			(class "Default")
 			(node
@@ -17722,7 +22928,7 @@
 			)
 		)
 		(net
-			(code "302")
+			(code "319")
 			(name "Net-(U2E-VDDA18AON)")
 			(class "Default")
 			(node
@@ -17738,7 +22944,7 @@
 			)
 		)
 		(net
-			(code "303")
+			(code "320")
 			(name "Net-(U2E-VDDA18PMU)")
 			(class "Default")
 			(node
@@ -17754,7 +22960,7 @@
 			)
 		)
 		(net
-			(code "304")
+			(code "321")
 			(name "Net-(U2E-VDDCSI)")
 			(class "Default")
 			(node
@@ -17819,7 +23025,7 @@
 			)
 		)
 		(net
-			(code "305")
+			(code "322")
 			(name "Net-(U2E-VDDIO2-PadL13)")
 			(class "Default")
 			(node
@@ -17860,7 +23066,7 @@
 			)
 		)
 		(net
-			(code "306")
+			(code "323")
 			(name "Net-(U2E-VDDIO4-PadE8)")
 			(class "Default")
 			(node
@@ -17877,7 +23083,7 @@
 			)
 		)
 		(net
-			(code "307")
+			(code "324")
 			(name "Net-(U2E-VDDIO5-PadE9)")
 			(class "Default")
 			(node
@@ -17894,7 +23100,7 @@
 			)
 		)
 		(net
-			(code "308")
+			(code "325")
 			(name "Net-(U2E-VREF+)")
 			(class "Default")
 			(node
@@ -17905,7 +23111,7 @@
 			)
 		)
 		(net
-			(code "309")
+			(code "326")
 			(name "Net-(U4-VBIAS)")
 			(class "Default")
 			(node
@@ -17921,23 +23127,7 @@
 			)
 		)
 		(net
-			(code "310")
-			(name "Net-(U4-VPWR)")
-			(class "Default")
-			(node
-				(ref "C6")
-				(pin "1")
-				(pintype "passive")
-			)
-			(node
-				(ref "U4")
-				(pin "10")
-				(pinfunction "VPWR_10")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "311")
+			(code "327")
 			(name "Net-(U5-VCC)")
 			(class "Default")
 			(node
@@ -17958,7 +23148,519 @@
 			)
 		)
 		(net
-			(code "312")
+			(code "328")
+			(name "Net-(U6-ACDRV1)")
+			(class "Default")
+			(node
+				(ref "C10")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C11")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C42")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C9")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "10")
+				(pinfunction "ACDRV2_10")
+				(pintype "input")
+			)
+			(node
+				(ref "U6")
+				(pin "11")
+				(pinfunction "ACDRV1_11")
+				(pintype "input")
+			)
+			(node
+				(ref "U6")
+				(pin "2")
+				(pinfunction "VBUS_2")
+				(pintype "input")
+			)
+			(node
+				(ref "U6")
+				(pin "3")
+				(pinfunction "VBUS_3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "329")
+			(name "Net-(U6-BATP)")
+			(class "Default")
+			(node
+				(ref "R23")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "18")
+				(pinfunction "BATP_18")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "330")
+			(name "Net-(U6-BTST1)")
+			(class "Default")
+			(node
+				(ref "C49")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "4")
+				(pinfunction "BTST1_4")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "331")
+			(name "Net-(U6-BTST2)")
+			(class "Default")
+			(node
+				(ref "C53")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "19")
+				(pinfunction "BTST2_19")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "332")
+			(name "Net-(U6-PMID)")
+			(class "Default")
+			(node
+				(ref "C86")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C87")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C88")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C91")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "29")
+				(pinfunction "PMID_29")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "333")
+			(name "Net-(U6-PROG)")
+			(class "Default")
+			(node
+				(ref "R35")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "20")
+				(pinfunction "PROG_20")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "334")
+			(name "Net-(U6-STAT)")
+			(class "Default")
+			(node
+				(ref "R28")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "1")
+				(pinfunction "STAT_1")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "335")
+			(name "Net-(U6-SW1)")
+			(class "Default")
+			(node
+				(ref "C49")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "L1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "28")
+				(pinfunction "SW1_28")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "336")
+			(name "Net-(U6-SW2)")
+			(class "Default")
+			(node
+				(ref "C53")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "L1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "26")
+				(pinfunction "SW2_26")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "337")
+			(name "Net-(U6-SYS)")
+			(class "Default")
+			(node
+				(ref "C56")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C62")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C81")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C82")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C83")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "25")
+				(pinfunction "SYS_25")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "338")
+			(name "Net-(U6-TS)")
+			(class "Default")
+			(node
+				(ref "R25")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R26")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "16")
+				(pinfunction "TS_16")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "339")
+			(name "Net-(U6-~{QON})")
+			(class "Default")
+			(node
+				(ref "TP1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "12")
+				(pinfunction "~{QON}_12")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "340")
+			(name "Net-(U7-AOLDO)")
+			(class "Default")
+			(node
+				(ref "C17")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "12")
+				(pinfunction "AOLDO_12")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "341")
+			(name "Net-(U7-BATTS)")
+			(class "Default")
+			(node
+				(ref "C8")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R11")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "24")
+				(pinfunction "BATTS_24")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "342")
+			(name "Net-(U7-CELL1)")
+			(class "Default")
+			(node
+				(ref "C12")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C8")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R12")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "21")
+				(pinfunction "CELL1_21")
+				(pintype "unspecified")
+			)
+			(node
+				(ref "U7")
+				(pin "22")
+				(pinfunction "CELL2_22")
+				(pintype "unspecified")
+			)
+			(node
+				(ref "U7")
+				(pin "23")
+				(pinfunction "CELL3_23")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "343")
+			(name "Net-(U7-CHG)")
+			(class "Default")
+			(node
+				(ref "R7")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "3")
+				(pinfunction "CHG_3")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "344")
+			(name "Net-(U7-CP)")
+			(class "Default")
+			(node
+				(ref "C13")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "2")
+				(pinfunction "CP_2")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "345")
+			(name "Net-(U7-DIS)")
+			(class "Default")
+			(node
+				(ref "R8")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "4")
+				(pinfunction "DIS_4")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "346")
+			(name "Net-(U7-IN)")
+			(class "Default")
+			(node
+				(ref "C13")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C14")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R10")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "1")
+				(pinfunction "IN_1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "347")
+			(name "Net-(U7-PCKP)")
+			(class "Default")
+			(node
+				(ref "R6")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "6")
+				(pinfunction "PCKP_6")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "348")
+			(name "Net-(U7-PFAIL)")
+			(class "Default")
+			(node
+				(ref "R9")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "11")
+				(pinfunction "PFAIL_11")
+				(pintype "unspecified")
+			)
+		)
+		(net
+			(code "349")
+			(name "Net-(U7-REG2)")
+			(class "Default")
+			(node
+				(ref "C16")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "17")
+				(pinfunction "REG2_17")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "350")
+			(name "Net-(U7-REG3)")
+			(class "Default")
+			(node
+				(ref "C15")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "13")
+				(pinfunction "REG3_13")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "351")
+			(name "Net-(U7-TH1)")
+			(class "Default")
+			(node
+				(ref "NTC1")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R36")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U7")
+				(pin "10")
+				(pinfunction "TH1_10")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "352")
 			(name "VDD")
 			(class "Default")
 			(node
@@ -17995,7 +23697,7 @@
 			)
 		)
 		(net
-			(code "313")
+			(code "353")
 			(name "VSS")
 			(class "Default")
 			(node
@@ -18018,7 +23720,7 @@
 			)
 		)
 		(net
-			(code "314")
+			(code "354")
 			(name "unconnected-(IC1-DN-Pad18)")
 			(class "Default")
 			(node
@@ -18029,7 +23731,7 @@
 			)
 		)
 		(net
-			(code "315")
+			(code "355")
 			(name "unconnected-(IC1-DP-Pad19)")
 			(class "Default")
 			(node
@@ -18040,7 +23742,7 @@
 			)
 		)
 		(net
-			(code "316")
+			(code "356")
 			(name "unconnected-(IC1-FLIP-Pad6)")
 			(class "Default")
 			(node
@@ -18051,7 +23753,7 @@
 			)
 		)
 		(net
-			(code "317")
+			(code "357")
 			(name "unconnected-(IC1-NC_1-Pad2)")
 			(class "Default")
 			(node
@@ -18062,7 +23764,7 @@
 			)
 		)
 		(net
-			(code "318")
+			(code "358")
 			(name "unconnected-(IC1-NC_2-Pad7)")
 			(class "Default")
 			(node
@@ -18073,7 +23775,7 @@
 			)
 		)
 		(net
-			(code "319")
+			(code "359")
 			(name "unconnected-(IC1-NC_3-Pad10)")
 			(class "Default")
 			(node
@@ -18084,7 +23786,7 @@
 			)
 		)
 		(net
-			(code "320")
+			(code "360")
 			(name "unconnected-(IC1-NC_4-Pad11)")
 			(class "Default")
 			(node
@@ -18095,7 +23797,7 @@
 			)
 		)
 		(net
-			(code "321")
+			(code "361")
 			(name "unconnected-(IC1-NC_5-Pad14)")
 			(class "Default")
 			(node
@@ -18106,7 +23808,7 @@
 			)
 		)
 		(net
-			(code "322")
+			(code "362")
 			(name "unconnected-(IC1-NC_6-Pad21)")
 			(class "Default")
 			(node
@@ -18117,7 +23819,7 @@
 			)
 		)
 		(net
-			(code "323")
+			(code "363")
 			(name "unconnected-(R44-Pad1)")
 			(class "Default")
 			(node
@@ -18127,7 +23829,7 @@
 			)
 		)
 		(net
-			(code "324")
+			(code "364")
 			(name "unconnected-(R45-Pad1)")
 			(class "Default")
 			(node
@@ -18137,7 +23839,7 @@
 			)
 		)
 		(net
-			(code "325")
+			(code "365")
 			(name "unconnected-(R46-Pad1)")
 			(class "Default")
 			(node
@@ -18147,7 +23849,7 @@
 			)
 		)
 		(net
-			(code "326")
+			(code "366")
 			(name "unconnected-(R47-Pad1)")
 			(class "Default")
 			(node
@@ -18157,7 +23859,7 @@
 			)
 		)
 		(net
-			(code "327")
+			(code "367")
 			(name "unconnected-(R48-Pad1)")
 			(class "Default")
 			(node
@@ -18167,7 +23869,7 @@
 			)
 		)
 		(net
-			(code "328")
+			(code "368")
 			(name "unconnected-(R49-Pad1)")
 			(class "Default")
 			(node
@@ -18177,7 +23879,7 @@
 			)
 		)
 		(net
-			(code "329")
+			(code "369")
 			(name "unconnected-(R50-Pad1)")
 			(class "Default")
 			(node
@@ -18187,7 +23889,7 @@
 			)
 		)
 		(net
-			(code "330")
+			(code "370")
 			(name "unconnected-(R51-Pad1)")
 			(class "Default")
 			(node
@@ -18197,7 +23899,7 @@
 			)
 		)
 		(net
-			(code "331")
+			(code "371")
 			(name "unconnected-(R53-Pad1)")
 			(class "Default")
 			(node
@@ -18207,7 +23909,7 @@
 			)
 		)
 		(net
-			(code "332")
+			(code "372")
 			(name "unconnected-(R54-Pad1)")
 			(class "Default")
 			(node
@@ -18217,7 +23919,7 @@
 			)
 		)
 		(net
-			(code "333")
+			(code "373")
 			(name "unconnected-(R55-Pad1)")
 			(class "Default")
 			(node
@@ -18227,7 +23929,7 @@
 			)
 		)
 		(net
-			(code "334")
+			(code "374")
 			(name "unconnected-(R56-Pad1)")
 			(class "Default")
 			(node
@@ -18237,7 +23939,7 @@
 			)
 		)
 		(net
-			(code "335")
+			(code "375")
 			(name "unconnected-(R57-Pad1)")
 			(class "Default")
 			(node
@@ -18247,7 +23949,7 @@
 			)
 		)
 		(net
-			(code "336")
+			(code "376")
 			(name "unconnected-(R58-Pad1)")
 			(class "Default")
 			(node
@@ -18257,7 +23959,7 @@
 			)
 		)
 		(net
-			(code "337")
+			(code "377")
 			(name "unconnected-(R59-Pad1)")
 			(class "Default")
 			(node
@@ -18267,7 +23969,7 @@
 			)
 		)
 		(net
-			(code "338")
+			(code "378")
 			(name "unconnected-(R60-Pad1)")
 			(class "Default")
 			(node
@@ -18277,7 +23979,7 @@
 			)
 		)
 		(net
-			(code "339")
+			(code "379")
 			(name "unconnected-(R61-Pad1)")
 			(class "Default")
 			(node
@@ -18287,7 +23989,7 @@
 			)
 		)
 		(net
-			(code "340")
+			(code "380")
 			(name "unconnected-(R62-Pad1)")
 			(class "Default")
 			(node
@@ -18297,7 +23999,7 @@
 			)
 		)
 		(net
-			(code "341")
+			(code "381")
 			(name "unconnected-(R63-Pad1)")
 			(class "Default")
 			(node
@@ -18307,7 +24009,7 @@
 			)
 		)
 		(net
-			(code "342")
+			(code "382")
 			(name "unconnected-(R64-Pad1)")
 			(class "Default")
 			(node
@@ -18317,7 +24019,7 @@
 			)
 		)
 		(net
-			(code "343")
+			(code "383")
 			(name "unconnected-(U1D-OTG1_ID-PadC3)")
 			(class "Default")
 			(node
@@ -18328,7 +24030,7 @@
 			)
 		)
 		(net
-			(code "344")
+			(code "384")
 			(name "unconnected-(U1D-OTG1_VBUS-PadB4)")
 			(class "Default")
 			(node
@@ -18339,7 +24041,7 @@
 			)
 		)
 		(net
-			(code "345")
+			(code "385")
 			(name "unconnected-(U1D-OTG2_HSDM-PadA3)")
 			(class "Default")
 			(node
@@ -18350,7 +24052,7 @@
 			)
 		)
 		(net
-			(code "346")
+			(code "386")
 			(name "unconnected-(U1D-OTG2_HSDP-PadB3)")
 			(class "Default")
 			(node
@@ -18361,7 +24063,7 @@
 			)
 		)
 		(net
-			(code "347")
+			(code "387")
 			(name "unconnected-(U1D-OTG2_ID-PadE6)")
 			(class "Default")
 			(node
@@ -18372,7 +24074,7 @@
 			)
 		)
 		(net
-			(code "348")
+			(code "388")
 			(name "unconnected-(U1D-OTG2_VBUS-PadC4)")
 			(class "Default")
 			(node
@@ -18383,7 +24085,7 @@
 			)
 		)
 		(net
-			(code "349")
+			(code "389")
 			(name "unconnected-(U4-SBU1-Pad15)")
 			(class "Default")
 			(node
@@ -18394,7 +24096,7 @@
 			)
 		)
 		(net
-			(code "350")
+			(code "390")
 			(name "unconnected-(U4-SBU2-Pad14)")
 			(class "Default")
 			(node
@@ -18405,7 +24107,7 @@
 			)
 		)
 		(net
-			(code "351")
+			(code "391")
 			(name "unconnected-(U5-DNU-PadB1)")
 			(class "Default")
 			(node
@@ -18416,7 +24118,7 @@
 			)
 		)
 		(net
-			(code "352")
+			(code "392")
 			(name "unconnected-(U5-DNU__1-PadB5)")
 			(class "Default")
 			(node
@@ -18427,7 +24129,7 @@
 			)
 		)
 		(net
-			(code "353")
+			(code "393")
 			(name "unconnected-(U5-NC-PadA2)")
 			(class "Default")
 			(node
@@ -18438,7 +24140,7 @@
 			)
 		)
 		(net
-			(code "354")
+			(code "394")
 			(name "unconnected-(U5-NC_10-PadE2)")
 			(class "Default")
 			(node
@@ -18449,7 +24151,7 @@
 			)
 		)
 		(net
-			(code "355")
+			(code "395")
 			(name "unconnected-(U5-NC_11-PadE1)")
 			(class "Default")
 			(node
@@ -18460,7 +24162,7 @@
 			)
 		)
 		(net
-			(code "356")
+			(code "396")
 			(name "unconnected-(U5-NC__1-PadA3)")
 			(class "Default")
 			(node
@@ -18471,7 +24173,7 @@
 			)
 		)
 		(net
-			(code "357")
+			(code "397")
 			(name "unconnected-(U5-NC__2-PadC5)")
 			(class "Default")
 			(node
@@ -18482,7 +24184,7 @@
 			)
 		)
 		(net
-			(code "358")
+			(code "398")
 			(name "unconnected-(U5-NC__3-PadD1)")
 			(class "Default")
 			(node
@@ -18493,7 +24195,7 @@
 			)
 		)
 		(net
-			(code "359")
+			(code "399")
 			(name "unconnected-(U5-NC__4-PadE4)")
 			(class "Default")
 			(node
@@ -18504,7 +24206,7 @@
 			)
 		)
 		(net
-			(code "360")
+			(code "400")
 			(name "unconnected-(U5-NC__5-PadC1)")
 			(class "Default")
 			(node
@@ -18515,7 +24217,7 @@
 			)
 		)
 		(net
-			(code "361")
+			(code "401")
 			(name "unconnected-(U5-NC__6-PadE5)")
 			(class "Default")
 			(node
@@ -18526,7 +24228,7 @@
 			)
 		)
 		(net
-			(code "362")
+			(code "402")
 			(name "unconnected-(U5-NC__7-PadC3)")
 			(class "Default")
 			(node
@@ -18537,7 +24239,7 @@
 			)
 		)
 		(net
-			(code "363")
+			(code "403")
 			(name "unconnected-(U5-NC__8-PadD5)")
 			(class "Default")
 			(node
@@ -18548,7 +24250,7 @@
 			)
 		)
 		(net
-			(code "364")
+			(code "404")
 			(name "unconnected-(U5-NC__9-PadE3)")
 			(class "Default")
 			(node
@@ -18559,18 +24261,7 @@
 			)
 		)
 		(net
-			(code "365")
-			(name "unconnected-(U5-SO{slash}SIO1-PadD2)")
-			(class "Default")
-			(node
-				(ref "U5")
-				(pin "D2")
-				(pinfunction "SO/SIO1_D2")
-				(pintype "bidirectional")
-			)
-		)
-		(net
-			(code "366")
+			(code "405")
 			(name "unconnected-(U5-~{ECS}-PadA5)")
 			(class "Default")
 			(node
@@ -18578,6 +24269,28 @@
 				(pin "A5")
 				(pinfunction "~{ECS}_A5")
 				(pintype "output+no_connect")
+			)
+		)
+		(net
+			(code "406")
+			(name "unconnected-(U6-D+-Pad6)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "6")
+				(pinfunction "D+_6")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "407")
+			(name "unconnected-(U6-D--Pad7)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "7")
+				(pinfunction "D-_7")
+				(pintype "bidirectional+no_connect")
 			)
 		)
 	)
