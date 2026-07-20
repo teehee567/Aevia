@@ -14427,7 +14427,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA1V8_AON"
+		(property "Value" "+1V8_AON"
 			(at 288.29 213.3599 90)
 			(show_name no)
 			(do_not_autoplace no)

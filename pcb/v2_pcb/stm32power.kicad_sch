@@ -9308,7 +9308,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDIO"
+		(property "Value" "+3V3_MAIN"
 			(at 78.74 25.4 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10266,7 +10266,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA1V8_AON"
+		(property "Value" "+1V8_AON"
 			(at 237.49 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11069,7 +11069,7 @@
 				)
 			)
 		)
-		(property "Value" "VDD3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 49.53 123.1899 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11393,7 +11393,7 @@
 				)
 			)
 		)
-		(property "Value" "VDD1V8"
+		(property "Value" "+1V8_RUN"
 			(at 78.74 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11628,7 +11628,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA1V8"
+		(property "Value" "+1V8_RUN"
 			(at 76.2 46.9899 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11785,7 +11785,7 @@
 				)
 			)
 		)
-		(property "Value" "VREFP"
+		(property "Value" "+1V8_RUN"
 			(at 147.32 69.8499 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12989,7 +12989,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA1V8"
+		(property "Value" "+1V8_RUN"
 			(at 60.96 138.4299 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13147,7 +13147,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA1V8"
+		(property "Value" "+1V8_RUN"
 			(at 118.11 172.72 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14526,7 +14526,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDIO"
+		(property "Value" "+3V3_MAIN"
 			(at 165.1 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15954,7 +15954,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDIO"
+		(property "Value" "+3V3_MAIN"
 			(at 160.02 74.9299 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16195,7 +16195,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDIO"
+		(property "Value" "+3V3_MAIN"
 			(at 76.2 62.2299 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16672,7 +16672,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA1V8"
+		(property "Value" "+1V8_RUN"
 			(at 78.74 181.61 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16832,7 +16832,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDIO_SD"
+		(property "Value" "+3V3_MAIN"
 			(at 200.66 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -16989,7 +16989,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDIO_SD"
+		(property "Value" "+3V3_MAIN"
 			(at 76.2 67.3099 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17150,7 +17150,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA1V8"
+		(property "Value" "+1V8_RUN"
 			(at 165.1 115.57 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17386,7 +17386,7 @@
 				)
 			)
 		)
-		(property "Value" "VDD1V8"
+		(property "Value" "+1V8_RUN"
 			(at 20.32 110.4899 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17465,7 +17465,7 @@
 				)
 			)
 		)
-		(property "Value" "VREFP"
+		(property "Value" "+1V8_RUN"
 			(at 180.34 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17621,7 +17621,7 @@
 				)
 			)
 		)
-		(property "Value" "VREFP"
+		(property "Value" "+1V8_RUN"
 			(at 118.11 181.61 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -17699,7 +17699,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDA1V8_AON"
+		(property "Value" "+1V8_AON"
 			(at 39.37 128.27 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -18167,7 +18167,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "ed228065-84a5-4f4a-9492-1a378a7945c0")
 		(property "Reference" "R168"
@@ -18180,7 +18180,7 @@
 				)
 			)
 		)
-		(property "Value" "50mH"
+		(property "Value" "50mR (DNP)"
 			(at 226.06 35.56 90)
 			(show_name no)
 			(do_not_autoplace no)

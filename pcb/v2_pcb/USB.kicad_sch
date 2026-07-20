@@ -5082,7 +5082,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 213.36 68.58 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7219,7 +7219,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 232.41 74.9299 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7378,7 +7378,7 @@
 				)
 			)
 		)
-		(property "Value" "VOUT"
+		(property "Value" "VBUS_PD"
 			(at 35.56 66.0399 90)
 			(show_name no)
 			(do_not_autoplace no)

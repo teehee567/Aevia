@@ -1939,7 +1939,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 133.35 100.3299 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2018,7 +2018,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 204.47 115.5699 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2340,7 +2340,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 128.27 85.0899 90)
 			(show_name no)
 			(do_not_autoplace no)

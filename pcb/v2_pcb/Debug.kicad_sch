@@ -941,7 +941,7 @@
 				)
 			)
 		)
-		(property "Value" "VDDIO"
+		(property "Value" "+3V3_MAIN"
 			(at 143.51 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)

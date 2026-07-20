@@ -1897,7 +1897,7 @@
 				)
 			)
 		)
-		(property "Value" "VDD_OCTOSPI_M"
+		(property "Value" "+1V8_RUN"
 			(at 76.2 64.77 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2401,7 +2401,7 @@
 				)
 			)
 		)
-		(property "Value" "VDD_OCTOSPI_M"
+		(property "Value" "+1V8_RUN"
 			(at 195.58 78.7399 90)
 			(show_name no)
 			(do_not_autoplace no)

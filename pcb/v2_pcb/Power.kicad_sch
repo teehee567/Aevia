@@ -5,6 +5,270 @@
 	(uuid "a52946ee-96a2-4706-9bed-44989f3f444d")
 	(paper "A3")
 	(lib_symbols
+		(symbol "open-race:RPL-3.0-R"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at 0 13.97 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "RPL-3.0-R"
+				(at 0 11.43 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "${KIPRJMOD}/../../datasheets/RPL-3_0.pdf"
+				(at 0 0 0)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "3A adjustable buck converter module with integrated inductor, 4V to 18V input, 0.8V to 5.2V output, LGA-10 3x3mm"
+				(at 0 0 0)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "RECOM Power"
+				(at 0 0 0)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "MPN" "RPL-3.0-R"
+				(at 0 0 0)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "RPL-3.0-R_0_1"
+				(rectangle
+					(start -7.62 10.16)
+					(end 7.62 -10.16)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "RPL-3.0-R_1_1"
+				(pin input line
+					(at -10.16 7.62 0)
+					(length 2.54)
+					(name "CTRL"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -5.08 -12.7 90)
+					(length 2.54)
+					(name "PGND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -2.54 -12.7 90)
+					(length 2.54)
+					(name "PGND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 10.16 5.08 180)
+					(length 2.54)
+					(name "VOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 10.16 2.54 180)
+					(length 2.54)
+					(name "+Sense"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 10.16 0 180)
+					(length 2.54)
+					(name "FB"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 2.54 -12.7 90)
+					(length 2.54)
+					(name "AGND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 10.16 -5.08 180)
+					(length 2.54)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin open_collector line
+					(at 10.16 -7.62 180)
+					(length 2.54)
+					(name "PG"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Connector:TestPoint_Small"
 			(pin_numbers
 				(hide yes)
@@ -2304,7 +2568,7 @@
 						)
 					)
 				)
-				(pin output line
+				(pin power_out line
 					(at 22.86 30.48 180)
 					(length 5.08)
 					(name "SYS"
@@ -3480,6 +3744,703 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "POWER TREE — RPL BUCKS ADDED\nVSYS_RAW -> U8 (1.8 V) -> +1V8_AON; CTRL = BUCK_3V3_PG with +3V3_MAIN pull-up.\nVSYS_RAW -> U9 (5 V) -> +5V_AUX; CTRL tied to VIN.\nWARNING: the 5 V buck needs about 6.8 V input to regulate; validate the loaded 2S minimum.\nTPSM863253 3.3 V stage and +1V8_RUN load switch remain to be inserted."
+		(exclude_from_sim no)
+		(at 248.92 73.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "343695a3-c675-4cc0-b0e6-a803db1ce56f")
+	)
+	(text "1.8 V AON BUCK — RPL-3.0-R"
+		(exclude_from_sim no)
+		(at 260.35 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000001")
+	)
+	(text "5 V AUX BUCK — RPL-3.0-R"
+		(exclude_from_sim no)
+		(at 332.74 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000002")
+	)
+	(junction
+		(at 267.97 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000003")
+	)
+	(junction
+		(at 267.97 124.46)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000004")
+	)
+	(junction
+		(at 303.53 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000005")
+	)
+	(junction
+		(at 306.07 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000006")
+	)
+	(junction
+		(at 313.69 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000007")
+	)
+	(junction
+		(at 321.31 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000008")
+	)
+	(junction
+		(at 306.07 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000009")
+	)
+	(junction
+		(at 267.97 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000010")
+	)
+	(junction
+		(at 280.67 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000011")
+	)
+	(junction
+		(at 283.21 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000012")
+	)
+	(junction
+		(at 285.75 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000013")
+	)
+	(junction
+		(at 288.29 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000014")
+	)
+	(junction
+		(at 306.07 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000015")
+	)
+	(junction
+		(at 321.31 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000016")
+	)
+	(junction
+		(at 340.36 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000017")
+	)
+	(junction
+		(at 340.36 124.46)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000018")
+	)
+	(junction
+		(at 375.92 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000019")
+	)
+	(junction
+		(at 378.46 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000020")
+	)
+	(junction
+		(at 386.08 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000021")
+	)
+	(junction
+		(at 393.7 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000022")
+	)
+	(junction
+		(at 378.46 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000023")
+	)
+	(junction
+		(at 340.36 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000024")
+	)
+	(junction
+		(at 353.06 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000025")
+	)
+	(junction
+		(at 355.6 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000026")
+	)
+	(junction
+		(at 358.14 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000027")
+	)
+	(junction
+		(at 360.68 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000028")
+	)
+	(junction
+		(at 378.46 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000029")
+	)
+	(junction
+		(at 393.7 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000030")
+	)
+	(no_connect
+		(at 295.91 132.08)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000031")
+	)
+	(no_connect
+		(at 295.91 134.62)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000032")
+	)
+	(no_connect
+		(at 368.3 132.08)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000033")
+	)
+	(no_connect
+		(at 368.3 134.62)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000034")
+	)
+	(wire
+		(pts
+			(xy 260.35 124.46) (xy 275.59 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000035")
+	)
+	(wire
+		(pts
+			(xy 267.97 124.46) (xy 267.97 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000036")
+	)
+	(wire
+		(pts
+			(xy 267.97 133.35) (xy 267.97 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000037")
+	)
+	(wire
+		(pts
+			(xy 267.97 119.38) (xy 275.59 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000038")
+	)
+	(wire
+		(pts
+			(xy 267.97 116.84) (xy 267.97 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000039")
+	)
+	(wire
+		(pts
+			(xy 267.97 109.22) (xy 267.97 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000040")
+	)
+	(wire
+		(pts
+			(xy 295.91 121.92) (xy 323.85 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000041")
+	)
+	(wire
+		(pts
+			(xy 323.85 114.3) (xy 323.85 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000042")
+	)
+	(wire
+		(pts
+			(xy 295.91 124.46) (xy 298.45 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000043")
+	)
+	(wire
+		(pts
+			(xy 303.53 124.46) (xy 303.53 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000044")
+	)
+	(wire
+		(pts
+			(xy 306.07 125.73) (xy 306.07 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000045")
+	)
+	(wire
+		(pts
+			(xy 313.69 125.73) (xy 313.69 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000046")
+	)
+	(wire
+		(pts
+			(xy 321.31 128.27) (xy 321.31 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000047")
+	)
+	(wire
+		(pts
+			(xy 295.91 127) (xy 300.99 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000048")
+	)
+	(wire
+		(pts
+			(xy 300.99 127) (xy 300.99 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000049")
+	)
+	(wire
+		(pts
+			(xy 300.99 130.81) (xy 313.69 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000050")
+	)
+	(wire
+		(pts
+			(xy 306.07 130.81) (xy 306.07 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000051")
+	)
+	(wire
+		(pts
+			(xy 306.07 139.7) (xy 306.07 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000052")
+	)
+	(wire
+		(pts
+			(xy 321.31 133.35) (xy 321.31 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000053")
+	)
+	(wire
+		(pts
+			(xy 280.67 139.7) (xy 280.67 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000054")
+	)
+	(wire
+		(pts
+			(xy 283.21 139.7) (xy 283.21 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000055")
+	)
+	(wire
+		(pts
+			(xy 288.29 139.7) (xy 288.29 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000056")
+	)
+	(wire
+		(pts
+			(xy 267.97 149.86) (xy 321.31 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000057")
+	)
+	(wire
+		(pts
+			(xy 332.74 124.46) (xy 347.98 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000058")
+	)
+	(wire
+		(pts
+			(xy 340.36 124.46) (xy 340.36 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000059")
+	)
+	(wire
+		(pts
+			(xy 340.36 133.35) (xy 340.36 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000060")
+	)
+	(wire
+		(pts
+			(xy 340.36 119.38) (xy 347.98 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000061")
+	)
+	(wire
+		(pts
+			(xy 340.36 119.38) (xy 340.36 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000062")
+	)
+	(wire
+		(pts
+			(xy 368.3 121.92) (xy 396.24 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000063")
+	)
+	(wire
+		(pts
+			(xy 396.24 114.3) (xy 396.24 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000064")
+	)
+	(wire
+		(pts
+			(xy 368.3 124.46) (xy 370.84 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000065")
+	)
+	(wire
+		(pts
+			(xy 375.92 124.46) (xy 375.92 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000066")
+	)
+	(wire
+		(pts
+			(xy 378.46 125.73) (xy 378.46 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000067")
+	)
+	(wire
+		(pts
+			(xy 386.08 125.73) (xy 386.08 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000068")
+	)
+	(wire
+		(pts
+			(xy 393.7 128.27) (xy 393.7 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000069")
+	)
+	(wire
+		(pts
+			(xy 368.3 127) (xy 373.38 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000070")
+	)
+	(wire
+		(pts
+			(xy 373.38 127) (xy 373.38 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000071")
+	)
+	(wire
+		(pts
+			(xy 373.38 130.81) (xy 386.08 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000072")
+	)
+	(wire
+		(pts
+			(xy 378.46 130.81) (xy 378.46 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000073")
+	)
+	(wire
+		(pts
+			(xy 378.46 139.7) (xy 378.46 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000074")
+	)
+	(wire
+		(pts
+			(xy 393.7 133.35) (xy 393.7 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000075")
+	)
+	(wire
+		(pts
+			(xy 353.06 139.7) (xy 353.06 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000076")
+	)
+	(wire
+		(pts
+			(xy 355.6 139.7) (xy 355.6 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000077")
+	)
+	(wire
+		(pts
+			(xy 360.68 139.7) (xy 360.68 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000078")
+	)
+	(wire
+		(pts
+			(xy 340.36 149.86) (xy 393.7 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000079")
+	)
+	(label "VSYS_RAW"
+		(at 260.35 124.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000080")
+	)
+	(label "BUCK_3V3_PG"
+		(at 267.97 119.38 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000081")
+	)
+	(label "VSYS_RAW"
+		(at 332.74 124.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f8e2a001-0720-4a11-8b22-000000000082")
+	)
 	(junction
 		(at 207.01 208.28)
 		(diameter 0)
@@ -3661,12 +4622,6 @@
 		(uuid "6c11dee8-e224-436f-bea7-37761f9af4b3")
 	)
 	(junction
-		(at 160.02 104.14)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6cb80ce2-041e-465d-a088-55b005012798")
-	)
-	(junction
 		(at 162.56 71.12)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3817,6 +4772,12 @@
 		(uuid "e3ba4061-7bb0-4f85-8ff3-51ff6fde893d")
 	)
 	(junction
+		(at 171.45 58.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e3e41efc-df73-4797-8210-b7603253b5fc")
+	)
+	(junction
 		(at 132.08 194.31)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3839,6 +4800,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f339144c-1001-4dae-9263-86f9edf649d4")
+	)
+	(junction
+		(at 160.02 104.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f33aff6c-bfbf-4ff9-90f0-243a6a76f0c4")
 	)
 	(junction
 		(at 68.58 63.5)
@@ -3981,6 +4948,16 @@
 			(type default)
 		)
 		(uuid "0839275f-4fc1-43f8-99e4-bc7d1377700a")
+	)
+	(wire
+		(pts
+			(xy 162.56 53.34) (xy 171.45 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "089aa8f3-424b-4244-b495-f48d9244d45b")
 	)
 	(wire
 		(pts
@@ -4281,16 +5258,6 @@
 			(type default)
 		)
 		(uuid "2dd1e018-ea02-4509-93a6-3255513120e0")
-	)
-	(wire
-		(pts
-			(xy 160.02 99.06) (xy 160.02 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2eb2febd-032e-4bf1-8cff-f2a3ad336a21")
 	)
 	(wire
 		(pts
@@ -4741,6 +5708,16 @@
 			(type default)
 		)
 		(uuid "6efb8cfe-911c-4a6e-9fa6-8dfb2ae3c61b")
+	)
+	(wire
+		(pts
+			(xy 160.02 100.33) (xy 160.02 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70bacf3f-4d89-4166-8942-849b6295a246")
 	)
 	(wire
 		(pts
@@ -5254,16 +6231,6 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 214.63) (xy 205.74 214.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bdb66882-2bbf-4d68-8a17-df6097c20b03")
-	)
-	(wire
-		(pts
 			(xy 73.66 100.33) (xy 82.55 100.33)
 		)
 		(stroke
@@ -5284,7 +6251,7 @@
 	)
 	(wire
 		(pts
-			(xy 189.23 214.63) (xy 195.58 214.63)
+			(xy 189.23 214.63) (xy 205.74 214.63)
 		)
 		(stroke
 			(width 0)
@@ -6307,6 +7274,1714 @@
 		(uuid "ed51caa7-ec36-4038-8d74-cc3e35254028")
 	)
 	(symbol
+		(lib_id "open-race:RPL-3.0-R")
+		(at 285.75 127 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000001")
+		(property "Reference" "U8"
+			(at 285.75 111.76 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RPL-3.0-R"
+			(at 285.75 114.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 285.75 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "${KIPRJMOD}/../../datasheets/RPL-3_0.pdf"
+			(at 285.75 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "3A adjustable buck converter module with integrated inductor, 4V to 18V input, LGA-10 3x3mm"
+			(at 285.75 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "RECOM Power"
+			(at 285.75 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RPL-3.0-R"
+			(at 285.75 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000002")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000003")
+		)
+		(pin "3"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000004")
+		)
+		(pin "4"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000005")
+		)
+		(pin "5"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000006")
+		)
+		(pin "6"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000007")
+		)
+		(pin "7"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000008")
+		)
+		(pin "8"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000009")
+		)
+		(pin "9"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000010")
+		)
+		(pin "10"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000011")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "U8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "open-race:RPL-3.0-R")
+		(at 358.14 127 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000012")
+		(property "Reference" "U9"
+			(at 358.14 111.76 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "RPL-3.0-R"
+			(at 358.14 114.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 358.14 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "${KIPRJMOD}/../../datasheets/RPL-3_0.pdf"
+			(at 358.14 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "3A adjustable buck converter module with integrated inductor, 4V to 18V input, LGA-10 3x3mm"
+			(at 358.14 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "RECOM Power"
+			(at 358.14 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RPL-3.0-R"
+			(at 358.14 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000013")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000014")
+		)
+		(pin "3"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000015")
+		)
+		(pin "4"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000016")
+		)
+		(pin "5"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000017")
+		)
+		(pin "6"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000018")
+		)
+		(pin "7"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000019")
+		)
+		(pin "8"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000020")
+		)
+		(pin "9"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000021")
+		)
+		(pin "10"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000022")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "U9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 267.97 114.3 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000023")
+		(property "Reference" "R221"
+			(at 264.16 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 264.16 115.57 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 267.97 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 267.97 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "BUCK_3V3_PG pull-up to +3V3_MAIN"
+			(at 267.97 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000024")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000025")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "R221")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 267.97 130.81 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000026")
+		(property "Reference" "C180"
+			(at 248.92 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF 25V X7R"
+			(at 248.92 132.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+			(at 267.97 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 267.97 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 required input capacitor"
+			(at 267.97 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000027")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000028")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C180")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 300.99 124.46 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000029")
+		(property "Reference" "R222"
+			(at 300.99 116.84 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1k"
+			(at 300.99 119.38 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 300.99 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 300.99 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 VOUT to +Sense resistor"
+			(at 300.99 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000030")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000031")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "R222")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 306.07 128.27 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000032")
+		(property "Reference" "R223"
+			(at 302.26 127 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "47k 1%"
+			(at 302.26 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 306.07 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 306.07 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 1.8V upper feedback resistor"
+			(at 306.07 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000033")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000034")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "R223")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 306.07 137.16 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000035")
+		(property "Reference" "R224"
+			(at 302.26 135.89 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "37.4k 1%"
+			(at 302.26 138.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 306.07 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 306.07 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 1.8V lower feedback resistor"
+			(at 306.07 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000036")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000037")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "R224")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 321.31 130.81 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000038")
+		(property "Reference" "C181"
+			(at 316.23 154.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22uF 10V X7R"
+			(at 311.15 157.48 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+			(at 321.31 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 321.31 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 mandatory output capacitor"
+			(at 321.31 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000039")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000040")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C181")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 313.69 128.27 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000041")
+		(property "Reference" "C182"
+			(at 308.61 116.84 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22pF C0G"
+			(at 308.61 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 313.69 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 313.69 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 1.8V feed-forward capacitor"
+			(at 313.69 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000042")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000043")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C182")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 340.36 130.81 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000044")
+		(property "Reference" "C183"
+			(at 321.31 134.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF 25V X7R"
+			(at 321.31 137.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+			(at 340.36 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 340.36 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 required input capacitor"
+			(at 340.36 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000045")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000046")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C183")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 373.38 124.46 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000047")
+		(property "Reference" "R225"
+			(at 373.38 116.84 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1k"
+			(at 373.38 119.38 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 373.38 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 373.38 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 VOUT to +Sense resistor"
+			(at 373.38 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000048")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000049")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "R225")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 378.46 128.27 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000050")
+		(property "Reference" "R226"
+			(at 374.65 127 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "47k 1%"
+			(at 374.65 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 378.46 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 378.46 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 5V upper feedback resistor"
+			(at 378.46 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000051")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000052")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "R226")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 378.46 137.16 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000053")
+		(property "Reference" "R227"
+			(at 374.65 135.89 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "8.87k 1%"
+			(at 374.65 138.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 378.46 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 378.46 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 5V lower feedback resistor"
+			(at 378.46 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000054")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000055")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "R227")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 393.7 130.81 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000056")
+		(property "Reference" "C184"
+			(at 388.62 154.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22uF 10V X7R"
+			(at 383.54 157.48 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+			(at 393.7 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 393.7 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 mandatory output capacitor"
+			(at 393.7 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000057")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000058")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C184")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 386.08 128.27 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000059")
+		(property "Reference" "C185"
+			(at 381 116.84 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "39pF C0G"
+			(at 381 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 386.08 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 386.08 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RPL-3.0 5V feed-forward capacitor"
+			(at 386.08 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000060")
+		)
+		(pin "2"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000061")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C185")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 267.97 109.22 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000062")
+		(property "Reference" "#PWR078"
+			(at 267.97 107.315 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3_MAIN"
+			(at 267.97 105.41 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 267.97 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 267.97 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 267.97 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000063")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "#PWR078")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 285.75 149.86 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000064")
+		(property "Reference" "#PWR079"
+			(at 285.75 147.955 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 285.75 154.94000000000003 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 285.75 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 285.75 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\", ground"
+			(at 285.75 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000065")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "#PWR079")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 323.85 114.3 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000066")
+		(property "Reference" "#PWR080"
+			(at 323.85 112.395 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+1V8_AON"
+			(at 323.85 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 323.85 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 323.85 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+1V8_AON\""
+			(at 323.85 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000067")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "#PWR080")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 358.14 149.86 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000068")
+		(property "Reference" "#PWR081"
+			(at 358.14 147.955 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 358.14 154.94000000000003 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 358.14 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 358.14 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\", ground"
+			(at 358.14 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000069")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "#PWR081")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 396.24 114.3 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f8e2a002-0720-4a11-8b22-000000000070")
+		(property "Reference" "#PWR082"
+			(at 396.24 112.395 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+5V_AUX"
+			(at 396.24 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 396.24 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 396.24 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V_AUX\""
+			(at 396.24 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8e2a002-0720-4a11-8b22-000000000071")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "#PWR082")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 147.32 55.88 0)
 		(unit 1)
@@ -6493,7 +9168,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "L"
+		(property "Value" "2.2uH"
 			(at 74.93 97.7899 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6547,84 +9222,6 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
 					(reference "L1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 160.02 99.06 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1087ce18-05bf-4e02-92f3-7f704c758caa")
-		(property "Reference" "#PWR070"
-			(at 160.02 92.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 160.02 93.98 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 160.02 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 160.02 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 160.02 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c7719527-e1bc-4e36-ae8b-21f5cbca65f3")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
-					(reference "#PWR070")
 					(unit 1)
 				)
 			)
@@ -7448,7 +10045,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 165.1 116.8399 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7499,6 +10096,84 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
 					(reference "#PWR073")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 160.02 100.33 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3e62e3c1-80c3-46cf-b4a5-7e1d1386ae3b")
+		(property "Reference" "#FLG034"
+			(at 160.02 98.425 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ILIM_HIZ"
+			(at 160.02 95.25 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 160.02 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 160.02 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 160.02 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "505b27be-b00c-42e3-b4d0-c0ef0f6ac282")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "#FLG034")
 					(unit 1)
 				)
 			)
@@ -8101,6 +10776,84 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
 					(reference "Q4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 240.03 58.42 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4cdbf372-a9bc-4077-8545-0a8420c76e3b")
+		(property "Reference" "#PWR077"
+			(at 240.03 56.515 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VSYS_RAW"
+			(at 240.03 54.61 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 240.03 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 240.03 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VSYS_RAW\""
+			(at 240.03 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "81e56f54-8f98-4916-9df5-88c8cb657075")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "#PWR077")
 					(unit 1)
 				)
 			)
@@ -8982,6 +11735,88 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 171.45 55.88 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "64899029-1797-418b-8ebe-d3fec08ef81f")
+		(property "Reference" "C93"
+			(at 173.99 54.6162 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF"
+			(at 173.99 57.1562 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 171.45 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 171.45 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 171.45 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "85525a1b-1a0b-4a4e-b461-859519537c57")
+		)
+		(pin "2"
+			(uuid "cc06034f-0cbe-42d5-a052-65c1dc9f0f4b")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C93")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3V3")
 		(at 214.63 208.28 270)
 		(unit 1)
@@ -9004,7 +11839,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 218.44 208.2799 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10656,7 +13491,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "power:GND1")
 		(at 186.69 212.09 90)
 		(unit 1)
 		(body_style 1)
@@ -10678,7 +13513,7 @@
 				)
 			)
 		)
-		(property "Value" "GND"
+		(property "Value" "GND1"
 			(at 190.5 212.0899 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10711,7 +13546,7 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+		(property "Description" "Power symbol creates a global label with name \"GND1\""
 			(at 186.69 212.09 0)
 			(hide yes)
 			(show_name no)
@@ -12315,7 +15150,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 52.07 125.7299 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12896,7 +15731,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "power:GND1")
 		(at 189.23 223.52 0)
 		(mirror y)
 		(unit 1)
@@ -12919,7 +15754,7 @@
 				)
 			)
 		)
-		(property "Value" "GND"
+		(property "Value" "GND1"
 			(at 189.23 228.6 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12951,7 +15786,7 @@
 				)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+		(property "Description" "Power symbol creates a global label with name \"GND1\""
 			(at 189.23 223.52 0)
 			(hide yes)
 			(show_name no)
@@ -12969,86 +15804,6 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
 					(reference "#PWR076")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 198.12 214.63 90)
-		(mirror x)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f5e301a4-4835-42e8-8f7c-8a0dc52f30d1")
-		(property "Reference" "R36"
-			(at 200.66 212.852 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 195.834 212.852 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 198.12 214.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 198.12 214.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "MAX17320 TH1 pull-up"
-			(at 198.12 214.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "6c167470-2c58-4a90-bbe9-2bccaf5d7154")
-		)
-		(pin "1"
-			(uuid "e48ca904-3d4f-425d-87dd-95c1e48c868f")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
-					(reference "R36")
 					(unit 1)
 				)
 			)
@@ -13234,7 +15989,7 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
+		(property "Value" "+3V3_MAIN"
 			(at 209.55 214.6299 90)
 			(show_name no)
 			(do_not_autoplace no)
