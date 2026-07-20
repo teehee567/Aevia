@@ -3640,7 +3640,7 @@
 						)
 					)
 				)
-				(pin input line
+				(pin output line
 					(at 66.04 -43.18 180)
 					(length 7.62)
 					(name "PWR_ON"
@@ -10373,7 +10373,7 @@
 		(uuid "cd2dc4a1-cf70-4c8c-89e4-7f0826371b88")
 	)
 	(hierarchical_label "PWR_ON"
-		(shape input)
+		(shape output)
 		(at 284.48 208.28 0)
 		(effects
 			(font

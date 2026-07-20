@@ -5,6 +5,16 @@
 	(uuid "1cc14db4-4207-4c76-b5f6-6a2491c5fa6b")
 	(paper "A4")
 	(lib_symbols)
+	(wire
+		(pts
+			(xy 99.06 127) (xy 116.84 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a804cedd-3c00-48ba-8a2d-65969234e60a")
+	)
 	(sheet
 		(at 55.88 83.82)
 		(size 43.18 10.16)
@@ -179,6 +189,16 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "PWR_ON" output
+			(at 116.84 127 180)
+			(uuid "00dbc96e-7b53-46c3-823a-a582895d85f1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances
@@ -373,6 +393,16 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "PWR_ON" input
+			(at 99.06 127 0)
+			(uuid "acee4d30-aeca-4d87-9ff4-78494a5b13fa")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances

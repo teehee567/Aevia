@@ -3503,6 +3503,287 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "open-race:TPS22997RYZR"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TPS22997RYZR"
+				(at 0 10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "noob:Texas_RYZ0010A_WQFN-HR-10_2x1.5mm_P0.5mm"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tps22997.pdf"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "10A, 0.1V to 5.5V load switch with 4mOhm typical on-resistance, adjustable rise time, adjustable QOD and open-drain power good; RYZ 10-pin WQFN-HR"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "Texas Instruments"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "MPN" "TPS22997RYZR"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TPS22997RYZR_0_1"
+				(rectangle
+					(start -7.62 7.62)
+					(end 7.62 -7.62)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "TPS22997RYZR_1_1"
+				(pin power_in line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "VBIAS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -10.16 0 0)
+					(length 2.54)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin open_collector line
+					(at 10.16 5.08 180)
+					(length 2.54)
+					(name "PG"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -2.54 -10.16 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 -5.08 180)
+					(length 2.54)
+					(name "QOD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 10.16 0 180)
+					(length 2.54)
+					(name "VOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 10.16 -2.54 180)
+					(length 2.54)
+					(name "VOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 2.54 -10.16 90)
+					(length 2.54)
+					(name "CT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 5.08 0)
+					(length 2.54)
+					(name "ON"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:+3V3"
 			(power global)
 			(pin_numbers
@@ -3988,7 +4269,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "POWER TREE — BUCK STAGES ADDED\nVSYS_RAW -> U10 (3.3 V) -> +3V3_MAIN; open-drain PG drives BUCK_3V3_PG.\nVSYS_RAW -> U8 (1.8 V) -> +1V8_AON; CTRL = BUCK_3V3_PG with +3V3_MAIN pull-up.\nVSYS_RAW -> U9 (5 V) -> +5V_AUX; CTRL tied to VIN.\nWARNING: the 5 V buck needs about 6.8 V input to regulate; validate the loaded 2S minimum.\n+1V8_RUN load switch remains to be inserted."
+	(text "POWER TREE — BUCK STAGES ADDED\nVSYS_RAW -> U10 (3.3 V) -> +3V3_MAIN; open-drain PG drives BUCK_3V3_PG.\nVSYS_RAW -> U8 (1.8 V) -> +1V8_AON; CTRL = BUCK_3V3_PG with +3V3_MAIN pull-up.\nVSYS_RAW -> U9 (5 V) -> +5V_AUX; CTRL tied to VIN.\nWARNING: the 5 V buck needs about 6.8 V input to regulate; validate the loaded 2S minimum.\n+1V8_AON -> U11 (PWR_ON enabled) -> +1V8_RUN."
 		(exclude_from_sim no)
 		(at 248.92 73.66 0)
 		(effects
@@ -4031,6 +4312,28 @@
 			(justify left bottom)
 		)
 		(uuid "f8e2a003-0720-4a11-8b22-000000000001")
+	)
+	(text "1.8 V RUN LOAD SWITCH — TPS22997RYZR"
+		(exclude_from_sim no)
+		(at 332.74 167.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7dd8dd86-4710-402a-a283-a3f14aa7f11f")
+	)
+	(text "+1V8_AON -> U11 -> +1V8_RUN; ON = STM32 PWR_ON.\nC192 = 3.9nF: about 1.05ms 10–90% rise at 1.8V.\nQOD tied to VOUT for fast discharge; PG unused."
+		(exclude_from_sim no)
+		(at 332.74 223.52 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "7f8a2a28-e845-4c8a-8717-80e320c0ee0a")
 	)
 	(text "U10: SW pin 2 DNC; VOS pin 7 to VOUT. EN 220k/100k (2M internal pull-down): ~4.14V turn-on, EN <=5.14V at VIN=17V."
 		(exclude_from_sim no)
@@ -4643,6 +4946,42 @@
 		(color 0 0 0 0)
 		(uuid "ffe0dea3-6ffa-4fd1-8270-1c9f63170da2")
 	)
+	(junction
+		(at 353.06 185.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d57437fd-37b1-401e-9c28-631f9713b0cd")
+	)
+	(junction
+		(at 355.6 187.96)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6b5cc539-652c-47c4-8a18-cf39781ce8fe")
+	)
+	(junction
+		(at 363.22 187.96)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "04bf8c23-47bd-444d-afdc-9edbc7f91b8d")
+	)
+	(junction
+		(at 363.22 190.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "056e1e21-d46a-4558-b2eb-867ee0236e04")
+	)
+	(junction
+		(at 383.54 187.96)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2bb1e9aa-e9e4-4e01-8259-78b6c12267af")
+	)
+	(junction
+		(at 383.54 190.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f356ebeb-3eea-41a4-9184-4a9568eb61cb")
+	)
 	(no_connect
 		(at 82.55 83.82)
 		(uuid "1142f243-b3e4-409c-b4c2-3803032c28c1")
@@ -4670,6 +5009,10 @@
 	(no_connect
 		(at 287.02 177.8)
 		(uuid "f8e2a003-0720-4a11-8b22-000000000016")
+	)
+	(no_connect
+		(at 383.54 182.88)
+		(uuid "3e9a206d-c113-44b8-88c3-9e4f9bfebd48")
 	)
 	(bus_entry
 		(at 88.9 151.13)
@@ -7155,6 +7498,156 @@
 		)
 		(uuid "fbda0a0e-d283-4701-8a4f-fc5142243c6f")
 	)
+	(wire
+		(pts
+			(xy 355.6 172.72) (xy 360.68 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff0807a2-ae0d-45b7-9d53-0c2b9ef66d73")
+	)
+	(wire
+		(pts
+			(xy 360.68 172.72) (xy 360.68 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce82b62f-951d-482e-8783-d0c04dfd0170")
+	)
+	(wire
+		(pts
+			(xy 360.68 182.88) (xy 363.22 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e2b2632-3fe9-4c04-91c0-73c06c5d412f")
+	)
+	(wire
+		(pts
+			(xy 353.06 185.42) (xy 363.22 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2f650fce-3ef9-4288-a3b6-de6ec7c4cfef")
+	)
+	(wire
+		(pts
+			(xy 353.06 175.26) (xy 353.06 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7800f7b7-3c25-4b42-bdd8-11039d7add32")
+	)
+	(wire
+		(pts
+			(xy 353.06 180.34) (xy 353.06 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fae8d1dc-58a4-40a0-b7df-793ce66a4240")
+	)
+	(wire
+		(pts
+			(xy 345.44 175.26) (xy 347.98 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce5084d7-bfae-4e31-a3b6-5a2e44de6840")
+	)
+	(wire
+		(pts
+			(xy 345.44 175.26) (xy 345.44 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c49254b-e1ae-491e-9702-f359323ce739")
+	)
+	(wire
+		(pts
+			(xy 345.44 187.96) (xy 363.22 187.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcb1cc7c-4968-460d-afca-e2de1e6e61d7")
+	)
+	(wire
+		(pts
+			(xy 355.6 190.5) (xy 363.22 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "624e121c-1b81-4948-8411-86eade5fc208")
+	)
+	(wire
+		(pts
+			(xy 355.6 187.96) (xy 355.6 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89d245e6-9813-484f-bf51-4faf1c21ab0b")
+	)
+	(wire
+		(pts
+			(xy 383.54 187.96) (xy 391.16 187.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "04613521-9add-4847-8bfe-18e0e7af97a0")
+	)
+	(wire
+		(pts
+			(xy 383.54 187.96) (xy 383.54 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "39c45bea-1a1a-48f9-9424-57a327717aaa")
+	)
+	(wire
+		(pts
+			(xy 370.84 198.12) (xy 370.84 200.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "640369be-8fc7-41a7-b644-21d47a8f135f")
+	)
+	(wire
+		(pts
+			(xy 375.92 198.12) (xy 375.92 200.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b8ccb0f4-6d4c-4b29-9bb8-59ce76e9d65e")
+	)
 	(image
 		(at 154.305 253.365)
 		(scale 0.313333)
@@ -7928,6 +8421,17 @@
 			(justify right)
 		)
 		(uuid "ed51caa7-ec36-4038-8d74-cc3e35254028")
+	)
+	(hierarchical_label "PWR_ON"
+		(shape input)
+		(at 355.6 172.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2e8afcba-b408-490e-8604-cce0b80ee9b2")
 	)
 	(symbol
 		(lib_id "Device:C_Small")
@@ -17694,5 +18198,446 @@
 				)
 			)
 		)
+	)
+	(symbol
+		(lib_id "open-race:TPS22997RYZR")
+		(at 373.38 187.96 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ebcbf0cd-cb5f-4a72-a1fe-7e2a1a5f0fa7")
+		(property "Reference" "U11"
+			(at 373.38 175.26 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TPS22997RYZR"
+			(at 373.38 177.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "noob:Texas_RYZ0010A_WQFN-HR-10_2x1.5mm_P0.5mm"
+			(at 373.38 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tps22997.pdf"
+			(at 373.38 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "10A, 0.1V to 5.5V load switch with 4mOhm typical on-resistance, adjustable rise time, adjustable QOD and open-drain power good; RYZ 10-pin WQFN-HR"
+			(at 373.38 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Texas Instruments"
+			(at 373.38 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "TPS22997RYZR"
+			(at 373.38 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7bd89f22-27f8-431f-a9dd-399bc46d7f77")
+		)
+		(pin "2"
+			(uuid "4909f52a-7782-4955-9101-eaac660060ff")
+		)
+		(pin "3"
+			(uuid "8f647faa-4228-422b-b38c-b856621282d1")
+		)
+		(pin "4"
+			(uuid "2d077bdc-e6a3-473b-90eb-a0f780cfbd08")
+		)
+		(pin "5"
+			(uuid "c035a935-55de-4fe5-8a0e-4eb4dafbf8f6")
+		)
+		(pin "6"
+			(uuid "0b52a07b-144a-4d28-a575-410f0d0191f5")
+		)
+		(pin "7"
+			(uuid "c3f8dc39-7fb6-4568-a66c-f0a1a0e778a7")
+		)
+		(pin "8"
+			(uuid "37bd7a27-1f20-4686-9746-9a4c42190ec5")
+		)
+		(pin "9"
+			(uuid "a4cbb212-4115-49ba-8be5-2dc88ba64273")
+		)
+		(pin "10"
+			(uuid "712e1336-5afd-4348-86c0-45375900d4ac")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "U11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 350.52 175.26 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0111273d-0199-41a2-a4a9-e01dad36cebb")
+		(property "Reference" "C190"
+			(at 337.82 172.72 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "100nF 10V X7R"
+			(at 337.82 175.26 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 350.52 175.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Datasheet" ""
+			(at 350.52 175.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Description" "TPS22997 VBIAS bypass capacitor; place at pin 1"
+			(at 350.52 175.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(pin "1" (uuid "dd0a311c-31e0-44c3-b914-36122fcd01a6"))
+		(pin "2" (uuid "7cfc0a2a-9632-4d6e-8f94-98ab992fdac2"))
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C190")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 355.6 193.04 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b2590cd1-deec-476f-87a4-ba84651d1ade")
+		(property "Reference" "C191"
+			(at 345.44 192.024 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "1uF 10V X7R"
+			(at 345.44 194.564 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 355.6 193.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Datasheet" ""
+			(at 355.6 193.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Description" "TPS22997 VIN bypass capacitor; place at pins 2 and 3"
+			(at 355.6 193.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(pin "1" (uuid "50773379-1082-4dc3-8545-c1a55a66a960"))
+		(pin "2" (uuid "9801c6a9-dfaa-440a-bd97-196429836e40"))
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C191")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 375.92 203.2 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "709bf4ff-3385-483c-a664-3dae7806c954")
+		(property "Reference" "C192"
+			(at 379.73 201.168 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Value" "3.9nF 50V C0G"
+			(at 379.73 203.708 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)) (justify left))
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 375.92 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Datasheet" ""
+			(at 375.92 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Description" "TPS22997 CT capacitor; targets approximately 1.05ms output rise at 1.8V with 3.3V VBIAS"
+			(at 375.92 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(pin "1" (uuid "6f8bdbad-b768-47f7-9dd3-33c9a9598bd1"))
+		(pin "2" (uuid "bb0122d5-fa80-46a7-b0fd-1b6e8c379221"))
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864"
+					(reference "C192")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 353.06 180.34 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1ca18c09-b708-42ed-b613-34b8b0f0872a")
+		(property "Reference" "#PWR085"
+			(at 353.06 178.435 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Value" "+3V3_MAIN"
+			(at 350.52 180.34 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects (font (size 1 1)) (justify right))
+		)
+		(property "Footprint" "" (at 353.06 180.34 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 353.06 180.34 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\"" (at 353.06 180.34 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "a8c82914-c3a3-4368-a000-342377806d7f"))
+		(instances (project "open-race_v2" (path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864" (reference "#PWR085") (unit 1))))
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 345.44 177.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "444b0f70-328a-4147-9c1d-afa36c1ce757")
+		(property "Reference" "#PWR086" (at 345.44 175.895 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND" (at 342.9 180.34 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1 1)) (justify right)))
+		(property "Footprint" "" (at 345.44 177.8 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 345.44 177.8 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Power symbol creates a global label with name \"GND\", ground" (at 345.44 177.8 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "2c4530f9-d6bf-4dd3-8f55-e4ad4e4678b6"))
+		(instances (project "open-race_v2" (path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864" (reference "#PWR086") (unit 1))))
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 345.44 187.96 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c8bdcdb7-1031-4d19-933b-53e30b479d5f")
+		(property "Reference" "#PWR087" (at 345.44 186.055 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "+1V8_AON" (at 345.44 184.15 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 345.44 187.96 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 345.44 187.96 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Power symbol creates a global label with name \"+1V8_AON\"" (at 345.44 187.96 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "f080496a-bb22-4c25-86d2-bac21841ce85"))
+		(instances (project "open-race_v2" (path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864" (reference "#PWR087") (unit 1))))
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 355.6 195.58 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b97bef77-449e-4cca-abe5-689a8dd5ceef")
+		(property "Reference" "#PWR088" (at 355.6 193.675 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND" (at 355.6 200.66 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 355.6 195.58 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 355.6 195.58 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Power symbol creates a global label with name \"GND\", ground" (at 355.6 195.58 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "2c270627-a2b8-4e4c-ad6a-627496e87c5f"))
+		(instances (project "open-race_v2" (path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864" (reference "#PWR088") (unit 1))))
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 391.16 187.96 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3f3d41bb-9b5e-4922-8513-b2b2b090f3d2")
+		(property "Reference" "#PWR089" (at 391.16 186.055 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "+1V8_RUN" (at 391.16 184.15 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 391.16 187.96 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 391.16 187.96 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Power symbol creates a global label with name \"+1V8_RUN\"" (at 391.16 187.96 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "03d6a318-4de6-435f-b746-f6ccf32b0a6f"))
+		(instances (project "open-race_v2" (path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864" (reference "#PWR089") (unit 1))))
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 370.84 200.66 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "33fe9ab2-3ab1-4c47-9d50-733af5b7a50a")
+		(property "Reference" "#PWR090" (at 370.84 198.755 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND" (at 370.84 205.74 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 370.84 200.66 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 370.84 200.66 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Power symbol creates a global label with name \"GND\", ground" (at 370.84 200.66 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "476858b1-3eff-473c-8448-4c52bdc9f62c"))
+		(instances (project "open-race_v2" (path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864" (reference "#PWR090") (unit 1))))
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 375.92 205.74 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bb68ce32-4579-401d-b6c1-a3b50f387f3e")
+		(property "Reference" "#PWR091" (at 375.92 203.835 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND" (at 375.92 210.82 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 375.92 205.74 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Datasheet" "" (at 375.92 205.74 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Description" "Power symbol creates a global label with name \"GND\", ground" (at 375.92 205.74 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(pin "1" (uuid "573a0036-bc11-47c4-b0e3-b362105419c5"))
+		(instances (project "open-race_v2" (path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/f75a094f-afff-47fb-af28-3f9eed6a2864" (reference "#PWR091") (unit 1))))
 	)
 )
