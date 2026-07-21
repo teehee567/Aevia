@@ -1,0 +1,8 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "open-race-v2")(type "KiCad")(uri "${KIPRJMOD}/open-race-v2.kicad_sym")(options "")(descr "Open Race v2 project symbols"))
+  (lib (name "noob")(type "KiCad")(uri "${KIPRJMOD}/open-race-v2.kicad_sym")(options "")(descr "Compatibility mapping for existing noob symbols"))
+  (lib (name "open-race")(type "KiCad")(uri "${KIPRJMOD}/open-race-v2.kicad_sym")(options "")(descr "Compatibility mapping for existing open-race symbols"))
+  (lib (name "MX25U51279GXDR00")(type "KiCad")(uri "${KIPRJMOD}/open-race-v2.kicad_sym")(options "")(descr "Compatibility mapping for boot flash symbol"))
+  (lib (name "APS512XXN-OB9-BG")(type "KiCad")(uri "${KIPRJMOD}/open-race-v2.kicad_sym")(options "")(descr "Compatibility mapping for APS512 PSRAM symbol"))
+)
