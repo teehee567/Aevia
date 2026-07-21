@@ -1379,6 +1379,16 @@
 		)
 		(uuid "0d137d24-56f6-4975-a9f7-39335beff3b8")
 	)
+	(label "DEV_BOOT"
+		(at 106.68 127 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "33b77dbc-a8d3-41e9-b9fe-5ca14f8b8a61")
+	)
 	(label "SWDIO"
 		(at 212.09 76.2 0)
 		(effects
@@ -1418,6 +1428,46 @@
 			(justify left bottom)
 		)
 		(uuid "6e2ea2b3-e2a2-4824-98c4-78bf8d35386b")
+	)
+	(label "SWCLK"
+		(at 140.97 95.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "741be709-3045-45ad-a5f0-14845982f499")
+	)
+	(label "SWDIO"
+		(at 140.97 97.79 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "77427a4c-9825-4d3e-b5d8-0bba95a8d831")
+	)
+	(label "SWO"
+		(at 140.97 100.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b4076522-ccdd-48d1-a4b0-01b623143750")
+	)
+	(label "NRST"
+		(at 140.97 90.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c0b13a4f-7278-41a0-8ea1-425ce0132932")
 	)
 	(hierarchical_label "{DEBUG_IF}"
 		(shape bidirectional)
@@ -2227,56 +2277,6 @@
 				)
 			)
 		)
-	)
-	(label "NRST"
-		(at 140.97 90.17 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c0b13a4f-7278-41a0-8ea1-425ce0132932")
-	)
-	(label "SWCLK"
-		(at 140.97 95.25 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "741be709-3045-45ad-a5f0-14845982f499")
-	)
-	(label "SWDIO"
-		(at 140.97 97.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "77427a4c-9825-4d3e-b5d8-0bba95a8d831")
-	)
-	(label "SWO"
-		(at 140.97 100.33 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b4076522-ccdd-48d1-a4b0-01b623143750")
-	)
-	(label "DEV_BOOT"
-		(at 106.68 127 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "33b77dbc-a8d3-41e9-b9fe-5ca14f8b8a61")
 	)
 	(sheet_instances
 		(path "/"
