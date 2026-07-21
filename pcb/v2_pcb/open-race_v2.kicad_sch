@@ -13,6 +13,39 @@
 		(comment 2 "Display and buzzer intentionally excluded from v2 scope")
 	)
 	(lib_symbols)
+	(bus_alias "POWER_CTRL"
+		(members "AUX5_EN" "BAT_ALRT" "BUCK_3V3_PG" "CHG_INT" "GNSS_EN" "IMU_EN" "PMIC_SCL" "PMIC_SDA" "PWR_ON" "RADIO_EN")
+	)
+	(bus_alias "USB_IF"
+		(members "USBPD_INT" "USBPD_SCL" "USBPD_SDA" "USB_DN" "USB_DP" "USB_TPD8S_FLT" "USB_VBUS_SENSE")
+	)
+	(bus_alias "RADIO_IF"
+		(members "ESP_BOOT" "ESP_EN" "ESP_HOST_WAKE" "ESP_UART_CTS" "ESP_UART_RTS" "ESP_UART_RX" "ESP_UART_TX")
+	)
+	(bus_alias "HMI_IF"
+		(members "BTN1_N" "BTN2_N" "BTN3_N" "LED_ERR" "LED_RUN" "LED_WARN")
+	)
+	(bus_alias "APA_IF"
+		(members "ESP_APA_CLK" "ESP_APA_DATA")
+	)
+	(bus_alias "GNSS_IF"
+		(members "GNSS_ERR_STAT" "GNSS_EVENT" "GNSS_PPS" "GNSS_PVT_STAT" "GNSS_RESET_N" "GNSS_RTK_STAT" "GNSS_UART_RX" "GNSS_UART_TX")
+	)
+	(bus_alias "IMU_IF"
+		(members "IMU_DRY_SYNC" "IMU_RESET_N" "IMU_SPI_CS_N" "IMU_SPI_MISO" "IMU_SPI_MOSI" "IMU_SPI_SCK")
+	)
+	(bus_alias "PSRAM_IF"
+		(members "PSRAM_CLK" "PSRAM_DQS0" "PSRAM_DQS1" "PSRAM_IO0" "PSRAM_IO1" "PSRAM_IO2" "PSRAM_IO3" "PSRAM_IO4" "PSRAM_IO5" "PSRAM_IO6" "PSRAM_IO7" "PSRAM_IO8" "PSRAM_IO9" "PSRAM_IO10" "PSRAM_IO11" "PSRAM_IO12" "PSRAM_IO13" "PSRAM_IO14" "PSRAM_IO15" "PSRAM_NCS")
+	)
+	(bus_alias "FLASH_IF"
+		(members "FLASH_CLK" "FLASH_IO0" "FLASH_IO1" "FLASH_IO2" "FLASH_IO3" "FLASH_NCS")
+	)
+	(bus_alias "SD_IF"
+		(members "SD_CD_N" "SD_CLK" "SD_CMD" "SD_D0" "SD_D1" "SD_D2" "SD_D3")
+	)
+	(bus_alias "DEBUG_IF"
+		(members "DEV_BOOT" "NRST" "SWCLK" "SWDIO" "SWO")
+	)
 	(text "open-race v2 schematic"
 		(exclude_from_sim no)
 		(at 25 20 0.0000)
@@ -24,7 +57,7 @@
 		)
 		(uuid "b409fe14-f635-4402-97f8-39400b134616")
 	)
-	(text "Cross-sheet connectivity uses scalar global labels. Display/backlight and buzzer are intentionally out of scope."
+	(text "Cross-sheet connectivity uses scoped hierarchical bus interfaces; only power rails remain global. Display/backlight and buzzer are intentionally out of scope."
 		(exclude_from_sim no)
 		(at 25 27 0.0000)
 		(effects
@@ -68,8 +101,8 @@
 		(uuid "124abaac-2b4f-4638-86ae-50cc50aecc28")
 	)
 	(sheet
-		(at 32 42)
-		(size 62 28)
+		(at 31.75 41.91)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -84,7 +117,7 @@
 		)
 		(uuid "f75a094f-afff-47fb-af28-3f9eed6a2864")
 		(property "Sheetname" "Power"
-			(at 32 41.2884 0)
+			(at 31.75 41.1984 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -93,13 +126,22 @@
 			)
 		)
 		(property "Sheetfile" "Power.kicad_sch"
-			(at 32 70.5846 0)
+			(at 31.75 70.4346 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{POWER_CTRL}" bidirectional
+			(at 93.98 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "98665792-2c16-4414-8c50-cf174fb75440")
 		)
 		(instances
 			(project "open-race_v2"
@@ -110,8 +152,8 @@
 		)
 	)
 	(sheet
-		(at 32 82)
-		(size 62 28)
+		(at 31.75 82.55)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -126,7 +168,7 @@
 		)
 		(uuid "3d335ef5-a898-4ee3-ac02-304e9e08b5b1")
 		(property "Sheetname" "USB-C PD"
-			(at 32 81.2884 0)
+			(at 31.75 81.8384 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -135,13 +177,22 @@
 			)
 		)
 		(property "Sheetfile" "USB.kicad_sch"
-			(at 32 110.5846 0)
+			(at 31.75 111.075 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{USB_IF}" bidirectional
+			(at 93.98 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "f1dc80bc-0331-48b5-a605-08a8e708d577")
 		)
 		(instances
 			(project "open-race_v2"
@@ -152,8 +203,8 @@
 		)
 	)
 	(sheet
-		(at 32 122)
-		(size 62 28)
+		(at 31.75 121.92)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -168,7 +219,7 @@
 		)
 		(uuid "c8698516-dbec-42fc-8101-85bbceb1caa7")
 		(property "Sheetname" "ESP32-C6 radio"
-			(at 32 121.2884 0)
+			(at 31.75 121.208 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -177,13 +228,31 @@
 			)
 		)
 		(property "Sheetfile" "Radio_ESP32.kicad_sch"
-			(at 32 150.5846 0)
+			(at 31.75 150.445 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{RADIO_IF}" bidirectional
+			(at 93.98 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "3dcfee68-8f62-44d6-8a97-9e8c195a4b45")
+		)
+		(pin "{APA_IF}" bidirectional
+			(at 93.98 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "1bd513c7-1f9e-49d6-9e18-7b0e9355131a")
 		)
 		(instances
 			(project "open-race_v2"
@@ -194,8 +263,8 @@
 		)
 	)
 	(sheet
-		(at 32 162)
-		(size 62 28)
+		(at 31.75 162.56)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -210,7 +279,7 @@
 		)
 		(uuid "bfd0f0c4-a213-448c-b2bc-89958714b75f")
 		(property "Sheetname" "Buttons and LEDs"
-			(at 32 161.2884 0)
+			(at 31.75 161.848 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -219,13 +288,31 @@
 			)
 		)
 		(property "Sheetfile" "HMI.kicad_sch"
-			(at 32 190.5846 0)
+			(at 31.75 191.085 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{HMI_IF}" bidirectional
+			(at 93.98 171.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "7c7d9eab-c609-4e39-b919-2a16c9264364")
+		)
+		(pin "{APA_IF}" bidirectional
+			(at 93.98 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "28ca73a0-ca96-408c-bd24-a7dc273db566")
 		)
 		(instances
 			(project "open-race_v2"
@@ -236,8 +323,8 @@
 		)
 	)
 	(sheet
-		(at 124 42)
-		(size 62 28)
+		(at 124.46 41.91)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -252,7 +339,7 @@
 		)
 		(uuid "57594d98-d9e7-4dd9-8bfb-43dd30470ece")
 		(property "Sheetname" "STM32 MCU I/O"
-			(at 124 41.2884 0)
+			(at 124.46 41.1984 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -261,13 +348,107 @@
 			)
 		)
 		(property "Sheetfile" "STM32_MCU_IO.kicad_sch"
-			(at 124 70.5846 0)
+			(at 124.46 70.4346 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{POWER_CTRL}" bidirectional
+			(at 124.46 50.8 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "0be7668c-ecec-45f8-af73-f699d62940a0")
+		)
+		(pin "{USB_IF}" bidirectional
+			(at 124.46 55.88 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "e847a8a4-f514-4316-8f8b-20365c927645")
+		)
+		(pin "{RADIO_IF}" bidirectional
+			(at 124.46 60.96 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "561804c2-bd32-4274-9f9d-82ef09cc6fc2")
+		)
+		(pin "{HMI_IF}" bidirectional
+			(at 124.46 66.04 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "48ad3865-8dc7-49e0-a8e0-9f6dc2b8e872")
+		)
+		(pin "{GNSS_IF}" bidirectional
+			(at 186.69 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "c81a50ec-6ff7-4628-b891-c983addb208e")
+		)
+		(pin "{IMU_IF}" bidirectional
+			(at 186.69 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "5fea7b88-4b20-4d53-8712-9e729fcbbee2")
+		)
+		(pin "{PSRAM_IF}" bidirectional
+			(at 186.69 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "46f422ad-09ef-4b4a-8904-bc070facbc51")
+		)
+		(pin "{FLASH_IF}" bidirectional
+			(at 186.69 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "7476d061-c36e-4d30-bfda-763c2f1c2785")
+		)
+		(pin "{SD_IF}" bidirectional
+			(at 186.69 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "75ffd799-d7c9-4e08-9a04-74812cbf4be6")
+		)
+		(pin "{DEBUG_IF}" bidirectional
+			(at 186.69 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+			(uuid "14d92c04-f89f-4eec-a606-31dc0cccf9d3")
 		)
 		(instances
 			(project "open-race_v2"
@@ -278,8 +459,8 @@
 		)
 	)
 	(sheet
-		(at 124 82)
-		(size 62 28)
+		(at 124.46 82.55)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -294,7 +475,7 @@
 		)
 		(uuid "f189ce9a-ee7a-4073-98fc-e7dae98a7e7f")
 		(property "Sheetname" "STM32 power"
-			(at 124 81.2884 0)
+			(at 124.46 81.8384 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -303,7 +484,7 @@
 			)
 		)
 		(property "Sheetfile" "stm32power.kicad_sch"
-			(at 124 110.5846 0)
+			(at 124.46 111.075 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -320,8 +501,8 @@
 		)
 	)
 	(sheet
-		(at 124 122)
-		(size 62 28)
+		(at 124.46 121.92)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -336,7 +517,7 @@
 		)
 		(uuid "80f34340-29b9-446b-8079-3559d68f1fbd")
 		(property "Sheetname" "x16 PSRAM"
-			(at 124 121.2884 0)
+			(at 124.46 121.208 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -345,13 +526,23 @@
 			)
 		)
 		(property "Sheetfile" "HexaSPI_PSRAM.kicad_sch"
-			(at 124 150.5846 0)
+			(at 124.46 150.445 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{PSRAM_IF}" bidirectional
+			(at 124.46 130.81 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "f991c409-8f3e-4adb-abd2-c22477394c76")
 		)
 		(instances
 			(project "open-race_v2"
@@ -362,8 +553,8 @@
 		)
 	)
 	(sheet
-		(at 124 162)
-		(size 62 28)
+		(at 124.46 162.56)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -378,7 +569,7 @@
 		)
 		(uuid "75f87715-f8d8-4db5-8e4d-2bcd184f549a")
 		(property "Sheetname" "Quad boot flash"
-			(at 124 161.2884 0)
+			(at 124.46 161.848 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -387,13 +578,23 @@
 			)
 		)
 		(property "Sheetfile" "OctoSPI_FLASH.kicad_sch"
-			(at 124 190.5846 0)
+			(at 124.46 191.085 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{FLASH_IF}" bidirectional
+			(at 124.46 171.45 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "11ec7e13-5217-4205-8f4f-fa9561c94e71")
 		)
 		(instances
 			(project "open-race_v2"
@@ -404,8 +605,8 @@
 		)
 	)
 	(sheet
-		(at 124 202)
-		(size 62 28)
+		(at 124.46 201.93)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -420,7 +621,7 @@
 		)
 		(uuid "4e99b39d-19ed-4d7e-8221-338d133844bd")
 		(property "Sheetname" "microSD"
-			(at 124 201.2884 0)
+			(at 124.46 201.218 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -429,13 +630,23 @@
 			)
 		)
 		(property "Sheetfile" "MicroSD.kicad_sch"
-			(at 124 230.5846 0)
+			(at 124.46 230.455 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{SD_IF}" bidirectional
+			(at 124.46 210.82 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "b60ba158-257c-4b4b-99d9-9d7bdca6b63f")
 		)
 		(instances
 			(project "open-race_v2"
@@ -446,8 +657,8 @@
 		)
 	)
 	(sheet
-		(at 124 242)
-		(size 62 28)
+		(at 124.46 242.57)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -462,7 +673,7 @@
 		)
 		(uuid "1c8ed5b4-70c4-4a28-8843-29110648d24f")
 		(property "Sheetname" "SWD debug"
-			(at 124 241.2884 0)
+			(at 124.46 241.858 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -471,13 +682,23 @@
 			)
 		)
 		(property "Sheetfile" "Debug.kicad_sch"
-			(at 124 270.5846 0)
+			(at 124.46 271.095 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{DEBUG_IF}" bidirectional
+			(at 124.46 251.46 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "da06e0cd-ded7-41b3-8ccf-0a20dd583868")
 		)
 		(instances
 			(project "open-race_v2"
@@ -488,8 +709,8 @@
 		)
 	)
 	(sheet
-		(at 216 42)
-		(size 62 28)
+		(at 215.9 41.91)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -504,7 +725,7 @@
 		)
 		(uuid "80a10964-6f93-4d91-8a86-6922d595776f")
 		(property "Sheetname" "UM980 GNSS"
-			(at 216 41.2884 0)
+			(at 215.9 41.1984 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -513,13 +734,23 @@
 			)
 		)
 		(property "Sheetfile" "GNSS.kicad_sch"
-			(at 216 70.5846 0)
+			(at 215.9 70.4346 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{GNSS_IF}" bidirectional
+			(at 215.9 50.8 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "8d48fffa-09e4-47f0-aa60-0e174906136a")
 		)
 		(instances
 			(project "open-race_v2"
@@ -530,8 +761,8 @@
 		)
 	)
 	(sheet
-		(at 216 82)
-		(size 62 28)
+		(at 215.9 82.55)
+		(size 62.23 27.94)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -546,7 +777,7 @@
 		)
 		(uuid "bbbc526a-3ef6-4a0d-8f44-5b2b1995eea4")
 		(property "Sheetname" "SCH16T IMU"
-			(at 216 81.2884 0)
+			(at 215.9 81.8384 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -555,13 +786,23 @@
 			)
 		)
 		(property "Sheetfile" "IMU.kicad_sch"
-			(at 216 110.5846 0)
+			(at 215.9 111.075 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left top)
 			)
+		)
+		(pin "{IMU_IF}" bidirectional
+			(at 215.9 90.17 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "a99520ac-4c77-4888-9df4-b470fdc7f73d")
 		)
 		(instances
 			(project "open-race_v2"
@@ -576,5 +817,324 @@
 			(page "1")
 		)
 	)
-	(embedded_fonts no)
+	(embedded_fonts no)	(bus
+		(pts
+			(xy 93.98 50.8)
+			(xy 124.46 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8f8e63fa-7f8c-4ab7-905e-c9cace3c76c6")
+	)
+	(bus
+		(pts
+			(xy 93.98 90.17)
+			(xy 99.06 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b03b1031-d658-4660-99de-1343982f43b5")
+	)
+	(bus
+		(pts
+			(xy 99.06 90.17)
+			(xy 99.06 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "74f3bd41-7ef9-46ed-ad18-eb99c843c747")
+	)
+	(bus
+		(pts
+			(xy 99.06 55.88)
+			(xy 124.46 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "767db5ce-7b20-4c5f-8094-568f83a2592a")
+	)
+	(bus
+		(pts
+			(xy 93.98 130.81)
+			(xy 104.14 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "24f293cd-01c4-403c-8db1-51632b50a304")
+	)
+	(bus
+		(pts
+			(xy 104.14 130.81)
+			(xy 104.14 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87a8657b-6cdb-4c46-bcc2-2b4d5e765034")
+	)
+	(bus
+		(pts
+			(xy 104.14 60.96)
+			(xy 124.46 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4f3a0c1-a688-496e-abea-253b0840a88b")
+	)
+	(bus
+		(pts
+			(xy 93.98 171.45)
+			(xy 109.22 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "50b0f473-652e-4e62-99b9-56c7f150b9f5")
+	)
+	(bus
+		(pts
+			(xy 109.22 171.45)
+			(xy 109.22 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a239ec82-dac9-4194-9f8c-29cb261a0b46")
+	)
+	(bus
+		(pts
+			(xy 109.22 66.04)
+			(xy 124.46 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4c16377-b979-447b-b6f7-bec88c3021da")
+	)
+	(bus
+		(pts
+			(xy 93.98 140.97)
+			(xy 99.06 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7ef84315-9572-4070-b0fe-94df3d858775")
+	)
+	(bus
+		(pts
+			(xy 99.06 140.97)
+			(xy 99.06 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3d558a6-08f5-4090-a937-1be9ff52a511")
+	)
+	(bus
+		(pts
+			(xy 99.06 181.61)
+			(xy 93.98 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce6ef899-51f2-4cbe-a290-618b18f76259")
+	)
+	(bus
+		(pts
+			(xy 186.69 50.8)
+			(xy 215.9 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56fa56d1-352a-4216-9fc2-6023beb54321")
+	)
+	(bus
+		(pts
+			(xy 186.69 54.61)
+			(xy 200.66 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6dd94dc6-9c00-40c9-afb8-689bb754c384")
+	)
+	(bus
+		(pts
+			(xy 200.66 54.61)
+			(xy 200.66 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "80a891b2-08ef-43fd-a7e9-637891377d43")
+	)
+	(bus
+		(pts
+			(xy 200.66 90.17)
+			(xy 215.9 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "280f4c8d-e926-4cbe-a0ed-2989ba8b48d0")
+	)
+	(bus
+		(pts
+			(xy 186.69 58.42)
+			(xy 115.57 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6097cf22-a294-46a7-907f-aec8c1c44339")
+	)
+	(bus
+		(pts
+			(xy 115.57 58.42)
+			(xy 115.57 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9cfa5e3a-8ba4-47ed-9116-bac6daa37cb6")
+	)
+	(bus
+		(pts
+			(xy 115.57 130.81)
+			(xy 124.46 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f7eb31d-c7af-4091-9f39-723319548937")
+	)
+	(bus
+		(pts
+			(xy 186.69 62.23)
+			(xy 113.03 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57136904-d017-4b5b-8e4d-043e4b4ac57b")
+	)
+	(bus
+		(pts
+			(xy 113.03 62.23)
+			(xy 113.03 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b34ed9a6-76df-4c10-b482-e6cd06889950")
+	)
+	(bus
+		(pts
+			(xy 113.03 171.45)
+			(xy 124.46 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dab83b53-0e13-41a3-bc2f-1bcf7130978f")
+	)
+	(bus
+		(pts
+			(xy 186.69 66.04)
+			(xy 107.95 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1728bfbc-380e-49f7-9f8a-537e2e2e4e0c")
+	)
+	(bus
+		(pts
+			(xy 107.95 66.04)
+			(xy 107.95 210.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f89ae6dc-6a17-4dab-bbe4-bb6fbcd80ba2")
+	)
+	(bus
+		(pts
+			(xy 107.95 210.82)
+			(xy 124.46 210.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75662800-dab5-4856-9c9a-3c136765861e")
+	)
+	(bus
+		(pts
+			(xy 186.69 68.58)
+			(xy 102.87 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c52d09a-a5d5-4e65-9dcd-65d1449fc24e")
+	)
+	(bus
+		(pts
+			(xy 102.87 68.58)
+			(xy 102.87 251.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6900d627-1e0a-42d6-bb1d-041e731acb70")
+	)
+	(bus
+		(pts
+			(xy 102.87 251.46)
+			(xy 124.46 251.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7e89ef2-8786-446e-aef8-4f6b18b79294")
+	)
+
 )
