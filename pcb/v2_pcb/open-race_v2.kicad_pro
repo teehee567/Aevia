@@ -224,7 +224,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "2"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -591,7 +591,114 @@
       "sort_asc": true,
       "sort_field": "Reference"
     },
-    "bus_aliases": {},
+    "bus_aliases": {
+      "APA_IF": [
+        "ESP_APA_CLK",
+        "ESP_APA_DATA"
+      ],
+      "DEBUG_IF": [
+        "DEV_BOOT",
+        "NRST",
+        "SWCLK",
+        "SWDIO",
+        "SWO"
+      ],
+      "FLASH_IF": [
+        "FLASH_CLK",
+        "FLASH_IO0",
+        "FLASH_IO1",
+        "FLASH_IO2",
+        "FLASH_IO3",
+        "FLASH_NCS"
+      ],
+      "GNSS_IF": [
+        "GNSS_ERR_STAT",
+        "GNSS_EVENT",
+        "GNSS_PPS",
+        "GNSS_PVT_STAT",
+        "GNSS_RESET_N",
+        "GNSS_RTK_STAT",
+        "GNSS_UART_RX",
+        "GNSS_UART_TX"
+      ],
+      "HMI_IF": [
+        "BTN1_N",
+        "BTN2_N",
+        "BTN3_N",
+        "LED_ERR",
+        "LED_RUN",
+        "LED_WARN"
+      ],
+      "IMU_IF": [
+        "IMU_DRY_SYNC",
+        "IMU_RESET_N",
+        "IMU_SPI_CS_N",
+        "IMU_SPI_MISO",
+        "IMU_SPI_MOSI",
+        "IMU_SPI_SCK"
+      ],
+      "POWER_CTRL": [
+        "AUX5_EN",
+        "BAT_ALRT",
+        "BUCK_3V3_PG",
+        "CHG_INT",
+        "GNSS_EN",
+        "IMU_EN",
+        "PMIC_SCL",
+        "PMIC_SDA",
+        "PWR_ON",
+        "RADIO_EN"
+      ],
+      "PSRAM_IF": [
+        "PSRAM_CLK",
+        "PSRAM_DQS0",
+        "PSRAM_DQS1",
+        "PSRAM_IO0",
+        "PSRAM_IO1",
+        "PSRAM_IO2",
+        "PSRAM_IO3",
+        "PSRAM_IO4",
+        "PSRAM_IO5",
+        "PSRAM_IO6",
+        "PSRAM_IO7",
+        "PSRAM_IO8",
+        "PSRAM_IO9",
+        "PSRAM_IO10",
+        "PSRAM_IO11",
+        "PSRAM_IO12",
+        "PSRAM_IO13",
+        "PSRAM_IO14",
+        "PSRAM_IO15",
+        "PSRAM_NCS"
+      ],
+      "RADIO_IF": [
+        "ESP_BOOT",
+        "ESP_EN",
+        "ESP_HOST_WAKE",
+        "ESP_UART_CTS",
+        "ESP_UART_RTS",
+        "ESP_UART_RX",
+        "ESP_UART_TX"
+      ],
+      "SD_IF": [
+        "SD_CD_N",
+        "SD_CLK",
+        "SD_CMD",
+        "SD_D0",
+        "SD_D1",
+        "SD_D2",
+        "SD_D3"
+      ],
+      "USB_IF": [
+        "USBPD_INT",
+        "USBPD_SCL",
+        "USBPD_SDA",
+        "USB_DN",
+        "USB_DP",
+        "USB_TPD8S_FLT",
+        "USB_VBUS_SENSE"
+      ]
+    },
     "connection_grid_size": 50.0,
     "drawing": {
       "dashed_lines_dash_length_ratio": 12.0,
@@ -648,36 +755,52 @@
       "Root"
     ],
     [
-      "57594d98-d9e7-4dd9-8bfb-43dd30470ece",
-      "STM32_MCU_IO"
-    ],
-    [
-      "f189ce9a-ee7a-4073-98fc-e7dae98a7e7f",
-      "STM32_MCU_PWR"
-    ],
-    [
-      "80f34340-29b9-446b-8079-3559d68f1fbd",
-      "HexaSPI_PSRAM"
-    ],
-    [
-      "75f87715-f8d8-4db5-8e4d-2bcd184f549a",
-      "OctoSPI_FLASH"
-    ],
-    [
-      "1c8ed5b4-70c4-4a28-8843-29110648d24f",
-      "Debug"
-    ],
-    [
-      "3d335ef5-a898-4ee3-ac02-304e9e08b5b1",
-      "USB"
-    ],
-    [
       "f75a094f-afff-47fb-af28-3f9eed6a2864",
       "Power"
     ],
     [
+      "3d335ef5-a898-4ee3-ac02-304e9e08b5b1",
+      "USB-C PD"
+    ],
+    [
+      "c8698516-dbec-42fc-8101-85bbceb1caa7",
+      "ESP32-C6 radio"
+    ],
+    [
+      "bfd0f0c4-a213-448c-b2bc-89958714b75f",
+      "Buttons and LEDs"
+    ],
+    [
+      "57594d98-d9e7-4dd9-8bfb-43dd30470ece",
+      "STM32 MCU I/O"
+    ],
+    [
+      "f189ce9a-ee7a-4073-98fc-e7dae98a7e7f",
+      "STM32 power"
+    ],
+    [
+      "80f34340-29b9-446b-8079-3559d68f1fbd",
+      "x16 PSRAM"
+    ],
+    [
+      "75f87715-f8d8-4db5-8e4d-2bcd184f549a",
+      "Quad boot flash"
+    ],
+    [
       "4e99b39d-19ed-4d7e-8221-338d133844bd",
-      "MicroSD"
+      "microSD"
+    ],
+    [
+      "1c8ed5b4-70c4-4a28-8843-29110648d24f",
+      "SWD debug"
+    ],
+    [
+      "80a10964-6f93-4d91-8a86-6922d595776f",
+      "UM980 GNSS"
+    ],
+    [
+      "bbbc526a-3ef6-4a0d-8f44-5b2b1995eea4",
+      "SCH16T IMU"
     ]
   ],
   "text_variables": {},
