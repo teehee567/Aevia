@@ -673,6 +673,263 @@
 			)
 			(embedded_fonts no)
 		)
+
+		(symbol "power:+3V3"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "+3V3"
+				(at 0 3.556 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+3V3\""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "+3V3_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+3V3_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "power:GND"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		))
+	(bus_alias "SD_IF"
+		(members "SD_CD_N" "SD_CLK" "SD_CMD" "SD_D0" "SD_D1" "SD_D2" "SD_D3")
 	)
 	(symbol
 		(lib_id "noob:DM3CS-SF")
@@ -1513,10 +1770,8 @@
 		)
 		(uuid "ebcb7279-06eb-481a-9cec-513d66b841e5")
 	)
-	(global_label "SD_D2"
-		(shape bidirectional)
+	(label "SD_D2"
 		(at 115.57 90.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1525,10 +1780,8 @@
 		)
 		(uuid "2fae15ef-a5b1-4d1e-aa1a-0771a230cc27")
 	)
-	(global_label "SD_D3"
-		(shape bidirectional)
+	(label "SD_D3"
 		(at 115.57 92.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1537,10 +1790,8 @@
 		)
 		(uuid "6dfc37c3-3112-4b96-b2f4-ff04bf5eeed4")
 	)
-	(global_label "SD_CMD"
-		(shape bidirectional)
+	(label "SD_CMD"
 		(at 115.57 95.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1549,22 +1800,76 @@
 		)
 		(uuid "11a12253-5bed-4c92-a366-54f16e373a22")
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 115.57 97.79 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "d51e48cb-dcc6-446e-a3e0-8b71e0f79503")
+		(property "Reference" "#PWR00209"
+			(at 115.57 101.6 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3_MAIN"
+			(at 115.57 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 115.57 97.79 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 97.79 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 115.57 97.79 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "def6d4d3-719f-5a7c-b569-fc24059cc74e")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00209")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "SD_CLK"
-		(shape bidirectional)
+	(label "SD_CLK"
 		(at 115.57 100.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1573,22 +1878,76 @@
 		)
 		(uuid "27fb4326-19de-4128-93d1-fed5392c0ed6")
 	)
-	(global_label "GND"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:GND")
 		(at 115.57 102.87 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "5d5dc8a0-d923-4726-a6fc-2d0891a6b84f")
+		(property "Reference" "#PWR00210"
+			(at 115.57 106.68 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 115.57 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 115.57 102.87 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 102.87 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 115.57 102.87 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f2648101-cfab-544a-9287-9723790008cd")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00210")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "SD_D0"
-		(shape bidirectional)
+	(label "SD_D0"
 		(at 168.91 105.41 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1597,10 +1956,8 @@
 		)
 		(uuid "71dae57d-c048-476b-b4df-e2c567bed64e")
 	)
-	(global_label "SD_D1"
-		(shape bidirectional)
+	(label "SD_D1"
 		(at 168.91 102.87 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1609,10 +1966,8 @@
 		)
 		(uuid "0c37f753-b38c-4af3-8ce7-5eade41b5ed3")
 	)
-	(global_label "SD_CD_N"
-		(shape bidirectional)
+	(label "SD_CD_N"
 		(at 168.91 100.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1621,249 +1976,1259 @@
 		)
 		(uuid "e891c0c7-4a31-43ad-ab52-ba448586d8a6")
 	)
-	(global_label "GND"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:GND")
 		(at 168.91 97.79 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "e58f41c5-6233-4349-b18a-ca166ba0857b")
+		(property "Reference" "#PWR00211"
+			(at 168.91 101.6 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 168.91 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 168.91 97.79 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 168.91 97.79 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 168.91 97.79 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "14cda09c-2432-50a3-90d1-ad1396133ffa")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00211")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "GND"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:GND")
 		(at 168.91 95.25 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "9cd1ae30-761d-4253-b5b3-3c376060e21d")
+		(property "Reference" "#PWR00212"
+			(at 168.91 99.06 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 168.91 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 168.91 95.25 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 168.91 95.25 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 168.91 95.25 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "93a8eff2-51c2-5867-9830-2d74bd9bb232")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00212")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "GND"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:GND")
 		(at 168.91 92.71 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "8082d02d-c261-429b-bba3-d58d5ac8773c")
+		(property "Reference" "#PWR00213"
+			(at 168.91 96.52 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 168.91 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 168.91 92.71 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 168.91 92.71 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 168.91 92.71 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6944e0c4-2092-5de8-b5cb-15e36b1945a0")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00213")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "GND"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:GND")
 		(at 168.91 90.17 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "0e1d91a6-66cd-487a-a699-0963b308e36b")
+		(property "Reference" "#PWR00214"
+			(at 168.91 93.98 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 168.91 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 168.91 90.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 168.91 90.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 168.91 90.17 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0b89ce73-d255-5c0c-ade0-7e7cec27ddae")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00214")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 64.77 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "f11f3790-cb24-4c00-bc16-b56b04fa39d4")
-	)
-	(global_label "SD_D0"
-		(shape bidirectional)
-		(at 64.77 139.7 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00215"
+			(at 64.77 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "50cc78ac-5be6-482e-bac7-61a85ae67a53")
+		(property "Value" "+3V3_MAIN"
+			(at 64.77 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 64.77 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 64.77 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 64.77 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "49fd2c32-edbf-514b-a25e-3eeb5d3eb382")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00215")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 74.93 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "b05bb28f-67f3-439b-8b34-e9ff16f9992a")
-	)
-	(global_label "SD_D1"
-		(shape bidirectional)
-		(at 74.93 139.7 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00216"
+			(at 74.93 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "86eb4a39-bdaf-487b-a7ab-319e53e9f628")
+		(property "Value" "+3V3_MAIN"
+			(at 74.93 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 74.93 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 74.93 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 74.93 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9a9ad5cb-12a3-5b11-99c8-ca2f48c6e4a0")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00216")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 85.09 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "9c526ab5-8055-4236-b20d-bcb22f23d800")
-	)
-	(global_label "SD_D2"
-		(shape bidirectional)
-		(at 85.09 139.7 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00217"
+			(at 85.09 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "faba7733-7dbe-4354-b8ee-68133abc533a")
+		(property "Value" "+3V3_MAIN"
+			(at 85.09 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 85.09 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 85.09 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 85.09 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0733f457-8fc6-51f6-a8ee-a098f1040443")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00217")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 95.25 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "6850756a-7940-49b6-b5b7-f3949dfcd759")
-	)
-	(global_label "SD_D3"
-		(shape bidirectional)
-		(at 95.25 139.7 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00218"
+			(at 95.25 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "a5cdc283-8ee2-4550-8997-a5d91833922e")
+		(property "Value" "+3V3_MAIN"
+			(at 95.25 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 95.25 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 95.25 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 95.25 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "242cf1df-32e2-54be-9da3-60d38a41f616")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00218")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 105.41 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "3c57e896-2355-48d8-9d07-8d69d7170af5")
-	)
-	(global_label "SD_CMD"
-		(shape bidirectional)
-		(at 105.41 139.7 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00219"
+			(at 105.41 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "c0938260-cc26-4c8f-9378-a3c9e4f26406")
+		(property "Value" "+3V3_MAIN"
+			(at 105.41 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 105.41 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 105.41 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 105.41 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e6ad9c83-61c7-556b-865e-65a174962d23")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00219")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 115.57 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "78368bb1-fbfe-4027-a556-f0a8b91a0a97")
-	)
-	(global_label "SD_CD_N"
-		(shape bidirectional)
-		(at 115.57 139.7 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00220"
+			(at 115.57 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "d3a8b48e-a207-4db8-9871-4275aa2c1d29")
+		(property "Value" "+3V3_MAIN"
+			(at 115.57 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 115.57 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 115.57 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "10321a8f-fa27-5020-8e0e-b65e85732955")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00220")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 144.78 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "696eed54-857a-4a37-91d3-7e5a28de58f6")
+		(property "Reference" "#PWR00221"
+			(at 144.78 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3_MAIN"
+			(at 144.78 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 144.78 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f4e5edd7-cddb-5c49-8c87-bee375612431")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00221")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "GND"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:GND")
 		(at 144.78 139.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "87228cc8-6323-40e8-bc04-4cfeccbe0ebc")
+		(property "Reference" "#PWR00222"
+			(at 144.78 143.51 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 144.78 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 139.7 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 139.7 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 144.78 139.7 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d8aa0811-9542-5e57-ad3b-91f67bfcbcf8")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00222")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "+3V3_MAIN"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:+3V3")
 		(at 160.02 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "e6b47770-d99e-4c72-add7-6c714ea32ec9")
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 160.02 139.7 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00223"
+			(at 160.02 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Value" "+3V3_MAIN"
+			(at 160.02 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 160.02 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 160.02 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_MAIN\""
+			(at 160.02 129.54 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "35248f24-c156-5cad-8b59-154890511392")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00223")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 160.02 139.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "83bb6440-9a6d-46e3-bc91-c14315d6c7b2")
+		(property "Reference" "#PWR00224"
+			(at 160.02 143.51 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 160.02 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 160.02 139.7 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 160.02 139.7 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 160.02 139.7 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6e28c36b-a1e4-5f8b-82f7-5f28a97bb39e")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/4e99b39d-19ed-4d7e-8221-338d133844bd"
+					(reference "#PWR00224")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(sheet_instances
 		(path "/"
 			(page "1")
 		)
+	)	(wire
+		(pts
+			(xy 115.57 90.17)
+			(xy 85.09 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0737d467-5541-4436-ac69-6c29366b5088")
 	)
+	(wire
+		(pts
+			(xy 115.57 92.71)
+			(xy 95.25 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d661ffb1-f46e-4bd1-9358-e6678603fc60")
+	)
+	(wire
+		(pts
+			(xy 115.57 95.25)
+			(xy 105.41 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81b56155-7669-454b-8012-af32b9e13f90")
+	)
+	(wire
+		(pts
+			(xy 168.91 105.41)
+			(xy 64.77 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a488360b-c841-409f-b102-cfe222976126")
+	)
+	(wire
+		(pts
+			(xy 168.91 102.87)
+			(xy 74.93 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78404f76-d662-43c8-9321-e00dbfa906cb")
+	)
+	(wire
+		(pts
+			(xy 168.91 100.33)
+			(xy 115.57 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "96791381-6d60-4d52-bc6a-9de634950828")
+	)
+	(hierarchical_label "{SD_IF}"
+		(shape bidirectional)
+		(at 224.79 55.88 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "45eeaec6-fc3f-40ed-93aa-635c4c5cf67a")
+	)
+	(bus
+		(pts
+			(xy 224.79 55.88)
+			(xy 224.79 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6189ec7f-02c6-4b97-860c-85a5465bb6d4")
+	)
+	(bus_entry
+		(at 224.79 58.42)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "92cfc559-4d12-4497-ad3e-fdf4505160ff")
+	)
+	(wire
+		(pts
+			(xy 212.09 60.96)
+			(xy 222.25 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8f6f7b8d-31b5-4cef-b0ab-c9baf25c0a82")
+	)
+	(label "SD_CD_N"
+		(at 212.09 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ff64a25e-c248-4fe8-af59-b81d690fdbe1")
+	)
+	(bus_entry
+		(at 224.79 63.5)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bab319f5-174c-4142-b69b-50940b59f78f")
+	)
+	(wire
+		(pts
+			(xy 212.09 66.04)
+			(xy 222.25 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "153725eb-3824-4c4b-a188-eaeec9085a15")
+	)
+	(label "SD_CLK"
+		(at 212.09 66.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "03cab9fe-d7d7-46d0-b73a-058f26f1c70b")
+	)
+	(bus_entry
+		(at 224.79 68.58)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "313ede0a-5aad-402e-b382-33eeb1c23304")
+	)
+	(wire
+		(pts
+			(xy 212.09 71.12)
+			(xy 222.25 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "96a2df8e-7209-48eb-846a-90dd797e3b4f")
+	)
+	(label "SD_CMD"
+		(at 212.09 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d12f6265-6bc1-4824-a516-350f053768e6")
+	)
+	(bus_entry
+		(at 224.79 73.66)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "924bd43f-2f3c-4ab1-a228-563f7e0a6ea3")
+	)
+	(wire
+		(pts
+			(xy 212.09 76.2)
+			(xy 222.25 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d489705b-0d66-4f11-bd0e-1876f09003ee")
+	)
+	(label "SD_D0"
+		(at 212.09 76.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "96a01194-8a85-4b5d-83e2-cdcac191627c")
+	)
+	(bus_entry
+		(at 224.79 78.74)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d8cc5ca-0659-4c3e-b51e-f35012e6464d")
+	)
+	(wire
+		(pts
+			(xy 212.09 81.28)
+			(xy 222.25 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83c81f3c-20d3-4f2f-aeaa-12f53ca2d031")
+	)
+	(label "SD_D1"
+		(at 212.09 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "08f426bf-fbb1-4a9c-a5dc-4624b4b62077")
+	)
+	(bus_entry
+		(at 224.79 83.82)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "77d1807a-d711-42bc-9b9b-033399f97fba")
+	)
+	(wire
+		(pts
+			(xy 212.09 86.36)
+			(xy 222.25 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "284bbf6d-fd66-4db5-94c9-2789b8995ed5")
+	)
+	(label "SD_D2"
+		(at 212.09 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "eb5f244d-bcaf-4c48-9c9c-baa3d2998b73")
+	)
+	(bus_entry
+		(at 224.79 88.9)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4021def9-023d-4a04-b2ad-dd0fe1df4bb5")
+	)
+	(wire
+		(pts
+			(xy 212.09 91.44)
+			(xy 222.25 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0235cd9f-a649-4333-ad31-6ce08de3b998")
+	)
+	(label "SD_D3"
+		(at 212.09 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "185d67e7-103f-432a-b0f8-4baa8365b5f0")
+	)
+
 )

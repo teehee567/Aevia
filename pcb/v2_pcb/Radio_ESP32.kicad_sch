@@ -1826,6 +1826,266 @@
 			)
 			(embedded_fonts no)
 		)
+
+		(symbol "power:+3V3"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "+3V3"
+				(at 0 3.556 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+3V3\""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "+3V3_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+3V3_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "power:GND"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		))
+	(bus_alias "RADIO_IF"
+		(members "ESP_BOOT" "ESP_EN" "ESP_HOST_WAKE" "ESP_UART_CTS" "ESP_UART_RTS" "ESP_UART_RX" "ESP_UART_TX")
+	)
+	(bus_alias "APA_IF"
+		(members "ESP_APA_CLK" "ESP_APA_DATA")
 	)
 	(symbol
 		(lib_id "RF_Module:ESP32-C6-MINI-1")
@@ -2907,26 +3167,6 @@
 		)
 		(uuid "e9472613-178d-4a66-b21b-a6a01b7567c0")
 	)
-	(label "ESP_UART_TX_NODE"
-		(at 201.93 88.9 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "9f48b84c-167b-4757-a415-f70e40d779ad")
-	)
-	(label "ESP_UART_CTS_NODE"
-		(at 201.93 102.87 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "932a095a-a4d3-46cf-8766-d47a667628ee")
-	)
 	(label "ESP_EN_NODE"
 		(at 109.22 71.12 0)
 		(effects
@@ -2936,46 +3176,6 @@
 			(justify left bottom)
 		)
 		(uuid "96b84947-cd68-44b5-8e9b-4b7b444212ce")
-	)
-	(label "ESP_EN_NODE"
-		(at 66.04 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b7c53c96-1343-4ab5-b686-182d7348fa0f")
-	)
-	(label "ESP_EN_NODE"
-		(at 77.47 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b3983414-91a4-4ac5-8a4b-4fd1bec0a1f4")
-	)
-	(label "ESP_EN_NODE"
-		(at 49.53 78.74 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "df2aa3af-55d3-46cc-99d3-8bf94a422610")
-	)
-	(label "ESP_EN_NODE"
-		(at 62.23 87.63 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "df1d3d08-f256-473f-82dd-34bc97034caf")
 	)
 	(label "ESP_BOOT_NODE"
 		(at 109.22 99.06 0)
@@ -2987,36 +3187,6 @@
 		)
 		(uuid "b5f59547-3c47-4343-864c-340a9cf9c0eb")
 	)
-	(label "ESP_BOOT_NODE"
-		(at 66.04 114.3 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "780c5060-99ed-4cfc-8843-1994a2016614")
-	)
-	(label "ESP_BOOT_NODE"
-		(at 49.53 129.54 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b811962c-dc8c-412f-b1f4-ca411506d2ac")
-	)
-	(label "ESP_BOOT_NODE"
-		(at 62.23 140.97 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4418dac4-3726-42c4-b6b1-1b27f881a401")
-	)
 	(label "ESP_GPIO8_STRAP"
 		(at 109.22 96.52 0)
 		(effects
@@ -3027,16 +3197,6 @@
 		)
 		(uuid "1c18e5c2-0bd9-4f7a-81e1-7d81bf112e03")
 	)
-	(label "ESP_GPIO8_STRAP"
-		(at 91.44 140.97 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "87508701-2d72-48d5-8963-9e1b195e8896")
-	)
 	(label "ESP_PROG_VTREF"
 		(at 218.44 71.12 0)
 		(effects
@@ -3046,46 +3206,6 @@
 			(justify left bottom)
 		)
 		(uuid "b5196fa3-0845-453a-baa9-b03aa65b56da")
-	)
-	(label "ESP_PROG_VTREF"
-		(at 223.52 105.41 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "62775998-4189-4be3-a28c-541f242792ad")
-	)
-	(label "ESP_UART_TX_NODE"
-		(at 223.52 110.49 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c92be33c-4f86-475c-9639-5ff69ecc8282")
-	)
-	(label "ESP_EN_NODE"
-		(at 223.52 115.57 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a09a8399-328b-46b4-ae86-37618e353673")
-	)
-	(label "ESP_BOOT_NODE"
-		(at 223.52 118.11 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ab7fba20-24e9-46c0-ac7a-4a08cc5a12af")
 	)
 	(no_connect
 		(at 137.16 106.68)
@@ -3218,34 +3338,144 @@
 		)
 		(uuid "fa16be51-3930-4a16-9dfb-f62662d3695f")
 	)
-	(global_label "+3V3_RADIO_SW"
-		(shape input)
-		(at 124.46 66.04 270)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 124.46 66.04 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "1b640816-2639-45b8-a755-5da6e4e0d9a8")
-	)
-	(global_label "GND"
-		(shape input)
-		(at 124.46 116.84 90)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00307"
+			(at 124.46 69.85 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "b2084874-74f2-4814-9413-56d5f8f2ac36")
+		(property "Value" "+3V3_RADIO_SW"
+			(at 124.46 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 124.46 66.04 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 124.46 66.04 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_RADIO_SW\""
+			(at 124.46 66.04 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0b30f77e-3bfe-58d8-85f2-dc3e4db411cd")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00307")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "ESP_UART_RX"
-		(shape bidirectional)
-		(at 139.7 71.12 270)
+	(symbol
+		(lib_id "power:GND")
+		(at 124.46 116.84 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
+		(uuid "b2084874-74f2-4814-9413-56d5f8f2ac36")
+		(property "Reference" "#PWR00308"
+			(at 124.46 120.65 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 124.46 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 124.46 116.84 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 124.46 116.84 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 124.46 116.84 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ec8b06ae-aa9d-5535-ba0e-e7d11d82ec02")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00308")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "ESP_UART_RX"
+		(at 139.7 71.12 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3254,10 +3484,8 @@
 		)
 		(uuid "3d91860d-1372-4c8d-9d56-ad8f57422af3")
 	)
-	(global_label "ESP_UART_RTS"
-		(shape bidirectional)
+	(label "ESP_UART_RTS"
 		(at 109.22 81.28 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3266,10 +3494,8 @@
 		)
 		(uuid "580b7039-076e-440f-bb32-4416f5c87650")
 	)
-	(global_label "ESP_UART_TX"
-		(shape bidirectional)
+	(label "ESP_UART_TX"
 		(at 201.93 81.28 270)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3278,10 +3504,8 @@
 		)
 		(uuid "e73558e2-5fba-413d-abec-9a6267a98d63")
 	)
-	(global_label "ESP_UART_CTS"
-		(shape bidirectional)
+	(label "ESP_UART_CTS"
 		(at 201.93 95.25 270)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3290,10 +3514,8 @@
 		)
 		(uuid "e725e09b-7779-4eb3-9a2e-80c5cc04204b")
 	)
-	(global_label "ESP_HOST_WAKE"
-		(shape bidirectional)
+	(label "ESP_HOST_WAKE"
 		(at 109.22 76.2 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3302,10 +3524,8 @@
 		)
 		(uuid "2683e837-a926-4e08-adb1-1dbb29f481f0")
 	)
-	(global_label "ESP_APA_DATA"
-		(shape bidirectional)
+	(label "ESP_APA_DATA"
 		(at 109.22 86.36 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3314,10 +3534,8 @@
 		)
 		(uuid "841ae8fd-ea6b-432a-8e26-1238842c82ab")
 	)
-	(global_label "ESP_APA_CLK"
-		(shape bidirectional)
+	(label "ESP_APA_CLK"
 		(at 109.22 88.9 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3326,34 +3544,144 @@
 		)
 		(uuid "adb618a2-8999-41d2-a7de-1e654fdcce31")
 	)
-	(global_label "+3V3_RADIO_SW"
-		(shape bidirectional)
-		(at 66.04 50.8 270)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 66.04 50.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "a616c45e-2ec5-4b5e-af51-6c4979056606")
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 77.47 71.12 90)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00309"
+			(at 66.04 54.61 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "b4ba0353-2ae8-44ef-836f-c0b567f4d937")
+		(property "Value" "+3V3_RADIO_SW"
+			(at 66.04 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 66.04 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_RADIO_SW\""
+			(at 66.04 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "146edbe1-3894-5998-93ce-bf243bfd2281")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00309")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "ESP_EN"
-		(shape bidirectional)
-		(at 49.53 71.12 270)
+	(symbol
+		(lib_id "power:GND")
+		(at 77.47 71.12 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
+		(uuid "b4ba0353-2ae8-44ef-836f-c0b567f4d937")
+		(property "Reference" "#PWR00310"
+			(at 77.47 74.93 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 77.47 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 77.47 71.12 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 77.47 71.12 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 77.47 71.12 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8b097ade-5ec6-55e6-8f34-c930c11e3cdd")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00310")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "ESP_EN"
+		(at 49.53 71.12 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3362,34 +3690,144 @@
 		)
 		(uuid "645ac42c-4975-4fe7-b96f-edaf18bcea32")
 	)
-	(global_label "GND"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:GND")
 		(at 72.39 87.63 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "66c8c236-2478-4721-bda7-547226a36f9f")
-	)
-	(global_label "+3V3_RADIO_SW"
-		(shape bidirectional)
-		(at 66.04 106.68 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00311"
+			(at 72.39 91.44 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
-		(uuid "c191596e-794a-4daa-b658-965bf23a2033")
+		(property "Value" "GND"
+			(at 72.39 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 72.39 87.63 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 72.39 87.63 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 72.39 87.63 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9701f111-88af-58b9-8098-3c49855cc99b")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00311")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(global_label "ESP_BOOT"
-		(shape bidirectional)
-		(at 49.53 121.92 270)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 66.04 106.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
+		(uuid "c191596e-794a-4daa-b658-965bf23a2033")
+		(property "Reference" "#PWR00312"
+			(at 66.04 110.49 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3_RADIO_SW"
+			(at 66.04 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 106.68 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 66.04 106.68 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_RADIO_SW\""
+			(at 66.04 106.68 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "718337ff-77d6-544b-b1e3-64604c962ae6")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00312")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "ESP_BOOT"
+		(at 49.53 121.92 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3398,142 +3836,1169 @@
 		)
 		(uuid "c6961413-99a7-4554-8b3d-9d87ad8a9f15")
 	)
-	(global_label "GND"
-		(shape bidirectional)
+	(symbol
+		(lib_id "power:GND")
 		(at 72.39 140.97 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
 		(uuid "765db121-e7eb-4e0f-8d7a-c00ac3d51bab")
-	)
-	(global_label "+3V3_RADIO_SW"
-		(shape bidirectional)
-		(at 91.44 133.35 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00313"
+			(at 72.39 144.78 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Value" "GND"
+			(at 72.39 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 72.39 140.97 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 72.39 140.97 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 72.39 140.97 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d987de14-7a18-5e70-b22c-d208e3a7bab4")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00313")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 91.44 133.35 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "50150aa8-1fef-4063-9795-5c2ceb36faa5")
-	)
-	(global_label "+3V3_RADIO_SW"
-		(shape bidirectional)
-		(at 171.45 50.8 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00314"
+			(at 91.44 137.16 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Value" "+3V3_RADIO_SW"
+			(at 91.44 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 91.44 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 91.44 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_RADIO_SW\""
+			(at 91.44 133.35 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "92d41074-0b31-5194-ae99-248689328a6b")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00314")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 171.45 50.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "dae4f9fa-d19e-4bba-b7ef-51eb06a646ab")
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 171.45 58.42 90)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00315"
+			(at 171.45 54.61 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Value" "+3V3_RADIO_SW"
+			(at 171.45 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 171.45 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 171.45 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_RADIO_SW\""
+			(at 171.45 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d4e66212-aa31-5dd3-820b-56bad5a2f1bc")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00315")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 171.45 58.42 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "15cbc326-555f-4868-acf7-a92e8cda9a1f")
-	)
-	(global_label "+3V3_RADIO_SW"
-		(shape bidirectional)
-		(at 185.42 50.8 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00316"
+			(at 171.45 62.23 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Value" "GND"
+			(at 171.45 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 171.45 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 171.45 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 171.45 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2d0ef6c4-c5c5-593c-b5de-22a386b68fb1")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00316")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 185.42 50.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "4e317bc9-9f5a-4470-97ee-b9152c8d9692")
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 185.42 58.42 90)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00317"
+			(at 185.42 54.61 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Value" "+3V3_RADIO_SW"
+			(at 185.42 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 185.42 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 185.42 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_RADIO_SW\""
+			(at 185.42 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9c7629f5-1c9e-500d-96f9-91966f0d162e")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00317")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 185.42 58.42 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "c06ce7bc-c901-42e7-9aa8-f0e218dd52e4")
-	)
-	(global_label "+3V3_RADIO_SW"
-		(shape bidirectional)
-		(at 199.39 50.8 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00318"
+			(at 185.42 62.23 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Value" "GND"
+			(at 185.42 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 185.42 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 185.42 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 185.42 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "eacb56ec-5420-5a97-94c1-10dd0e6c3f91")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00318")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 199.39 50.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "cad08cc6-fd04-469f-b867-2f7f981b3912")
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 199.39 58.42 90)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00319"
+			(at 199.39 54.61 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Value" "+3V3_RADIO_SW"
+			(at 199.39 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 199.39 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 199.39 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_RADIO_SW\""
+			(at 199.39 50.8 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f79278cc-260a-56f4-a35c-6b50b87a940a")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00319")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 199.39 58.42 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "09e5e575-e39f-4565-8401-713b9f669dcb")
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 223.52 107.95 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00320"
+			(at 199.39 62.23 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify right)
 		)
+		(property "Value" "GND"
+			(at 199.39 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 199.39 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 199.39 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 199.39 58.42 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "08376587-8a70-5f14-b83e-77d95b85b789")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00320")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 223.52 107.95 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "73812007-240e-4455-bd03-6a56cdd0cf08")
-	)
-	(global_label "ESP_UART_RX"
-		(shape bidirectional)
-		(at 223.52 113.03 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Reference" "#PWR00321"
+			(at 223.52 111.76 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify right)
 		)
-		(uuid "834fe302-f5e7-4c5a-96e0-275420f43646")
-	)
-	(global_label "+3V3_RADIO_SW"
-		(shape bidirectional)
-		(at 218.44 63.5 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
+		(property "Value" "GND"
+			(at 223.52 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify left)
 		)
+		(property "Footprint" ""
+			(at 223.52 107.95 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 223.52 107.95 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\""
+			(at 223.52 107.95 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "efdbb032-637e-52fe-9efe-4e69d1b95d00")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00321")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 218.44 63.5 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
 		(uuid "05637118-7f0f-4995-a9ea-b8a0ca78076a")
+		(property "Reference" "#PWR00322"
+			(at 218.44 67.31 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3_RADIO_SW"
+			(at 218.44 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 218.44 63.5 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 218.44 63.5 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3_RADIO_SW\""
+			(at 218.44 63.5 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ba62115f-b661-5594-87bc-60f3301a9b2d")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/c8698516-dbec-42fc-8101-85bbceb1caa7"
+					(reference "#PWR00322")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(sheet_instances
 		(path "/"
 			(page "1")
 		)
 	)
-	(embedded_fonts no)
+	(embedded_fonts no)	(wire
+		(pts
+			(xy 139.7 73.66)
+			(xy 201.93 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "355120b6-fb5f-40d2-9d69-18b19535d2fd")
+	)
+	(wire
+		(pts
+			(xy 201.93 88.9)
+			(xy 223.52 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d44263d0-cbb1-4599-b591-43595898e391")
+	)
+	(wire
+		(pts
+			(xy 109.22 83.82)
+			(xy 201.93 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d113753c-c83a-4064-ae78-c9578aaaf828")
+	)
+	(wire
+		(pts
+			(xy 109.22 71.12)
+			(xy 66.04 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f9eb225-9251-4d4e-8b83-57d561837248")
+	)
+	(wire
+		(pts
+			(xy 66.04 58.42)
+			(xy 77.47 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "170437c3-4df6-4e14-be7c-254df4e9070e")
+	)
+	(wire
+		(pts
+			(xy 77.47 63.5)
+			(xy 49.53 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "28decf2c-91da-4cf0-847a-d81491e4610a")
+	)
+	(wire
+		(pts
+			(xy 49.53 78.74)
+			(xy 62.23 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "38fa0d72-4beb-4861-957d-df9833f8aa7f")
+	)
+	(wire
+		(pts
+			(xy 62.23 87.63)
+			(xy 223.52 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8dec0670-4a6f-48b9-a6cd-d8960e0060ab")
+	)
+	(wire
+		(pts
+			(xy 109.22 99.06)
+			(xy 66.04 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7e430cb7-7ed9-455a-ac30-cc419e3080fd")
+	)
+	(wire
+		(pts
+			(xy 66.04 114.3)
+			(xy 49.53 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89e9589f-bf44-4f75-a64e-062297ec0e1e")
+	)
+	(wire
+		(pts
+			(xy 49.53 129.54)
+			(xy 62.23 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aaa56151-eec2-40ef-a128-e47719930c74")
+	)
+	(wire
+		(pts
+			(xy 62.23 140.97)
+			(xy 223.52 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "80133325-84cf-4bf5-95c2-35583b6c1256")
+	)
+	(wire
+		(pts
+			(xy 109.22 96.52)
+			(xy 91.44 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9007c78-6118-4b6f-99ab-0816d92b4836")
+	)
+	(wire
+		(pts
+			(xy 218.44 71.12)
+			(xy 223.52 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8356595f-2c2d-434c-8948-61f96cf4a198")
+	)
+	(wire
+		(pts
+			(xy 139.7 71.12)
+			(xy 223.52 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "866ea0a1-8b1d-4375-a5da-b3a4802a53d7")
+	)
+	(hierarchical_label "{RADIO_IF}"
+		(shape bidirectional)
+		(at 299.72 41.91 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2b45a938-de57-4bd9-8700-aade68d771fa")
+	)
+	(bus
+		(pts
+			(xy 299.72 41.91)
+			(xy 299.72 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "99bce6bd-886b-45e2-95a2-f5a3a167313f")
+	)
+	(bus_entry
+		(at 299.72 44.45)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6126d4de-7aa5-4c63-8777-9719cd2cc8d3")
+	)
+	(wire
+		(pts
+			(xy 287.02 46.99)
+			(xy 297.18 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "852801a8-6785-4033-a701-b30cab58dc1e")
+	)
+	(label "ESP_BOOT"
+		(at 287.02 46.99 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "57313f51-b92c-4709-abff-691eedb89a37")
+	)
+	(bus_entry
+		(at 299.72 49.53)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "071d59d6-788e-4fd3-979d-e0be3166cd6f")
+	)
+	(wire
+		(pts
+			(xy 287.02 52.07)
+			(xy 297.18 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "01289aa9-d3c0-4b08-b6dc-2959802c455b")
+	)
+	(label "ESP_EN"
+		(at 287.02 52.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3b699a30-2a14-4638-9a69-4067fe7ca2ed")
+	)
+	(bus_entry
+		(at 299.72 54.61)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eeb62754-99b3-4ae5-81b2-169b7ed459b1")
+	)
+	(wire
+		(pts
+			(xy 287.02 57.15)
+			(xy 297.18 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e32065c0-4d53-4d03-ab98-513306efa591")
+	)
+	(label "ESP_HOST_WAKE"
+		(at 287.02 57.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "54467e6b-462c-4e98-880a-c3af90bca98d")
+	)
+	(bus_entry
+		(at 299.72 59.69)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ccdaf426-a637-41c7-b040-06e2fbd686ba")
+	)
+	(wire
+		(pts
+			(xy 287.02 62.23)
+			(xy 297.18 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34302272-a139-4a9f-961a-0c5c7955d0c8")
+	)
+	(label "ESP_UART_CTS"
+		(at 287.02 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "da778655-2d4a-4200-9b8b-e27f8a03faad")
+	)
+	(bus_entry
+		(at 299.72 64.77)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75e16d46-73fd-45d8-b18c-0fa2bbe150ca")
+	)
+	(wire
+		(pts
+			(xy 287.02 67.31)
+			(xy 297.18 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "30c78d31-fc8b-4f9d-9c9d-cfebb25f6a5a")
+	)
+	(label "ESP_UART_RTS"
+		(at 287.02 67.31 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2be728b9-1496-46c8-916f-16ceda78d7c8")
+	)
+	(bus_entry
+		(at 299.72 69.85)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e3f3e44-133c-44b3-8b19-12028364e7ce")
+	)
+	(wire
+		(pts
+			(xy 287.02 72.39)
+			(xy 297.18 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "883370fd-f349-40e5-b270-9754aaac2d0f")
+	)
+	(label "ESP_UART_RX"
+		(at 287.02 72.39 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4ee82641-d75d-4287-b3b9-a84bc77179cc")
+	)
+	(bus_entry
+		(at 299.72 74.93)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8f92888-6049-42f0-a3c1-c831c5462be1")
+	)
+	(wire
+		(pts
+			(xy 287.02 77.47)
+			(xy 297.18 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ba8920d-9025-455d-89cb-07d87746b8b8")
+	)
+	(label "ESP_UART_TX"
+		(at 287.02 77.47 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "851a4c35-d3bb-4982-891e-d516931f430c")
+	)
+	(hierarchical_label "{APA_IF}"
+		(shape bidirectional)
+		(at 340.36 41.91 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0cd29a73-21ac-4203-b7b6-c6fda0a1d7be")
+	)
+	(bus
+		(pts
+			(xy 340.36 41.91)
+			(xy 340.36 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8bfeac32-6e25-4f4a-a5c9-406b775efbfb")
+	)
+	(bus_entry
+		(at 340.36 44.45)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "000f2b19-1a61-4873-bc34-ea6e0d780e69")
+	)
+	(wire
+		(pts
+			(xy 327.66 46.99)
+			(xy 337.82 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e1f3844-998b-4014-bc8b-5d5c9c4c0d09")
+	)
+	(label "ESP_APA_CLK"
+		(at 327.66 46.99 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3c41de18-b794-4805-b384-92f49d70432e")
+	)
+	(bus_entry
+		(at 340.36 49.53)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7604811-1723-4584-8078-c38810411008")
+	)
+	(wire
+		(pts
+			(xy 327.66 52.07)
+			(xy 337.82 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4e45ef8f-8611-4cd6-8a5a-82923f56c050")
+	)
+	(label "ESP_APA_DATA"
+		(at 327.66 52.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d89ea4e4-589a-4135-b986-6fbf208aec7a")
+	)
+
 )
