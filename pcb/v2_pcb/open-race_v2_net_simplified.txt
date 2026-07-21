@@ -1,204 +1,630 @@
-# Simplified netlist  (115 components, 326 nets)
-# source: .\pcb\v2_pcb\open-race_v2.net
+# Netlist review report
 
-== COMPONENTS ==
-C1    100nF                                         Unpolarized capacitor
-C2    100nF                                         Unpolarized capacitor
-C3    1uF                                           Unpolarized capacitor
-C4    100nF                                         Unpolarized capacitor
-C5    0.1uF                                         Unpolarized capacitor
-C6    0.1uF                                         Unpolarized capacitor
-C28   100nF                                         Unpolarized capacitor
-C29   10uF                                          Unpolarized capacitor
-C34   4.7uF                                         Unpolarized capacitor
-C35   10uF                                          Unpolarized capacitor
-C36   100nF                                         Unpolarized capacitor
-C37   2.2nF                                         Unpolarized capacitor
-C38   1uF                                           Unpolarized capacitor
-C39   100nF                                         Unpolarized capacitor
-C40   100nF                                         Unpolarized capacitor
-C41   1uF                                           Unpolarized capacitor
-C43   1uF                                           Unpolarized capacitor
-C44   1uF                                           Unpolarized capacitor
-C45   1uF                                           Unpolarized capacitor
-C46   100nF                                         Unpolarized capacitor
-C47   100nF                                         Unpolarized capacitor
-C48   100nF                                         Unpolarized capacitor
-C50   100nF                                         Unpolarized capacitor
-C51   1uF                                           Unpolarized capacitor
-C52   100nF                                         Unpolarized capacitor
-C54   100nF                                         Unpolarized capacitor
-C55   100nF                                         Unpolarized capacitor
-C57   1uF                                           Unpolarized capacitor
-C58   100nF                                         Unpolarized capacitor
-C59   100nF                                         Unpolarized capacitor
-C60   1uF                                           Unpolarized capacitor
-C61   1uF                                           Unpolarized capacitor
-C63   1uF                                           Unpolarized capacitor
-C64   100nF                                         Unpolarized capacitor
-C65   1uF                                           Unpolarized capacitor
-C66   100nF                                         Unpolarized capacitor
-C67   100nF                                         Unpolarized capacitor
-C68   1uF                                           Unpolarized capacitor
-C69   1uF                                           Unpolarized capacitor
-C70   1uF                                           Unpolarized capacitor
-C71   100nF                                         Unpolarized capacitor
-C72   100nF                                         Unpolarized capacitor
-C73   100nF                                         Unpolarized capacitor
-C74   100nF                                         Unpolarized capacitor
-C75   100nF                                         Unpolarized capacitor
-C76   100nF                                         Unpolarized capacitor
-C77   100nF                                         Unpolarized capacitor
-C78   100nF                                         Unpolarized capacitor
-C79   100nF                                         Unpolarized capacitor
-C80   100nF                                         Unpolarized capacitor
-C89   100nF                                         Unpolarized capacitor
-C90   4.7uF                                         Unpolarized capacitor
-C141  4.7uF                                         Unpolarized capacitor
-C142  100nF                                         Unpolarized capacitor
-C143  4.7uF                                         Unpolarized capacitor
-C144  100nF                                         Unpolarized capacitor
-C169  100nF                                         Unpolarized capacitor
-C170  22uF                                          Unpolarized capacitor
-C176  22uF                                          Unpolarized capacitor
-C177  22uF                                          Unpolarized capacitor
-C178  22uF                                          Unpolarized capacitor
-C179  22uF                                          Unpolarized capacitor
-D1    LED                                           Light emitting diode
-D4    D                                             Diode
-IC1   AP33772SDKZ-13-FA01       AP33772SDKZ13FA01   USB
-J1    Conn_ARM_SWD_TagConnect_  Connector:Tag-Conn  Tag-Connect ARM Cortex SWD JTAG connector
-J2    USB_C_Receptacle_USB2.0_                      USB 2.0-only 16P Type-C Receptacle connector
-L4    2.2nH                                         Inductor
-L7    1.0uH                                         Inductor
-L8    18R @ 100MHz                                  Inductor
-Q1    NMOS                                          N-MOSFET transistor
-Q2    NMOS                                          N-MOSFET transistor
-R1    6.2k                                          Resistor
-R2    200                                           Resistor
-R3    5m                                            Resistor
-R4    1k                                            Resistor
-R5    10k                                           Resistor
-R22   0R                                            Resistor
-R27   0R                                            Resistor
-R32   200R                                          Resistor
-R33   200R                                          Resistor
-R34   200R                                          Resistor
-R44   Resistor 0R               Library:R0402       Resistor
-R45   Resistor 0R               Library:R0402       Resistor
-R46   Resistor 0R               Library:R0402       Resistor
-R47   Resistor 0R               Library:R0402       Resistor
-R48   Resistor 0R               Library:R0402       Resistor
-R49   Resistor 0R               Library:R0402       Resistor
-R50   Resistor 0R               Library:R0402       Resistor
-R51   Resistor 0R               Library:R0402       Resistor
-R53   Resistor 0R               Library:R0402       Resistor
-R54   Resistor 0R               Library:R0402       Resistor
-R55   Resistor 0R               Library:R0402       Resistor
-R56   Resistor 0R               Library:R0402       Resistor
-R57   Resistor 0R               Library:R0402       Resistor
-R58   Resistor 0R               Library:R0402       Resistor
-R59   Resistor 0R               Library:R0402       Resistor
-R60   Resistor 0R               Library:R0402       Resistor
-R61   Resistor 0R               Library:R0402       Resistor
-R62   Resistor 0R               Library:R0402       Resistor
-R63   Resistor 0R               Library:R0402       Resistor
-R64   Resistor 0R               Library:R0402       Resistor
-R140  10K                                           Resistor
-R148  0R                                            Resistor
-R159  0R                                            Resistor
-R167  0R                                            Resistor
-R168  50mH                                          Resistor
-R173  0R                                            Resistor
-R220  2R                                            Resistor
-TH1   10K@25c                                       Temperature dependent resistor
-U1    STM32N657X0H3Q            VFBGA264_14X14_STM  
-U2    STM32N657X0H3Q            VFBGA264_14X14_STM  
-U3    APS512XXN-OB9-BG          APS512XXN-OB9-BG:B  DRAM IoT RAM 256Mb OPI (x8
-U4    TPD8S300ARUKR             WQFN20_RUK_TEX      
-U5    MX25U51279GXDR00          MX66UW1G45GXDI00:B  
+- Source: pcb/v2_pcb/open-race_v2.net
+- Exported: 2026-07-08T23:58:09
+- Tool: Eeschema 10.0.0
+- Scope: entire design
+- Generated file: do not edit by hand; regenerate it from the KiCad netlist.
 
-== NETS ==
-GND: C1.2 C2.2 C3.2 C4.2 C5.1 C6.2 C28.2 C29.2 C34.2 C35.2 C36.1 C37.2 C38.1 C39.1 C40.1 C41.2 C43.1 C44.1 C45.2 C46.1 C47.1 C48.2 C50.1 C51.1 C52.2 C54.1 C55.1 C57.1 C58.1 C59.1 C60.1 C61.1 C63.1 C64.1 C65.1 C66.1 C67.1 C68.1 C69.1 C70.1 C71.1 C72.1 C73.1 C74.1 C75.1 C76.1 C77.1 C78.1 C79.1 C80.1 C89.2 C90.2 C141.2 C142.2 C143.2 C144.2 C169.1 C176.1 C177.2 C178.1 C179.1 D1.1 IC1.25 IC1.3 J2.A1 J2.A12 J2.B1 J2.B12 J2.SH R32.1 R33.1 R34.1 TH1.2 U2.A17 U2.F10 U2.F11 U2.F12 U2.F2 U2.F7 U2.G12 U2.G6 U2.H1 U2.H2 U2.H3 U2.H4 U2.H5 U2.H6 U2.K12 U2.M10 U2.M12 U2.M13 U2.M6 U2.M8 U2.N11 U2.N5 U2.N7 U2.N9 U2.T2 U2.U1 U2.U17 U3.C1 U4.13 U4.18 U4.21 U4.8 U5.B3
-Net-(C29-Pad1): C29.1 C35.1 C41.1 C45.1 C48.1 C52.1 L4.2 U2.K1 U2.K2 U2.K3 U2.K4 U2.K5 U2.K6
-Net-(C44-Pad2): C44.2 C51.2 C57.2 C60.2 C61.2 C63.2 C65.2 C68.2 C69.2 C70.2
-Net-(C46-Pad2): C46.2 C47.2 C50.2 C54.2 C71.2 C74.2 C77.2 C78.2 C79.2 C80.2
-Net-(U2E-VDDCSI): U2.L12 U2.L6 U2.M11 U2.M7 U2.M9 U2.N10 U2.N12 U2.N8 U2.P11 U2.R4
-I_SENS_VDDCORE_P: C170.2 C176.2 C177.1 C178.2 C179.2 L7.2 R167.2 R168.2
-Net-(C55-Pad2): C55.2 C58.2 C66.2 C67.2 C72.2 C73.2 C75.2 C76.2
-Net-(L7-Pad1): L7.1 R220.1 U2.J1 U2.J2 U2.J3 U2.J4 U2.J5 U2.J6
-Net-(IC1-ISENP): IC1.1 J2.A4 J2.A9 J2.B4 J2.B9 R3.2
-Net-(U2E-VDD-PadG13): U2.G13 U2.H12 U2.H13 U2.J12 U2.J13 U2.K13
-Net-(U2E-VDDIO2-PadL13): U2.L13 U2.L14 U2.M14 U2.M15 U2.N13 U2.P13
-VDD: C141.1 C142.1 C143.1 C144.1 U3.D1 U3.E4
-I_SENS_VDDCORE_N: C170.1 R22.2 R167.1 R168.1 U2.G2
-Net-(U2E-VDDA18ADC): U2.C5 U2.M5 U2.N6 U2.R5
-USB_DN: J2.A7 J2.B7 U4.17 U4.20
-USB_DP: J2.A6 J2.B6 U4.16 U4.19
-Net-(D4-A): D4.2 R140.2 U5.A4
-Net-(IC1-VCC): IC1.24 Q1.3 R3.1
-Net-(J2-CC1): J2.A5 U4.4 U4.7
-Net-(J2-CC2): J2.B5 U4.5 U4.6
-Net-(Q1-G): Q1.2 Q2.2 R1.1
-Net-(U2E-VDD33USB): C43.2 R159.2 U2.A4
-Net-(U5-VCC): C89.1 C90.1 U5.B4
-VSS: U3.C5 U3.E1 U3.E5
-HEXASPI_IO0: U3.C2 U3.D3
-HEXASPI_IO1: U3.B1 U3.D2
-HEXASPI_IO2: U3.A2 U3.C4
-HEXASPI_IO3: U3.A4 U3.D4
-HEXASPI_IO4: U3.A5 U3.D5
-HEXASPI_IO5: U3.B4 U3.E3
-HEXASPI_IO6: U3.B5 U3.E2
-Net-(C37-Pad1): C37.1 R220.2
-Net-(C38-Pad2): C38.2 C39.2
-Net-(C59-Pad2): C59.2 C64.2
-Net-(D1-A): D1.2 R4.2
-Net-(IC1-CC1): IC1.17 U4.12
-Net-(IC1-CC2): IC1.16 U4.11
-Net-(IC1-IFB): C2.1 IC1.15
-Net-(IC1-LED): IC1.8 R4.1
-Net-(IC1-OTP): IC1.13 TH1.1
-Net-(IC1-PWR_EN): IC1.23 R1.2
-Net-(IC1-V18): C4.1 IC1.12
-Net-(IC1-V5V): C3.1 IC1.20
-Net-(IC1-VOUT): IC1.22 R2.2
-Net-(J1-GND): C1.1 J1.5
-Net-(J2-SBU1): J2.A8 U4.1
-Net-(J2-SBU2): J2.B8 U4.2
-Net-(Q1-D): Q1.1 Q2.1
-Net-(Q2-S): Q2.3 R2.1
-Net-(U1D-CSI_REXT): R33.2 U1.P5
-Net-(U1D-OTG1_TXRTUNE): R32.2 U1.C6
-Net-(U1D-OTG2_TXRTUNE): R34.2 U1.D6
-Net-(U2E-V08CAP): C34.1 U2.F1
-Net-(U2E-VBAT): C28.1 U2.E1
-Net-(U2E-VDDA18AON): R148.2 U2.F6
-Net-(U2E-VDDA18PMU): C169.2 U2.G1
-Net-(U2E-VDDIO4-PadE8): U2.E8 U2.F8
-Net-(U2E-VDDIO5-PadE9): U2.E9 U2.F9
-Net-(U4-VBIAS): C5.2 U4.3
-Net-(U4-VPWR): C6.1 U4.10
-PO0: R62.2 U1.M17
-PO2: R56.2 U1.K17
-PO3: R59.2 U1.M16
-PO4: R58.2 U1.N16
-PP0: R55.2 U1.G17
-PP1: R47.2 U1.H16
-PP10: R50.2 U1.N15
-PP11: R49.2 U1.L15
-PP12: R60.2 U1.J15
-PP13: R48.2 U1.K14
-PP14: R46.2 U1.L17
-PP15: R61.2 U1.H17
-PP2: R45.2 U1.J17
-PP3: R57.2 U1.J16
-PP4: R44.2 U1.H15
-PP5: R54.2 U1.J14
-PP6: R53.2 U1.G16
-PP7: R51.2 U1.G15
-PP8: R64.2 U1.L16
-PP9: R63.2 U1.N14
-USB_TPD8S_FLT: R5.1 U4.9
+## Summary
 
-# 245 single-node nets omitted
+- Components: 180 of 180
+- Nets touching scope: 375 of 375
+- Connected nets: 128
+- Labeled single-ended nets requiring review: 177
+- Automatic/dangling single-ended nets requiring review: 36
+- Explicit or intrinsic no-connects: 34
+- Malformed or empty net records: 0
+- Missing footprints: 150
+
+Legend: `REF.PIN[FUNCTION:TYPE]`; `in/out/bi` are pin directions; R/C endpoints show values.
+Multi-unit references include the inferred unit, for example `U1D.G3`.
+A single-ended net has exactly one exported endpoint and is not treated as connected.
+This report describes exported connectivity only; it cannot infer design intent or PCB placement.
+
+## Structural findings
+
+- ATTENTION possible split physical part `STM32N657X0H3Q`: U1 units=A,B,C,D; U2 units=E. These complementary units use different references.
+- ATTENTION `NRST` is 3 disconnected hierarchical nets:
+  - /Debug/NRST -> J1.3[~{RESET}:oc]
+  - /OctoSPI_FLASH/NRST -> D4.1[K]
+  - /STM32_MCU_IO/NRST -> U1D.G3[NRST:in]
+- Cross-sheet connected nets (2): GND(141), +3V3(18)
+- CHECK component identity U3: value=APS512XXN-OB9-BG; symbol=noob:APS256XXN-OBR-BG.
+- CHECK footprint assignment: 150 of 180 components have no footprint.
+- CHECK all nets in scope use the `Default` net class; no electrical constraints are encoded here.
+
+## Sheet summary
+
+- /Debug/: parts=2 connected=2 named-singleton=4 auto-singleton=1 no-connect=0
+- /HexaSPI_PSRAM/: parts=5 connected=10 named-singleton=4 auto-singleton=0 no-connect=0
+- /MicroSD/: parts=7 connected=8 named-singleton=1 auto-singleton=0 no-connect=0
+- /OctoSPI_FLASH/: parts=5 connected=3 named-singleton=7 auto-singleton=1 no-connect=15
+- /Power/: parts=58 connected=43 named-singleton=0 auto-singleton=0 no-connect=2
+- /STM32_MCU_IO/: parts=24 connected=24 named-singleton=158 auto-singleton=21 no-connect=6
+- /STM32_MCU_PWR/: parts=62 connected=22 named-singleton=0 auto-singleton=13 no-connect=0
+- /USB/: parts=17 connected=25 named-singleton=3 auto-singleton=0 no-connect=11
+
+## Key components
+
+### /Debug/
+
+- J1 Conn_ARM_SWD_TagConnect_TC2030-NL | symbol=Connector:Conn_ARM_SWD_TagConnect_TC2030-NL | units=A (1/1 inferred/placed)
+  | pins: connected=1 named-singleton=4 auto-singleton=1 no-connect=0 missing=0
+  | footprint=Connector:Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical
+  | datasheet=https://www.tag-connect.com/wp-content/uploads/bsk-pdf-manager/TC2030-CTX_1.pdf
+
+### /HexaSPI_PSRAM/
+
+- U3 APS512XXN-OB9-BG | symbol=noob:APS256XXN-OBR-BG | units=A (1/1 inferred/placed)
+  | pins: connected=20 named-singleton=4 auto-singleton=0 no-connect=0 missing=0 | footprint=APS512XXN-OB9-BG:BGA24C100P5X5_800X600X120
+
+### /MicroSD/
+
+- J3 DM3CS-SF | symbol=noob:DM3CS-SF | units=A (1/1 inferred/placed)
+  | pins: connected=12 named-singleton=1 auto-singleton=0 no-connect=0 missing=0 | footprint=DM3CS-SF_HIR | datasheet=DM3CS-SF
+
+### /OctoSPI_FLASH/
+
+- D4 D | symbol=Device:D | units=A (1/1 inferred/placed) | pins: connected=1 named-singleton=1 auto-singleton=0 no-connect=0 missing=0
+  | footprint=MISSING
+- U5 MX25U51279GXDR00 | symbol=MX25U51279GXDR00:MX25U51279GXDR00 | units=A (1/1 inferred/placed)
+  | pins: connected=3 named-singleton=6 auto-singleton=0 no-connect=15 missing=0 | footprint=MX66UW1G45GXDI00:BGA24C100P5X5_800X600X120
+
+### /Power/
+
+- BT1 Battery_Cell | symbol=Device:Battery_Cell | units=A (1/1 inferred/placed)
+  | pins: connected=2 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+- BT2 Battery_Cell | symbol=Device:Battery_Cell | units=A (1/1 inferred/placed)
+  | pins: connected=2 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+- D2 LED | symbol=Device:LED | units=A (1/1 inferred/placed) | pins: connected=2 named-singleton=0 auto-singleton=0 no-connect=0 missing=0
+  | footprint=MISSING
+- L1 L | symbol=Device:L | units=A (1/1 inferred/placed) | pins: connected=2 named-singleton=0 auto-singleton=0 no-connect=0 missing=0
+  | footprint=MISSING
+- NTC1 NCP15XH103F03RC | symbol=Device:Thermistor_NTC | units=A (1/1 inferred/placed)
+  | pins: connected=2 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+- Q3 NMOS | symbol=Simulation_SPICE:NMOS | units=A (1/1 inferred/placed)
+  | pins: connected=3 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+  | datasheet=https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs
+- Q4 NMOS | symbol=Simulation_SPICE:NMOS | units=A (1/1 inferred/placed)
+  | pins: connected=3 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+  | datasheet=https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs
+- Q5 NMOS | symbol=Simulation_SPICE:NMOS | units=A (1/1 inferred/placed)
+  | pins: connected=3 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+  | datasheet=https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs
+- TP1 TestPoint_Small | symbol=Connector:TestPoint_Small | units=A (1/1 inferred/placed)
+  | pins: connected=1 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+- U6 BQ25798RQMR | symbol=noob:BQ25798RQMR | units=A (1/1 inferred/placed)
+  | pins: connected=27 named-singleton=0 auto-singleton=0 no-connect=2 missing=0 | footprint=BQ25798RQMR:IC_BQ25798RQMR
+- U7 MAX17320G22+ | symbol=noob:MAX17320G22+ | units=A (1/1 inferred/placed)
+  | pins: connected=25 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=21-0139I_T2444-4_MXM | datasheet=MAX17320G22+
+
+### /STM32_MCU_IO/
+
+- U1 STM32N657X0H3Q | symbol=noob:STM32N657X0H3Q | units=A,B,C,D (4/4 inferred/placed)
+  | pins: connected=23 named-singleton=158 auto-singleton=1 no-connect=6 missing=0 | footprint=VFBGA264_14X14_STM
+  | datasheet=https://www.st.com/resource/en/datasheet/stm32n657a0.pdf
+
+### /STM32_MCU_PWR/
+
+- L4 2.2nH | symbol=Device:L_Small | units=A (1/1 inferred/placed)
+  | pins: connected=1 named-singleton=0 auto-singleton=1 no-connect=0 missing=0 | footprint=MISSING
+- L7 1.0uH | symbol=Device:L_Small | units=A (1/1 inferred/placed)
+  | pins: connected=2 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+- L8 18R @ 100MHz | symbol=Device:L_Small | units=A (1/1 inferred/placed)
+  | pins: connected=0 named-singleton=0 auto-singleton=2 no-connect=0 missing=0 | footprint=MISSING
+- U2 STM32N657X0H3Q | symbol=noob:STM32N657X0H3Q | units=E (1/1 inferred/placed)
+  | pins: connected=75 named-singleton=0 auto-singleton=1 no-connect=0 missing=0 | footprint=VFBGA264_14X14_STM
+  | datasheet=https://www.st.com/resource/en/datasheet/stm32n657a0.pdf
+
+### /USB/
+
+- D1 LED | symbol=Device:LED | units=A (1/1 inferred/placed) | pins: connected=2 named-singleton=0 auto-singleton=0 no-connect=0 missing=0
+  | footprint=MISSING
+- IC1 AP33772SDKZ-13-FA01 | symbol=noob:AP33772SDKZ-13-FA01 | units=A (1/1 inferred/placed)
+  | pins: connected=13 named-singleton=3 auto-singleton=0 no-connect=9 missing=0 | footprint=AP33772SDKZ13FA01
+  | datasheet=https://www.diodes.com/datasheet/download/AP33772S.pdf
+- J2 USB_C_Receptacle_USB2.0_16P | symbol=Connector:USB_C_Receptacle_USB2.0_16P | units=A (1/1 inferred/placed)
+  | pins: connected=17 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+  | datasheet=https://www.usb.org/sites/default/files/documents/usb_type-c.zip
+- Q1 NMOS | symbol=Simulation_SPICE:NMOS | units=A (1/1 inferred/placed)
+  | pins: connected=3 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+  | datasheet=https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs
+- Q2 NMOS | symbol=Simulation_SPICE:NMOS | units=A (1/1 inferred/placed)
+  | pins: connected=3 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+  | datasheet=https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_MOSFETs
+- TH1 10K@25c | symbol=Device:Thermistor_NTC | units=A (1/1 inferred/placed)
+  | pins: connected=2 named-singleton=0 auto-singleton=0 no-connect=0 missing=0 | footprint=MISSING
+- U4 TPD8S300ARUKR | symbol=noob:TPD8S300ARUKR | units=A (1/1 inferred/placed)
+  | pins: connected=19 named-singleton=0 auto-singleton=0 no-connect=2 missing=0 | footprint=WQFN20_RUK_TEX
+  | datasheet=https://www.ti.com/lit/gpn/tpd8s300a
+
+## Connected nets
+
+### / (global or cross-sheet)
+
+- +3V3 [18 nodes]: C6.1[0.1uF], D2.2[A], J3.4[VDD:pwr-in], R5.2[10k], R14.2[47k], R15.2[47k], R16.2[47k], R17.1[47k], R18.1[47k], R19.1[47k]
+  R29.2[10k], R30.2[10k], R31.2[10k], R36.2[10k], R37.2[10k], R38.2[10k], R39.2[10k], U4.10[VPWR:pwr-in]
+- GND [141 nodes]: C1.2[100nF], C2.2[100nF], C3.2[1uF], C4.2[100nF], C5.1[0.1uF], C6.2[0.1uF], C9.1[10uF], C10.1[10uF], C11.1[100nF]
+  C28.2[100nF], C29.2[10uF], C34.2[4.7uF], C35.2[10uF], C36.1[100nF], C37.2[2.2nF], C38.1[1uF], C39.1[100nF], C40.1[100nF], C41.2[1uF]
+  C42.1[10uF], C43.1[1uF], C44.1[1uF], C45.2[1uF], C46.1[100nF], C47.1[100nF], C48.2[100nF], C50.1[100nF], C51.1[1uF], C52.2[100nF]
+  C54.1[100nF], C55.1[100nF], C56.1[10uF], C57.1[1uF], C58.1[100nF], C59.1[100nF], C60.1[1uF], C61.1[1uF], C62.1[10uF], C63.1[1uF]
+  C64.1[100nF], C65.1[1uF], C66.1[100nF], C67.1[100nF], C68.1[1uF], C69.1[1uF], C70.1[1uF], C71.1[100nF], C72.1[100nF], C73.1[100nF]
+  C74.1[100nF], C75.1[100nF], C76.1[100nF], C77.1[100nF], C78.1[100nF], C79.1[100nF], C80.1[100nF], C81.1[10uF], C82.1[10uF], C83.1[100nF]
+  C84.2[10uF], C85.2[10uF], C86.1[100nF], C87.1[10uF], C88.1[10uF], C89.2[100nF], C90.2[4.7uF], C91.1[10uF], C92.1[4.7uF], C141.2[4.7uF]
+  C142.2[100nF], C143.2[4.7uF], C144.2[100nF], C169.1[100nF], C176.1[22uF], C177.2[22uF], C178.1[22uF], C179.1[22uF], D1.1[K], IC1.3[GND_1]
+  IC1.25[GND_2], J2.A1[GND], J2.A12[GND], J2.B1[GND], J2.B12[GND], J2.SH[SHIELD], J3.6[VSS:pwr-out], J3.10[GND1:pwr-out]
+  J3.11[GND2:pwr-out], J3.12[GND3:pwr-out], J3.13[GND4:pwr-out], NTC1.1, R13.2[5m], R24.2[10k], R26.1[10k], R32.1[200R], R33.1[200R]
+  R34.1[200R], R35.1[8.2k], TH1.2, U2E.A17[VSS:pwr-in], U2E.F2[VSSAPMU:pwr-in], U2E.F7[VSS:pwr-in], U2E.F10[VSS:pwr-in], U2E.F11[VSS:pwr-in]
+  U2E.F12[VSS:pwr-in], U2E.G6[VSSAON:pwr-in], U2E.G12[VSS:pwr-in], U2E.H1[VSSSMPS:pwr-in], U2E.H2[VSSSMPS:pwr-in], U2E.H3[VSSSMPS:pwr-in]
+  U2E.H4[VSSSMPS:pwr-in], U2E.H5[VSSSMPS:pwr-in], U2E.H6[VSSSMPS:pwr-in], U2E.K12[VSS:pwr-in], U2E.M6[VSSA:pwr-in], U2E.M8[VSS:pwr-in]
+  U2E.M10[VSS:pwr-in], U2E.M12[VSS:pwr-in], U2E.M13[VSS:pwr-in], U2E.N5[VSS:pwr-in], U2E.N7[VSS:pwr-in], U2E.N9[VSS:pwr-in]
+  U2E.N11[VSS:pwr-in], U2E.T2[VREF-:pwr-in], U2E.U1[VSS:pwr-in], U2E.U17[VSS:pwr-in], U3.C1[VSS:pwr-in], U4.8[GND:pwr-out]
+  U4.13[GND:pwr-out], U4.18[GND:pwr-out], U4.21[GND:pwr-out], U5.B3[GND:pwr-in], U6.8[VAC2:in], U6.9[VAC1:in], U6.13[~{CE}:in]
+  U6.17[ILIM_HIZ:in], U6.27[GND:pwr-in], U7.14[CSN:?], U7.16[TH2:in], U7.18[TH3:in], U7.19[TH4:in]
+
+### /Debug/
+
+- Net-(J1-GND) [2 nodes]: C1.1[100nF], J1.5[GND:pwr-in]
+
+### /HexaSPI_PSRAM/
+
+- /HexaSPI_PSRAM/HEXASPI_IO0 [2 nodes]: U3.C2[DQ8:bi], U3.D3[ADQ0:bi]
+- /HexaSPI_PSRAM/HEXASPI_IO1 [2 nodes]: U3.B1[DQ9:bi], U3.D2[ADQ1:bi]
+- /HexaSPI_PSRAM/HEXASPI_IO2 [2 nodes]: U3.A2[DQ10:bi], U3.C4[ADQ2:bi]
+- /HexaSPI_PSRAM/HEXASPI_IO3 [2 nodes]: U3.A4[DQ11:bi], U3.D4[ADQ3:bi]
+- /HexaSPI_PSRAM/HEXASPI_IO4 [2 nodes]: U3.A5[DQ12:bi], U3.D5[ADQ4:bi]
+- /HexaSPI_PSRAM/HEXASPI_IO5 [2 nodes]: U3.B4[DQ13:bi], U3.E3[ADQ5:bi]
+- /HexaSPI_PSRAM/HEXASPI_IO6 [2 nodes]: U3.B5[DQ14:bi], U3.E2[ADQ6:bi]
+- VDD [6 nodes]: C141.1[4.7uF], C142.1[100nF], C143.1[4.7uF], C144.1[100nF], U3.D1[VDD:pwr-in], U3.E4[VDD:pwr-in]
+- VSS [3 nodes]: U3.C5[DQ15:bi], U3.E1[ADQ7:bi], U3.E5[VSS:pwr-in]
+
+### /MicroSD/
+
+- /MicroSD/SDMMC_CDS [2 nodes]: J3.9[CDS:?], R14.1[47k]
+- /MicroSD/SDMMC_CMD [2 nodes]: J3.3[CMD:?], R17.2[47k]
+- /MicroSD/SDMMC_D0 [2 nodes]: J3.7[DAT0:bi], R16.1[47k]
+- /MicroSD/SDMMC_D1 [2 nodes]: J3.8[DAT1:bi], R15.1[47k]
+- /MicroSD/SDMMC_D2 [2 nodes]: J3.1[DAT2:bi], R19.2[47k]
+- /MicroSD/SDMMC_D3 [2 nodes]: J3.2[CD/DAT3:?], R18.2[47k]
+
+### /OctoSPI_FLASH/
+
+- Net-(D4-A) [3 nodes]: D4.2[A], R140.2[10K], U5.A4[~{RESET}:in]
+- Net-(U5-VCC) [3 nodes]: C89.1[100nF], C90.1[4.7uF], U5.B4[VCC:pwr-in]
+
+### /Power/
+
+- /Power/BAT_ALRT [2 nodes]: R37.1[10k], U7.7[ALRT:out]
+- /Power/BAT_SCL [2 nodes]: R39.1[10k], U7.8[SCL/OD:in]
+- /Power/BAT_SDA [2 nodes]: R38.1[10k], U7.9[SDA/DQ:bi]
+- /Power/CHG_INT [2 nodes]: R31.1[10k], U6.21[~{INT}:out]
+- /Power/CHG_SCL [2 nodes]: R30.1[10k], U6.14[SCL:in]
+- /Power/CHG_SDA [2 nodes]: R29.1[10k], U6.15[SDA:bi]
+- /Power/REGN [4 nodes]: C92.2[4.7uF], R24.1[10k], R25.1[8.2k], U6.5[REGN:out]
+- /Power/vpack+ [5 nodes]: Q3.1[D], Q5.3[S], R6.1[1k], R23.2[100], U7.5[ZVC:?]
+- BAT [5 nodes]: C84.1[10uF], C85.1[10uF], Q3.3[S], U6.22[BAT:pwr-in], U6.23[BAT:pwr-in]
+- GND1 [11 nodes]: BT2.2[-], C12.2[10nF], C14.2[100nF], C15.2[470nF], C16.2[470nF], C17.2[470nF], R9.1[1k], R13.1[5m], U7.15[CSP:?]
+  U7.20[GND:pwr-in], U7.25[EPAD:pwr-in]
+- Net-(BT1-+) [5 nodes]: BT1.1[+], C7.1[100nF], Q4.3[S], R10.1[10], R11.1[68]
+- Net-(BT1--) [3 nodes]: BT1.2[-], BT2.1[+], R12.1[68]
+- Net-(D2-K) [2 nodes]: D2.1[K], R28.2[2k2]
+- Net-(Q3-G) [2 nodes]: Q3.2[G:in], U6.24[SDRV:out]
+- Net-(Q4-D) [2 nodes]: Q4.1[D], Q5.1[D]
+- Net-(Q4-G) [3 nodes]: C7.2[100nF], Q4.2[G:in], R7.1[100]
+- Net-(Q5-G) [2 nodes]: Q5.2[G:in], R8.1[100]
+- Net-(U6-ACDRV1) [8 nodes]: C9.2[10uF], C10.2[10uF], C11.2[100nF], C42.2[10uF], U6.2[VBUS:in], U6.3[VBUS:in], U6.10[ACDRV2:in]
+  U6.11[ACDRV1:in]
+- Net-(U6-BATP) [2 nodes]: R23.1[100], U6.18[BATP:pwr-in]
+- Net-(U6-BTST1) [2 nodes]: C49.2[47nF, 10v+ ceram], U6.4[BTST1:in]
+- Net-(U6-BTST2) [2 nodes]: C53.2[47nF, 10v+ ceram], U6.19[BTST2:out]
+- Net-(U6-PMID) [5 nodes]: C86.2[100nF], C87.2[10uF], C88.2[10uF], C91.2[10uF], U6.29[PMID]
+- Net-(U6-PROG) [2 nodes]: R35.2[8.2k], U6.20[PROG:in]
+- Net-(U6-STAT) [2 nodes]: R28.1[2k2], U6.1[STAT:out]
+- Net-(U6-SW1) [3 nodes]: C49.1[47nF, 10v+ ceram], L1.1[1], U6.28[SW1]
+- Net-(U6-SW2) [3 nodes]: C53.1[47nF, 10v+ ceram], L1.2[2], U6.26[SW2]
+- Net-(U6-SYS) [6 nodes]: C56.2[10uF], C62.2[10uF], C81.2[10uF], C82.2[10uF], C83.2[100nF], U6.25[SYS:out]
+- Net-(U6-TS) [3 nodes]: R25.2[8.2k], R26.2[10k], U6.16[TS:in]
+- Net-(U6-~{QON}) [2 nodes]: TP1.1[1], U6.12[~{QON}:in]
+- Net-(U7-AOLDO) [2 nodes]: C17.1[470nF], U7.12[AOLDO:?]
+- Net-(U7-BATTS) [3 nodes]: C8.1[10nF], R11.2[68], U7.24[BATTS:?]
+- Net-(U7-CELL1) [6 nodes]: C8.2[10nF], C12.1[10nF], R12.2[68], U7.21[CELL1:?], U7.22[CELL2:?], U7.23[CELL3:?]
+- Net-(U7-CHG) [2 nodes]: R7.2[100], U7.3[CHG:?]
+- Net-(U7-CP) [2 nodes]: C13.1[100nF], U7.2[CP:out]
+- Net-(U7-DIS) [2 nodes]: R8.2[100], U7.4[DIS:?]
+- Net-(U7-IN) [4 nodes]: C13.2[100nF], C14.1[100nF], R10.2[10], U7.1[IN:in]
+- Net-(U7-PCKP) [2 nodes]: R6.2[1k], U7.6[PCKP:?]
+- Net-(U7-PFAIL) [2 nodes]: R9.2[1k], U7.11[PFAIL:?]
+- Net-(U7-REG2) [2 nodes]: C16.1[470nF], U7.17[REG2:out]
+- Net-(U7-REG3) [2 nodes]: C15.1[470nF], U7.13[REG3:out]
+- Net-(U7-TH1) [3 nodes]: NTC1.2, R36.1[10k], U7.10[TH1:in]
+
+### /STM32_MCU_IO/
+
+- /STM32_MCU_IO/PO0 [2 nodes]: R62.2[Resistor 0R], U1C.M17[PO0:bi]
+- /STM32_MCU_IO/PO2 [2 nodes]: R56.2[Resistor 0R], U1C.K17[PO2:bi]
+- /STM32_MCU_IO/PO3 [2 nodes]: R59.2[Resistor 0R], U1C.M16[PO3:bi]
+- /STM32_MCU_IO/PO4 [2 nodes]: R58.2[Resistor 0R], U1C.N16[PO4:bi]
+- /STM32_MCU_IO/PP0 [2 nodes]: R55.2[Resistor 0R], U1C.G17[PP0:bi]
+- /STM32_MCU_IO/PP1 [2 nodes]: R47.2[Resistor 0R], U1C.H16[PP1:bi]
+- /STM32_MCU_IO/PP10 [2 nodes]: R50.2[Resistor 0R], U1C.N15[PP10:bi]
+- /STM32_MCU_IO/PP11 [2 nodes]: R49.2[Resistor 0R], U1C.L15[PP11:bi]
+- /STM32_MCU_IO/PP12 [2 nodes]: R60.2[Resistor 0R], U1C.J15[PP12:bi]
+- /STM32_MCU_IO/PP13 [2 nodes]: R48.2[Resistor 0R], U1C.K14[PP13:bi]
+- /STM32_MCU_IO/PP14 [2 nodes]: R46.2[Resistor 0R], U1C.L17[PP14:bi]
+- /STM32_MCU_IO/PP15 [2 nodes]: R61.2[Resistor 0R], U1C.H17[PP15:bi]
+- /STM32_MCU_IO/PP2 [2 nodes]: R45.2[Resistor 0R], U1C.J17[PP2:bi]
+- /STM32_MCU_IO/PP3 [2 nodes]: R57.2[Resistor 0R], U1C.J16[PP3:bi]
+- /STM32_MCU_IO/PP4 [2 nodes]: R44.2[Resistor 0R], U1C.H15[PP4:bi]
+- /STM32_MCU_IO/PP5 [2 nodes]: R54.2[Resistor 0R], U1C.J14[PP5:bi]
+- /STM32_MCU_IO/PP6 [2 nodes]: R53.2[Resistor 0R], U1C.G16[PP6:bi]
+- /STM32_MCU_IO/PP7 [2 nodes]: R51.2[Resistor 0R], U1C.G15[PP7:bi]
+- /STM32_MCU_IO/PP8 [2 nodes]: R64.2[Resistor 0R], U1C.L16[PP8:bi]
+- /STM32_MCU_IO/PP9 [2 nodes]: R63.2[Resistor 0R], U1C.N14[PP9:bi]
+- Net-(U1D-CSI_REXT) [2 nodes]: R33.2[200R], U1D.P5[CSI_REXT:bi]
+- Net-(U1D-OTG1_TXRTUNE) [2 nodes]: R32.2[200R], U1D.C6[OTG1_TXRTUNE:bi]
+- Net-(U1D-OTG2_TXRTUNE) [2 nodes]: R34.2[200R], U1D.D6[OTG2_TXRTUNE:bi]
+
+### /STM32_MCU_PWR/
+
+- /STM32_MCU_PWR/I_SENS_VDDCORE_N [5 nodes]: C170.1[22uF], R22.2[0R], R167.1[0R], R168.1[50mH], U2E.G2[VFBSMPS:pwr-in]
+- /STM32_MCU_PWR/I_SENS_VDDCORE_P [8 nodes]: C170.2[22uF], C176.2[22uF], C177.1[22uF], C178.2[22uF], C179.2[22uF], L7.2, R167.2[0R]
+  R168.2[50mH]
+- Net-(C29-Pad1) [13 nodes]: C29.1[10uF], C35.1[10uF], C41.1[1uF], C45.1[1uF], C48.1[100nF], C52.1[100nF], L4.2, U2E.K1[VDDSMPS:pwr-in]
+  U2E.K2[VDDSMPS:pwr-in], U2E.K3[VDDSMPS:pwr-in], U2E.K4[VDDSMPS:pwr-in], U2E.K5[VDDSMPS:pwr-in], U2E.K6[VDDSMPS:pwr-in]
+- Net-(C37-Pad1) [2 nodes]: C37.1[2.2nF], R220.2[2R]
+- Net-(C38-Pad2) [2 nodes]: C38.2[1uF], C39.2[100nF]
+- Net-(C44-Pad2) [10 nodes]: C44.2[1uF], C51.2[1uF], C57.2[1uF], C60.2[1uF], C61.2[1uF], C63.2[1uF], C65.2[1uF], C68.2[1uF], C69.2[1uF]
+  C70.2[1uF]
+- Net-(C46-Pad2) [10 nodes]: C46.2[100nF], C47.2[100nF], C50.2[100nF], C54.2[100nF], C71.2[100nF], C74.2[100nF], C77.2[100nF], C78.2[100nF]
+  C79.2[100nF], C80.2[100nF]
+- Net-(C55-Pad2) [8 nodes]: C55.2[100nF], C58.2[100nF], C66.2[100nF], C67.2[100nF], C72.2[100nF], C73.2[100nF], C75.2[100nF], C76.2[100nF]
+- Net-(C59-Pad2) [2 nodes]: C59.2[100nF], C64.2[100nF]
+- Net-(L7-Pad1) [8 nodes]: L7.1, R220.1[2R], U2E.J1[VLXSMPS:pwr-in], U2E.J2[VLXSMPS:pwr-in], U2E.J3[VLXSMPS:pwr-in], U2E.J4[VLXSMPS:pwr-in]
+  U2E.J5[VLXSMPS:pwr-in], U2E.J6[VLXSMPS:pwr-in]
+- Net-(U2E-V08CAP) [2 nodes]: C34.1[4.7uF], U2E.F1[V08CAP:pwr-in]
+- Net-(U2E-VBAT) [2 nodes]: C28.1[100nF], U2E.E1[VBAT:pwr-in]
+- Net-(U2E-VDD-PadG13) [6 nodes]: U2E.G13[VDD:pwr-in], U2E.H12[VDD:pwr-in], U2E.H13[VDD:pwr-in], U2E.J12[VDD:pwr-in], U2E.J13[VDD:pwr-in]
+  U2E.K13[VDD:pwr-in]
+- Net-(U2E-VDD33USB) [3 nodes]: C43.2[1uF], R159.2[0R], U2E.A4[VDD33USB:pwr-in]
+- Net-(U2E-VDDA18ADC) [4 nodes]: U2E.C5[VDDA18USB:pwr-in], U2E.M5[VDDA18PLL:pwr-in], U2E.N6[VDDA18ADC:pwr-in], U2E.R5[VDDA18CSI:pwr-in]
+- Net-(U2E-VDDA18AON) [2 nodes]: R148.2[0R], U2E.F6[VDDA18AON:pwr-in]
+- Net-(U2E-VDDA18PMU) [2 nodes]: C169.2[100nF], U2E.G1[VDDA18PMU:pwr-in]
+- Net-(U2E-VDDCSI) [10 nodes]: U2E.L6[VDDCORE:pwr-in], U2E.L12[VDDCORE:pwr-in], U2E.M7[VDDCORE:pwr-in], U2E.M9[VDDCORE:pwr-in]
+  U2E.M11[VDDCORE:pwr-in], U2E.N8[VDDCORE:pwr-in], U2E.N10[VDDCORE:pwr-in], U2E.N12[VDDCORE:pwr-in], U2E.P11[VDDCORE:pwr-in]
+  U2E.R4[VDDCSI:pwr-in]
+- Net-(U2E-VDDIO2-PadL13) [6 nodes]: U2E.L13[VDDIO2:pwr-in], U2E.L14[VDDIO2:pwr-in], U2E.M14[VDDIO2:pwr-in], U2E.M15[VDDIO2:pwr-in]
+  U2E.N13[VDDIO3:pwr-in], U2E.P13[VDDIO3:pwr-in]
+- Net-(U2E-VDDIO4-PadE8) [2 nodes]: U2E.E8[VDDIO4:pwr-in], U2E.F8[VDDIO4:pwr-in]
+- Net-(U2E-VDDIO5-PadE9) [2 nodes]: U2E.E9[VDDIO5:pwr-in], U2E.F9[VDDIO5:pwr-in]
+
+### /USB/
+
+- /USB/USB_DN [4 nodes]: J2.A7[D-:bi], J2.B7[D-:bi], U4.17[D3:bi], U4.20[D1:bi]
+- /USB/USB_DP [4 nodes]: J2.A6[D+:bi], J2.B6[D+:bi], U4.16[D4:bi], U4.19[D2:bi]
+- /USB/USB_TPD8S_FLT [2 nodes]: R5.1[10k], U4.9[*FLT:out]
+- Net-(D1-A) [2 nodes]: D1.2[A], R4.2[1k]
+- Net-(IC1-CC1) [2 nodes]: IC1.17[CC1], U4.12[CC1:bi]
+- Net-(IC1-CC2) [2 nodes]: IC1.16[CC2], U4.11[CC2:bi]
+- Net-(IC1-IFB) [2 nodes]: C2.1[100nF], IC1.15[IFB]
+- Net-(IC1-ISENP) [6 nodes]: IC1.1[ISENP], J2.A4[VBUS], J2.A9[VBUS], J2.B4[VBUS], J2.B9[VBUS], R3.2[5m]
+- Net-(IC1-LED) [2 nodes]: IC1.8[LED], R4.1[1k]
+- Net-(IC1-OTP) [2 nodes]: IC1.13[OTP], TH1.1
+- Net-(IC1-PWR_EN) [2 nodes]: IC1.23[PWR_EN], R1.2[6.2k]
+- Net-(IC1-V18) [2 nodes]: C4.1[100nF], IC1.12[V18]
+- Net-(IC1-V5V) [2 nodes]: C3.1[1uF], IC1.20[V5V]
+- Net-(IC1-VCC) [3 nodes]: IC1.24[VCC], Q1.3[S], R3.1[5m]
+- Net-(IC1-VOUT) [2 nodes]: IC1.22[VOUT], R2.2[200]
+- Net-(J2-CC1) [3 nodes]: J2.A5[CC1:bi], U4.4[C_CC1:bi], U4.7[RPD_G1:bi]
+- Net-(J2-CC2) [3 nodes]: J2.B5[CC2:bi], U4.5[C_CC2:bi], U4.6[RPD_G2:bi]
+- Net-(J2-SBU1) [2 nodes]: J2.A8[SBU1:bi], U4.1[C_SBU1:bi]
+- Net-(J2-SBU2) [2 nodes]: J2.B8[SBU2:bi], U4.2[C_SBU2:bi]
+- Net-(Q1-D) [2 nodes]: Q1.1[D], Q2.1[D]
+- Net-(Q1-G) [3 nodes]: Q1.2[G:in], Q2.2[G:in], R1.1[6.2k]
+- Net-(Q2-S) [2 nodes]: Q2.3[S], R2.1[200]
+- Net-(U4-VBIAS) [2 nodes]: C5.2[0.1uF], U4.3[VBIAS:pwr-in]
+
+## Labeled single-ended nets requiring review
+
+### /Debug/
+
+- /Debug/NRST [1 nodes]: J1.3[~{RESET}:oc]
+- /Debug/SWCLK [1 nodes]: J1.4[SWCLK:out]
+- /Debug/SWDIO [1 nodes]: J1.2[SWDIO:bi]
+- /Debug/SWO [1 nodes]: J1.6[SWO:in]
+
+### /HexaSPI_PSRAM/
+
+- /HexaSPI_PSRAM/HEXASPI_CLK [1 nodes]: U3.B2[CLK:in]
+- /HexaSPI_PSRAM/HEXASPI_DQS0 [1 nodes]: U3.C3[DQS/DM0:bi]
+- /HexaSPI_PSRAM/HEXASPI_DQS1 [1 nodes]: U3.B3[DQS/DM1:bi]
+- /HexaSPI_PSRAM/HEXASPI_NCS [1 nodes]: U3.A3[~{CE}:in]
+
+### /MicroSD/
+
+- /MicroSD/SDMMC_CK [1 nodes]: J3.5[CLK:?]
+
+### /OctoSPI_FLASH/
+
+- /OctoSPI_FLASH/NRST [1 nodes]: D4.1[K]
+- /OctoSPI_FLASH/QUADSPI_CLK [1 nodes]: U5.B2[SCLK:in]
+- /OctoSPI_FLASH/QUADSPI_I00 [1 nodes]: U5.D3[SI/SIO0:bi]
+- /OctoSPI_FLASH/QUADSPI_I01 [1 nodes]: U5.D2[SO/SIO1:bi]
+- /OctoSPI_FLASH/QUADSPI_I02 [1 nodes]: U5.C4[SIO2:bi]
+- /OctoSPI_FLASH/QUADSPI_I03 [1 nodes]: U5.D4[SIO3:bi]
+- /OctoSPI_FLASH/QUADSPI_NCS [1 nodes]: U5.C2[~{CS}:in]
+
+### /STM32_MCU_IO/
+
+- /STM32_MCU_IO/BOOT0 [1 nodes]: U1D.G4[BOOT0:in]
+- /STM32_MCU_IO/CSI_CKN [1 nodes]: U1D.U3[CSI_CKN:in]
+- /STM32_MCU_IO/CSI_CKP [1 nodes]: U1D.T3[CSI_CKP:in]
+- /STM32_MCU_IO/CSI_D0N [1 nodes]: U1D.U5[CSI_D0N:in]
+- /STM32_MCU_IO/CSI_D0P [1 nodes]: U1D.T5[CSI_D0P:in]
+- /STM32_MCU_IO/CSI_D1N [1 nodes]: U1D.U4[CSI_D1N:in]
+- /STM32_MCU_IO/CSI_D1P [1 nodes]: U1D.T4[CSI_D1P:in]
+- /STM32_MCU_IO/NRST [1 nodes]: U1D.G3[NRST:in]
+- /STM32_MCU_IO/OTG1_HSDM [1 nodes]: U1D.A5[OTG1_HSDM:bi]
+- /STM32_MCU_IO/OTG1_HSDP [1 nodes]: U1D.B5[OTG1_HSDP:bi]
+- /STM32_MCU_IO/PA0 [1 nodes]: U1A.U10[PA0:bi]
+- /STM32_MCU_IO/PA1 [1 nodes]: U1A.P9[PA1:bi]
+- /STM32_MCU_IO/PA10 [1 nodes]: U1A.R7[PA10:bi]
+- /STM32_MCU_IO/PA11 [1 nodes]: U1A.T7[PA11:bi]
+- /STM32_MCU_IO/PA12 [1 nodes]: U1A.U7[PA12:bi]
+- /STM32_MCU_IO/PA13 [1 nodes]: U1A.U6[PA13:bi]
+- /STM32_MCU_IO/PA14 [1 nodes]: U1A.T6[PA14:bi]
+- /STM32_MCU_IO/PA15 [1 nodes]: U1A.P12[PA15:bi]
+- /STM32_MCU_IO/PA2 [1 nodes]: U1A.T8[PA2:bi]
+- /STM32_MCU_IO/PA3 [1 nodes]: U1A.R14[PA3:bi]
+- /STM32_MCU_IO/PA4 [1 nodes]: U1A.U14[PA4:bi]
+- /STM32_MCU_IO/PA5 [1 nodes]: U1A.R8[PA5:bi]
+- /STM32_MCU_IO/PA6 [1 nodes]: U1A.P8[PA6:bi]
+- /STM32_MCU_IO/PA7 [1 nodes]: U1A.R12[PA7:bi]
+- /STM32_MCU_IO/PA8 [1 nodes]: U1A.U8[PA8:bi]
+- /STM32_MCU_IO/PA9 [1 nodes]: U1A.P7[PA9:bi]
+- /STM32_MCU_IO/PB0 [1 nodes]: U1A.E15[PB0:bi]
+- /STM32_MCU_IO/PB1 [1 nodes]: U1A.R11[PB1:bi]
+- /STM32_MCU_IO/PB10 [1 nodes]: U1A.U11[PB10:bi]
+- /STM32_MCU_IO/PB11 [1 nodes]: U1A.P10[PB11:bi]
+- /STM32_MCU_IO/PB12 [1 nodes]: U1A.R10[PB12:bi]
+- /STM32_MCU_IO/PB13 [1 nodes]: U1A.C15[PB13:bi]
+- /STM32_MCU_IO/PB14 [1 nodes]: U1A.B17[PB14:bi]
+- /STM32_MCU_IO/PB15 [1 nodes]: U1A.D17[PB15:bi]
+- /STM32_MCU_IO/PB2 [1 nodes]: U1A.C16[PB2:bi]
+- /STM32_MCU_IO/PB3 [1 nodes]: U1A.F13[PB3:bi]
+- /STM32_MCU_IO/PB4 [1 nodes]: U1A.T12[PB4:bi]
+- /STM32_MCU_IO/PB5 [1 nodes]: U1A.U12[PB5:bi]
+- /STM32_MCU_IO/PB6 [1 nodes]: U1A.E17[PB6:bi]
+- /STM32_MCU_IO/PB7 [1 nodes]: U1A.E16[PB7:bi]
+- /STM32_MCU_IO/PB8 [1 nodes]: U1A.D16[PB8:bi]
+- /STM32_MCU_IO/PB9 [1 nodes]: U1A.D15[PB9:bi]
+- /STM32_MCU_IO/PC0 [1 nodes]: U1A.C10[PC0:bi]
+- /STM32_MCU_IO/PC1 [1 nodes]: U1A.A9[PC1:bi]
+- /STM32_MCU_IO/PC10 [1 nodes]: U1A.A8[PC10:bi]
+- /STM32_MCU_IO/PC11 [1 nodes]: U1A.B8[PC11:bi]
+- /STM32_MCU_IO/PC12 [1 nodes]: U1A.C8[PC12:bi]
+- /STM32_MCU_IO/PC13 [1 nodes]: U1A.F3[PC13:bi]
+- /STM32_MCU_IO/PC14 [1 nodes]: U1A.D1[PC14-OSC32_IN:bi]
+- /STM32_MCU_IO/PC15 [1 nodes]: U1A.C1[PC15-OSC32_OUT:bi]
+- /STM32_MCU_IO/PC2 [1 nodes]: U1A.D9[PC2:bi]
+- /STM32_MCU_IO/PC3 [1 nodes]: U1A.E10[PC3:bi]
+- /STM32_MCU_IO/PC4 [1 nodes]: U1A.A10[PC4:bi]
+- /STM32_MCU_IO/PC5 [1 nodes]: U1A.B10[PC5:bi]
+- /STM32_MCU_IO/PC6 [1 nodes]: U1A.B9[PC6:bi]
+- /STM32_MCU_IO/PC7 [1 nodes]: U1A.C9[PC7:bi]
+- /STM32_MCU_IO/PC8 [1 nodes]: U1A.D7[PC8:bi]
+- /STM32_MCU_IO/PC9 [1 nodes]: U1A.C7[PC9:bi]
+- /STM32_MCU_IO/PD0 [1 nodes]: U1A.D13[PD0:bi]
+- /STM32_MCU_IO/PD1 [1 nodes]: U1A.A14[PD1:bi]
+- /STM32_MCU_IO/PD10 [1 nodes]: U1A.A13[PD10:bi]
+- /STM32_MCU_IO/PD11 [1 nodes]: U1A.G14[PD11:bi]
+- /STM32_MCU_IO/PD12 [1 nodes]: U1A.C13[PD12:bi]
+- /STM32_MCU_IO/PD13 [1 nodes]: U1A.C17[PD13:bi]
+- /STM32_MCU_IO/PD14 [1 nodes]: U1A.C14[PD14:bi]
+- /STM32_MCU_IO/PD15 [1 nodes]: U1A.B14[PD15:bi]
+- /STM32_MCU_IO/PD2 [1 nodes]: U1A.C12[PD2:bi]
+- /STM32_MCU_IO/PD3 [1 nodes]: U1A.E13[PD3:bi]
+- /STM32_MCU_IO/PD4 [1 nodes]: U1A.B15[PD4:bi]
+- /STM32_MCU_IO/PD5 [1 nodes]: U1A.D14[PD5:bi]
+- /STM32_MCU_IO/PD6 [1 nodes]: U1A.D12[PD6:bi]
+- /STM32_MCU_IO/PD7 [1 nodes]: U1A.E12[PD7:bi]
+- /STM32_MCU_IO/PD8 [1 nodes]: U1A.E14[PD8:bi]
+- /STM32_MCU_IO/PD9 [1 nodes]: U1A.H14[PD9:bi]
+- /STM32_MCU_IO/PE0 [1 nodes]: U1B.F16[PE0:bi]
+- /STM32_MCU_IO/PE1 [1 nodes]: U1B.F17[PE1:bi]
+- /STM32_MCU_IO/PE10 [1 nodes]: U1B.B16[PE10:bi]
+- /STM32_MCU_IO/PE11 [1 nodes]: U1B.E11[PE11:bi]
+- /STM32_MCU_IO/PE12 [1 nodes]: U1B.B12[PE12:bi]
+- /STM32_MCU_IO/PE13 [1 nodes]: U1B.A11[PE13:bi]
+- /STM32_MCU_IO/PE14 [1 nodes]: U1B.B11[PE14:bi]
+- /STM32_MCU_IO/PE15 [1 nodes]: U1B.A12[PE15:bi]
+- /STM32_MCU_IO/PE2 [1 nodes]: U1B.F15[PE2:bi]
+- /STM32_MCU_IO/PE3 [1 nodes]: U1B.F14[PE3:bi]
+- /STM32_MCU_IO/PE4 [1 nodes]: U1B.D10[PE4:bi]
+- /STM32_MCU_IO/PE5 [1 nodes]: U1B.C11[PE5:bi]
+- /STM32_MCU_IO/PE6 [1 nodes]: U1B.D11[PE6:bi]
+- /STM32_MCU_IO/PE7 [1 nodes]: U1B.B13[PE7:bi]
+- /STM32_MCU_IO/PE8 [1 nodes]: U1B.A15[PE8:bi]
+- /STM32_MCU_IO/PE9 [1 nodes]: U1B.A16[PE9:bi]
+- /STM32_MCU_IO/PF0 [1 nodes]: U1B.R3[PF0:bi]
+- /STM32_MCU_IO/PF1 [1 nodes]: U1B.P4[PF1:bi]
+- /STM32_MCU_IO/PF10 [1 nodes]: U1B.L4[PF10:bi]
+- /STM32_MCU_IO/PF11 [1 nodes]: U1B.P3[PF11:bi]
+- /STM32_MCU_IO/PF12 [1 nodes]: U1B.T1[PF12:bi]
+- /STM32_MCU_IO/PF13 [1 nodes]: U1B.R2[PF13:bi]
+- /STM32_MCU_IO/PF14 [1 nodes]: U1B.N2[PF14:bi]
+- /STM32_MCU_IO/PF15 [1 nodes]: U1B.N1[PF15:bi]
+- /STM32_MCU_IO/PF2 [1 nodes]: U1B.N4[PF2:bi]
+- /STM32_MCU_IO/PF3 [1 nodes]: U1B.M2[PF3:bi]
+- /STM32_MCU_IO/PF4 [1 nodes]: U1B.L2[PF4:bi]
+- /STM32_MCU_IO/PF5 [1 nodes]: U1B.M3[PF5:bi]
+- /STM32_MCU_IO/PF6 [1 nodes]: U1B.L5[PF6:bi]
+- /STM32_MCU_IO/PF7 [1 nodes]: U1B.M1[PF7:bi]
+- /STM32_MCU_IO/PF8 [1 nodes]: U1B.N3[PF8:bi]
+- /STM32_MCU_IO/PF9 [1 nodes]: U1B.P1[PF9:bi]
+- /STM32_MCU_IO/PG0 [1 nodes]: U1B.R13[PG0:bi]
+- /STM32_MCU_IO/PG1 [1 nodes]: U1B.R9[PG1:bi]
+- /STM32_MCU_IO/PG10 [1 nodes]: U1B.T10[PG10:bi]
+- /STM32_MCU_IO/PG11 [1 nodes]: U1B.U13[PG11:bi]
+- /STM32_MCU_IO/PG12 [1 nodes]: U1B.T9[PG12:bi]
+- /STM32_MCU_IO/PG13 [1 nodes]: U1B.U9[PG13:bi]
+- /STM32_MCU_IO/PG14 [1 nodes]: U1B.P6[PG14:bi]
+- /STM32_MCU_IO/PG15 [1 nodes]: U1B.R6[PG15:bi]
+- /STM32_MCU_IO/PG2 [1 nodes]: U1B.T11[PG2:bi]
+- /STM32_MCU_IO/PG3 [1 nodes]: U1B.R1[PG3:bi]
+- /STM32_MCU_IO/PG4 [1 nodes]: U1B.P2[PG4:bi]
+- /STM32_MCU_IO/PG5 [1 nodes]: U1B.M4[PG5:bi]
+- /STM32_MCU_IO/PG6 [1 nodes]: U1B.L3[PG6:bi]
+- /STM32_MCU_IO/PG7 [1 nodes]: U1B.L1[PG7:bi]
+- /STM32_MCU_IO/PG8 [1 nodes]: U1B.T14[PG8:bi]
+- /STM32_MCU_IO/PG9 [1 nodes]: U1B.T13[PG9:bi]
+- /STM32_MCU_IO/PH0 [1 nodes]: U1B.A7[PH0-OSC_IN:bi]
+- /STM32_MCU_IO/PH1 [1 nodes]: U1B.B7[PH1-OSC_OUT:bi]
+- /STM32_MCU_IO/PH2 [1 nodes]: U1B.E7[PH2:bi]
+- /STM32_MCU_IO/PH3 [1 nodes]: U1B.B1[PH3:bi]
+- /STM32_MCU_IO/PH4 [1 nodes]: U1B.F4[PH4:bi]
+- /STM32_MCU_IO/PH5 [1 nodes]: U1B.F5[PH5:bi]
+- /STM32_MCU_IO/PH6 [1 nodes]: U1B.B2[PH6:bi]
+- /STM32_MCU_IO/PH7 [1 nodes]: U1B.D2[PH7:bi]
+- /STM32_MCU_IO/PH8 [1 nodes]: U1B.C2[PH8:bi]
+- /STM32_MCU_IO/PH9 [1 nodes]: U1B.D8[PH9:bi]
+- /STM32_MCU_IO/PN0 [1 nodes]: U1C.P17[PN0:bi]
+- /STM32_MCU_IO/PN1 [1 nodes]: U1C.R17[PN1:bi]
+- /STM32_MCU_IO/PN10 [1 nodes]: U1C.U15[PN10:bi]
+- /STM32_MCU_IO/PN11 [1 nodes]: U1C.U16[PN11:bi]
+- /STM32_MCU_IO/PN12 [1 nodes]: U1C.P14[PN12:bi]
+- /STM32_MCU_IO/PN2 [1 nodes]: U1C.T17[PN2:bi]
+- /STM32_MCU_IO/PN3 [1 nodes]: U1C.R15[PN3:bi]
+- /STM32_MCU_IO/PN4 [1 nodes]: U1C.N17[PN4:bi]
+- /STM32_MCU_IO/PN5 [1 nodes]: U1C.R16[PN5:bi]
+- /STM32_MCU_IO/PN6 [1 nodes]: U1C.P15[PN6:bi]
+- /STM32_MCU_IO/PN7 [1 nodes]: U1C.T16[PN7:bi]
+- /STM32_MCU_IO/PN8 [1 nodes]: U1C.P16[PN8:bi]
+- /STM32_MCU_IO/PN9 [1 nodes]: U1C.T15[PN9:bi]
+- /STM32_MCU_IO/PO1 [1 nodes]: U1C.K16[PO1:bi]
+- /STM32_MCU_IO/PO5 [1 nodes]: U1C.K15[PO5:bi]
+- /STM32_MCU_IO/PQ0 [1 nodes]: U1C.E5[PQ0:bi]
+- /STM32_MCU_IO/PQ1 [1 nodes]: U1C.E4[PQ1:bi]
+- /STM32_MCU_IO/PQ2 [1 nodes]: U1C.E3[PQ2:bi]
+- /STM32_MCU_IO/PQ3 [1 nodes]: U1C.D3[PQ3:bi]
+- /STM32_MCU_IO/PQ4 [1 nodes]: U1C.D4[PQ4:bi]
+- /STM32_MCU_IO/PQ5 [1 nodes]: U1C.D5[PQ5:bi]
+- /STM32_MCU_IO/PQ6 [1 nodes]: U1C.A2[PQ6:bi]
+- /STM32_MCU_IO/PQ7 [1 nodes]: U1C.G5[PQ7:bi]
+- /STM32_MCU_IO/PWR_ON [1 nodes]: U1D.E2[PWR_ON:in]
+- /STM32_MCU_IO/UCPD1_CC1 [1 nodes]: U1D.A6[UCPD1_CC1:bi]
+- /STM32_MCU_IO/UCPD1_CC2 [1 nodes]: U1D.B6[UCPD1_CC2:bi]
+
+### /USB/
+
+- /USB/USBPD_INT [1 nodes]: IC1.9[INT]
+- /USB/USBPD_SCL [1 nodes]: IC1.5[SCL]
+- /USB/USBPD_SDA [1 nodes]: IC1.4[SDA]
+
+## Automatic/dangling single-ended nets requiring review
+
+- [one_pin_auto] Net-(C36-Pad2) -> C36.2[100nF]
+- [one_pin_auto] Net-(C40-Pad2) -> C40.2[100nF]
+- [one_pin_auto] Net-(J1-VCC) -> J1.1[VCC:pwr-in]
+- [one_pin_auto] Net-(L4-Pad1) -> L4.1
+- [one_pin_auto] Net-(L8-Pad1) -> L8.1
+- [one_pin_auto] Net-(L8-Pad2) -> L8.2
+- [one_pin_auto] Net-(R140-Pad1) -> R140.1[10K]
+- [one_pin_auto] Net-(R148-Pad1) -> R148.1[0R]
+- [one_pin_auto] Net-(R159-Pad1) -> R159.1[0R]
+- [one_pin_auto] Net-(R173-Pad1) -> R173.1[0R]
+- [one_pin_auto] Net-(R173-Pad2) -> R173.2[0R]
+- [one_pin_auto] Net-(R22-Pad1) -> R22.1[0R]
+- [one_pin_auto] Net-(R27-Pad1) -> R27.1[0R]
+- [one_pin_auto] Net-(R27-Pad2) -> R27.2[0R]
+- [one_pin_auto] Net-(U1D-PDR_ON) -> U1D.A1[PDR_ON:in]
+- [one_pin_auto] Net-(U2E-VREF+) -> U2E.U2[VREF+:pwr-in]
+- [dangling] unconnected-(R44-Pad1) -> R44.1[Resistor 0R]
+- [dangling] unconnected-(R45-Pad1) -> R45.1[Resistor 0R]
+- [dangling] unconnected-(R46-Pad1) -> R46.1[Resistor 0R]
+- [dangling] unconnected-(R47-Pad1) -> R47.1[Resistor 0R]
+- [dangling] unconnected-(R48-Pad1) -> R48.1[Resistor 0R]
+- [dangling] unconnected-(R49-Pad1) -> R49.1[Resistor 0R]
+- [dangling] unconnected-(R50-Pad1) -> R50.1[Resistor 0R]
+- [dangling] unconnected-(R51-Pad1) -> R51.1[Resistor 0R]
+- [dangling] unconnected-(R53-Pad1) -> R53.1[Resistor 0R]
+- [dangling] unconnected-(R54-Pad1) -> R54.1[Resistor 0R]
+- [dangling] unconnected-(R55-Pad1) -> R55.1[Resistor 0R]
+- [dangling] unconnected-(R56-Pad1) -> R56.1[Resistor 0R]
+- [dangling] unconnected-(R57-Pad1) -> R57.1[Resistor 0R]
+- [dangling] unconnected-(R58-Pad1) -> R58.1[Resistor 0R]
+- [dangling] unconnected-(R59-Pad1) -> R59.1[Resistor 0R]
+- [dangling] unconnected-(R60-Pad1) -> R60.1[Resistor 0R]
+- [dangling] unconnected-(R61-Pad1) -> R61.1[Resistor 0R]
+- [dangling] unconnected-(R62-Pad1) -> R62.1[Resistor 0R]
+- [dangling] unconnected-(R63-Pad1) -> R63.1[Resistor 0R]
+- [dangling] unconnected-(R64-Pad1) -> R64.1[Resistor 0R]
+
+## Explicit and intrinsic no-connect pins
+
+- IC1: IC1.2[NC_1](explicit), IC1.6[FLIP](explicit), IC1.7[NC_2](explicit), IC1.10[NC_3](explicit), IC1.11[NC_4](explicit)
+  IC1.14[NC_5](explicit), IC1.18[DN](explicit), IC1.19[DP](explicit), IC1.21[NC_6](explicit)
+- U1: U1D.A3[OTG2_HSDM:bi](explicit), U1D.B3[OTG2_HSDP:bi](explicit), U1D.B4[OTG1_VBUS:bi](explicit), U1D.C3[OTG1_ID:bi](explicit)
+  U1D.C4[OTG2_VBUS:bi](explicit), U1D.E6[OTG2_ID:bi](explicit)
+- U4: U4.14[SBU2:bi](explicit), U4.15[SBU1:bi](explicit)
+- U5: U5.A2[NC:nc](intrinsic), U5.A3[NC__1:nc](intrinsic), U5.A5[~{ECS}:out](explicit), U5.B1[DNU:nc](intrinsic)
+  U5.B5[DNU__1:nc](intrinsic), U5.C1[NC__5:nc](intrinsic), U5.C3[NC__7:nc](intrinsic), U5.C5[NC__2:nc](intrinsic)
+  U5.D1[NC__3:nc](intrinsic), U5.D5[NC__8:nc](intrinsic), U5.E1[NC_11:nc](intrinsic), U5.E2[NC_10:nc](intrinsic), U5.E3[NC__9:nc](intrinsic)
+  U5.E4[NC__4:nc](intrinsic), U5.E5[NC__6:nc](intrinsic)
+- U6: U6.6[D+:bi](explicit), U6.7[D-:bi](explicit)
+
+## Pins absent from inferred placed units
+
+- None. Pins belonging only to uninstantiated library units are intentionally excluded.
+
+## R/C value index
+
+### /Debug/
+
+- C: 100nF=C1
+
+### /HexaSPI_PSRAM/
+
+- C: 100nF=C142,C144; 4.7uF=C141,C143
+
+### /MicroSD/
+
+- R: 47k=R14-R19
+
+### /OctoSPI_FLASH/
+
+- C: 100nF=C89; 4.7uF=C90
+- R: 10K=R140
+
+### /Power/
+
+- C: 100nF=C7,C11,C13,C14,C83,C86; 10nF=C8,C12; 10uF=C9,C10,C42,C56,C62,C81,C82,C84,C85,C87,C88,C91; 4.7uF=C92; 470nF=C15-C17
+  47nF, 10v+ ceram=C49,C53
+- R: 10=R10; 100=R7,R8,R23; 10k=R24,R26,R29-R31,R36-R39; 1k=R6,R9; 2k2=R28; 5m=R13; 68=R11,R12; 8.2k=R25,R35
+
+### /STM32_MCU_IO/
+
+- R: 200R=R32-R34; Resistor 0R=R44-R51,R53-R64
+
+### /STM32_MCU_PWR/
+
+- C: 100nF=C28,C36,C39,C40,C46-C48,C50,C52,C54,C55,C58,C59,C64,C66,C67,C71-C80,C169; 10uF=C29,C35
+  1uF=C38,C41,C43-C45,C51,C57,C60,C61,C63,C65,C68-C70; 2.2nF=C37; 22uF=C170,C176-C179; 4.7uF=C34
+- R: 0R=R22,R27,R148,R159,R167,R173; 2R=R220; 50mH=R168
+
+### /USB/
+
+- C: 0.1uF=C5,C6; 100nF=C2,C4; 1uF=C3
+- R: 10k=R5; 1k=R4; 200=R2; 5m=R3; 6.2k=R1
+
+## Missing footprints
+
+- /Debug/: C1
+- /HexaSPI_PSRAM/: C141-C144
+- /MicroSD/: R14-R19
+- /OctoSPI_FLASH/: C89, C90, D4, R140
+- /Power/: BT1, BT2, C7-C17, C42, C49, C53, C56, C62, C81-C88, C91, C92, D2, L1, NTC1, Q3-Q5, R6-R13, R23-R26, R28-R31, R35-R39, TP1
+- /STM32_MCU_IO/: R32-R34
+- /STM32_MCU_PWR/: C28, C29, C34-C41, C43-C48, C50-C52, C54, C55, C57-C61, C63-C80, C169, C170, C176-C179, L4, L7, L8, R22, R27, R148, R159
+  R167, R168, R173, R220
+- /USB/: C2-C6, D1, J2, Q1, Q2, R1-R5, TH1
