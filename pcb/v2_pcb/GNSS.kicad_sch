@@ -3085,16 +3085,6 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 104.14) (xy 171.45 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4560924c-e592-4335-9f76-cf4da0803a88")
-	)
-	(wire
-		(pts
 			(xy 323.85 146.05) (xy 349.25 146.05)
 		)
 		(stroke
@@ -3285,7 +3275,7 @@
 	)
 	(wire
 		(pts
-			(xy 171.45 96.52) (xy 181.61 96.52)
+			(xy 179.07 96.52) (xy 181.61 96.52)
 		)
 		(stroke
 			(width 0)
@@ -4905,7 +4895,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_Zener")
-		(at 173.99 118.11 270)
+		(at 173.99 118.11 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7018,7 +7008,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 171.45 100.33 0)
+		(at 175.26 96.52 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7028,7 +7018,7 @@
 		(dnp no)
 		(uuid "f5e10772-68c5-49c4-a93b-00d14ddb9861")
 		(property "Reference" "C900"
-			(at 175.26 100.33 0)
+			(at 175.26 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7039,7 +7029,7 @@
 			)
 		)
 		(property "Value" "100pF C0G"
-			(at 177.8 101.6 0)
+			(at 175.26 91.44 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

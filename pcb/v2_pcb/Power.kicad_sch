@@ -11693,7 +11693,7 @@
 	)
 	(symbol
 		(lib_id "open-race-v2:CSD18540Q5B")
-		(at 160.02 154.94 90)
+		(at 160.02 154.94 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -14275,7 +14275,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF 10V X7R"
+		(property "Value" "10uF 25V X5R"
 			(at 538.734 114.808 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -14541,7 +14541,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF 25V X7R"
+		(property "Value" "10uF 25V X5R"
 			(at 468.884 83.058 0)
 			(show_name no)
 			(do_not_autoplace no)
