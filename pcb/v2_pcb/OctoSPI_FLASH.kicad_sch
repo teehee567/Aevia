@@ -1426,16 +1426,6 @@
 	)
 	(wire
 		(pts
-			(xy 127 76.2) (xy 123.19 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4b8a6661-7ae7-409c-bf84-92c61650f419")
-	)
-	(wire
-		(pts
 			(xy 127 81.28) (xy 123.19 81.28)
 		)
 		(stroke
@@ -1576,7 +1566,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 76.2) (xy 69.85 76.2)
+			(xy 69.85 76.2) (xy 127 76.2)
 		)
 		(stroke
 			(width 0)
@@ -3320,5 +3310,4 @@
 			(page "1")
 		)
 	)
-	(embedded_fonts no)
 )

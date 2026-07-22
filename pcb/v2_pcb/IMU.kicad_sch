@@ -1140,16 +1140,16 @@
 		(uuid "87bc4f7f-f86d-4d52-a7ef-b050dc6ce2da")
 	)
 	(junction
-		(at 175.26 127)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9657af3e-44a5-461f-92da-81df9fb27c1b")
-	)
-	(junction
 		(at 195.58 97.79)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9ab289c3-c455-4d90-b679-0fbf603d9bc2")
+	)
+	(junction
+		(at 162.56 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9d68bbda-75ed-4824-8c91-6bee0bff0fea")
 	)
 	(junction
 		(at 248.92 133.35)
@@ -1162,6 +1162,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "bf513444-45d8-4fdf-867f-a52381c4f0ca")
+	)
+	(junction
+		(at 162.56 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d8198b0a-7cf8-4b2a-a7d4-503d8c6386f3")
 	)
 	(junction
 		(at 191.77 113.03)
@@ -1449,6 +1455,16 @@
 	)
 	(wire
 		(pts
+			(xy 168.91 113.03) (xy 182.88 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "65c34dfb-3195-4c6b-b36d-338e98e024f1")
+	)
+	(wire
+		(pts
 			(xy 196.85 97.79) (xy 195.58 97.79)
 		)
 		(stroke
@@ -1519,16 +1535,6 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 119.38) (xy 175.26 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9a01c782-d842-484d-b300-94c27281d803")
-	)
-	(wire
-		(pts
 			(xy 241.3 133.35) (xy 248.92 133.35)
 		)
 		(stroke
@@ -1586,6 +1592,16 @@
 			(type default)
 		)
 		(uuid "b2f2b82a-9879-4696-873b-e950b5e5ba54")
+	)
+	(wire
+		(pts
+			(xy 162.56 119.38) (xy 175.26 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b39124a6-0753-486e-b543-87210c5c9d9e")
 	)
 	(wire
 		(pts
@@ -1748,7 +1764,7 @@
 		(uuid "c7804a53-2e63-4d77-8608-d101048aafc6")
 	)
 	(label "IMU_RESET_N"
-		(at 182.88 113.03 0)
+		(at 168.91 113.03 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2667,7 +2683,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 175.26 127 0)
+		(at 162.56 127 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2678,7 +2694,7 @@
 		(fields_autoplaced yes)
 		(uuid "4c6650ea-e696-42b1-ae68-02d0aea6246d")
 		(property "Reference" "#PWR00204"
-			(at 175.26 130.81 0)
+			(at 162.56 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2689,7 +2705,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 177.8 128.2699 0)
+			(at 165.1 128.2699 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2700,7 +2716,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 175.26 127 0)
+			(at 162.56 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2711,7 +2727,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 175.26 127 0)
+			(at 162.56 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2722,7 +2738,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\""
-			(at 175.26 127 0)
+			(at 162.56 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3769,7 +3785,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 175.26 119.38 0)
+		(at 162.56 119.38 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3780,7 +3796,7 @@
 		(fields_autoplaced yes)
 		(uuid "c155b0c4-4a2a-40ea-b828-a39172a6a9d1")
 		(property "Reference" "#PWR00203"
-			(at 175.26 123.19 0)
+			(at 162.56 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3791,7 +3807,7 @@
 			)
 		)
 		(property "Value" "+3V3_IMU_CLEAN"
-			(at 175.26 115.57 0)
+			(at 162.56 115.57 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3801,7 +3817,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 175.26 119.38 0)
+			(at 162.56 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3812,7 +3828,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 175.26 119.38 0)
+			(at 162.56 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3823,7 +3839,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3_IMU_CLEAN\""
-			(at 175.26 119.38 0)
+			(at 162.56 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4097,5 +4113,4 @@
 			(page "1")
 		)
 	)
-	(embedded_fonts no)
 )
