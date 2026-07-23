@@ -2441,21 +2441,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 54.61 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW04021K00FKED" (at 54.61 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 54.61 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 54.61 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 54.61 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 54.61 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW04021K00FKED"
+			(at 54.61 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 54.61 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 54.61 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 54.61 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "8dcd9831-9216-42a8-b59c-499b6adf4216")
 		)
@@ -2535,27 +2575,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 350.52 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 350.52 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 350.52 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 350.52 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 350.52 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 350.52 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 350.52 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 350.52 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 350.52 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 350.52 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 350.52 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 350.52 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 350.52 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 350.52 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "3e73f1d8-2468-4652-b9ad-ddca21621302")
 		)
@@ -2657,9 +2753,17 @@
 				)
 			)
 		)
-    (property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current." (at 240.03 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current."
+			(at 240.03 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c8858347-2225-44f2-be81-4968920c2bc2")
 		)
@@ -2751,27 +2855,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 185.42 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 185.42 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 185.42 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 185.42 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 185.42 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 185.42 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 185.42 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 185.42 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 185.42 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 185.42 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 185.42 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 185.42 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 185.42 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 185.42 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "cd9cac36-7c73-424b-b52d-460d40f29477")
 		)
@@ -3194,21 +3354,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 48.26 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040210K0FKED" (at 48.26 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 48.26 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 48.26 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 48.26 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 48.26 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040210K0FKED"
+			(at 48.26 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 48.26 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 48.26 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 48.26 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "000af639-e9a3-464e-bc0a-ca0fbbb65c3d")
 		)
@@ -3388,18 +3588,50 @@
 				)
 			)
 		)
-    (property "Color" "Yellow green" (at 72.39 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "Automotive qualified" (at 72.39 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40 to +100 °C" (at 72.39 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Current" "20 mA maximum; visual-qualify at fitted 1 kΩ drive" (at 72.39 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Color" "Yellow green"
+			(at 72.39 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "Automotive qualified"
+			(at 72.39 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40 to +100 °C"
+			(at 72.39 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Current" "20 mA maximum; visual-qualify at fitted 1 kΩ drive"
+			(at 72.39 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "ced11d72-e76a-4b3a-aa18-5b043fec01af")
 		)
@@ -3501,9 +3733,17 @@
 				)
 			)
 		)
-    (property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current." (at 185.42 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current."
+			(at 185.42 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "cdcdd9ae-cb00-43e4-840d-a85acb730310")
 		)
@@ -3617,18 +3857,50 @@
 				)
 			)
 		)
-    (property "Color" "Red" (at 252.73 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "Automotive qualified" (at 252.73 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40 to +100 °C" (at 252.73 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Current" "20 mA maximum; visual-qualify at fitted 1 kΩ drive" (at 252.73 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Color" "Red"
+			(at 252.73 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "Automotive qualified"
+			(at 252.73 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40 to +100 °C"
+			(at 252.73 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Current" "20 mA maximum; visual-qualify at fitted 1 kΩ drive"
+			(at 252.73 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "7da1983c-bad1-4438-b450-08a5cca75a1a")
 		)
@@ -3708,21 +3980,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 295.91 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040210K0FKED" (at 295.91 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 295.91 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 295.91 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 295.91 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 295.91 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040210K0FKED"
+			(at 295.91 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 295.91 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 295.91 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 295.91 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "58077abe-ccd6-4ddd-a66a-993722a57ad0")
 		)
@@ -3902,9 +4214,17 @@
 				)
 			)
 		)
-    (property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current." (at 129.54 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current."
+			(at 129.54 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "d136df58-4ad1-4bed-aa68-40fb8e48e53b")
 		)
@@ -4252,12 +4572,28 @@
 				)
 			)
 		)
-    (property "Contact" "Gold ULC; 1 µA minimum at 1.8 V" (at 224.79 171.45 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40 to +125 °C" (at 224.79 171.45 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Contact" "Gold ULC; 1 µA minimum at 1.8 V"
+			(at 224.79 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40 to +125 °C"
+			(at 224.79 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "9ab522f7-22fd-40dc-b3f2-c9d5ec700f61")
 		)
@@ -4337,21 +4673,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 48.26 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040210K0FKED" (at 48.26 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 48.26 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 48.26 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 48.26 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 48.26 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040210K0FKED"
+			(at 48.26 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 48.26 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 48.26 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 48.26 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "b8a503ec-9acb-45cf-aaf2-883adcafc007")
 		)
@@ -4453,12 +4829,28 @@
 				)
 			)
 		)
-    (property "Contact" "Gold ULC; 1 µA minimum at 1.8 V" (at 304.8 171.45 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40 to +125 °C" (at 304.8 171.45 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Contact" "Gold ULC; 1 µA minimum at 1.8 V"
+			(at 304.8 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40 to +125 °C"
+			(at 304.8 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f799c9c2-0f54-4d8d-964d-3d8035d73125")
 		)
@@ -4694,21 +5086,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 104.14 62.23 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040233R0FKED" (at 104.14 62.23 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 104.14 62.23 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 104.14 62.23 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 104.14 62.23 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 104.14 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040233R0FKED"
+			(at 104.14 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 104.14 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 104.14 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 104.14 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "97848644-cc44-4bd5-b1da-344c9db1d9f0")
 		)
@@ -4810,18 +5242,50 @@
 				)
 			)
 		)
-    (property "Color" "Orange" (at 162.56 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "Automotive qualified" (at 162.56 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40 to +100 °C" (at 162.56 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Current" "20 mA maximum; visual-qualify at fitted 1 kΩ drive" (at 162.56 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Color" "Orange"
+			(at 162.56 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "Automotive qualified"
+			(at 162.56 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40 to +100 °C"
+			(at 162.56 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Current" "20 mA maximum; visual-qualify at fitted 1 kΩ drive"
+			(at 162.56 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a13d52d5-7bb2-402c-9c82-28254930a731")
 		)
@@ -5547,12 +6011,28 @@
 				)
 			)
 		)
-    (property "Contact" "Gold ULC; 1 µA minimum at 1.8 V" (at 144.78 171.45 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40 to +125 °C" (at 144.78 171.45 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Contact" "Gold ULC; 1 µA minimum at 1.8 V"
+			(at 144.78 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40 to +125 °C"
+			(at 144.78 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "4c397078-5f3c-408f-bdbf-d6bda8631776")
 		)
@@ -5710,27 +6190,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 233.68 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 233.68 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 233.68 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 233.68 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 233.68 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 233.68 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 233.68 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 233.68 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 233.68 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 233.68 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 233.68 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 233.68 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 233.68 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 233.68 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "345a9fc2-d930-486d-8e39-c0f72fd62878")
 		)
@@ -5810,21 +6346,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 215.9 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040210K0FKED" (at 215.9 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 215.9 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 215.9 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 215.9 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 215.9 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040210K0FKED"
+			(at 215.9 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 215.9 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 215.9 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 215.9 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "4dc73cad-1608-4d93-abf4-63b2643076d6")
 		)
@@ -5982,27 +6558,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 100.33 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 100.33 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 100.33 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 100.33 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 100.33 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 100.33 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 100.33 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 100.33 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 100.33 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 100.33 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 100.33 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 100.33 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 100.33 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 100.33 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f13e14c9-3ee0-4eae-89b5-449cf40d7b9b")
 		)
@@ -6104,9 +6736,17 @@
 				)
 			)
 		)
-    (property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current." (at 294.64 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current."
+			(at 294.64 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "372e7286-ee3c-4b1e-bea7-48d7e4f18c3c")
 		)
@@ -7245,30 +7885,94 @@
 				)
 			)
 		)
-    (property "Manufacturer" "KEMET (Yageo Group)" (at 350.52 135.89 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "C1210X476K8RACAUTO" (at 350.52 135.89 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "10 VDC" (at 350.52 135.89 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 350.52 135.89 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 350.52 135.89 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 350.52 135.89 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "FT-CAP flexible termination" (at 350.52 135.89 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Release_Status" "Verify effective capacitance under worst-case DC bias" (at 350.52 135.89 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "KEMET (Yageo Group)"
+			(at 350.52 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C1210X476K8RACAUTO"
+			(at 350.52 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "10 VDC"
+			(at 350.52 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 350.52 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 350.52 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 350.52 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "FT-CAP flexible termination"
+			(at 350.52 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Release_Status" "Verify effective capacitance under worst-case DC bias"
+			(at 350.52 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "d872f1ff-699e-438c-a24c-86c00b282bf3")
 		)
@@ -7348,27 +8052,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 129.54 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 129.54 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 129.54 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 129.54 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 129.54 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 129.54 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 129.54 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 129.54 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 129.54 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 129.54 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 129.54 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 129.54 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 129.54 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 129.54 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "82403888-4d62-44f6-9d28-0484a23e7a5d")
 		)
@@ -7448,21 +8208,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 104.14 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040233R0FKED" (at 104.14 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 104.14 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 104.14 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 104.14 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 104.14 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040233R0FKED"
+			(at 104.14 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 104.14 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 104.14 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 104.14 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6aa5160f-9c07-4e42-87a6-8d9d4635de56")
 		)
@@ -7620,27 +8420,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 153.67 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 153.67 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 153.67 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 153.67 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 153.67 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 153.67 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 153.67 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 153.67 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 153.67 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 153.67 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 153.67 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 153.67 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 153.67 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 153.67 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "3354f5f2-f1bc-49b1-9da3-e8d97d221d9c")
 		)
@@ -7798,27 +8654,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 240.03 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 240.03 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 240.03 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 240.03 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 240.03 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 240.03 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 240.03 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 240.03 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 240.03 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 240.03 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 240.03 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 240.03 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 240.03 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 240.03 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "1f122b25-40b5-4e5c-97fc-06210cf572da")
 		)
@@ -8054,27 +8966,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 313.69 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 313.69 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 313.69 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 313.69 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 313.69 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 313.69 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 313.69 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 313.69 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 313.69 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 313.69 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 313.69 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 313.69 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 313.69 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 313.69 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c03a2cae-2733-44ab-9382-f192b3cc64ee")
 		)
@@ -8176,9 +9144,17 @@
 				)
 			)
 		)
-    (property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current." (at 350.52 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Design_Note" "Include the five LEDs in the +5V_AUX worst-case current and thermal budget; firmware shall bound global brightness/current."
+			(at 350.52 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "53ffc356-7a5c-4860-a0eb-26b7219c7651")
 		)
@@ -8270,21 +9246,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 234.95 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW04021K00FKED" (at 234.95 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 234.95 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 234.95 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 234.95 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 234.95 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW04021K00FKED"
+			(at 234.95 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 234.95 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 234.95 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 234.95 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a3f7e6d9-85a1-4f12-ae37-7997274a025e")
 		)
@@ -8364,27 +9380,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 100.33 60.96 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 100.33 60.96 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 100.33 60.96 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 100.33 60.96 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 100.33 60.96 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 100.33 60.96 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 100.33 60.96 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 100.33 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 100.33 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 100.33 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 100.33 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 100.33 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 100.33 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 100.33 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "679db8a4-f99b-4db7-b8c8-e1d300d90295")
 		)
@@ -9010,21 +10082,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 144.78 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW04021K00FKED" (at 144.78 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 144.78 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 144.78 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 144.78 209.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 144.78 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW04021K00FKED"
+			(at 144.78 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 144.78 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 144.78 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 144.78 209.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "102bff3c-e9f6-436e-9275-3744521a5c10")
 		)
@@ -9182,27 +10294,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 294.64 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H104K050BE" (at 294.64 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 294.64 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 294.64 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 294.64 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 294.64 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 294.64 115.57 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 294.64 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H104K050BE"
+			(at 294.64 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 294.64 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 294.64 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 294.64 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 294.64 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 294.64 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "36b98f29-765f-4487-8590-5d8356839786")
 		)
@@ -9516,21 +10684,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 135.89 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040210K0FKED" (at 135.89 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 135.89 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 135.89 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 135.89 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 135.89 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040210K0FKED"
+			(at 135.89 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 135.89 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 135.89 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 135.89 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "212c3659-1b5b-4199-b270-d189ff175a4c")
 		)
