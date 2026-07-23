@@ -2939,7 +2939,7 @@
       (property "Footprint" "VFBGA264_14X14_STM" (id 2) (at 0 0 0)
         (effects (font (size 1.27 1.27) italic) hide)
       )
-      (property "Datasheet" "https://www.st.com/resource/en/datasheet/stm32n657a0.pdf" (id 3) (at 0 0 0)
+      (property "Datasheet" "https://www.st.com/resource/en/datasheet/stm32n657x0.pdf" (id 3) (at 0 0 0)
         (effects (font (size 1.27 1.27) italic) hide)
       )
       (property "ki_keywords" "STM32N657X0H3Q" (id 4) (at 0 0 0)
@@ -5415,7 +5415,7 @@
       )
     )
 
-	(symbol "AP33772SDKZ-13-FA01"
+	(symbol "AP33772SDKZ-13-FA02"
 				(exclude_from_sim no)
 				(in_bom yes)
 				(on_board yes)
@@ -5431,7 +5431,7 @@
 						)
 					)
 				)
-				(property "Value" "AP33772SDKZ-13-FA01"
+				(property "Value" "AP33772SDKZ-13-FA02"
 					(at 38.1 3.8802 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -5441,7 +5441,7 @@
 						)
 					)
 				)
-				(property "Footprint" "AP33772SDKZ13FA01"
+				(property "Footprint" "open-race-v2:WQFN-24-1EP_4x4mm_P0.5mm_EP2.70x2.70mm_AP33772S"
 					(at 26.67 -84.76 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -5465,7 +5465,7 @@
 						(justify left top)
 					)
 				)
-				(property "Description" "USB, Type-C Controller PMIC W-QFN4040-24 (Type A1)"
+				(property "Description" "USB PD 3.1 sink controller, FA02 standard firmware, W-QFN4040-24 Type A1"
 					(at 0 0 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -5500,7 +5500,7 @@
 						(justify left top)
 					)
 				)
-				(property "Manufacturer_Part_Number" "AP33772SDKZ-13-FA01"
+				(property "Manufacturer_Part_Number" "AP33772SDKZ-13-FA02"
 					(at 26.67 -584.76 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -5512,7 +5512,7 @@
 						(justify left top)
 					)
 				)
-				(property "Mouser Part Number" "621-P33772SDKZ13FA01"
+				(property "Mouser Part Number" ""
 					(at 26.67 -684.76 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -5524,7 +5524,7 @@
 						(justify left top)
 					)
 				)
-				(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/AP33772SDKZ-13-FA01?qs=2wMNvWM5ZX4CLYQ4%252BLyimw%3D%3D"
+				(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/AP33772SDKZ-13-FA02?qs=2wMNvWM5ZX4CLYQ4%252BLyimw%3D%3D"
 					(at 26.67 -784.76 0)
 					(show_name no)
 					(do_not_autoplace no)
@@ -5560,7 +5560,7 @@
 						(justify left top)
 					)
 				)
-				(symbol "AP33772SDKZ-13-FA01_1_1"
+				(symbol "AP33772SDKZ-13-FA02_1_1"
 					(rectangle
 						(start 5.08 12.7)
 						(end 25.4 -22.86)
@@ -5680,10 +5680,10 @@
 							)
 						)
 					)
-					(pin passive line
+					(pin bidirectional line
 						(at 7.62 -27.94 90)
 						(length 5.08)
-						(name "NC_2"
+						(name "GPIO"
 							(effects
 								(font
 									(size 1.27 1.27)
@@ -5752,10 +5752,10 @@
 							)
 						)
 					)
-					(pin passive line
+					(pin input line
 						(at 17.78 -27.94 90)
 						(length 5.08)
-						(name "NC_4"
+						(name "VSEL"
 							(effects
 								(font
 									(size 1.27 1.27)
@@ -7022,7 +7022,7 @@
 				(embedded_fonts no)
 			)
 
-  (symbol "MX25U51279GXDR00"
+  (symbol "IS25WP512M-RHLE"
   		(exclude_from_sim no)
   		(in_bom yes)
   		(on_board yes)
@@ -7038,7 +7038,7 @@
   				)
   			)
   		)
-  		(property "Value" "MX25U51279GXDR00"
+		(property "Value" "IS25WP512M-RHLE"
   			(at 0 0 0)
   			(show_name no)
   			(do_not_autoplace no)
@@ -7048,18 +7048,7 @@
   				)
   			)
   		)
-  		(property "Footprint" "MX66UW1G45GXDI00:BGA24C100P5X5_800X600X120"
-  			(at 0 0 0)
-  			(show_name no)
-  			(do_not_autoplace no)
-  			(hide yes)
-  			(effects
-  				(font
-  					(size 1.27 1.27)
-  				)
-  			)
-  		)
-  		(property "Datasheet" ""
+		(property "Footprint" "noob:BGA24C100P5X5_800X600X120"
   			(at 0 0 0)
   			(show_name no)
   			(do_not_autoplace no)
@@ -7070,7 +7059,7 @@
   				)
   			)
   		)
-  		(property "Description" ""
+		(property "Datasheet" "https://www.issi.com/WW/pdf/25LP-WP512M.pdf"
   			(at 0 0 0)
   			(show_name no)
   			(do_not_autoplace no)
@@ -7081,7 +7070,18 @@
   				)
   			)
   		)
-  		(symbol "MX25U51279GXDR00_0_0"
+		(property "Description" "512-Mbit 1.8 V serial NOR flash; 24-TFBGA 6x8 mm; factory 0Bh read uses 8 dummy cycles for STM32N6 ROM boot"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+		(symbol "IS25WP512M-RHLE_0_0"
   			(rectangle
   				(start -12.7 25.4)
   				(end 12.7 -16.51)
@@ -7111,10 +7111,11 @@
   					)
   				)
   			)
-  			(pin output line
-  				(at 17.78 12.7 180)
-  				(length 5.08)
-  				(name "~{ECS}"
+			(pin no_connect line
+				(at 17.78 12.7 180)
+				(length 5.08)
+				(hide yes)
+				(name "NC_A5"
   					(effects
   						(font
   							(size 1.016 1.016)
@@ -7132,7 +7133,7 @@
   			(pin input clock
   				(at -17.78 17.78 0)
   				(length 5.08)
-  				(name "SCLK"
+				(name "SCK"
   					(effects
   						(font
   							(size 1.016 1.016)
@@ -7186,7 +7187,7 @@
   			(pin input line
   				(at -17.78 22.86 0)
   				(length 5.08)
-  				(name "~{CS}"
+				(name "~{CE}"
   					(effects
   						(font
   							(size 1.016 1.016)
@@ -7204,7 +7205,7 @@
   			(pin bidirectional line
   				(at -17.78 7.62 0)
   				(length 5.08)
-  				(name "SIO2"
+				(name "IO2"
   					(effects
   						(font
   							(size 1.016 1.016)
@@ -7222,7 +7223,7 @@
   			(pin bidirectional line
   				(at -17.78 10.16 0)
   				(length 5.08)
-  				(name "SO/SIO1"
+				(name "SO/IO1"
   					(effects
   						(font
   							(size 1.016 1.016)
@@ -7240,7 +7241,7 @@
   			(pin bidirectional line
   				(at -17.78 12.7 0)
   				(length 5.08)
-  				(name "SI/SIO0"
+				(name "SI/IO0"
   					(effects
   						(font
   							(size 1.016 1.016)
@@ -7258,7 +7259,7 @@
   			(pin bidirectional line
   				(at -17.78 5.08 0)
   				(length 5.08)
-  				(name "SIO3"
+				(name "IO3"
   					(effects
   						(font
   							(size 1.016 1.016)
@@ -7274,7 +7275,7 @@
   				)
   			)
   		)
-  		(symbol "MX25U51279GXDR00_1_0"
+		(symbol "IS25WP512M-RHLE_1_0"
   			(pin no_connect line
   				(at -17.78 -3.81 0)
   				(length 5.08)
@@ -7317,7 +7318,7 @@
   				(at -17.78 1.27 0)
   				(length 5.08)
   				(hide yes)
-  				(name "DNU"
+				(name "NC_B1"
   					(effects
   						(font
   							(size 1.016 1.016)
@@ -7336,7 +7337,7 @@
   				(at -17.78 -1.27 0)
   				(length 5.08)
   				(hide yes)
-  				(name "DNU__1"
+				(name "NC_B5"
   					(effects
   						(font
   							(size 1.016 1.016)

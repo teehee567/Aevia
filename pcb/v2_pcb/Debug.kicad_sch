@@ -1409,7 +1409,7 @@
 		)
 		(uuid "586166a5-8791-4f26-abd3-e2c247a0b29e")
 	)
-	(label "NRST"
+	(global_label "NRST"
 		(at 212.09 66.04 0)
 		(effects
 			(font
@@ -1459,7 +1459,7 @@
 		)
 		(uuid "b4076522-ccdd-48d1-a4b0-01b623143750")
 	)
-	(label "NRST"
+	(global_label "NRST"
 		(at 140.97 90.17 0)
 		(effects
 			(font
@@ -1580,7 +1580,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "DEV BOOT"
+		(property "Value" "KMR223NG ULC LFG"
 			(at 120.65 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1602,7 +1602,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.littelfuse.com/assetdocs/littelfuse-ck-tactile-kmr2-series-datasheet?assetguid=f782bfc7-b600-4ab5-8c8d-a2a094a642e3"
 			(at 120.65 127 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1622,7 +1622,7 @@
 				)
 			)
 		)
-		(property "MPN" "KMR221GLFS"
+		(property "MPN" "Y78B22324FP"
 			(at 123.19 132.0799 0)
 			(hide yes)
 			(show_name no)
@@ -1633,7 +1633,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "C&K"
+		(property "Manufacturer" "Littelfuse (C&K)"
 			(at 123.19 132.0799 0)
 			(hide yes)
 			(show_name no)
@@ -1644,6 +1644,12 @@
 				)
 			)
 		)
+    (property "Contact" "Gold ULC; 1 µA minimum at 1.8 V" (at 120.65 127.0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Operating_Temperature" "-40 to +125 °C" (at 120.65 127.0 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "7ea64ada-fa06-4538-a312-c562cdf706c8")
 		)
@@ -1673,7 +1679,7 @@
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board yes)
-		(in_pos_files yes)
+		(in_pos_files no)
 		(dnp no)
 		(uuid "8ccfd2b4-98c9-4a46-b3bf-e2bfe43335e0")
 		(property "Reference" "J1"
@@ -1802,7 +1808,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.yageo.com/upload/media/product/productsearch/datasheet/rchip/PYu-RC_Group_51_RoHS_L_12.pdf"
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
 			(at 106.68 132.08 0)
 			(hide yes)
 			(show_name no)
@@ -1823,7 +1829,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC0402FR-0710KL"
+		(property "MPN" "CRCW040210K0FKED"
 			(at 109.22 137.1599 0)
 			(hide yes)
 			(show_name no)
@@ -1834,7 +1840,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Yageo"
+		(property "Manufacturer" "Vishay"
 			(at 109.22 137.1599 0)
 			(hide yes)
 			(show_name no)
@@ -1845,6 +1851,18 @@
 				)
 			)
 		)
+    (property "Tolerance" "±1%" (at 106.68 132.08 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063 W" (at 106.68 132.08 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "TCR" "±100 ppm/K" (at 106.68 132.08 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200" (at 106.68 132.08 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "6d11eab6-94cc-45e1-9caf-3edab3542652")
 		)
@@ -1888,7 +1906,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "100nF 50V X7R"
 			(at 120.65 96.52 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1910,7 +1928,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA2B3X7R1H104K050BE"
 			(at 116.84 95.25 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1930,6 +1948,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "TDK" (at 116.84 95.25 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "CGA2B3X7R1H104K050BE" (at 116.84 95.25 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50 VDC" (at 116.84 95.25 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±10%" (at 116.84 95.25 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Dielectric" "X7R" (at 116.84 95.25 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200" (at 116.84 95.25 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Termination" "Soft termination" (at 116.84 95.25 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "87f11d04-2510-447f-8f41-a4d2bf039158")
 		)
@@ -1959,7 +1998,7 @@
 		(exclude_from_sim no)
 		(in_bom no)
 		(on_board yes)
-		(in_pos_files yes)
+		(in_pos_files no)
 		(dnp no)
 		(uuid "c10cf2e9-89e3-4b6e-8f25-181831016890")
 		(property "Reference" "TP300"
