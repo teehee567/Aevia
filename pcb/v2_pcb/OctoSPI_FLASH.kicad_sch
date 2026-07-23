@@ -1261,6 +1261,12 @@
 			(embedded_fonts no)
 		)
 	)
+	(junction
+		(at 121.92 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6166ba63-40c2-4ebe-8ce2-a0f4a1784600")
+	)
 	(no_connect
 		(at 162.56 107.95)
 		(uuid "0ade860f-02be-4413-8335-0aed7f205081")
@@ -1377,16 +1383,6 @@
 	)
 	(wire
 		(pts
-			(xy 121.92 72.39) (xy 121.92 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "01a7de3a-a49c-4316-9982-398969a96c12")
-	)
-	(wire
-		(pts
 			(xy 127 93.98) (xy 123.19 93.98)
 		)
 		(stroke
@@ -1414,6 +1410,16 @@
 			(type default)
 		)
 		(uuid "279a6de7-205b-4b9b-91e5-8dff6dc34d54")
+	)
+	(wire
+		(pts
+			(xy 121.92 71.12) (xy 121.92 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2fd5fa8a-9210-4316-8a8b-5b81ee2e7b5b")
 	)
 	(wire
 		(pts
@@ -1457,7 +1463,7 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 77.47) (xy 116.84 77.47)
+			(xy 113.03 71.12) (xy 116.84 71.12)
 		)
 		(stroke
 			(width 0)
@@ -1547,7 +1553,7 @@
 	)
 	(wire
 		(pts
-			(xy 69.85 72.39) (xy 69.85 69.85)
+			(xy 69.85 71.12) (xy 69.85 69.85)
 		)
 		(stroke
 			(width 0)
@@ -1617,27 +1623,17 @@
 	)
 	(wire
 		(pts
-			(xy 69.85 76.2) (xy 69.85 77.47)
+			(xy 121.92 78.74) (xy 127 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f23f4134-64fd-4faa-8540-83fd51d71bdf")
+		(uuid "f6a3bef5-7507-41f8-a366-aa215edce7c2")
 	)
 	(wire
 		(pts
-			(xy 119.38 72.39) (xy 121.92 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f6ac9e70-ebec-4a82-a0eb-a56bbf08aa22")
-	)
-	(wire
-		(pts
-			(xy 90.17 78.74) (xy 127 78.74)
+			(xy 90.17 78.74) (xy 121.92 78.74)
 		)
 		(stroke
 			(width 0)
@@ -1706,7 +1702,7 @@
 		(uuid "5575b4af-a4a1-4c69-9e20-1dcb7d2f2d28")
 	)
 	(label "FLASH_NCS"
-		(at 123.19 76.2 0)
+		(at 113.03 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1777,7 +1773,7 @@
 	)
 	(global_label "NRST"
 		(shape bidirectional)
-		(at 116.84 77.47 180)
+		(at 113.03 71.12 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1786,7 +1782,7 @@
 		)
 		(uuid "f4699c70-28aa-4f07-ac58-c142147fa2bd")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 116.84 77.47 0)
+			(at 113.03 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1818,10 +1814,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "045e75ef-07fe-47e3-ab47-79e93672c64d")
 		(property "Reference" "U5"
-			(at 151.13 71.12 0)
+			(at 143.764 69.088 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1831,7 +1826,7 @@
 			)
 		)
 		(property "Value" "IS25WP512M-RHLE"
-			(at 151.13 73.66 0)
+			(at 144.272 72.136 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2099,7 +2094,7 @@
 			)
 		)
 		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA2B3X7R1H104K050BE"
-			(at 165.1 74.93 0)
+			(at 150.876 59.944 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2412,7 +2407,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
-			(at 90.17 74.93 0)
+			(at 90.932 69.85 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2754,7 +2749,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 69.85 74.93 0)
+		(at 69.85 73.66 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2764,7 +2759,7 @@
 		(dnp no)
 		(uuid "8320cfcf-a05d-4f15-adb0-854336396844")
 		(property "Reference" "R140"
-			(at 70.612 75.438 0)
+			(at 70.612 74.168 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2775,7 +2770,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 70.612 73.914 0)
+			(at 70.612 72.644 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2786,7 +2781,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 69.85 74.93 0)
+			(at 69.85 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2797,7 +2792,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
-			(at 70.612 76.708 0)
+			(at 70.612 81.788 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2807,7 +2802,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 69.85 74.93 0)
+			(at 69.85 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2817,7 +2812,7 @@
 			)
 		)
 		(property "Manufacturer" "Vishay"
-			(at 69.85 74.93 0)
+			(at 69.85 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2828,7 +2823,7 @@
 			)
 		)
 		(property "MPN" "CRCW040210K0FKED"
-			(at 69.85 74.93 0)
+			(at 69.85 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2839,7 +2834,7 @@
 			)
 		)
 		(property "Tolerance" "±1%"
-			(at 69.85 74.93 0)
+			(at 69.85 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2850,7 +2845,7 @@
 			)
 		)
 		(property "Power" "0.063 W"
-			(at 69.85 74.93 0)
+			(at 69.85 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2861,7 +2856,7 @@
 			)
 		)
 		(property "TCR" "±100 ppm/K"
-			(at 69.85 74.93 0)
+			(at 69.85 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2972,7 +2967,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_Schottky_Small")
-		(at 119.38 74.93 90)
+		(at 119.38 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2982,7 +2977,7 @@
 		(dnp no)
 		(uuid "8c932d63-3f71-4a43-94ee-62dd55e0299e")
 		(property "Reference" "D4"
-			(at 117.348 73.66 90)
+			(at 120.65 69.088 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2992,8 +2987,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "BAT54HT1G"
-			(at 121.412 67.818 90)
+		(property "Value" "BAT54XV2T1G"
+			(at 126.492 73.152 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3003,8 +2998,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-323"
-			(at 119.38 74.93 90)
+		(property "Footprint" "Diode_SMD:D_SOD-523"
+			(at 119.38 71.12 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3015,7 +3010,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.onsemi.com/pdf/datasheet/bat54ht1-d.pdf"
-			(at 119.38 74.93 0)
+			(at 104.902 54.102 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3025,7 +3020,7 @@
 			)
 		)
 		(property "Description" "Schottky reset-isolation diode, SOD-323; pin 1 cathode to NRST, pin 2 anode to FLASH_RESET_N"
-			(at 119.38 74.93 0)
+			(at 99.822 54.356 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3035,7 +3030,7 @@
 			)
 		)
 		(property "MPN" "BAT54HT1G"
-			(at 121.92 80.0099 0)
+			(at 114.3001 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3046,7 +3041,7 @@
 			)
 		)
 		(property "Manufacturer" "onsemi"
-			(at 121.92 80.0099 0)
+			(at 114.3001 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
