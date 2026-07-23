@@ -1148,6 +1148,413 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Power_Protection:TVS2200DRV"
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 2.54 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "TVS2200DRV"
+				(at 2.54 -1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_SON:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm"
+				(at 5.08 -8.89 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tvs2200.pdf"
+				(at -2.54 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Flat-Clamp Surge Protection Device. 22Vrwm, WSON-6"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "EMI, ESD, TVS protection transient"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "WSON*1EP*2x2mm*P0.65mm*EP1x1.6mm*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TVS2200DRV_0_0"
+				(rectangle
+					(start -11.43 2.54)
+					(end -5.08 -2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -8.255 2.54) (xy -8.255 3.81) (xy 0 3.81)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -8.255 -2.54) (xy -8.255 -3.81) (xy 0 -3.81)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.27) (xy -1.778 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(text "Det &"
+					(at -8.255 0.635 0)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(text "Drv"
+					(at -8.255 -1.27 0)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(symbol "TVS2200DRV_0_1"
+				(rectangle
+					(start -12.065 5.08)
+					(end 2.54 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.286 1.397) (xy -2.286 -1.524)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.286 0) (xy -5.08 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.778 1.778) (xy -1.778 -1.778)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -0.889 0)
+					(radius 2.794)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.127 -1.27) (xy -1.143 -1.651) (xy -1.143 -0.889) (xy -0.127 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 5.08) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 0 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 0 -1.27) (xy -1.778 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TVS2200DRV_1_1"
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "IN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 7.62 270)
+					(length 2.54)
+					(hide yes)
+					(name "IN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 7.62 270)
+					(length 2.54)
+					(hide yes)
+					(name "IN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(hide yes)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Power_Supervisor:TPS3808DBV"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1346,6 +1753,200 @@
 						)
 					)
 					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Regulator_Linear:TLV75533PDBV"
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at -3.81 5.715 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TLV75533PDBV"
+				(at 0 5.715 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+				(at 0 8.255 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tlv755p.pdf"
+				(at 0 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "500mA Low Dropout Voltage Regulator, Fixed Output 3.3V, SOT-23-5"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "LDO Regulator Fixed Positive"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "SOT?23*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TLV75533PDBV_0_1"
+				(rectangle
+					(start -5.08 4.445)
+					(end 5.08 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "TLV75533PDBV_1_1"
+				(pin power_in line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "IN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at 5.08 0 180)
+					(length 2.54)
+					(hide yes)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 7.62 2.54 180)
+					(length 2.54)
+					(name "OUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4295,607 +4896,18 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Regulator_Linear:TLV75533PDBV"
-			(pin_names
-				(offset 0.254)
+	)
+	(text "SPR ONLY: D3 TVS2200 prohibits 28 V EPR. Firmware must clear EPR_MODE_EN, accept only <=20 V PDOs, and validate VCC overshoot on the worst cable."
+		(exclude_from_sim no)
+		(at 200 105 0)
+		(effects
+			(font
+				(size 1 1)
+				(bold yes)
 			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at -3.81 5.715 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "TLV75533PDBV"
-				(at 0 5.715 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
-				(at 0 8.255 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-				)
-			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tlv755p.pdf"
-				(at 0 1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "500mA Low Dropout Voltage Regulator, Fixed Output 3.3V, SOT-23-5"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "LDO Regulator Fixed Positive"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SOT?23*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "TLV75533PDBV_0_1"
-				(rectangle
-					(start -5.08 4.445)
-					(end 5.08 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-			)
-			(symbol "TLV75533PDBV_1_1"
-				(pin power_in line
-					(at -7.62 2.54 0)
-					(length 2.54)
-					(name "IN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -7.62 0 0)
-					(length 2.54)
-					(name "EN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at 5.08 0 180)
-					(length 2.54)
-					(hide yes)
-					(name "NC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at 7.62 2.54 180)
-					(length 2.54)
-					(name "OUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
+			(justify left bottom)
 		)
-		(symbol "Power_Protection:TVS2200DRV"
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at 2.54 1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "TVS2200DRV"
-				(at 2.54 -1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_SON:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm"
-				(at 5.08 -8.89 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tvs2200.pdf"
-				(at -2.54 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Flat-Clamp Surge Protection Device. 22Vrwm, WSON-6"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "EMI, ESD, TVS protection transient"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "WSON*1EP*2x2mm*P0.65mm*EP1x1.6mm*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "TVS2200DRV_0_0"
-				(rectangle
-					(start -11.43 2.54)
-					(end -5.08 -2.54)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -8.255 2.54) (xy -8.255 3.81) (xy 0 3.81)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -8.255 -2.54) (xy -8.255 -3.81) (xy 0 -3.81)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 1.27) (xy -1.778 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(text "Det &"
-					(at -8.255 0.635 0)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(text "Drv"
-					(at -8.255 -1.27 0)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(symbol "TVS2200DRV_0_1"
-				(rectangle
-					(start -12.065 5.08)
-					(end 2.54 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.286 1.397) (xy -2.286 -1.524)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.286 0) (xy -5.08 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.778 1.778) (xy -1.778 -1.778)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center -0.889 0)
-					(radius 2.794)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.127 -1.27) (xy -1.143 -1.651) (xy -1.143 -0.889) (xy -0.127 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 5.08) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -2.54) (xy 0 -5.08)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -2.54) (xy 0 -1.27) (xy -1.778 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "TVS2200DRV_1_1"
-				(pin power_in line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(hide yes)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(hide yes)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 7.62 270)
-					(length 2.54)
-					(name "IN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 7.62 270)
-					(length 2.54)
-					(hide yes)
-					(name "IN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 7.62 270)
-					(length 2.54)
-					(hide yes)
-					(name "IN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(hide yes)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
+		(uuid "160fbbfc-d295-4387-9441-aa39d1042d7d")
 	)
 	(text "USB PD RELEASE GATE — SPR/PPS ONLY: at startup write PDCONFIG=0x02 (clear EPR_MODE_EN); reject PDO8–13/AVS; never request >20.0 V. TPD8S300A is not EPR-rated."
 		(exclude_from_sim no)
@@ -4981,12 +4993,6 @@
 		(uuid "534f1e9c-cf9a-47a5-8c58-cb77e98bb0e9")
 	)
 	(junction
-		(at 82.55 74.93)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5a344903-249f-42e6-9414-317a7f9dacfb")
-	)
-	(junction
 		(at 157.48 111.76)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5029,10 +5035,6 @@
 		(uuid "fc49c806-dfc7-4e28-8e46-c22d7e8c2f0b")
 	)
 	(no_connect
-		(at 134.62 81.28)
-		(uuid "5dfd17b7-cb5e-4b91-bdd4-628047cab7bd")
-	)
-	(no_connect
 		(at 60.96 111.76)
 		(uuid "0128c5f3-ea82-40cd-9236-e4d2be11784f")
 	)
@@ -5051,6 +5053,10 @@
 	(no_connect
 		(at 421.64 193.04)
 		(uuid "33ea0500-0ab7-49ff-9fc6-ddda7051d4c9")
+	)
+	(no_connect
+		(at 134.62 81.28)
+		(uuid "5dfd17b7-cb5e-4b91-bdd4-628047cab7bd")
 	)
 	(no_connect
 		(at 78.74 137.16)
@@ -5274,6 +5280,16 @@
 	)
 	(wire
 		(pts
+			(xy 330.2 63.5) (xy 330.2 187.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2a29e6e9-4e2e-4db3-b878-f72a3e03f5ea")
+	)
+	(wire
+		(pts
 			(xy 421.64 175.26) (xy 421.64 177.8)
 		)
 		(stroke
@@ -5281,6 +5297,16 @@
 			(type default)
 		)
 		(uuid "2a2f8c1f-289c-4730-8a44-44b444435231")
+	)
+	(wire
+		(pts
+			(xy 330.2 189.23) (xy 330.2 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2baaa8cb-21ac-471a-9e5f-f6c3f30e618d")
 	)
 	(wire
 		(pts
@@ -5454,6 +5480,26 @@
 	)
 	(wire
 		(pts
+			(xy 137.16 78.74) (xy 142.24 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "520991df-d09b-4f9d-b876-34fc0b7791f4")
+	)
+	(wire
+		(pts
+			(xy 111.76 115.57) (xy 111.76 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "52927811-a424-4d9d-a556-6a318a159924")
+	)
+	(wire
+		(pts
 			(xy 82.55 74.93) (xy 83.82 74.93)
 		)
 		(stroke
@@ -5481,26 +5527,6 @@
 			(type default)
 		)
 		(uuid "5d0ba88c-4609-4d61-a21b-9c8d274633c5")
-	)
-	(wire
-		(pts
-			(xy 91.44 113.03) (xy 121.92 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9ddcdbba-3367-4813-ab3c-2ee5e117a901")
-	)
-	(wire
-		(pts
-			(xy 121.92 113.03) (xy 121.92 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f3477126-3986-4dca-8ea6-407eb440affe")
 	)
 	(wire
 		(pts
@@ -5541,6 +5567,16 @@
 			(type default)
 		)
 		(uuid "64d4cd02-dac3-47ed-833d-11f613f4f8df")
+	)
+	(wire
+		(pts
+			(xy 121.92 81.28) (xy 121.92 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "655a1af9-a58d-478d-a609-4074a024b86a")
 	)
 	(wire
 		(pts
@@ -5604,6 +5640,16 @@
 	)
 	(wire
 		(pts
+			(xy 142.24 78.74) (xy 142.24 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d7f7f5e-a716-431c-9074-e622d854f424")
+	)
+	(wire
+		(pts
 			(xy 205.74 114.3) (xy 226.06 114.3)
 		)
 		(stroke
@@ -5641,6 +5687,16 @@
 			(type default)
 		)
 		(uuid "79985874-1313-40f5-b4b6-79023ebea1e6")
+	)
+	(wire
+		(pts
+			(xy 116.84 88.9) (xy 129.54 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7a873e36-24be-4a3d-8515-1ed40386cd37")
 	)
 	(wire
 		(pts
@@ -5704,16 +5760,6 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 177.8) (xy 322.58 177.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b3abbf16-2f97-41e2-81d2-b3c75d9c604a")
-	)
-	(wire
-		(pts
 			(xy 149.86 96.52) (xy 160.02 96.52)
 		)
 		(stroke
@@ -5741,26 +5787,6 @@
 			(type default)
 		)
 		(uuid "8f4ea714-1758-49cc-81e3-10a082e1b29d")
-	)
-	(wire
-		(pts
-			(xy 33.02 63.5) (xy 330.2 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fbd12af3-c4c9-4dc7-ab0c-f10f82366e22")
-	)
-	(wire
-		(pts
-			(xy 330.2 63.5) (xy 330.2 187.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2a29e6e9-4e2e-4db3-b878-f72a3e03f5ea")
 	)
 	(wire
 		(pts
@@ -5811,6 +5837,16 @@
 			(type default)
 		)
 		(uuid "9993e558-c43e-4291-84a4-ae261700eae1")
+	)
+	(wire
+		(pts
+			(xy 91.44 113.03) (xy 121.92 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ddcdbba-3367-4813-ab3c-2ee5e117a901")
 	)
 	(wire
 		(pts
@@ -5904,26 +5940,6 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 115.57) (xy 111.76 115.57)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c5297bc2-14a3-4113-b163-097bb59652f4")
-	)
-	(wire
-		(pts
-			(xy 111.76 115.57) (xy 111.76 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "52927811-a424-4d9d-a556-6a318a159924")
-	)
-	(wire
-		(pts
 			(xy 205.74 116.84) (xy 226.06 116.84)
 		)
 		(stroke
@@ -5934,6 +5950,16 @@
 	)
 	(wire
 		(pts
+			(xy 81.28 177.8) (xy 322.58 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3abbf16-2f97-41e2-81d2-b3c75d9c604a")
+	)
+	(wire
+		(pts
 			(xy 73.66 137.16) (xy 73.66 139.7)
 		)
 		(stroke
@@ -5941,6 +5967,16 @@
 			(type default)
 		)
 		(uuid "b4cb4547-5090-48fe-a1bd-8d281150bd18")
+	)
+	(wire
+		(pts
+			(xy 129.54 88.9) (xy 142.24 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b57be4cb-b861-4af4-a32d-4f6dacc4c421")
 	)
 	(wire
 		(pts
@@ -5961,6 +5997,16 @@
 			(type default)
 		)
 		(uuid "b99e0c88-eb18-423c-8d63-f9e7563b615f")
+	)
+	(wire
+		(pts
+			(xy 50.8 191.77) (xy 330.2 191.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcb32c01-a91d-4515-b16d-81f49876ff0a")
 	)
 	(wire
 		(pts
@@ -5994,26 +6040,6 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 191.77) (xy 330.2 191.77)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bcb32c01-a91d-4515-b16d-81f49876ff0a")
-	)
-	(wire
-		(pts
-			(xy 330.2 191.77) (xy 330.2 193.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e0fc43b6-84c6-4b06-a615-8ac79cf82feb")
-	)
-	(wire
-		(pts
 			(xy 226.06 97.79) (xy 224.79 97.79)
 		)
 		(stroke
@@ -6021,6 +6047,26 @@
 			(type default)
 		)
 		(uuid "bf8916a8-d45d-4fa1-b8f0-64a23d46437a")
+	)
+	(wire
+		(pts
+			(xy 116.84 78.74) (xy 116.84 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c0625f56-b8ce-4db7-ba95-c114ff02fd47")
+	)
+	(wire
+		(pts
+			(xy 91.44 115.57) (xy 111.76 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c5297bc2-14a3-4113-b163-097bb59652f4")
 	)
 	(wire
 		(pts
@@ -6041,16 +6087,6 @@
 			(type default)
 		)
 		(uuid "ca3a0b8f-8287-4c50-a554-ebed79447d7e")
-	)
-	(wire
-		(pts
-			(xy 330.2 189.23) (xy 330.2 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2baaa8cb-21ac-471a-9e5f-f6c3f30e618d")
 	)
 	(wire
 		(pts
@@ -6091,16 +6127,6 @@
 			(type default)
 		)
 		(uuid "d0826fa9-06d8-4a4a-9aa7-732b987fc1d4")
-	)
-	(wire
-		(pts
-			(xy 378.46 185.42) (xy 378.46 193.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f2138421-22e5-4874-9cbb-acae4fa2f042")
 	)
 	(wire
 		(pts
@@ -6164,6 +6190,16 @@
 	)
 	(wire
 		(pts
+			(xy 330.2 191.77) (xy 330.2 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e0fc43b6-84c6-4b06-a615-8ac79cf82feb")
+	)
+	(wire
+		(pts
 			(xy 106.68 116.84) (xy 106.68 123.19)
 		)
 		(stroke
@@ -6171,6 +6207,16 @@
 			(type default)
 		)
 		(uuid "e3f421f0-6a13-4d3e-8f8c-16d2b6976aec")
+	)
+	(wire
+		(pts
+			(xy 121.92 78.74) (xy 116.84 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e4e21466-e4a4-47ec-a195-476c28168bdb")
 	)
 	(wire
 		(pts
@@ -6204,6 +6250,26 @@
 	)
 	(wire
 		(pts
+			(xy 378.46 185.42) (xy 378.46 193.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f2138421-22e5-4874-9cbb-acae4fa2f042")
+	)
+	(wire
+		(pts
+			(xy 121.92 113.03) (xy 121.92 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3477126-3986-4dca-8ea6-407eb440affe")
+	)
+	(wire
+		(pts
 			(xy 100.33 132.08) (xy 100.33 133.35)
 		)
 		(stroke
@@ -6211,6 +6277,16 @@
 			(type default)
 		)
 		(uuid "f4b6feda-d5f0-4ce6-84c3-4a4774031e52")
+	)
+	(wire
+		(pts
+			(xy 33.02 63.5) (xy 330.2 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fbd12af3-c4c9-4dc7-ab0c-f10f82366e22")
 	)
 	(wire
 		(pts
@@ -6332,16 +6408,6 @@
 		)
 		(uuid "2ccf388f-823a-4ca6-ae34-6ff7d14c977e")
 	)
-	(label "USB_PD_GATE"
-		(at 63.5 78.74 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "f7211bf5-6328-45d8-a9a0-ee40f8a4efb3")
-	)
 	(label "VBUS_PD"
 		(at 312.42 30.48 0)
 		(effects
@@ -6392,6 +6458,16 @@
 		)
 		(uuid "5d83fa20-8645-465c-8e34-2022c003104f")
 	)
+	(label "USB_PROT_3V3_AON"
+		(at 205.74 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "61a4c734-97e1-491d-8dc5-f5cf31a6afc0")
+	)
 	(label "USB_PD_FET_COMMON"
 		(at 363.22 40.64 0)
 		(effects
@@ -6411,6 +6487,16 @@
 			(justify left bottom)
 		)
 		(uuid "69abc833-3055-4cc0-8e59-c8bd9ddcc272")
+	)
+	(label "AP_V5V"
+		(at 81.28 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6beb4233-3878-4409-96e0-3a8d747f5c63")
 	)
 	(label "AP_OTP"
 		(at 100.33 121.92 0)
@@ -6481,6 +6567,16 @@
 			(justify left bottom)
 		)
 		(uuid "95a39c95-e3f4-468a-94cf-9d397b373a70")
+	)
+	(label "AP_V5V"
+		(at 116.84 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "97e598c3-9a6e-4617-a373-03794191470b")
 	)
 	(label "USBPD_SCL"
 		(at 309.88 190.5 0)
@@ -6572,6 +6668,16 @@
 		)
 		(uuid "d472e956-50bd-4d70-9604-b0b59ff15449")
 	)
+	(label "USB_PROT_3V3_AON"
+		(at 142.24 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "da579bbf-c8be-4f0c-914d-49e601ed9185")
+	)
 	(label "AP_USBPD_SDA_5V"
 		(at 33.02 116.84 0)
 		(effects
@@ -6592,6 +6698,26 @@
 		)
 		(uuid "edf16ff9-83d7-4d73-aa72-de20f2ee971e")
 	)
+	(label "AP_ISENP"
+		(at 270.51 72.39 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f2aba872-5011-4312-8431-143812883c7c")
+	)
+	(label "USB_PD_GATE"
+		(at 63.5 78.74 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "f7211bf5-6328-45d8-a9a0-ee40f8a4efb3")
+	)
 	(label "AP_USBPD_SCL_5V"
 		(at 33.02 119.38 0)
 		(effects
@@ -6611,6 +6737,28 @@
 			(justify left bottom)
 		)
 		(uuid "fc617e13-83c5-4884-bd6e-8ad996055e7b")
+	)
+	(global_label "GND"
+		(shape bidirectional)
+		(at 270.51 87.63 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d90b4b56-2dac-41be-be31-2587fa082395")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 270.51 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 	)
 	(hierarchical_label "{USB_IF}"
 		(shape bidirectional)
@@ -6701,9 +6849,17 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Global Connector Technology (GCT)" (at 241.3 107.95 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Global Connector Technology (GCT)"
+			(at 241.3 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "A1"
 			(uuid "1c6a0054-e927-4f50-844d-88421122989f")
 		)
@@ -6831,21 +6987,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 71.12 143.51 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW06031K00FKEA" (at 71.12 143.51 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 71.12 143.51 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 71.12 143.51 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 71.12 143.51 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 71.12 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW06031K00FKEA"
+			(at 71.12 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 71.12 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 71.12 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 71.12 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f94437ed-352b-4015-84b9-0bb79b608f02")
 		)
@@ -7160,21 +7356,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 408.94 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW060388K7FKEA" (at 408.94 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 408.94 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 408.94 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 408.94 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 408.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW060388K7FKEA"
+			(at 408.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 408.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 408.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 408.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "3318cbbf-7381-423d-9120-a2628ab0cadf")
 		)
@@ -7419,27 +7655,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 81.28 139.7 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA3E2X7R1H104K080AE" (at 81.28 139.7 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 81.28 139.7 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 81.28 139.7 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 81.28 139.7 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 81.28 139.7 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 81.28 139.7 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 81.28 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E2X7R1H104K080AE"
+			(at 81.28 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 81.28 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 81.28 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 81.28 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 81.28 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 81.28 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a82c5abf-2e6c-4690-8272-553eb5225fb9")
 		)
@@ -7613,6 +7905,82 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 129.54 88.9 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "2e51ff49-8acd-48ef-b2e4-bfc74cbb2298")
+		(property "Reference" "#PWR00387"
+			(at 129.54 82.55 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 129.54 85.09 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 129.54 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 129.54 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\", ground"
+			(at 129.54 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f2357c46-6cb0-47c2-89fe-edf4d5dbb283")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
+					(reference "#PWR00387")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 210.82 85.09 270)
 		(unit 1)
@@ -7677,27 +8045,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 210.82 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA4J3X7R1H105K125AE" (at 210.82 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 210.82 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 210.82 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 210.82 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 210.82 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 210.82 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 210.82 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA4J3X7R1H105K125AE"
+			(at 210.82 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 210.82 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 210.82 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 210.82 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 210.82 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 210.82 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c17bcbd0-8f53-4600-b128-b32c3ab37046")
 		)
@@ -7778,27 +8202,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 90.17 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA4J3X7R1H105K125AE" (at 90.17 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 90.17 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 90.17 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 90.17 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 90.17 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 90.17 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 90.17 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA4J3X7R1H105K125AE"
+			(at 90.17 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 90.17 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 90.17 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 90.17 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 90.17 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 90.17 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "adf04e51-2eb0-4c63-adeb-932d915b12f9")
 		)
@@ -7954,20 +8434,24 @@
 		)
 		(property "Manufacturer" "Diodes Incorporated"
 			(at 60.96 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
 			)
 		)
 		(property "Design_Note" "SPR/PPS-only build: pin 7 GPIO intentionally NC; pin 11 VSEL intentionally floating for 5 V default. At startup write PDCONFIG=0x02 to clear EPR_MODE_EN; reject PDO8-13 and all AVS/EPR requests."
 			(at 60.96 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
 			)
 		)
 		(pin "15"
@@ -8132,9 +8616,17 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Texas Instruments" (at 205.74 116.84 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Texas Instruments"
+			(at 205.74 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "11"
 			(uuid "56f051e1-3251-479f-816b-b0acb0f3584c")
 		)
@@ -8430,21 +8922,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 45.72 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW0603200RFKEA" (at 45.72 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 45.72 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 45.72 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 45.72 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 45.72 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW0603200RFKEA"
+			(at 45.72 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 45.72 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 45.72 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 45.72 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "d67fd845-1b37-438d-bcfb-b268ab41e9de")
 		)
@@ -8455,6 +8987,135 @@
 			(project "open-race_v2"
 				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
 					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Power_Protection:TVS2200DRV")
+		(at 270.51 80.01 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4acf9ad7-e8d8-41cb-82e6-35f575694941")
+		(property "Reference" "D3"
+			(at 273.05 81.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TVS2200DRVR"
+			(at 273.05 78.74 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "open-race-v2:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm_TVS2200"
+			(at 275.59 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tvs2200.pdf"
+			(at 267.97 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Flat-Clamp Surge Protection Device. 22Vrwm, WSON-6"
+			(at 270.51 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Texas Instruments"
+			(at 270.51 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "TVS2200DRVR"
+			(at 270.51 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Design_Note" "SPR-only raw VBUS clamp. Place at USB receptacle AP_ISENP-to-GND with minimum loop and ground vias. Prohibits 28 V EPR; bench-verify AP33772 VCC overshoot."
+			(at 270.51 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0729efeb-65c7-40e9-a489-dd35f692f18a")
+		)
+		(pin "2"
+			(uuid "92553c5f-797d-4489-bd2a-6c75561b8ae5")
+		)
+		(pin "3"
+			(uuid "1fadf366-dc48-405f-855e-471a483edc54")
+		)
+		(pin "4"
+			(uuid "5bb70b5e-e841-42a2-808a-6201a8e92623")
+		)
+		(pin "5"
+			(uuid "94e3b46d-0df8-42bd-a388-4894fe8fe4b5")
+		)
+		(pin "6"
+			(uuid "16e3320d-b472-48e6-89fe-ce70715db1e5")
+		)
+		(pin "7"
+			(uuid "8ba85841-64e7-42ba-8615-4331f66af8b0")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
+					(reference "D3")
 					(unit 1)
 				)
 			)
@@ -8527,27 +9188,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 106.68 125.73 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA3E2X7R1H104K080AE" (at 106.68 125.73 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 106.68 125.73 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 106.68 125.73 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 106.68 125.73 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 106.68 125.73 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 106.68 125.73 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 106.68 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E2X7R1H104K080AE"
+			(at 106.68 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 106.68 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 106.68 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 106.68 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 106.68 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 106.68 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "7b77b085-fffe-4855-8ae7-dc5cefccc04d")
 		)
@@ -9109,21 +9826,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 226.06 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW060310K0FKEA" (at 226.06 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 226.06 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 226.06 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 226.06 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 226.06 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW060310K0FKEA"
+			(at 226.06 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 226.06 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 226.06 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 226.06 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c8a41df2-05be-49e2-b552-23fdc5ff5eae")
 		)
@@ -9281,27 +10038,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 106.68 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA4J3X7R1H105K125AE" (at 106.68 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 106.68 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 106.68 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 106.68 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 106.68 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 106.68 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 106.68 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA4J3X7R1H105K125AE"
+			(at 106.68 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 106.68 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 106.68 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 106.68 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 106.68 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 106.68 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "22a25c78-8c76-4267-9ea2-8d2c6ff74761")
 		)
@@ -9778,21 +10591,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 421.64 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW060310K0FKEA" (at 421.64 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 421.64 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 421.64 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 421.64 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 421.64 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW060310K0FKEA"
+			(at 421.64 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 421.64 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 421.64 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 421.64 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "777eed57-9348-4c03-8f74-33b180c8aa20")
 		)
@@ -9971,6 +10824,287 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 116.84 86.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8d71ab06-609e-41f4-b973-d5e409008d6c")
+		(property "Reference" "C255"
+			(at 116.84 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1uF 25V X7R"
+			(at 116.84 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA3E1X7R1E105K080AE"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "TDK"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E1X7R1E105K080AE"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "25 VDC"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 116.84 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "60d5467c-d8a5-4dbe-a577-6a9f8eea6593")
+		)
+		(pin "2"
+			(uuid "81b18ee0-60ce-4f3f-9879-c353e82e50ac")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
+					(reference "C255")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Regulator_Linear:TLV75533PDBV")
+		(at 129.54 81.28 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "9606230e-d70b-4b76-af13-873c61b21972")
+		(property "Reference" "U26"
+			(at 129.54 76.2 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TLV75533PDBVR"
+			(at 129.54 91.44 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+			(at 129.54 89.535 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tlv755p.pdf"
+			(at 129.54 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "500mA Low Dropout Voltage Regulator, Fixed Output 3.3V, SOT-23-5"
+			(at 129.54 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Texas Instruments"
+			(at 129.54 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "TLV75533PDBVR"
+			(at 129.54 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Design_Note" "Always-on USB protection rail; IN and EN from AP_V5V, OUT powers U4 VPWR only"
+			(at 129.54 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6add82b7-50c2-4743-b23a-f55e8220f808")
+		)
+		(pin "2"
+			(uuid "941ed379-6841-49d9-81ec-69035d4e26fd")
+		)
+		(pin "3"
+			(uuid "6395bdc1-7ad0-4193-a4c4-5c426779d3a7")
+		)
+		(pin "4"
+			(uuid "9e5d6586-ccb1-4e18-a642-838b5484ea8c")
+		)
+		(pin "5"
+			(uuid "2c5d01dc-92ca-498e-849c-0b38f841ecf6")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
+					(reference "U26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 106.68 88.9 0)
 		(unit 1)
@@ -10112,21 +11246,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 391.16 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW0603100KFKEA" (at 391.16 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 391.16 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 391.16 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 391.16 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 391.16 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW0603100KFKEA"
+			(at 391.16 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 391.16 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 391.16 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 391.16 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "83691caa-774a-4ea4-94a2-70ff3875aa14")
 		)
@@ -10212,27 +11386,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 444.5 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA3E2X7R1H104K080AE" (at 444.5 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 444.5 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 444.5 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 444.5 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 444.5 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 444.5 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 444.5 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E2X7R1H104K080AE"
+			(at 444.5 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 444.5 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 444.5 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 444.5 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 444.5 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 444.5 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "ab707d0c-8313-4eaf-b729-d5561531a861")
 		)
@@ -10249,6 +11479,164 @@
 			(project "simple_circuit"
 				(path "/7e2e2180-ce84-433c-80e7-480362cfb862"
 					(reference "C253")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 142.24 86.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a24bfaeb-ba3f-4b78-963b-25fc58192f53")
+		(property "Reference" "C256"
+			(at 142.24 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1uF 25V X7R"
+			(at 142.24 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA3E1X7R1E105K080AE"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "TDK"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E1X7R1E105K080AE"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "25 VDC"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 142.24 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "891d5b0b-28ea-4d56-8068-d5465d8dba4c")
+		)
+		(pin "2"
+			(uuid "b9760701-ec4a-4b05-bbfd-3d9e88809747")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
+					(reference "C256")
 					(unit 1)
 				)
 			)
@@ -10499,21 +11887,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Broadcom" (at 71.12 149.86 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Color" "Yellow green" (at 71.12 149.86 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "Automotive qualified" (at 71.12 149.86 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40 to +100 °C" (at 71.12 149.86 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Current" "20 mA maximum; visual-qualify at fitted 1 kΩ drive" (at 71.12 149.86 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Broadcom"
+			(at 71.12 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Color" "Yellow green"
+			(at 71.12 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "Automotive qualified"
+			(at 71.12 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40 to +100 °C"
+			(at 71.12 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Current" "20 mA maximum; visual-qualify at fitted 1 kΩ drive"
+			(at 71.12 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "8d7d519a-bfbc-45a2-b95d-d76076d1e7ce")
 		)
@@ -10593,27 +12021,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 365.76 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA3E2X7R1H104K080AE" (at 365.76 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 365.76 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 365.76 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 365.76 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 365.76 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 365.76 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 365.76 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E2X7R1H104K080AE"
+			(at 365.76 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 365.76 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 365.76 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 365.76 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 365.76 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 365.76 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "139bc514-a19c-4e87-83d5-11e7963ed194")
 		)
@@ -10711,21 +12195,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay Dale" (at 86.36 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 86.36 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "1.0 W at 70 °C" (at 86.36 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±75 ppm/K" (at 86.36 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 86.36 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay Dale"
+			(at 86.36 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 86.36 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "1.0 W at 70 °C"
+			(at 86.36 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±75 ppm/K"
+			(at 86.36 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 86.36 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "72c8d478-d7e5-4cb9-8d8a-061727ec37cb")
 		)
@@ -10966,21 +12490,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 63.5 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW06036K20FKEA" (at 63.5 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 63.5 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 63.5 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 63.5 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 63.5 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW06036K20FKEA"
+			(at 63.5 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 63.5 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 63.5 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 63.5 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "36832996-f0a2-47a2-92a8-2e62a049ed45")
 		)
@@ -11231,9 +12795,17 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Murata" (at 100.33 128.27 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Murata"
+			(at 100.33 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "40c05cf3-cdcb-4607-8f9c-a78ec9d265de")
 		)
@@ -11313,21 +12885,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 378.46 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW060310K0FKEA" (at 378.46 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 378.46 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 378.46 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 378.46 190.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 378.46 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW060310K0FKEA"
+			(at 378.46 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 378.46 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 378.46 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 378.46 190.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "3c01f44b-8802-4142-a327-d402f8628e04")
 		)
@@ -11539,27 +13151,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 457.2 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA3E2C0G2A102J080AE" (at 457.2 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "100 VDC" (at 457.2 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±5%" (at 457.2 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "C0G" (at 457.2 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 457.2 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 457.2 177.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 457.2 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E2C0G2A102J080AE"
+			(at 457.2 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "100 VDC"
+			(at 457.2 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±5%"
+			(at 457.2 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "C0G"
+			(at 457.2 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 457.2 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 457.2 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "8a41df09-89f3-48ae-b8ad-598540b1b723")
 		)
@@ -11789,21 +13457,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 111.76 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW06035K10FKEA" (at 111.76 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 111.76 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 111.76 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 111.76 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 111.76 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW06035K10FKEA"
+			(at 111.76 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 111.76 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 111.76 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 111.76 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "8fb817f2-c617-4f68-b85c-53edea6e2c25")
 		)
@@ -12046,27 +13754,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 353.06 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA3E2X7R1H104K080AE" (at 353.06 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 353.06 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 353.06 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 353.06 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 353.06 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 353.06 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 353.06 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E2X7R1H104K080AE"
+			(at 353.06 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 353.06 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 353.06 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 353.06 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 353.06 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 353.06 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "569968de-7dab-4900-acf4-b41395acffee")
 		)
@@ -12307,27 +14071,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 213.36 111.76 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA3E2X7R1H104K080AE" (at 213.36 111.76 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 213.36 111.76 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 213.36 111.76 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 213.36 111.76 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 213.36 111.76 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 213.36 111.76 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 213.36 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA3E2X7R1H104K080AE"
+			(at 213.36 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 213.36 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 213.36 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 213.36 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 213.36 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 213.36 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a82a75be-f8d8-45d1-af04-1d34845c6d02")
 		)
@@ -12564,21 +14384,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 121.92 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW06035K10FKEA" (at 121.92 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 121.92 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.10 W" (at 121.92 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 121.92 132.08 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 121.92 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW06035K10FKEA"
+			(at 121.92 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 121.92 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.10 W"
+			(at 121.92 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 121.92 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "294e3734-bed0-42af-8f34-d63e3cbd2eaa")
 		)
@@ -12678,705 +14538,5 @@
 				)
 			)
 		)
-	)
-	(symbol
-		(lib_id "Regulator_Linear:TLV75533PDBV")
-		(at 129.54 81.28 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9606230e-d70b-4b76-af13-873c61b21972")
-		(property "Reference" "U26"
-			(at 129.54 76.2 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TLV75533PDBVR"
-			(at 129.54 91.44 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
-			(at 129.54 89.535 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tlv755p.pdf"
-			(at 129.54 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "500mA Low Dropout Voltage Regulator, Fixed Output 3.3V, SOT-23-5"
-			(at 129.54 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "Texas Instruments"
-			(at 129.54 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "TLV75533PDBVR"
-			(at 129.54 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Design_Note" "Always-on USB protection rail; IN and EN from AP_V5V, OUT powers U4 VPWR only"
-			(at 129.54 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6add82b7-50c2-4743-b23a-f55e8220f808")
-		)
-		(pin "2"
-			(uuid "941ed379-6841-49d9-81ec-69035d4e26fd")
-		)
-		(pin "3"
-			(uuid "6395bdc1-7ad0-4193-a4c4-5c426779d3a7")
-		)
-		(pin "4"
-			(uuid "9e5d6586-ccb1-4e18-a642-838b5484ea8c")
-		)
-		(pin "5"
-			(uuid "2c5d01dc-92ca-498e-849c-0b38f841ecf6")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
-					(reference "U26")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 116.84 86.36 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8d71ab06-609e-41f4-b973-d5e409008d6c")
-		(property "Reference" "C255"
-			(at 116.84 83.82 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1uF 25V X7R"
-			(at 116.84 88.9 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 116.84 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA3E1X7R1E105K080AE"
-			(at 116.84 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 116.84 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "TDK"
-			(at 116.84 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "CGA3E1X7R1E105K080AE"
-			(at 116.84 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-    (property "Voltage" "25 VDC" (at 116.84 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 116.84 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 116.84 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 116.84 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 116.84 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-		(pin "1"
-			(uuid "60d5467c-d8a5-4dbe-a577-6a9f8eea6593")
-		)
-		(pin "2"
-			(uuid "81b18ee0-60ce-4f3f-9879-c353e82e50ac")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
-					(reference "C255")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 142.24 86.36 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "a24bfaeb-ba3f-4b78-963b-25fc58192f53")
-		(property "Reference" "C256"
-			(at 142.24 83.82 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1uF 25V X7R"
-			(at 142.24 88.9 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 142.24 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA3E1X7R1E105K080AE"
-			(at 142.24 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 142.24 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "TDK"
-			(at 142.24 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "CGA3E1X7R1E105K080AE"
-			(at 142.24 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-    (property "Voltage" "25 VDC" (at 142.24 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 142.24 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 142.24 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 142.24 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 142.24 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-		(pin "1"
-			(uuid "891d5b0b-28ea-4d56-8068-d5465d8dba4c")
-		)
-		(pin "2"
-			(uuid "b9760701-ec4a-4b05-bbfd-3d9e88809747")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
-					(reference "C256")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 129.54 88.9 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "2e51ff49-8acd-48ef-b2e4-bfc74cbb2298")
-		(property "Reference" "#PWR00387"
-			(at 129.54 82.55 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 129.54 85.09 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 129.54 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 129.54 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\", ground"
-			(at 129.54 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f2357c46-6cb0-47c2-89fe-edf4d5dbb283")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
-					(reference "#PWR00387")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 121.91999999999999 78.74) (xy 116.84 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e4e21466-e4a4-47ec-a195-476c28168bdb")
-	)
-	(wire
-		(pts
-			(xy 116.84 78.74) (xy 116.84 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c0625f56-b8ce-4db7-ba95-c114ff02fd47")
-	)
-	(wire
-		(pts
-			(xy 121.91999999999999 81.28) (xy 121.91999999999999 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "655a1af9-a58d-478d-a609-4074a024b86a")
-	)
-	(wire
-		(pts
-			(xy 137.16 78.74) (xy 142.24 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "520991df-d09b-4f9d-b876-34fc0b7791f4")
-	)
-	(wire
-		(pts
-			(xy 142.24 78.74) (xy 142.24 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6d7f7f5e-a716-431c-9074-e622d854f424")
-	)
-	(wire
-		(pts
-			(xy 116.84 88.9) (xy 129.54 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7a873e36-24be-4a3d-8515-1ed40386cd37")
-	)
-	(wire
-		(pts
-			(xy 129.54 88.9) (xy 142.24 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b57be4cb-b861-4af4-a32d-4f6dacc4c421")
-	)
-	(label "AP_V5V"
-		(at 81.28 91.44 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "6beb4233-3878-4409-96e0-3a8d747f5c63")
-	)
-	(label "AP_V5V"
-		(at 116.84 83.82 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "97e598c3-9a6e-4617-a373-03794191470b")
-	)
-	(label "USB_PROT_3V3_AON"
-		(at 142.24 83.82 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "da579bbf-c8be-4f0c-914d-49e601ed9185")
-	)
-	(label "USB_PROT_3V3_AON"
-		(at 205.74 93.98 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "61a4c734-97e1-491d-8dc5-f5cf31a6afc0")
-	)
-	(symbol
-		(lib_id "Power_Protection:TVS2200DRV")
-		(at 270.51 80.01 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "4acf9ad7-e8d8-41cb-82e6-35f575694941")
-		(property "Reference" "D3"
-			(at 273.05 81.28 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TVS2200DRVR"
-			(at 273.05 78.74 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "open-race-v2:WSON-6-1EP_2x2mm_P0.65mm_EP1x1.6mm_TVS2200"
-			(at 275.59 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tvs2200.pdf"
-			(at 267.97 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Flat-Clamp Surge Protection Device. 22Vrwm, WSON-6"
-			(at 270.51 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Manufacturer" "Texas Instruments"
-			(at 270.51 80.01 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "TVS2200DRVR"
-			(at 270.51 80.01 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Design_Note" "SPR-only raw VBUS clamp. Place at USB receptacle AP_ISENP-to-GND with minimum loop and ground vias. Prohibits 28 V EPR; bench-verify AP33772 VCC overshoot."
-			(at 270.51 80.01 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "0729efeb-65c7-40e9-a489-dd35f692f18a")
-		)
-		(pin "2"
-			(uuid "92553c5f-797d-4489-bd2a-6c75561b8ae5")
-		)
-		(pin "3"
-			(uuid "1fadf366-dc48-405f-855e-471a483edc54")
-		)
-		(pin "4"
-			(uuid "5bb70b5e-e841-42a2-808a-6201a8e92623")
-		)
-		(pin "5"
-			(uuid "94e3b46d-0df8-42bd-a388-4894fe8fe4b5")
-		)
-		(pin "6"
-			(uuid "16e3320d-b472-48e6-89fe-ce70715db1e5")
-		)
-		(pin "7"
-			(uuid "8ba85841-64e7-42ba-8615-4331f66af8b0")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/3d335ef5-a898-4ee3-ac02-304e9e08b5b1"
-					(reference "D3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(label "AP_ISENP"
-		(at 270.51 72.39 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "f2aba872-5011-4312-8431-143812883c7c")
-	)
-	(global_label "GND"
-		(at 270.51 87.63000000000001 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d90b4b56-2dac-41be-be31-2587fa082395")
-	)
-	(text "SPR ONLY: D3 TVS2200 prohibits 28 V EPR. Firmware must clear EPR_MODE_EN, accept only <=20 V PDOs, and validate VCC overshoot on the worst cable."
-		(exclude_from_sim no)
-		(at 200 105 0)
-		(effects
-			(font
-				(size 1 1)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "160fbbfc-d295-4387-9441-aa39d1042d7d")
 	)
 )

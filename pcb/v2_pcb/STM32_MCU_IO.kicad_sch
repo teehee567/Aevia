@@ -6272,6 +6272,30 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "BOOT-ROM PIN CONFLICT AVOIDED: ESP_UART_RTS is PF5 / ball M3; PG10 / ball T10 remains free for ROM USART5_TX."
+		(exclude_from_sim no)
+		(at 275 307.5 0)
+		(effects
+			(font
+				(size 1 1)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "0d834ac4-138f-45cc-a0fe-7053a1e6d839")
+	)
+	(text "PROVISIONING: program OTP124 mask 0x00018000 so VDDIO2/VDDIO3 are 1.8 V before enabling attached interfaces; verify readback in production."
+		(exclude_from_sim no)
+		(at 275 300 0)
+		(effects
+			(font
+				(size 1 1)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "53505586-32f6-4ee1-b30a-b93f63227be0")
+	)
 	(text "OTG1_TXRTUNE: R326 = 200 ohm +/-1% to GND; place close to the USB PHY1 pin."
 		(exclude_from_sim no)
 		(at 275 292.5 0)
@@ -7498,6 +7522,16 @@
 	)
 	(wire
 		(pts
+			(xy 153.67 207.01) (xy 299.72 207.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08ea9a21-4218-46eb-bddf-7d20a150334c")
+	)
+	(wire
+		(pts
 			(xy 417.83 71.12) (xy 427.99 71.12)
 		)
 		(stroke
@@ -7558,7 +7592,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 198.12) (xy 147.32 198.12)
+			(xy 142.24 198.12) (xy 148.59 198.12)
 		)
 		(stroke
 			(width 0)
@@ -7816,36 +7850,6 @@
 		)
 		(uuid "28eef383-7e45-40a3-8d00-f4441e44110d")
 	)
-	(wire
-		(pts
-			(xy 151.13 88.9) (xy 152.4 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "28f76995-a3e3-4b5e-b1a8-6fa8a3a24893")
-	)
-	(wire
-		(pts
-			(xy 152.4 88.9) (xy 152.4 222.25)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "88356a44-00b8-434e-85ce-419e5fc8cf27")
-	)
-	(wire
-		(pts
-			(xy 152.4 222.25) (xy 299.72 222.25)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "81da8aef-839a-434c-b655-5edea225f948")
-	)
 	(bus
 		(pts
 			(xy 469.9 124.46) (xy 469.9 160.02)
@@ -8078,33 +8082,23 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 165.1) (xy 199.39 165.1)
+			(xy 148.59 162.56) (xy 299.72 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42a304cc-6768-4a24-bc87-9cb4240866c6")
+	)
+	(wire
+		(pts
+			(xy 199.39 165.1) (xy 205.74 165.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "4364b701-6caa-4303-8b59-c08170b37662")
-	)
-	(wire
-		(pts
-			(xy 199.39 165.1) (xy 199.39 265.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9d0d7586-4305-403b-bee0-e7d33771f9f9")
-	)
-	(wire
-		(pts
-			(xy 199.39 265.43) (xy 279.4 265.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e2c56a36-589d-4414-ba9f-a0144d9d28ce")
 	)
 	(wire
 		(pts
@@ -8188,36 +8182,6 @@
 	)
 	(wire
 		(pts
-			(xy 151.13 86.36) (xy 153.67 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4b7d70ad-3c5f-4816-9f2d-3146a68aaa23")
-	)
-	(wire
-		(pts
-			(xy 153.67 86.36) (xy 153.67 207.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "89505370-7617-448c-b572-42725f15db0d")
-	)
-	(wire
-		(pts
-			(xy 153.67 207.01) (xy 299.72 207.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "08ea9a21-4218-46eb-bddf-7d20a150334c")
-	)
-	(wire
-		(pts
 			(xy 146.05 99.06) (xy 151.13 99.06)
 		)
 		(stroke
@@ -8248,26 +8212,6 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 200.66) (xy 299.72 200.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4e6155af-061e-40ff-8738-87134c3d1bde")
-	)
-	(wire
-		(pts
-			(xy 299.72 200.66) (xy 299.72 177.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e7cbf633-c64a-4cec-a3b8-1eed1a021d90")
-	)
-	(wire
-		(pts
 			(xy 497.84 175.26) (xy 508 175.26)
 		)
 		(stroke
@@ -8278,7 +8222,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 88.9) (xy 151.13 88.9)
+			(xy 146.05 88.9) (xy 152.4 88.9)
 		)
 		(stroke
 			(width 0)
@@ -8485,6 +8429,16 @@
 			(type default)
 		)
 		(uuid "632615ca-eb6f-4f42-b21c-c5e3231c5ef1")
+	)
+	(wire
+		(pts
+			(xy 314.96 181.61) (xy 314.96 255.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63ddbe26-9ddd-4677-8f98-6d849f844120")
 	)
 	(wire
 		(pts
@@ -8728,6 +8682,16 @@
 	)
 	(wire
 		(pts
+			(xy 148.59 198.12) (xy 148.59 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f169805-a804-464c-bf11-17fa453cc4a5")
+	)
+	(wire
+		(pts
 			(xy 85.09 48.26) (xy 80.01 48.26)
 		)
 		(stroke
@@ -8735,6 +8699,16 @@
 			(type default)
 		)
 		(uuid "80e45079-9dbb-405e-b75b-8a569f9c895d")
+	)
+	(wire
+		(pts
+			(xy 152.4 222.25) (xy 299.72 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81da8aef-839a-434c-b655-5edea225f948")
 	)
 	(wire
 		(pts
@@ -8816,6 +8790,26 @@
 		)
 		(uuid "878223e4-149c-4c8d-90bc-5c56d7e97c7f")
 	)
+	(wire
+		(pts
+			(xy 152.4 88.9) (xy 152.4 222.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "88356a44-00b8-434e-85ce-419e5fc8cf27")
+	)
+	(wire
+		(pts
+			(xy 153.67 86.36) (xy 153.67 207.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89505370-7617-448c-b572-42725f15db0d")
+	)
 	(bus
 		(pts
 			(xy 430.53 35.56) (xy 430.53 91.44)
@@ -8825,6 +8819,16 @@
 			(type default)
 		)
 		(uuid "898133b2-13de-4d02-a160-e6025e9de53f")
+	)
+	(wire
+		(pts
+			(xy 200.66 181.61) (xy 314.96 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89e1ef9a-a81a-497d-9c16-0883c583b926")
 	)
 	(wire
 		(pts
@@ -8855,26 +8859,6 @@
 			(type default)
 		)
 		(uuid "8be9c50f-a681-45f1-a5ec-880ab26f6ca6")
-	)
-	(wire
-		(pts
-			(xy 200.66 181.61) (xy 314.96 181.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "89e1ef9a-a81a-497d-9c16-0883c583b926")
-	)
-	(wire
-		(pts
-			(xy 314.96 181.61) (xy 314.96 255.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "63ddbe26-9ddd-4677-8f98-6d849f844120")
 	)
 	(wire
 		(pts
@@ -9058,6 +9042,16 @@
 	)
 	(wire
 		(pts
+			(xy 199.39 165.1) (xy 199.39 265.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9d0d7586-4305-403b-bee0-e7d33771f9f9")
+	)
+	(wire
+		(pts
 			(xy 457.2 139.7) (xy 467.36 139.7)
 		)
 		(stroke
@@ -9065,36 +9059,6 @@
 			(type default)
 		)
 		(uuid "9e0756ce-e5cd-400c-a724-eea08c6b4f4a")
-	)
-	(wire
-		(pts
-			(xy 147.32 198.12) (xy 148.59 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9e56c8cc-1cc3-4a5d-ba36-f81e24235142")
-	)
-	(wire
-		(pts
-			(xy 148.59 198.12) (xy 148.59 162.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7f169805-a804-464c-bf11-17fa453cc4a5")
-	)
-	(wire
-		(pts
-			(xy 148.59 162.56) (xy 299.72 162.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "42a304cc-6768-4a24-bc87-9cb4240866c6")
 	)
 	(wire
 		(pts
@@ -9458,7 +9422,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 200.66) (xy 147.32 200.66)
+			(xy 142.24 200.66) (xy 299.72 200.66)
 		)
 		(stroke
 			(width 0)
@@ -9718,16 +9682,6 @@
 	)
 	(wire
 		(pts
-			(xy 205.74 165.1) (xy 200.66 165.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d56c1017-ff1c-47c0-b7a1-78702db3560e")
-	)
-	(wire
-		(pts
 			(xy 311.15 231.14) (xy 311.15 233.68)
 		)
 		(stroke
@@ -9818,6 +9772,16 @@
 	)
 	(wire
 		(pts
+			(xy 199.39 265.43) (xy 279.4 265.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2c56a36-589d-4414-ba9f-a0144d9d28ce")
+	)
+	(wire
+		(pts
 			(xy 497.84 139.7) (xy 508 139.7)
 		)
 		(stroke
@@ -9825,6 +9789,16 @@
 			(type default)
 		)
 		(uuid "e78b96bf-9f24-4f79-ab76-55582fdddc04")
+	)
+	(wire
+		(pts
+			(xy 299.72 200.66) (xy 299.72 177.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7cbf633-c64a-4cec-a3b8-1eed1a021d90")
 	)
 	(wire
 		(pts
@@ -9848,7 +9822,7 @@
 	)
 	(wire
 		(pts
-			(xy 146.05 86.36) (xy 151.13 86.36)
+			(xy 146.05 86.36) (xy 153.67 86.36)
 		)
 		(stroke
 			(width 0)
@@ -11286,16 +11260,6 @@
 		)
 		(uuid "cbafe48f-f075-4dc5-807a-f198c80038b2")
 	)
-	(global_label "NRST"
-		(at 487.68 270.51 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "cbf87f79-2fb6-4af3-b882-26a36bea22bd")
-	)
 	(label "PSRAM_IO6"
 		(at 260.35 88.9 0)
 		(effects
@@ -11425,16 +11389,6 @@
 			(justify left bottom)
 		)
 		(uuid "d8851526-a3ae-4afe-be14-7a0605f133a9")
-	)
-	(global_label "NRST"
-		(at 200.66 165.1 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d8c1af49-d464-47cc-84a6-454e5ccb355f")
 	)
 	(label "HSE_IN"
 		(at 147.32 200.66 0)
@@ -11706,6 +11660,72 @@
 		)
 		(uuid "ffe9aeeb-ce8b-4743-856f-1a59b7b3310f")
 	)
+	(global_label "NRST"
+		(shape bidirectional)
+		(at 205.74 165.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "18394c1d-fe6c-4ecc-b714-c2501bfd6c8b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 205.74 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "NRST"
+		(shape bidirectional)
+		(at 487.68 270.51 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cbf87f79-2fb6-4af3-b882-26a36bea22bd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 487.68 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "NRST"
+		(shape bidirectional)
+		(at 200.66 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d8c1af49-d464-47cc-84a6-454e5ccb355f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 200.66 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
 	(hierarchical_label "{POWER_CTRL}"
 		(shape bidirectional)
 		(at 430.53 35.56 90)
@@ -11903,18 +11923,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "3fac8230-ddf9-4325-a51b-c3723c870d78")
 		)
@@ -12023,18 +12075,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 91.44 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 91.44 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 91.44 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 91.44 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "161d2b20-de3a-4d7f-9e46-1b0431c2372f")
 		)
@@ -12143,18 +12227,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 50.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 50.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 50.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 50.8 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "11eb9485-23db-4b81-9e93-f15ad13ee291")
 		)
@@ -12341,18 +12457,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "1b2aff80-d2b7-4424-b99b-2809c6f19b9c")
 		)
@@ -12653,18 +12801,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 71.12 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 71.12 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 71.12 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 71.12 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e66fd3fb-f85b-430a-a05f-85f4c4b327aa")
 		)
@@ -12773,18 +12953,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 93.98 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 93.98 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 93.98 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 93.98 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "62361cbb-0ab1-4c2e-81bd-3c955573b461")
 		)
@@ -12893,18 +13105,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "797081c2-6caf-438e-b2f0-32503e60b085")
 		)
@@ -13169,18 +13413,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "2792b2dc-e8f5-4f05-ba68-0b590feb89c9")
 		)
@@ -13288,12 +13564,28 @@
 				)
 			)
 		)
-    (property "Contact" "Gold ULC; 1 µA minimum at 1.8 V" (at 335.28 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40 to +125 °C" (at 335.28 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Contact" "Gold ULC; 1 µA minimum at 1.8 V"
+			(at 335.28 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40 to +125 °C"
+			(at 335.28 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "bcdf2221-342a-4978-98f2-fa66496ebedd")
 		)
@@ -13402,18 +13694,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 83.82 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "07eb75fd-b350-451c-8a2a-104061ea50d6")
 		)
@@ -13630,18 +13954,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 104.14 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f2ae18ad-b185-4eb9-9284-4e3aebce2281")
 		)
@@ -13727,27 +14083,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Murata" (at 311.15 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "GCQ1555C1H8R2BB01D" (at 311.15 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 311.15 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±0.1 pF" (at 311.15 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "C0G" (at 311.15 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 311.15 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Release_Status" "TUNE - validate oscillation margin and frequency on final PCB" (at 311.15 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Murata"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "GCQ1555C1H8R2BB01D"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±0.1 pF"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "C0G"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Release_Status" "TUNE - validate oscillation margin and frequency on final PCB"
+			(at 311.15 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "4697888f-0882-4a4d-815e-df0f10c7014a")
 		)
@@ -13856,18 +14268,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 73.66 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 73.66 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 73.66 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 73.66 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "42ca653c-80e6-4f09-82d9-9e17a400a3df")
 		)
@@ -13976,18 +14420,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 76.2 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "baf3cf34-566d-4580-aae8-57c39ea6a2c6")
 		)
@@ -14073,27 +14549,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Murata" (at 289.56 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "GCQ1555C1H8R2BB01D" (at 289.56 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 289.56 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±0.1 pF" (at 289.56 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "C0G" (at 289.56 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 289.56 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Release_Status" "TUNE - validate oscillation margin and frequency on final PCB" (at 289.56 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Murata"
+			(at 289.56 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "GCQ1555C1H8R2BB01D"
+			(at 289.56 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 289.56 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±0.1 pF"
+			(at 289.56 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "C0G"
+			(at 289.56 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 289.56 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Release_Status" "TUNE - validate oscillation margin and frequency on final PCB"
+			(at 289.56 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "098b8f86-45eb-4d95-a19e-1757b35e1ee2")
 		)
@@ -14202,18 +14734,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 48.26 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 48.26 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 48.26 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 48.26 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "760527e1-bde2-49d0-a78b-9fd375c29df5")
 		)
@@ -14458,15 +15022,39 @@
 				)
 			)
 		)
-    (property "Manufacturer" "STMicroelectronics" (at 86.36 162.56 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "STM32N657X0H3Q" (at 86.36 162.56 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Design_Note" "Program OTP124 mask 0x00018000 (VDDIO2/VDDIO3 1.8 V selection) before enabling attached 1.8 V interfaces; verify with production provisioning readback." (at 86.36 162.56 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "STMicroelectronics"
+			(at 86.36 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "STM32N657X0H3Q"
+			(at 86.36 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Design_Note" "Program OTP124 mask 0x00018000 (VDDIO2/VDDIO3 1.8 V selection) before enabling attached 1.8 V interfaces; verify with production provisioning readback."
+			(at 86.36 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "A7"
 			(uuid "e653f17c-92d8-4ebd-b9e1-3f9efa4e1732")
 		)
@@ -15355,18 +15943,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 45.72 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 45.72 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 45.72 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 45.72 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "2fd8d8e6-0516-48db-b691-66a1ba96345d")
 		)
@@ -15475,18 +16095,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 99.06 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "9c48b4ec-1b16-4e2b-9225-2f7e78805b07")
 		)
@@ -15595,18 +16247,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 78.74 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 78.74 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 78.74 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 78.74 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6a2ff0c2-1a3a-4b2f-b01c-af8eec2fe5e2")
 		)
@@ -15793,18 +16477,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "bdee9df7-f33f-4db4-9832-a9184f72bde9")
 		)
@@ -15913,18 +16629,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 86.36 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "0d3318f1-7d08-4e51-b157-16432cea6283")
 		)
@@ -16010,21 +16758,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 355.6 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW0402100KFKED" (at 355.6 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 355.6 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 355.6 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 355.6 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 355.6 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW0402100KFKED"
+			(at 355.6 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 355.6 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 355.6 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 355.6 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f2b9e3d5-05fc-45ca-a335-a5fd7ca7cad7")
 		)
@@ -16133,18 +16921,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 374.65 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 374.65 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 374.65 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 374.65 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 374.65 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 374.65 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 374.65 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 374.65 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "b9bf0a53-0887-4477-a2d1-c69454fafb84")
 		)
@@ -16253,18 +17073,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 53.34 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 53.34 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 53.34 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 53.34 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f9e78c5f-b40a-40fe-887f-b227ef1b5b3a")
 		)
@@ -16350,27 +17202,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Murata" (at 311.15 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "GCQ1555C1H8R2BB01D" (at 311.15 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 311.15 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±0.1 pF" (at 311.15 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "C0G" (at 311.15 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 311.15 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Release_Status" "TUNE - validate oscillation margin and frequency on final PCB" (at 311.15 182.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Murata"
+			(at 311.15 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "GCQ1555C1H8R2BB01D"
+			(at 311.15 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 311.15 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±0.1 pF"
+			(at 311.15 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "C0G"
+			(at 311.15 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 311.15 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Release_Status" "TUNE - validate oscillation margin and frequency on final PCB"
+			(at 311.15 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "7a008e60-2fa5-426b-b195-1601ac9b610b")
 		)
@@ -16456,21 +17364,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 279.4 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040210K0FKED" (at 279.4 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 279.4 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 279.4 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 279.4 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 279.4 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040210K0FKED"
+			(at 279.4 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 279.4 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 279.4 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 279.4 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c5c355b7-606a-49c8-a9d8-bd0fb3084636")
 		)
@@ -17603,18 +18551,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 101.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 101.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 101.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 101.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "78162bf6-2ebe-4d6e-a86e-b8491646f5bf")
 		)
@@ -17801,18 +18781,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 81.28 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "fcdfbf78-0551-46df-94e6-37575620925f")
 		)
@@ -17999,18 +19011,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 55.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 55.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 55.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 55.88 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c176c03c-0f9d-4584-a982-227de7eb0d67")
 		)
@@ -18096,27 +19140,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Murata" (at 289.56 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "GCQ1555C1H8R2BB01D" (at 289.56 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 289.56 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±0.1 pF" (at 289.56 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "C0G" (at 289.56 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 289.56 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Release_Status" "TUNE - validate oscillation margin and frequency on final PCB" (at 289.56 228.6 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Murata"
+			(at 289.56 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "GCQ1555C1H8R2BB01D"
+			(at 289.56 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 289.56 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±0.1 pF"
+			(at 289.56 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "C0G"
+			(at 289.56 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 289.56 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Release_Status" "TUNE - validate oscillation margin and frequency on final PCB"
+			(at 289.56 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e7b97944-903b-4b6e-9bd3-5bbe92f23489")
 		)
@@ -18225,18 +19325,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 96.52 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 96.52 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 96.52 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 96.52 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a3327de0-b48e-430d-a629-0f2066288c02")
 		)
@@ -18322,30 +19454,94 @@
 				)
 			)
 		)
-    (property "Manufacturer" "TDK" (at 294.64 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CGA2B3X7R1H103K050BE" (at 294.64 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50 VDC" (at 294.64 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±10%" (at 294.64 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Dielectric" "X7R" (at 294.64 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Design_Note" "STM32N6 NRST capacitor; keep at or below ST 10 nF maximum" (at 294.64 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 294.64 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Termination" "Soft termination" (at 294.64 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "TDK"
+			(at 294.64 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CGA2B3X7R1H103K050BE"
+			(at 294.64 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50 VDC"
+			(at 294.64 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±10%"
+			(at 294.64 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Dielectric" "X7R"
+			(at 294.64 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Design_Note" "STM32N6 NRST capacitor; keep at or below ST 10 nF maximum"
+			(at 294.64 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 294.64 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Termination" "Soft termination"
+			(at 294.64 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6f806bbd-3830-44e8-ab9d-325c96fcc85d")
 		)
@@ -19400,18 +20596,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 88.9 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 88.9 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 88.9 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 88.9 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "1329f507-be08-4ff5-bbaf-0085d4b69471")
 		)
@@ -19520,18 +20748,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 198.12 88.9 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 198.12 88.9 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 198.12 88.9 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 198.12 88.9 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 198.12 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 198.12 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 198.12 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 198.12 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "af053e45-6b9d-4c8f-87a6-bfbd9d49177c")
 		)
@@ -19617,21 +20877,61 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Vishay" (at 314.96 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "MPN" "CRCW040210K0FKED" (at 314.96 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±1%" (at 314.96 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 314.96 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 314.96 260.35 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Vishay"
+			(at 314.96 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CRCW040210K0FKED"
+			(at 314.96 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 314.96 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 314.96 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 314.96 260.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "da824e48-f0e5-4a4c-977c-bdab8ff7c6f1")
 		)
@@ -20686,18 +21986,50 @@
 				)
 			)
 		)
-    (property "Tolerance" "±1%" (at 254.0 78.74 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063 W" (at 254.0 78.74 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "TCR" "±100 ppm/K" (at 254.0 78.74 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Qualification" "AEC-Q200" (at 254.0 78.74 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Tolerance" "±1%"
+			(at 254 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063 W"
+			(at 254 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "TCR" "±100 ppm/K"
+			(at 254 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Qualification" "AEC-Q200"
+			(at 254 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "27b7f752-4046-44c3-8158-db1d5779b106")
 		)
@@ -20718,40 +22050,6 @@
 				)
 			)
 		)
-	)
-	(global_label "NRST"
-		(at 205.74 165.1 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "18394c1d-fe6c-4ecc-b714-c2501bfd6c8b")
-	)
-	(text "PROVISIONING: program OTP124 mask 0x00018000 so VDDIO2/VDDIO3 are 1.8 V before enabling attached interfaces; verify readback in production."
-		(exclude_from_sim no)
-		(at 275 300 0)
-		(effects
-			(font
-				(size 1 1)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "53505586-32f6-4ee1-b30a-b93f63227be0")
-	)
-	(text "BOOT-ROM PIN CONFLICT AVOIDED: ESP_UART_RTS is PF5 / ball M3; PG10 / ball T10 remains free for ROM USART5_TX."
-		(exclude_from_sim no)
-		(at 275 307.5 0)
-		(effects
-			(font
-				(size 1 1)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "0d834ac4-138f-45cc-a0fe-7053a1e6d839")
 	)
 	(sheet_instances
 		(path "/"
