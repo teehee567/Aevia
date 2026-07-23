@@ -69,7 +69,7 @@
 	)
 	(bus
 		(pts
-			(xy 107.95 66.04) (xy 186.69 66.04)
+			(xy 109.22 66.04) (xy 124.46 66.04)
 		)
 		(stroke
 			(width 0)
@@ -339,13 +339,43 @@
 	)
 	(bus
 		(pts
-			(xy 107.95 66.04) (xy 107.95 210.82)
+			(xy 186.69 66.04) (xy 190.5 66.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "f89ae6dc-6a17-4dab-bbe4-bb6fbcd80ba2")
+	)
+	(bus
+		(pts
+			(xy 190.5 66.04) (xy 190.5 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf8019e5-01d0-4b6e-a8b0-40369852d855")
+	)
+	(bus
+		(pts
+			(xy 190.5 72.39) (xy 107.95 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4bedcf6-e38d-4b34-aab7-e805358be04b")
+	)
+	(bus
+		(pts
+			(xy 107.95 72.39) (xy 107.95 210.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b6a43cb0-bd7b-40bc-8c2b-bb4ff6b36dd3")
 	)
 	(sheet
 		(at 124.46 242.57)
@@ -530,7 +560,7 @@
 			(color 0 0 0 0)
 		)
 		(uuid "57594d98-d9e7-4dd9-8bfb-43dd30470ece")
-		(property "Sheetname" "STM32 MCU I/O"
+		(property "Sheetname" "STM32 MCU IO"
 			(at 124.46 41.1984 0)
 			(show_name no)
 			(do_not_autoplace no)

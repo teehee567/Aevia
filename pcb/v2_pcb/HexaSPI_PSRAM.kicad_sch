@@ -2352,7 +2352,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "4.7uF"
+		(property "Value" "4.7uF 16V X7S"
 			(at 110.744 132.588 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2374,7 +2374,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://pim.murata.com/en-us/pim/details/?partNum=GCM188C71C475KE36%23"
 			(at 110.49 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2394,6 +2394,24 @@
 				)
 			)
 		)
+    (property "Manufacturer" "Murata" (at 110.49 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "GCM188C71C475KE36D" (at 110.49 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "16 VDC" (at 110.49 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±10%" (at 110.49 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Dielectric" "X7S" (at 110.49 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200 powertrain/safety" (at 110.49 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "1cdf83c9-ab3f-4107-914a-4bfd37a4020b")
 		)
@@ -3179,7 +3197,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
 			(at 64.77 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3199,6 +3217,21 @@
 				)
 			)
 		)
+    (property "Manufacturer" "Vishay" (at 64.77 85.09 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "CRCW040210K0FKED" (at 64.77 85.09 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±1%" (at 64.77 85.09 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063 W" (at 64.77 85.09 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "TCR" "±100 ppm/K" (at 64.77 85.09 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "1df9e281-7138-4b1a-9b8e-1d851c448ed4")
 		)
@@ -3320,7 +3353,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "100nF 50V X7R"
 			(at 80.264 132.588 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3342,7 +3375,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA2B3X7R1H104K050BE"
 			(at 80.01 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3362,6 +3395,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "TDK" (at 80.01 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "CGA2B3X7R1H104K050BE" (at 80.01 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50 VDC" (at 80.01 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±10%" (at 80.01 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Dielectric" "X7R" (at 80.01 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200" (at 80.01 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Termination" "Soft termination" (at 80.01 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "07dccf22-e382-4a40-8e36-038186d3ce36")
 		)
@@ -3561,7 +3615,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1uF"
+		(property "Value" "1uF 25V X7R"
 			(at 95.504 132.588 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3583,7 +3637,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA3E1X7R1E105K080AE"
 			(at 95.25 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3603,6 +3657,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "TDK" (at 95.25 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "CGA3E1X7R1E105K080AE" (at 95.25 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "25 VDC" (at 95.25 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±10%" (at 95.25 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Dielectric" "X7R" (at 95.25 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200" (at 95.25 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Termination" "Soft termination" (at 95.25 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "b9531dc3-6f26-4eef-a17f-9b4ab63c1d12")
 		)
@@ -3802,7 +3877,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "100nF 50V X7R"
 			(at 65.024 132.588 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3824,7 +3899,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA2B3X7R1H104K050BE"
 			(at 64.77 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3844,6 +3919,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "TDK" (at 64.77 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "CGA2B3X7R1H104K050BE" (at 64.77 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50 VDC" (at 64.77 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±10%" (at 64.77 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Dielectric" "X7R" (at 64.77 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200" (at 64.77 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Termination" "Soft termination" (at 64.77 134.62 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "b10975f9-4165-4770-b133-fd4a63a2cc34")
 		)
@@ -3865,7 +3961,227 @@
 			)
 		)
 	)
-	(sheet_instances
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 115.57 118.11 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "31838551-7e2e-434e-baf9-42320317d201")
+		(property "Reference" "R174"
+			(at 116.332 118.618 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10.0k 1%"
+			(at 116.332 117.094 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 115.57 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
+			(at 115.57 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 115.57 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "Vishay"
+			(at 115.57 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "CRCW040210K0FKED"
+			(at 115.57 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Tolerance" "±1%"
+			(at 115.57 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Design_Note" "PSRAM CLK weak pulldown; firmware must drive CLK low before CE# and wait at least 150 us after power-up"
+			(at 115.57 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+    (property "Power" "0.063 W" (at 115.57 118.11 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "TCR" "±100 ppm/K" (at 115.57 118.11 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200" (at 115.57 118.11 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+		(pin "1"
+			(uuid "f46e0897-38a4-4592-84ba-6b64e8611060")
+		)
+		(pin "2"
+			(uuid "b3d61f30-4aff-4181-a547-688c0e94c526")
+		)
+		(instances
+			(project "open-race_v2"
+				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/80f34340-29b9-446b-8079-3559d68f1fbd"
+					(reference "R174")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(label "PSRAM_CLK"
+		(at 115.57 115.57 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e77cface-c4f1-43d4-ab3b-6444244e2585")
+	)
+	(wire
+		(pts
+			(xy 115.57 120.65) (xy 115.57 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8f8db8c-9c0e-4380-95d0-e87cbd72e017")
+	)
+	  (symbol (lib_id "power:GND") (at 115.57 123.19 0) (unit 1)
+    (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+    (uuid "3162fa9a-51ef-43e2-9924-0b055c204263")
+    (property "Reference" "#PWR00388"
+      (at 115.57 116.84 0)
+      (show_name no)
+      (do_not_autoplace no)
+      (effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+    )
+    (property "Value" "GND"
+      (at 115.57 119.38 0)
+      (show_name no)
+      (do_not_autoplace no)
+      (effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+    )
+    (property "Footprint" ""
+      (at 115.57 123.19 0)
+      (hide yes)
+      (show_name no)
+      (do_not_autoplace no)
+      (effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+    )
+    (property "Datasheet" ""
+      (at 115.57 123.19 0)
+      (hide yes)
+      (show_name no)
+      (do_not_autoplace no)
+      (effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+    )
+    (property "Description" "Power symbol creates a global label with name \"GND\", ground"
+      (at 115.57 123.19 0)
+      (hide yes)
+      (show_name no)
+      (do_not_autoplace no)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid "123cffe4-db04-4abb-90b6-fdfc83ed62dd"))
+    (instances
+      (project "open-race_v2"
+        (path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/80f34340-29b9-446b-8079-3559d68f1fbd"
+          (reference "#PWR00388")
+          (unit 1)
+        )
+      )
+    )
+  )
+	(text "PSRAM STARTUP: drive CK LOW before asserting CE#; wait at least 150 us after power is valid, then set MR8[6]=1 before HPI x16 operation."
+		(exclude_from_sim no)
+		(at 45 180 0)
+		(effects
+			(font
+				(size 1 1)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "a97a6f31-5cff-47b6-9f42-c8a3008857e4")
+	)
+  (sheet_instances
 		(path "/"
 			(page "1")
 		)

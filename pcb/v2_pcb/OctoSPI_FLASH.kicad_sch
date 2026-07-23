@@ -483,7 +483,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "MX25U51279GXDR00:MX25U51279GXDR00"
+		(symbol "open-race-v2:IS25WP512M-RHLE"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -499,7 +499,7 @@
 					)
 				)
 			)
-			(property "Value" "MX25U51279GXDR00"
+			(property "Value" "IS25WP512M-RHLE"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -509,18 +509,7 @@
 					)
 				)
 			)
-			(property "Footprint" "MX66UW1G45GXDI00:BGA24C100P5X5_800X600X120"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
+			(property "Footprint" "noob:BGA24C100P5X5_800X600X120"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -531,7 +520,7 @@
 					)
 				)
 			)
-			(property "Description" ""
+			(property "Datasheet" "https://www.issi.com/WW/pdf/25LP-WP512M.pdf"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -542,7 +531,18 @@
 					)
 				)
 			)
-			(symbol "MX25U51279GXDR00_0_0"
+			(property "Description" "512-Mbit 1.8 V serial NOR flash; 24-TFBGA 6x8 mm; factory 0Bh read uses 8 dummy cycles for STM32N6 ROM boot"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "IS25WP512M-RHLE_0_0"
 				(rectangle
 					(start -12.7 25.4)
 					(end 12.7 -16.51)
@@ -572,10 +572,11 @@
 						)
 					)
 				)
-				(pin output line
+				(pin no_connect line
 					(at 17.78 12.7 180)
 					(length 5.08)
-					(name "~{ECS}"
+					(hide yes)
+					(name "NC_A5"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -593,7 +594,7 @@
 				(pin input clock
 					(at -17.78 17.78 0)
 					(length 5.08)
-					(name "SCLK"
+					(name "SCK"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -647,7 +648,7 @@
 				(pin input line
 					(at -17.78 22.86 0)
 					(length 5.08)
-					(name "~{CS}"
+					(name "~{CE}"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -665,7 +666,7 @@
 				(pin bidirectional line
 					(at -17.78 7.62 0)
 					(length 5.08)
-					(name "SIO2"
+					(name "IO2"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -683,7 +684,7 @@
 				(pin bidirectional line
 					(at -17.78 10.16 0)
 					(length 5.08)
-					(name "SO/SIO1"
+					(name "SO/IO1"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -701,7 +702,7 @@
 				(pin bidirectional line
 					(at -17.78 12.7 0)
 					(length 5.08)
-					(name "SI/SIO0"
+					(name "SI/IO0"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -719,7 +720,7 @@
 				(pin bidirectional line
 					(at -17.78 5.08 0)
 					(length 5.08)
-					(name "SIO3"
+					(name "IO3"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -735,7 +736,7 @@
 					)
 				)
 			)
-			(symbol "MX25U51279GXDR00_1_0"
+			(symbol "IS25WP512M-RHLE_1_0"
 				(pin no_connect line
 					(at -17.78 -3.81 0)
 					(length 5.08)
@@ -778,7 +779,7 @@
 					(at -17.78 1.27 0)
 					(length 5.08)
 					(hide yes)
-					(name "DNU"
+					(name "NC_B1"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -797,7 +798,7 @@
 					(at -17.78 -1.27 0)
 					(length 5.08)
 					(hide yes)
-					(name "DNU__1"
+					(name "NC_B5"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -1406,16 +1407,6 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 72.39) (xy 105.41 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "322b9d0f-a144-4a29-97cd-111c422dde6f")
-	)
-	(wire
-		(pts
 			(xy 180.34 72.39) (xy 180.34 69.85)
 		)
 		(stroke
@@ -1466,16 +1457,6 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 69.85) (xy 119.38 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6f26b3c0-3db2-43ec-b72d-777470c31a58")
-	)
-	(wire
-		(pts
 			(xy 162.56 80.01) (xy 166.37 80.01)
 		)
 		(stroke
@@ -1493,16 +1474,6 @@
 			(type default)
 		)
 		(uuid "7cee72e5-b701-44cb-96c0-3b9a9457af57")
-	)
-	(wire
-		(pts
-			(xy 123.19 78.74) (xy 90.17 80.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "87fe3d5a-0f1b-4a60-a617-765d659143d0")
 	)
 	(wire
 		(pts
@@ -1576,16 +1547,6 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 77.47) (xy 105.41 80.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bba835fb-20c7-4fc6-9b35-38bb34620f8b")
-	)
-	(wire
-		(pts
 			(xy 212.09 60.96) (xy 222.25 60.96)
 		)
 		(stroke
@@ -1616,16 +1577,6 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 77.47) (xy 119.38 80.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c134eea0-ce7a-4110-9d94-c31df58acdf2")
-	)
-	(wire
-		(pts
 			(xy 90.17 72.39) (xy 90.17 69.85)
 		)
 		(stroke
@@ -1633,36 +1584,6 @@
 			(type default)
 		)
 		(uuid "cb225c37-2206-4748-bb42-831c7ac6a332")
-	)
-	(wire
-		(pts
-			(xy 90.17 77.47) (xy 90.17 80.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "de9f8585-1deb-434f-ac9a-16f2f2fc0b8d")
-	)
-	(wire
-		(pts
-			(xy 119.38 72.39) (xy 119.38 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "def197a7-17b4-412f-a7a4-3ddaca5ab185")
-	)
-	(wire
-		(pts
-			(xy 90.17 80.01) (xy 105.41 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "edf4d965-b099-4444-b563-e36198148785")
 	)
 	(wire
 		(pts
@@ -1826,7 +1747,7 @@
 		(uuid "827fed4d-8110-49e5-bf98-21a7823a4b99")
 	)
 	(symbol
-		(lib_id "MX25U51279GXDR00:MX25U51279GXDR00")
+		(lib_id "open-race-v2:IS25WP512M-RHLE")
 		(at 144.78 99.06 0)
 		(unit 1)
 		(body_style 1)
@@ -1847,7 +1768,7 @@
 				)
 			)
 		)
-		(property "Value" "MX25U51279GXDR00"
+		(property "Value" "IS25WP512M-RHLE"
 			(at 151.13 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1868,7 +1789,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.macronix.com/Lists/Datasheet/Attachments/8721/MX25U51279G,%201.8V,%20512Mb,%20v1.6.pdf"
+		(property "Datasheet" "https://www.issi.com/WW/pdf/25LP-WP512M.pdf"
 			(at 151.13 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -1879,7 +1800,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "512-Mbit 1.8 V serial NOR flash; 24-TFBGA 6x8 mm; factory 0Bh read uses 8 dummy cycles for STM32N6 ROM boot"
 			(at 151.13 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -1890,7 +1811,7 @@
 				)
 			)
 		)
-		(property "MPN" "MX25U51279GXDR00"
+		(property "MPN" "IS25WP512M-RHLE"
 			(at 147.54 105.0799 0)
 			(hide yes)
 			(show_name no)
@@ -1901,7 +1822,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Macronix"
+		(property "Manufacturer" "ISSI"
 			(at 147.54 105.0799 0)
 			(hide yes)
 			(show_name no)
@@ -2093,7 +2014,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "100nF 50V X7R"
 			(at 165.354 72.898 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2115,7 +2036,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/en/search/capacitor/ceramic/mlcc/info?part_no=CGA2B3X7R1H104K050BE"
 			(at 165.1 74.93 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2135,6 +2056,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "TDK" (at 165.1 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "CGA2B3X7R1H104K050BE" (at 165.1 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50 VDC" (at 165.1 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±10%" (at 165.1 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Dielectric" "X7R" (at 165.1 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200" (at 165.1 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Termination" "Soft termination" (at 165.1 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "39745725-2751-4f5e-a219-244a7cd3dd93")
 		)
@@ -2178,7 +2120,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "4.7uF"
+		(property "Value" "4.7uF 16V X7S"
 			(at 180.594 72.898 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2200,7 +2142,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://pim.murata.com/en-us/pim/details/?partNum=GCM188C71C475KE36%23"
 			(at 180.34 74.93 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2220,6 +2162,24 @@
 				)
 			)
 		)
+    (property "Manufacturer" "Murata" (at 180.34 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "GCM188C71C475KE36D" (at 180.34 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "16 VDC" (at 180.34 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±10%" (at 180.34 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Dielectric" "X7S" (at 180.34 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200 powertrain/safety" (at 180.34 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "22dafb41-9c07-438b-b5b5-cc195ee00405")
 		)
@@ -2285,7 +2245,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
 			(at 90.17 74.93 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2305,6 +2265,24 @@
 				)
 			)
 		)
+    (property "Manufacturer" "Vishay" (at 90.17 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "CRCW040210K0FKED" (at 90.17 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±1%" (at 90.17 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063 W" (at 90.17 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "TCR" "±100 ppm/K" (at 90.17 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Qualification" "AEC-Q200" (at 90.17 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "ab059ffc-7ad3-482b-b707-f8cf1a2991c1")
 		)
@@ -2321,84 +2299,6 @@
 			(project "simple_circuit"
 				(path "/2d31a29e-fd31-488a-8143-af7c413d6fc3"
 					(reference "R303")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 119.38 80.01 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "57542862-4cff-4c01-9606-7a42b88dc6b7")
-		(property "Reference" "#PWR00230"
-			(at 119.38 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+1V8_RUN"
-			(at 119.38 76.2 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 119.38 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 119.38 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+1V8_RUN\""
-			(at 119.38 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "25928f81-035e-5332-a60d-246d728a7e46")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/75f87715-f8d8-4db5-8e4d-2bcd184f549a"
-					(reference "#PWR00230")
 					(unit 1)
 				)
 			)
@@ -2682,7 +2582,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.vishay.com/docs/20035/dcrcwe3.pdf"
 			(at 69.85 74.93 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2702,6 +2602,21 @@
 				)
 			)
 		)
+    (property "Manufacturer" "Vishay" (at 69.85 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "MPN" "CRCW040210K0FKED" (at 69.85 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "±1%" (at 69.85 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063 W" (at 69.85 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "TCR" "±100 ppm/K" (at 69.85 74.93 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "0d2755d2-6781-4e6d-85b8-ffd9df16f57c")
 		)
@@ -2823,7 +2738,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "BAT54H"
+		(property "Value" "BAT54HT1G"
 			(at 121.412 67.818 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2845,7 +2760,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.onsemi.com/pdf/datasheet/bat54ht1-d.pdf"
 			(at 119.38 74.93 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2855,7 +2770,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Schottky reset-isolation diode, SOD-323; pin 1 cathode to NRST, pin 2 anode to FLASH_RESET_N"
 			(at 119.38 74.93 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2865,7 +2780,7 @@
 				)
 			)
 		)
-		(property "MPN" "BAT54H,115"
+		(property "MPN" "BAT54HT1G"
 			(at 121.92 80.0099 0)
 			(hide yes)
 			(show_name no)
@@ -2876,7 +2791,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Nexperia"
+		(property "Manufacturer" "onsemi"
 			(at 121.92 80.0099 0)
 			(hide yes)
 			(show_name no)
@@ -2903,91 +2818,6 @@
 			(project "simple_circuit"
 				(path "/2d31a29e-fd31-488a-8143-af7c413d6fc3"
 					(reference "D4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 105.41 74.93 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9b483497-4033-426d-af71-34be73ea39bd")
-		(property "Reference" "C305"
-			(at 105.664 76.708 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 105.664 72.898 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 105.41 74.93 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 105.41 74.93 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 105.41 74.93 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "18aac82a-f90a-4ecc-b100-c9d05fe6967c")
-		)
-		(pin "2"
-			(uuid "f44ee98c-eb02-4aee-8469-98b90cc14db8")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/75f87715-f8d8-4db5-8e4d-2bcd184f549a"
-					(reference "C305")
-					(unit 1)
-				)
-			)
-			(project "simple_circuit"
-				(path "/2d31a29e-fd31-488a-8143-af7c413d6fc3"
-					(reference "C305")
 					(unit 1)
 				)
 			)
@@ -3227,83 +3057,81 @@
 			)
 		)
 	)
-	(symbol
-		(lib_id "power:GND")
-		(at 105.41 80.01 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "cbe2f114-6f84-44e3-af6b-e327a6393602")
-		(property "Reference" "#PWR00229"
-			(at 105.41 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
+	(wire
+		(pts
+			(xy 90.17 77.47000000000001) (xy 90.17 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89a6f8d1-4ef9-40ba-baa8-b43fd5af226a")
+	)
+	(wire
+		(pts
+			(xy 90.17 78.74) (xy 123.19 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8baacf8-8305-4ac8-8dd3-b5552b087a1a")
+	)
+	(wire
+		(pts
+			(xy 119.38 72.39) (xy 121.92 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f6ac9e70-ebec-4a82-a0eb-a56bbf08aa22")
+	)
+	(wire
+		(pts
+			(xy 121.92 72.39) (xy 121.92 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "01a7de3a-a49c-4316-9982-398969a96c12")
+	)
+	(wire
+		(pts
+			(xy 121.92 78.74) (xy 123.19 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7c58d9fb-6799-4099-a61d-f863b2b1b43f")
+	)
+	(junction
+		(at 123.19 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a123e6e7-3233-4d20-b01b-eac90c114ed4")
+	)
+	(wire
+		(pts
+			(xy 119.38 77.47000000000001) (xy 116.84 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f7f5c12-6442-4152-bd0d-69e12db2d1f5")
+	)
+	(global_label "NRST"
+		(at 116.84 77.47 180)
+		(effects
+			(font
+				(size 1.27 1.27)
 			)
+			(justify right)
 		)
-		(property "Value" "GND"
-			(at 105.41 76.2 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 105.41 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 105.41 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\""
-			(at 105.41 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "128cd3cc-b133-5969-927b-a1e1f875e25d")
-		)
-		(instances
-			(project "open-race_v2"
-				(path "/1cc14db4-4207-4c76-b5f6-6a2491c5fa6b/75f87715-f8d8-4db5-8e4d-2bcd184f549a"
-					(reference "#PWR00229")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "f4699c70-28aa-4f07-ac58-c142147fa2bd")
 	)
 	(sheet_instances
 		(path "/"

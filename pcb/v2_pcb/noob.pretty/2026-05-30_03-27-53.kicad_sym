@@ -9,7 +9,7 @@
     (property "Footprint" "VFBGA264_14X14_STM" (id 2) (at 0 0 0)
       (effects (font (size 1.27 1.27) italic) hide)
     )
-    (property "Datasheet" "https://www.st.com/resource/en/datasheet/stm32n657a0.pdf" (id 3) (at 0 0 0)
+    (property "Datasheet" "https://www.st.com/resource/en/datasheet/stm32n657x0.pdf" (id 3) (at 0 0 0)
       (effects (font (size 1.27 1.27) italic) hide)
     )
     (property "ki_keywords" "STM32N657X0H3Q" (id 4) (at 0 0 0)
