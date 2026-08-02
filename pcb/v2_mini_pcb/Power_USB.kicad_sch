@@ -4371,16 +4371,6 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 130.81) (xy 194.31 130.81)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "19650897-2c29-42e0-8827-fc12c3b1330e")
-	)
-	(wire
-		(pts
 			(xy 135.89 86.36) (xy 138.43 86.36)
 		)
 		(stroke
@@ -5151,6 +5141,16 @@
 	)
 	(wire
 		(pts
+			(xy 181.61 130.81) (xy 194.31 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9dfd52a-5369-436c-92ac-38adb48772b1")
+	)
+	(wire
+		(pts
 			(xy 204.47 86.36) (xy 208.28 86.36)
 		)
 		(stroke
@@ -5399,16 +5399,6 @@
 		)
 		(uuid "1e381fff-982a-4e21-b0d8-e2d44bc3ca7d")
 	)
-	(label "BAT_SCL"
-		(at 181.61 134.62 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1f95487a-192b-4215-b62c-0132a074545e")
-	)
 	(label "USB_DP"
 		(at 83.82 91.44 0)
 		(effects
@@ -5449,16 +5439,6 @@
 		)
 		(uuid "3c085bce-96bf-4746-81bb-de8164e8c06e")
 	)
-	(label "BAT_SDA"
-		(at 181.61 130.81 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "427f4f29-7af9-431b-a4cf-b9dd3a471433")
-	)
 	(label "USB_CC1"
 		(at 119.38 91.44 0)
 		(effects
@@ -5489,6 +5469,16 @@
 		)
 		(uuid "4f0d9248-4d0a-43b1-92bd-f3ce68178a53")
 	)
+	(label "+3V3_IMU"
+		(at 118.11 166.37 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "52b1702a-99ee-4e80-9d72-3b555bb6a555")
+	)
 	(label "POW_SDA"
 		(at 123.19 124.46 0)
 		(effects
@@ -5498,6 +5488,16 @@
 			(justify left bottom)
 		)
 		(uuid "5427c5d2-29a6-4eb4-b70b-86fc1b47179a")
+	)
+	(label "BAT_SDA"
+		(at 181.61 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "552f80c7-eac0-416a-8f72-38f8d1ed607f")
 	)
 	(label "USB_CC2"
 		(at 102.87 49.53 0)
@@ -5558,6 +5558,16 @@
 			(justify left bottom)
 		)
 		(uuid "8c72a43e-ec7e-4fcd-9263-fdae01f61f27")
+	)
+	(label "BAT_SCL"
+		(at 181.61 130.81 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "935235a4-81a9-484c-9659-ebb34f4c8d03")
 	)
 	(label "CHG_INT"
 		(at 66.04 44.45 0)
@@ -5668,6 +5678,16 @@
 			(justify left bottom)
 		)
 		(uuid "f6956538-a5de-4801-9539-8590a1824497")
+	)
+	(label "+3V3_GNSS"
+		(at 118.11 157.48 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fe5549e4-ae52-4eb8-8485-8a84a7930508")
 	)
 	(hierarchical_label "{USB_IF}"
 		(shape bidirectional)

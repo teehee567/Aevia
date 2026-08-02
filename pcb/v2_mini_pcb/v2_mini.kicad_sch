@@ -7,167 +7,67 @@
 	(lib_symbols)
 	(bus
 		(pts
-			(xy 95 60) (xy 115 60)
+			(xy 163.83 95.25) (xy 177.8 95.25)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "10000000-0000-4000-8000-00000000000c")
+		(uuid "075b9bbf-a629-4370-bd86-a3ac0142d9f2")
 	)
 	(bus
 		(pts
-			(xy 95 70) (xy 115 70)
+			(xy 101.6 95.25) (xy 115.57 95.25)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "10000000-0000-4000-8000-00000000000d")
+		(uuid "4eecef7e-80db-4afd-a023-4497a9542b78")
 	)
 	(bus
 		(pts
-			(xy 185 50) (xy 190 50)
+			(xy 163.83 101.6) (xy 177.8 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "10000000-0000-4000-8000-00000000000e")
+		(uuid "664ee92e-8d57-4530-92d4-4e7a24094440")
 	)
 	(bus
 		(pts
-			(xy 190 50) (xy 190 115)
+			(xy 101.6 60.96) (xy 115.57 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "10000000-0000-4000-8000-00000000000f")
+		(uuid "68baf2f3-ca25-4391-a610-7f721fe56a57")
 	)
 	(bus
 		(pts
-			(xy 190 115) (xy 100 115)
+			(xy 163.83 60.96) (xy 177.8 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "10000000-0000-4000-8000-000000000010")
+		(uuid "9113c468-8156-4d51-9ffb-55c6aee47d92")
 	)
 	(bus
 		(pts
-			(xy 100 115) (xy 100 145)
+			(xy 101.6 67.31) (xy 115.57 67.31)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "10000000-0000-4000-8000-000000000011")
-	)
-	(bus
-		(pts
-			(xy 100 145) (xy 95 145)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-000000000012")
-	)
-	(bus
-		(pts
-			(xy 185 60) (xy 188 60)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-000000000013")
-	)
-	(bus
-		(pts
-			(xy 188 60) (xy 188 145)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-000000000014")
-	)
-	(bus
-		(pts
-			(xy 188 145) (xy 115 145)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-000000000015")
-	)
-	(bus
-		(pts
-			(xy 185 70) (xy 200 70)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-000000000016")
-	)
-	(bus
-		(pts
-			(xy 200 70) (xy 200 135)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-000000000017")
-	)
-	(bus
-		(pts
-			(xy 200 135) (xy 205 135)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-000000000018")
-	)
-	(bus
-		(pts
-			(xy 185 80) (xy 198 80)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-000000000019")
-	)
-	(bus
-		(pts
-			(xy 198 80) (xy 198 145)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-00000000001a")
-	)
-	(bus
-		(pts
-			(xy 198 145) (xy 205 145)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10000000-0000-4000-8000-00000000001b")
+		(uuid "eeb5463c-1caf-4079-ace2-1d0ce3a8149b")
 	)
 	(sheet
-		(at 205 125)
-		(size 70 40)
+		(at 177.8 88.17)
+		(size 39.37 26.13)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -182,7 +82,7 @@
 		)
 		(uuid "0a25b8a8-ad00-432b-a1e7-4a7291f71ca1")
 		(property "Sheetname" "Storage + Display"
-			(at 207.54 123.73 0)
+			(at 177.8 87.5343 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -193,34 +93,34 @@
 			)
 		)
 		(property "Sheetfile" "Storage_Display.kicad_sch"
-			(at 207.54 166.27 0)
+			(at 177.8 114.8087 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left bottom)
+				(justify left top)
 			)
 		)
-		(pin "{SHARED_SPI}" bidirectional
-			(at 205 135 180)
-			(uuid "8b378a3b-83f9-4e18-81a9-abcd8eb5764f")
+		(pin "{LCD}" bidirectional
+			(at 177.8 95.25 180)
+			(uuid "4473fcbf-ab7d-4c8a-8db2-3cbf621d785f")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
-		(pin "{HMI_IF}" bidirectional
-			(at 205 145 180)
-			(uuid "70ed3e6a-b573-4538-9bf9-f89697d19c22")
+		(pin "{SD}" bidirectional
+			(at 177.8 101.6 180)
+			(uuid "13a2f4d1-4536-4c0e-83a3-f15367a59d81")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(instances
@@ -232,8 +132,8 @@
 		)
 	)
 	(sheet
-		(at 25 40)
-		(size 70 60)
+		(at 63.5 50.16)
+		(size 38.1 26.04)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -248,7 +148,7 @@
 		)
 		(uuid "4f258941-373d-43ad-86e2-121941fb93df")
 		(property "Sheetname" "Power + USB"
-			(at 27.54 38.73 0)
+			(at 63.5 49.5243 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -259,34 +159,34 @@
 			)
 		)
 		(property "Sheetfile" "Power_USB.kicad_sch"
-			(at 27.54 101.27 0)
+			(at 63.5 76.7087 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left bottom)
+				(justify left top)
 			)
 		)
 		(pin "{USB_IF}" bidirectional
-			(at 95 60 0)
-			(uuid "54b9ee7a-e391-4c3e-81ff-5793dddd334c")
+			(at 101.6 60.96 0)
+			(uuid "ae25f23e-030e-4a3d-b054-a4bb0ce20791")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
-		(pin "{CHARGER_I2C}" bidirectional
-			(at 95 70 0)
-			(uuid "e4a5f8b2-bd98-4273-9dee-54aec2588541")
+		(pin "{POWER_I2C}" bidirectional
+			(at 101.6 67.31 0)
+			(uuid "1f605d49-f715-4d80-9eea-e92ed21a025f")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(instances
@@ -298,8 +198,8 @@
 		)
 	)
 	(sheet
-		(at 115 125)
-		(size 70 40)
+		(at 177.8 50.07)
+		(size 39.37 26.13)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -314,7 +214,7 @@
 		)
 		(uuid "a7e9176c-19e9-4164-84c0-42ef6ac15138")
 		(property "Sheetname" "IMU"
-			(at 117.54 123.73 0)
+			(at 177.8 49.4343 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -325,24 +225,24 @@
 			)
 		)
 		(property "Sheetfile" "IMU_Mini.kicad_sch"
-			(at 117.54 166.27 0)
+			(at 177.8 76.7087 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left bottom)
+				(justify left top)
 			)
 		)
 		(pin "{IMU_IF}" bidirectional
-			(at 115 145 180)
-			(uuid "ceebf2ba-22bf-41c0-bca6-02c996d73b0c")
+			(at 177.8 60.96 180)
+			(uuid "0697d4d4-5aad-4cca-9fa8-2ed3e57c27b7")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(instances
@@ -354,8 +254,8 @@
 		)
 	)
 	(sheet
-		(at 25 125)
-		(size 70 40)
+		(at 63.5 88.17)
+		(size 38.1 26.13)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -370,7 +270,7 @@
 		)
 		(uuid "a81c2312-17da-4077-8f80-7b7fd8fe19c5")
 		(property "Sheetname" "GNSS"
-			(at 27.54 123.73 0)
+			(at 63.5 87.5343 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -381,24 +281,24 @@
 			)
 		)
 		(property "Sheetfile" "GNSS_Mini.kicad_sch"
-			(at 27.54 166.27 0)
+			(at 63.5 114.8087 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left bottom)
+				(justify left top)
 			)
 		)
 		(pin "{GNSS_IF}" bidirectional
-			(at 95 145 0)
-			(uuid "155eec7b-d260-4936-bb4e-66a29867e846")
+			(at 101.6 95.25 0)
+			(uuid "4f38c81f-fab2-408d-8089-25469b888289")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(instances
@@ -410,8 +310,8 @@
 		)
 	)
 	(sheet
-		(at 115 40)
-		(size 70 60)
+		(at 115.57 50.8)
+		(size 48.26 64.77)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -426,7 +326,7 @@
 		)
 		(uuid "d810a1dc-5c9a-4ac6-8c4b-d9616121b31e")
 		(property "Sheetname" "ESP32-S31 MCU"
-			(at 117.54 38.73 0)
+			(at 115.57 50.1643 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -437,69 +337,69 @@
 			)
 		)
 		(property "Sheetfile" "MCU.kicad_sch"
-			(at 117.54 101.27 0)
+			(at 115.57 116.0787 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left bottom)
+				(justify left top)
 			)
 		)
-		(pin "{USB_IF}" bidirectional
-			(at 115 60 180)
-			(uuid "816802d8-e153-4505-bb90-a3e0bb36b770")
+		(pin "{POWER_I2C}" bidirectional
+			(at 115.57 67.31 180)
+			(uuid "4635e3fa-bc4c-4f0c-abf1-b41b1cba9408")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
-			)
-		)
-		(pin "{CHARGER_I2C}" bidirectional
-			(at 115 70 180)
-			(uuid "cd891f49-ee29-4070-ba5e-226f78b50399")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(pin "{GNSS_IF}" bidirectional
-			(at 185 50 0)
-			(uuid "e3fcd00b-114f-4968-b41c-125dd262d345")
+			(at 115.57 95.25 180)
+			(uuid "ba52eb1e-0ea1-4b09-90f4-0dbe1a84f53e")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left)
+			)
+		)
+		(pin "{LCD}" bidirectional
+			(at 163.83 95.25 0)
+			(uuid "2bd16b08-d46f-43b8-a59c-1c774b39d1fc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "{SD}" bidirectional
+			(at 163.83 101.6 0)
+			(uuid "07502d16-82b1-402a-959a-06fd322e0d46")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(pin "{IMU_IF}" bidirectional
-			(at 185 60 0)
-			(uuid "ab64d27b-2cd5-4909-91ce-cfe6d84db299")
+			(at 163.83 60.96 0)
+			(uuid "9f7530b7-41de-4db5-a160-00ad281c8ea9")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
-		(pin "{SHARED_SPI}" bidirectional
-			(at 185 70 0)
-			(uuid "4ad360ca-a968-4c0f-95b3-3e9ce6e0a992")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "{HMI_IF}" bidirectional
-			(at 185 80 0)
-			(uuid "8219c53a-b217-4936-b2b6-10466bb66944")
+		(pin "{USB_IF}" bidirectional
+			(at 115.57 60.96 180)
+			(uuid "589fa231-a818-45eb-b01e-c7bbc52f196f")
 			(effects
 				(font
 					(size 1.27 1.27)

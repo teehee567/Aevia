@@ -1067,8 +1067,8 @@
 			)
 			(symbol "UM980_0_0"
 				(rectangle
-					(start -15.24 -35.56)
-					(end 15.24 33.02)
+					(start -15.24 33.02)
+					(end 15.24 -35.56)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -1584,25 +1584,6 @@
 						)
 					)
 					(number "28"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at -20.32 -25.4 0)
-					(length 5.08)
-					(hide yes)
-					(name "BIF"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "29"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -5776,9 +5757,6 @@
 		(pin "34"
 			(uuid "9657f1ce-d1b9-4715-beeb-c48ea734ec5e")
 		)
-		(pin "29"
-			(uuid "c0ef48db-a4f6-4217-ba03-ea14c8501eb6")
-		)
 		(instances
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
@@ -5944,6 +5922,85 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
 					(reference "#FLG04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 59.69 113.03 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b0982e30-06e5-4a31-8344-c9d1b6b3cfb0")
+		(property "Reference" "R2"
+			(at 56.896 112.014 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 62.484 112.014 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 59.69 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 59.69 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 59.69 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "305e28d3-b549-4bac-8a88-65e526d1d2c3")
+		)
+		(pin "1"
+			(uuid "b4bcd6b1-07a7-4e0a-81ab-23127a20ca9b")
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -6180,85 +6237,6 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
 					(reference "C3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 59.69 113.03 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ca9d3b1d-0402-41e4-ab18-82f537f4da85")
-		(property "Reference" "R2"
-			(at 56.896 112.014 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 62.484 112.014 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 59.69 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 59.69 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 59.69 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "9d6d52cb-2906-4802-ba49-c7727d17d267")
-		)
-		(pin "1"
-			(uuid "02d6b55e-533c-457c-9313-24e829e81702")
-		)
-		(instances
-			(project "v2_mini"
-				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
-					(reference "R2")
 					(unit 1)
 				)
 			)
