@@ -9,6 +9,7 @@ larger library/debug-oriented view.
 
 import argparse
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -93,6 +94,17 @@ def parse(tokens):
             return tok
 
     return parse_expr()
+
+
+def xml_to_tree(element):
+    """Convert KiCad's XML netlist into the legacy parser's list shape."""
+    tree = [('SYM', element.tag)]
+    for name, value in element.attrib.items():
+        tree.append([('SYM', name), ('STR', value)])
+    if element.text and element.text.strip():
+        tree.append(('STR', element.text.strip()))
+    tree.extend(xml_to_tree(child) for child in element)
+    return tree
 
 
 def val(node):
@@ -471,7 +483,10 @@ def pin_label(pin, pin_info):
 
 def load_netlist(src_path):
     text = Path(src_path).read_text(encoding='utf-8', errors='replace')
-    tree = parse(tokenize(text))
+    if text.lstrip().startswith('<?xml') or text.lstrip().startswith('<export'):
+        tree = xml_to_tree(ET.fromstring(text))
+    else:
+        tree = parse(tokenize(text))
     design = parse_design(find_first(tree, 'design') or [])
     libparts = parse_libparts(find_first(tree, 'libparts') or [])
     comps = parse_components(find_first(tree, 'components') or [])

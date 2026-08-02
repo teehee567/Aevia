@@ -3181,7 +3181,7 @@
 		)
 		(uuid "fc4e83c5-00bf-4c58-9929-3a9e73e6dd9c")
 	)
-	(hierarchical_label "{SD}"
+	(hierarchical_label "{LCD}"
 		(shape bidirectional)
 		(at 231.14 20.4 0)
 		(effects
