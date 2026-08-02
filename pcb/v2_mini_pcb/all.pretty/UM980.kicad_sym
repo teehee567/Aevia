@@ -1,0 +1,877 @@
+
+(kicad_symbol_lib (version 20211014) (generator kicad_symbol_editor)
+  (symbol "UM980" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "U" (id 0) (at -15.24 35.56 0)
+      (effects (font (size 1.27 1.27)) (justify top left))
+    )
+    (property "Value" "UM980" (id 1) (at -15.24 -38.1 0)
+      (effects (font (size 1.27 1.27)) (justify bottom left))
+    )
+    (property "Footprint" "UM980:XCVR_UM980" (id 2) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "MF" "unicore communications" (id 4) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "MAXIMUM_PACKAGE_HEIGHT" "2.80mm" (id 5) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "CREATOR" "RODRIGO" (id 6) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Price" "None" (id 7) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Package" "None" (id 8) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Check_prices" "https://www.snapeda.com/parts/UM980/Unicore+Comm/view-part/?ref=eda" (id 9) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "STANDARD" "Manufacturer Recommendations" (id 10) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "PARTREV" "R1.9" (id 11) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "VERIFIER" "" (id 12) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "SnapEDA_Link" "https://www.snapeda.com/parts/UM980/Unicore+Comm/view-part/?ref=snap" (id 13) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "MP" "UM980" (id 14) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Description" "\n                        \n                            - RF Receiver BeiDou, Galileo, GLONASS, GNSS, GPS, QZSS, NAVIC 1.575GHz, 1.561GHz, 1.278GHz, 1.227GHz, 1.176GHz, 1.268GHz, 1.278GHz, 1.207GHz, 1.602GHz, 1.246GHz -161dBm 921.6kbps 54-LGA (22x17)\n                        \n" (id 15) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Availability" "In Stock" (id 16) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "MANUFACTURER" "Unicore Comm" (id 17) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (symbol "UM980_0_0"
+      (rectangle (start -15.24 -35.56) (end 15.24 33.02)
+        (stroke (width 0.254)) (fill (type background))
+      )
+      (pin power_in line (at 20.32 -33.02 180.0) (length 5.08)
+        (name "GND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -33.02 180.0) (length 5.08) hide
+        (name "GND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "3"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -33.02 180.0) (length 5.08) hide
+        (name "GND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "12"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -33.02 180.0) (length 5.08) hide
+        (name "GND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "14"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -33.02 180.0) (length 5.08) hide
+        (name "GND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "32"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -33.02 180.0) (length 5.08) hide
+        (name "GND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "37"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -33.02 180.0) (length 5.08) hide
+        (name "GND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "41"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -33.02 180.0) (length 5.08) hide
+        (name "GND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "48"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at 20.32 20.32 180.0) (length 5.08)
+        (name "ANT_IN"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "2"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at 20.32 17.78 180.0) (length 5.08)
+        (name "ANT_DETECT"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "4"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 15.24 180.0) (length 5.08)
+        (name "ANT_OFF"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "5"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at 20.32 12.7 180.0) (length 5.08)
+        (name "~{ANT_SHORT}"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "6"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 30.48 180.0) (length 5.08)
+        (name "VCC_RF"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "7"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at 20.32 -7.62 180.0) (length 5.08)
+        (name "SPIS_CSN"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "8"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at 20.32 -10.16 180.0) (length 5.08)
+        (name "SPIS_MOSI"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "9"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input clock (at 20.32 -12.7 180.0) (length 5.08)
+        (name "SPIS_CLK"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "10"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 -15.24 180.0) (length 5.08)
+        (name "SPIS_MISO"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "11"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -27.94 0) (length 5.08)
+        (name "RSV"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "13"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -27.94 0) (length 5.08) hide
+        (name "RSV"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "22"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -27.94 0) (length 5.08) hide
+        (name "RSV"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "23"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08)
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "15"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "16"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "17"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "18"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "24"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "25"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "35"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "38"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "39"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "40"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "46"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "47"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "50"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "52"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -33.02 0) (length 5.08) hide
+        (name "NC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "54"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 7.62 180.0) (length 5.08)
+        (name "PVT_STAT"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "19"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 5.08 180.0) (length 5.08)
+        (name "RTK_STAT"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "20"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 2.54 180.0) (length 5.08)
+        (name "ERR_STAT"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "21"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 2.54 0) (length 5.08)
+        (name "RXD2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "26"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at -20.32 0.0 0) (length 5.08)
+        (name "TXD2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "27"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -25.4 0) (length 5.08)
+        (name "BIF"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "28"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin no_connect line (at -20.32 -25.4 0) (length 5.08) hide
+        (name "BIF"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "29"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at -20.32 -5.08 0) (length 5.08)
+        (name "TXD3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "30"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 -7.62 0) (length 5.08)
+        (name "RXD3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "31"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 27.94 180.0) (length 5.08)
+        (name "VCC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "33"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 27.94 180.0) (length 5.08) hide
+        (name "VCC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "34"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 25.4 180.0) (length 5.08)
+        (name "V_BCKP"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "36"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at -20.32 7.62 0) (length 5.08)
+        (name "TXD1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "42"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 10.16 0) (length 5.08)
+        (name "RXD1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "43"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin bidirectional line (at -20.32 -12.7 0) (length 5.08)
+        (name "SDA"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "44"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin bidirectional clock (at -20.32 -15.24 0) (length 5.08)
+        (name "SCL"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "45"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 20.32 0) (length 5.08)
+        (name "~{RESET}"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "49"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 15.24 0) (length 5.08)
+        (name "EVENT"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "51"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 -2.54 180.0) (length 5.08)
+        (name "PPS"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "53"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08)
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP2"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP3"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP4"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP5"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP6"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP7"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP8"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP9"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP10"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP11"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP12"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP13"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP14"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 5.08) hide
+        (name "EXP_1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP15"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08)
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP16"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP17"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP18"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP19"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP20"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP21"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP22"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP23"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP24"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP25"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP26"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP27"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP28"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP29"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -22.86 180.0) (length 5.08) hide
+        (name "EXP_2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP30"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08)
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP31"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP32"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP33"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP34"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP35"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP36"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP37"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP38"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP39"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP40"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP41"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP42"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP43"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP44"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -25.4 180.0) (length 5.08) hide
+        (name "EXP_3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP45"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -27.94 180.0) (length 5.08)
+        (name "EXP_4"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP46"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -27.94 180.0) (length 5.08) hide
+        (name "EXP_4"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP47"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -27.94 180.0) (length 5.08) hide
+        (name "EXP_4"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "EXP48"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+    )
+  )
+)
