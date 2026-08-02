@@ -1,0 +1,524 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "4318b369-034c-40ef-a05b-b7d2541c0647")
+	(paper "A4")
+	(lib_symbols)
+	(bus
+		(pts
+			(xy 95 60) (xy 115 60)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-00000000000c")
+	)
+	(bus
+		(pts
+			(xy 95 70) (xy 115 70)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-00000000000d")
+	)
+	(bus
+		(pts
+			(xy 185 50) (xy 190 50)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-00000000000e")
+	)
+	(bus
+		(pts
+			(xy 190 50) (xy 190 115)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-00000000000f")
+	)
+	(bus
+		(pts
+			(xy 190 115) (xy 100 115)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000010")
+	)
+	(bus
+		(pts
+			(xy 100 115) (xy 100 145)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000011")
+	)
+	(bus
+		(pts
+			(xy 100 145) (xy 95 145)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000012")
+	)
+	(bus
+		(pts
+			(xy 185 60) (xy 188 60)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000013")
+	)
+	(bus
+		(pts
+			(xy 188 60) (xy 188 145)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000014")
+	)
+	(bus
+		(pts
+			(xy 188 145) (xy 115 145)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000015")
+	)
+	(bus
+		(pts
+			(xy 185 70) (xy 200 70)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000016")
+	)
+	(bus
+		(pts
+			(xy 200 70) (xy 200 135)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000017")
+	)
+	(bus
+		(pts
+			(xy 200 135) (xy 205 135)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000018")
+	)
+	(bus
+		(pts
+			(xy 185 80) (xy 198 80)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-000000000019")
+	)
+	(bus
+		(pts
+			(xy 198 80) (xy 198 145)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-00000000001a")
+	)
+	(bus
+		(pts
+			(xy 198 145) (xy 205 145)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10000000-0000-4000-8000-00000000001b")
+	)
+	(sheet
+		(at 205 125)
+		(size 70 40)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.0006)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "0a25b8a8-ad00-432b-a1e7-4a7291f71ca1")
+		(property "Sheetname" "Storage + Display"
+			(at 207.54 123.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Storage_Display.kicad_sch"
+			(at 207.54 166.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(pin "{SHARED_SPI}" bidirectional
+			(at 205 135 180)
+			(uuid "8b378a3b-83f9-4e18-81a9-abcd8eb5764f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "{HMI_IF}" bidirectional
+			(at 205 145 180)
+			(uuid "70ed3e6a-b573-4538-9bf9-f89697d19c22")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25 40)
+		(size 70 60)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.0006)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "4f258941-373d-43ad-86e2-121941fb93df")
+		(property "Sheetname" "Power + USB"
+			(at 27.54 38.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Power_USB.kicad_sch"
+			(at 27.54 101.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(pin "{USB_IF}" bidirectional
+			(at 95 60 0)
+			(uuid "54b9ee7a-e391-4c3e-81ff-5793dddd334c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "{CHARGER_I2C}" bidirectional
+			(at 95 70 0)
+			(uuid "e4a5f8b2-bd98-4273-9dee-54aec2588541")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 115 125)
+		(size 70 40)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.0006)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "a7e9176c-19e9-4164-84c0-42ef6ac15138")
+		(property "Sheetname" "IMU"
+			(at 117.54 123.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "IMU_Mini.kicad_sch"
+			(at 117.54 166.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(pin "{IMU_IF}" bidirectional
+			(at 115 145 180)
+			(uuid "ceebf2ba-22bf-41c0-bca6-02c996d73b0c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25 125)
+		(size 70 40)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.0006)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "a81c2312-17da-4077-8f80-7b7fd8fe19c5")
+		(property "Sheetname" "GNSS"
+			(at 27.54 123.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "GNSS_Mini.kicad_sch"
+			(at 27.54 166.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(pin "{GNSS_IF}" bidirectional
+			(at 95 145 0)
+			(uuid "155eec7b-d260-4936-bb4e-66a29867e846")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 115 40)
+		(size 70 60)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.0006)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d810a1dc-5c9a-4ac6-8c4b-d9616121b31e")
+		(property "Sheetname" "ESP32-S31 MCU"
+			(at 117.54 38.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "MCU.kicad_sch"
+			(at 117.54 101.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(pin "{USB_IF}" bidirectional
+			(at 115 60 180)
+			(uuid "816802d8-e153-4505-bb90-a3e0bb36b770")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "{CHARGER_I2C}" bidirectional
+			(at 115 70 180)
+			(uuid "cd891f49-ee29-4070-ba5e-226f78b50399")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "{GNSS_IF}" bidirectional
+			(at 185 50 0)
+			(uuid "e3fcd00b-114f-4968-b41c-125dd262d345")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "{IMU_IF}" bidirectional
+			(at 185 60 0)
+			(uuid "ab64d27b-2cd5-4909-91ce-cfe6d84db299")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "{SHARED_SPI}" bidirectional
+			(at 185 70 0)
+			(uuid "4ad360ca-a968-4c0f-95b3-3e9ce6e0a992")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "{HMI_IF}" bidirectional
+			(at 185 80 0)
+			(uuid "8219c53a-b217-4936-b2b6-10466bb66944")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

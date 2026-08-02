@@ -2313,7 +2313,7 @@
 	)
 	(wire
 		(pts
-			(xy 36.83 81.28) (xy 62.23 81.28)
+			(xy 36.83 81.28) (xy 53.34 81.28)
 		)
 		(stroke
 			(width 0)
@@ -2450,6 +2450,16 @@
 			(type default)
 		)
 		(uuid "2aa5c5e9-055c-4f90-b41e-4516145cb7b6")
+	)
+	(wire
+		(pts
+			(xy 58.42 81.28) (xy 62.23 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35de681c-3ef1-42f4-bd00-c4d0ef743a70")
 	)
 	(wire
 		(pts
@@ -3011,7 +3021,7 @@
 		)
 		(uuid "84105bb8-d9e0-4104-b97a-c3070079663f")
 	)
-	(label "SD_D2"
+	(label "SD_D3"
 		(at 55.88 50.8 0)
 		(effects
 			(font
@@ -5584,6 +5594,87 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/0a25b8a8-ad00-432b-a1e7-4a7291f71ca1"
 					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 55.88 81.28 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ef5005a2-bedd-4e74-ba06-f1e9efa089d6")
+		(property "Reference" "R19"
+			(at 59.725 80.264 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22"
+			(at 54.645 80.264 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 55.88 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 55.88 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 55.88 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5fdf7557-aa91-46ee-bfb6-1bcfcd0fc60c")
+		)
+		(pin "2"
+			(uuid "9fb19f89-9ea6-4a7b-9245-33e56c895127")
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/0a25b8a8-ad00-432b-a1e7-4a7291f71ca1"
+					(reference "R19")
 					(unit 1)
 				)
 			)
