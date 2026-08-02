@@ -1259,12 +1259,6 @@
 		)
 	)
 	(junction
-		(at 87.63 53.34)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "04267af8-1d63-4f12-b67d-92e758323cf5")
-	)
-	(junction
 		(at 87.63 88.9)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1281,12 +1275,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "765cc062-eb18-4ac7-92ac-8885559a2383")
-	)
-	(junction
-		(at 111.76 53.34)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7f729f2a-755b-480e-89b4-771e447c41dc")
 	)
 	(junction
 		(at 46.99 60.96)
@@ -1386,16 +1374,6 @@
 	)
 	(wire
 		(pts
-			(xy 36.83 40.64) (xy 36.83 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "02b63fb1-19a4-410c-a4b1-54e970c0c467")
-	)
-	(wire
-		(pts
 			(xy 99.06 46.99) (xy 107.95 46.99)
 		)
 		(stroke
@@ -1433,16 +1411,6 @@
 			(type default)
 		)
 		(uuid "1cebb3ef-bf6b-4e52-9ac7-c3dd0a821a54")
-	)
-	(wire
-		(pts
-			(xy 113.03 53.34) (xy 111.76 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "282282fa-3c55-4fd4-b9c0-5854271d8b0f")
 	)
 	(wire
 		(pts
@@ -1556,16 +1524,6 @@
 	)
 	(wire
 		(pts
-			(xy 36.83 40.64) (xy 87.63 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "72c95a39-b845-4e3f-8840-5c3f9ec0ca06")
-	)
-	(wire
-		(pts
 			(xy 87.63 60.96) (xy 87.63 63.5)
 		)
 		(stroke
@@ -1613,16 +1571,6 @@
 			(type default)
 		)
 		(uuid "8063b89b-cb14-4241-814d-b9132dfcd1a9")
-	)
-	(wire
-		(pts
-			(xy 87.63 40.64) (xy 87.63 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "81b8fbb4-0728-4694-9519-d6550f79d347")
 	)
 	(wire
 		(pts
@@ -1913,6 +1861,50 @@
 			(justify left bottom)
 		)
 		(uuid "b78bff85-e471-413a-8bab-c092d89bf7de")
+	)
+	(global_label "+3V3_IMU"
+		(shape bidirectional)
+		(at 36.83 62.23 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2e9b65d6-27bd-4d3c-b144-75f6c1cd3f4e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 36.83 62.23 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_IMU"
+		(shape bidirectional)
+		(at 111.76 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "764dd777-a626-462a-9bb5-99e88b5db1ee")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 111.76 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 	)
 	(hierarchical_label "{IMU_IF}"
 		(shape bidirectional)
@@ -2475,85 +2467,6 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a7e9176c-19e9-4164-84c0-42ef6ac15138"
 					(reference "#PWR063")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 113.03 53.34 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a07d3c12-1ae5-4c73-afc8-706eeddee92c")
-		(property "Reference" "#FLG010"
-			(at 114.935 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3_IMU"
-			(at 116.84 53.3399 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 113.03 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 113.03 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 113.03 53.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "1d34ef8e-3e73-43d5-8978-c592764673a1")
-		)
-		(instances
-			(project "v2_mini"
-				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a7e9176c-19e9-4164-84c0-42ef6ac15138"
-					(reference "#FLG010")
 					(unit 1)
 				)
 			)

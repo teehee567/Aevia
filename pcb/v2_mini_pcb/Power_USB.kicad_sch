@@ -5517,16 +5517,6 @@
 		)
 		(uuid "4f0d9248-4d0a-43b1-92bd-f3ce68178a53")
 	)
-	(label "+3V3_IMU"
-		(at 118.11 166.37 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "52b1702a-99ee-4e80-9d72-3b555bb6a555")
-	)
 	(label "POW_SDA"
 		(at 115.57 124.46 0)
 		(effects
@@ -5666,6 +5656,28 @@
 			(justify left bottom)
 		)
 		(uuid "fe5549e4-ae52-4eb8-8485-8a84a7930508")
+	)
+	(global_label "+3V3_IMU"
+		(shape bidirectional)
+		(at 118.11 166.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "32e43009-24d5-4e04-972f-5fa54078bffc")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 118.11 166.37 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 	)
 	(hierarchical_label "{USB_IF}"
 		(shape bidirectional)
