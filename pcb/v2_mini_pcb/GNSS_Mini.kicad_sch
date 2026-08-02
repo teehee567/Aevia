@@ -1944,24 +1944,6 @@
 						)
 					)
 				)
-				(pin input line
-					(at -20.32 20.32 0)
-					(length 5.08)
-					(name "~{RESET}"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "49"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
 				(pin no_connect line
 					(at -20.32 -33.02 0)
 					(length 5.08)
@@ -3001,6 +2983,24 @@
 						)
 					)
 				)
+				(pin input line
+					(at -20.32 20.32 0)
+					(length 5.08)
+					(name "~{RESET}"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "49"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
 			)
 			(embedded_fonts no)
 		)
@@ -3298,6 +3298,12 @@
 		(uuid "3d7913f0-5036-46cf-aaf7-944e0afacfbd")
 	)
 	(junction
+		(at 62.23 67.31)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "40ef41be-9bd8-4a63-afdd-3a0d20a7d984")
+	)
+	(junction
 		(at 135.89 85.09)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3344,12 +3350,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7066fdbe-07c4-4340-862c-89fc798a389a")
-	)
-	(junction
-		(at 60.96 67.31)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "796f8339-2837-45c6-801c-c7c43978bc54")
 	)
 	(junction
 		(at 130.81 71.12)
@@ -3744,16 +3744,6 @@
 	)
 	(wire
 		(pts
-			(xy 60.96 59.69) (xy 60.96 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6c222731-d00a-4d65-904c-04c27b0072b7")
-	)
-	(wire
-		(pts
 			(xy 204.47 104.14) (xy 189.23 104.14)
 		)
 		(stroke
@@ -3781,6 +3771,16 @@
 			(type default)
 		)
 		(uuid "7c0cddb9-cebb-460d-ab95-3b0e7ed1ac2a")
+	)
+	(wire
+		(pts
+			(xy 62.23 67.31) (xy 66.04 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7c6e9706-fbb8-49fc-885f-da2d67464ccc")
 	)
 	(wire
 		(pts
@@ -3934,6 +3934,16 @@
 	)
 	(wire
 		(pts
+			(xy 44.45 67.31) (xy 62.23 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b9deb34a-6e9a-4294-a887-da7796b03f85")
+	)
+	(wire
+		(pts
 			(xy 106.68 107.95) (xy 106.68 110.49)
 		)
 		(stroke
@@ -4004,16 +4014,6 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 67.31) (xy 60.96 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "df4e3de4-dea3-4f62-8d3b-c5a109e2a907")
-	)
-	(wire
-		(pts
 			(xy 106.68 82.55) (xy 118.11 82.55)
 		)
 		(stroke
@@ -4072,16 +4072,6 @@
 		)
 		(uuid "fbbe1bd9-deeb-49b0-8e7e-1c23f4f9c5e5")
 	)
-	(wire
-		(pts
-			(xy 60.96 67.31) (xy 66.04 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ffc3dd9f-a54b-4993-bb12-b36329cdeed1")
-	)
 	(label "GNSS_ERR"
 		(at 189.23 104.14 0)
 		(effects
@@ -4133,7 +4123,7 @@
 		(uuid "45dd6ae6-a82f-49a1-8cf4-f76b628b57db")
 	)
 	(label "GNSS_RESETN"
-		(at 43.18 67.31 0)
+		(at 44.45 67.31 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4350,85 +4340,6 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
 					(reference "C8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 60.96 64.77 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "2dc40ff1-9178-4d09-931f-75c7041a91da")
-		(property "Reference" "R3"
-			(at 62.992 66.294 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 63.246 62.484 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 60.96 64.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 64.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 60.96 64.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "9d457e48-9a89-48f9-ac1a-1e1634fa8a6e")
-		)
-		(pin "1"
-			(uuid "1239f9dc-4050-4ebc-80e1-537861335f8c")
-		)
-		(instances
-			(project "v2_mini"
-				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
-					(reference "R3")
 					(unit 1)
 				)
 			)
@@ -5220,6 +5131,89 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
 					(reference "#PWR037")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 62.23 64.77 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "967f2afc-a1b5-4095-9e91-accdb9e90aa5")
+		(property "Reference" "R24"
+			(at 64.77 63.4999 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "10k"
+			(at 64.77 66.0399 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 62.23 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 62.23 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 62.23 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "53d7e161-32c9-47e8-9aae-99c1bf1d3c03")
+		)
+		(pin "2"
+			(uuid "82de34f8-d9c9-408e-9f8a-c588ee772dd3")
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
+					(reference "R24")
 					(unit 1)
 				)
 			)
@@ -6243,84 +6237,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 60.96 59.69 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ccb5715c-289d-4545-b280-8141aa5dabe5")
-		(property "Reference" "#FLG09"
-			(at 60.96 57.785 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3_GNSS"
-			(at 60.96 54.61 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 60.96 59.69 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 59.69 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 60.96 59.69 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3781a7c3-9ccf-45a9-842f-643315bd4713")
-		)
-		(instances
-			(project "v2_mini"
-				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
-					(reference "#FLG09")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 110.49 57.15 0)
 		(unit 1)
@@ -6568,7 +6484,7 @@
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
-		(at 158.75 59.69 0)
+		(at 62.23 62.23 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6577,6 +6493,83 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
+		(uuid "f1eb804a-614d-41cf-8e3b-3ac847f36ede")
+		(property "Reference" "#FLG06"
+			(at 62.23 60.325 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3_GNSS"
+			(at 62.23 57.15 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 62.23 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 62.23 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 62.23 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "86398166-3331-47db-8e3a-fece4e291fc6")
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a81c2312-17da-4077-8f80-7b7fd8fe19c5"
+					(reference "#FLG06")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 158.75 59.69 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "f5becc3c-fe9c-46b7-bab9-3b32932b3ddf")
 		(property "Reference" "#FLG03"
 			(at 158.75 57.785 0)

@@ -607,7 +607,57 @@
       "sort_asc": true,
       "sort_field": "Reference"
     },
-    "bus_aliases": {},
+    "bus_aliases": {
+      "GNSS_IF": [
+        "GNSS_TXD1",
+        "GNSS_RXD1",
+        "GNSS_TXD2",
+        "GNSS_RXD2",
+        "GNSS_PPS",
+        "GNSS_RESETN",
+        "GNSS_PVT",
+        "GNSS_RTK",
+        "GNSS_ERR"
+      ],
+      "IMU_IF": [
+        "IMU_SCLK",
+        "IMU_MOSI",
+        "IMU_MISO",
+        "IMU_CS_N",
+        "IMU_DRDY",
+        "IMU_RESET_N"
+      ],
+      "LCD": [
+        "LCD_SCLK",
+        "LCD_SDA",
+        "LCD_CSN",
+        "LCD_DC",
+        "LCD_RN",
+        "LCD_TE",
+        "LCD_BACK"
+      ],
+      "POWER_I2C": [
+        "POW_SDA",
+        "POW_SCL",
+        "CHG_INT",
+        "CHG_STAT",
+        "BAT_ALRT"
+      ],
+      "SD": [
+        "SD_CLK",
+        "SD_CMD",
+        "SD_D0",
+        "SD_D1",
+        "SD_D2",
+        "SD_D3"
+      ],
+      "USB_IF": [
+        "USB_DP",
+        "USB_DN",
+        "USB_CC1",
+        "USB_CC2"
+      ]
+    },
     "connection_grid_size": 50.0,
     "drawing": {
       "dashed_lines_dash_length_ratio": 12.0,
@@ -656,7 +706,7 @@
         "uuid": "4318b369-034c-40ef-a05b-b7d2541c0647"
       }
     ],
-    "used_designators": "U1-3,U6-10,L1,L4-5,#PWR1-68,J1-3,J6-7,R1-27,#FLG1-11,C1-11,C13-23,C25-40,TH1,BT1,FB1-2,D1-2,Q1,SW1-2,TP1-2",
+    "used_designators": "U1-3,U6-10,L1,L4-5,#PWR1-69,J1-3,J6-7,R1-27,#FLG1-12,C1-11,C13-23,C25-40,TH1,BT1,FB1-2,D1-2,Q1,SW1-2,TP1-2",
     "variants": []
   },
   "sheets": [
