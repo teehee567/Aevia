@@ -6316,6 +6316,12 @@
 		)
 		(uuid "ef1c45ec-5a91-4cb9-8eba-e3e3f3ea7d2f")
 	)
+	(junction
+		(at 299.72 207.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2a700c33-0237-4d4c-b53e-7b810cf43342")
+	)
 	(no_connect
 		(at 146.05 68.58)
 		(uuid "01fc839e-2ee1-4dd6-a3cc-272ff174fa56")
