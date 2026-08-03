@@ -324,26 +324,24 @@
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at -15.24 20.955 0)
+			(property "Reference" "U3"
+				(at 0 25.4 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left bottom)
 				)
 			)
 			(property "Value" "SCH16T-K01-1"
-				(at -15.24 -25.4 0)
+				(at 0 22.86 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left bottom)
 				)
 			)
 			(property "Footprint" "SCH16T-K01-1:XDCR_SCH16T-K01-1"
@@ -575,8 +573,8 @@
 			)
 			(symbol "SCH16T-K01-1_0_0"
 				(rectangle
-					(start -15.24 -22.86)
-					(end 15.24 20.32)
+					(start -15.24 20.32)
+					(end 15.24 -22.86)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -604,7 +602,7 @@
 					)
 				)
 				(pin passive line
-					(at -20.32 -7.62 0)
+					(at -20.32 -11.43 0)
 					(length 5.08)
 					(name "RESERVED"
 						(effects
@@ -660,7 +658,6 @@
 				(pin passive line
 					(at -20.32 -7.62 0)
 					(length 5.08)
-					(hide yes)
 					(name "RESERVED"
 						(effects
 							(font
@@ -1464,8 +1461,8 @@
 		(uuid "ffacc4bc-f834-4ac0-ab77-fdf21f85d7a6")
 	)
 	(no_connect
-		(at 46.99 78.74)
-		(uuid "04f50137-db49-4ee1-8b7b-09216eae5f67")
+		(at 46.99 82.55)
+		(uuid "2b863bdc-1ae1-42fd-8024-cd2d79f3d6ce")
 	)
 	(bus_entry
 		(at 158.75 30.48)
@@ -2106,6 +2103,85 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a7e9176c-19e9-4164-84c0-42ef6ac15138"
 					(reference "#PWR066")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 46.99 78.74 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3073321a-6f49-49f8-a2ad-f52b59eb9915")
+		(property "Reference" "#PWR071"
+			(at 40.64 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 43.18 78.7399 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 46.99 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 46.99 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 46.99 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6f098dcf-835f-4fa7-9011-9c860b3880e7")
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/a7e9176c-19e9-4164-84c0-42ef6ac15138"
+					(reference "#PWR071")
 					(unit 1)
 				)
 			)
