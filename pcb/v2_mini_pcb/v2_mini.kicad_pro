@@ -641,7 +641,8 @@
         "POW_SCL",
         "CHG_INT",
         "CHG_STAT",
-        "BAT_ALRT"
+        "BAT_ALRT",
+        "CHG_PG"
       ],
       "SD": [
         "SD_CLK",
@@ -706,7 +707,7 @@
         "uuid": "4318b369-034c-40ef-a05b-b7d2541c0647"
       }
     ],
-    "used_designators": "U1-3,U6-10,L1,L4-5,#PWR1-69,J1-3,J6-7,R1-27,#FLG1-12,C1-11,C13-23,C25-40,TH1,BT1,FB1-2,D1-2,Q1,SW1-2,TP1-2",
+    "used_designators": "U1-3,U6-10,L1,L4-5,#PWR1-70,J1-3,J6-7,R1-27,#FLG1-12,C1-11,C13-23,C25-40,TH1,BT1,FB1-2,D1-2,Q1,SW1-2,TP1-2",
     "variants": []
   },
   "sheets": [
