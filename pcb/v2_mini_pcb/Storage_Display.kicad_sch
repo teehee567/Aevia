@@ -3425,6 +3425,17 @@
 				)
 			)
 		)
+		(property "MPN" ""
+			(at 173.99 80.01 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "e6bd6ef9-af6d-4268-a503-d50d91a3111d")
 		)
@@ -3583,6 +3594,17 @@
 				)
 			)
 		)
+		(property "MPN" ""
+			(at 173.99 77.47 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "2d1c1d77-4fb8-4c22-a360-2fb5b2c4edfc")
 		)
@@ -3710,7 +3732,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
 			(at 171.45 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -3733,6 +3755,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 171.45 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KB54PNC"
 			(at 171.45 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -3901,6 +3934,17 @@
 				)
 			)
 		)
+		(property "MPN" ""
+			(at 166.37 60.96 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "D"
 			(uuid "838b8a24-7c84-46f6-a05a-262cff168a9a")
 		)
@@ -4032,7 +4076,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
 			(at 99.06 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -4055,6 +4099,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 99.06 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KB54PNC"
 			(at 99.06 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -4777,6 +4832,17 @@
 				(justify bottom)
 			)
 		)
+		(property "MPN" ""
+			(at 80.01 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "95ec33fb-525d-4b34-9e66-f2bb9971b290")
 		)
@@ -5028,6 +5094,17 @@
 				(justify bottom)
 			)
 		)
+		(property "MPN" ""
+			(at 198.12 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "20"
 			(uuid "99966701-ca48-4daf-b61e-da15382f501c")
 		)
@@ -5182,6 +5259,17 @@
 				)
 			)
 		)
+		(property "MPN" ""
+			(at 165.1 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "912a2495-c156-430c-a347-97d25188315a")
 		)
@@ -5230,7 +5318,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 177.8 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -5253,6 +5341,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 177.8 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL10A106KP8NNNC"
 			(at 177.8 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -5391,7 +5490,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 109.22 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -5414,6 +5513,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 109.22 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL10A106KP8NNNC"
 			(at 109.22 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -5472,7 +5582,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
 			(at 163.83 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -5495,6 +5605,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 163.83 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KB54PNC"
 			(at 163.83 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -5584,6 +5705,17 @@
 				)
 			)
 		)
+		(property "MPN" ""
+			(at 173.99 63.5 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "b6c2aaac-e8da-4d5e-91e7-3a6afee432dc")
 		)
@@ -5656,6 +5788,17 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 55.88 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" ""
+			(at 55.88 81.28 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
