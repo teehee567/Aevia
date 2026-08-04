@@ -4494,7 +4494,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
 			(at 142.24 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4517,6 +4517,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 142.24 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KB54PNC"
 			(at 142.24 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4576,7 +4587,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 118.11 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4599,6 +4610,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 118.11 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL10A106KP8NNNC"
 			(at 118.11 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4812,7 +4834,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 133.35 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -4836,6 +4858,17 @@
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 133.35 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL10A106KP8NNNC"
+			(at 133.35 81.28 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4881,7 +4914,7 @@
 				)
 			)
 		)
-		(property "Value" "ESDS311DYFR"
+		(property "Value" ""
 			(at 124.714 82.042 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4891,7 +4924,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_SMD:D_SOD-323F"
 			(at 127 80.01 0)
 			(hide yes)
 			(show_name no)
@@ -4914,6 +4947,17 @@
 			)
 		)
 		(property "Description" "Bidirectional transient-voltage-suppression diode"
+			(at 127 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "ESDS311DYFR"
 			(at 127 80.01 0)
 			(hide yes)
 			(show_name no)
@@ -5082,6 +5126,17 @@
 				)
 			)
 		)
+		(property "MPN" ""
+			(at 59.69 110.49 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "9c192f40-6b11-4361-9308-c47717c748a9")
 		)
@@ -5207,7 +5262,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
 			(at 111.76 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -5231,6 +5286,17 @@
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 111.76 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402CG101J500NT"
+			(at 111.76 67.31 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5392,6 +5458,17 @@
 			)
 		)
 		(property "Description" "Resistor, small US symbol"
+			(at 62.23 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" ""
 			(at 62.23 64.77 0)
 			(hide yes)
 			(show_name no)
@@ -5638,6 +5715,17 @@
 					(size 1.27 1.27)
 				)
 				(justify bottom)
+			)
+		)
+		(property "MPN" ""
+			(at 86.36 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
 		)
 		(pin "11"
@@ -6025,6 +6113,17 @@
 				)
 			)
 		)
+		(property "MPN" ""
+			(at 143.51 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "95bdc6ca-bfd2-46d2-a36b-631d1a92c20c")
 		)
@@ -6095,6 +6194,17 @@
 		)
 		(property "Description" "Resistor, small US symbol"
 			(at 59.69 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" ""
+			(at 59.69 113.03 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6297,7 +6407,7 @@
 				)
 			)
 		)
-		(property "Value" "ESDS311DYFR"
+		(property "Value" ""
 			(at 131.318 68.834 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6307,7 +6417,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_SON:Texas_DPY0002A_0.6x1mm_P0.65mm"
 			(at 127 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -6330,6 +6440,17 @@
 			)
 		)
 		(property "Description" "Bidirectional transient-voltage-suppression diode"
+			(at 127 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "TPD1E0B04DPYR"
 			(at 127 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -6386,7 +6507,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
 			(at 133.35 85.09 0)
 			(hide yes)
 			(show_name no)
@@ -6410,6 +6531,17 @@
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 133.35 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL05B104KB54PNC"
+			(at 133.35 85.09 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6465,7 +6597,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
 			(at 133.35 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -6489,6 +6621,17 @@
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
 			(at 133.35 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0402CG101J500NT"
+			(at 133.35 88.9 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6547,7 +6690,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 110.49 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -6570,6 +6713,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 110.49 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL10A106KP8NNNC"
 			(at 110.49 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -6740,6 +6894,17 @@
 				)
 			)
 		)
+		(property "MPN" ""
+			(at 130.81 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "743525ae-0fc8-4482-9cda-e89353cbfaec")
 		)
@@ -6789,7 +6954,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 133.35 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -6812,6 +6977,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 133.35 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL10A106KP8NNNC"
 			(at 133.35 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -6871,7 +7047,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 125.73 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -6894,6 +7070,17 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 125.73 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL10A106KP8NNNC"
 			(at 125.73 57.15 0)
 			(hide yes)
 			(show_name no)
