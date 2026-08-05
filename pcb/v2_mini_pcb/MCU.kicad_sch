@@ -6017,7 +6017,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 340.36 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -6050,7 +6050,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05A105KA5NQNC"
+		(property "MPN" "DNP"
 			(at 340.36 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -6187,7 +6187,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 43.18 109.22 0)
 			(hide yes)
 			(show_name no)
@@ -6220,7 +6220,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05B104KB54PNC"
+		(property "MPN" "GRM155R71C104KA88D"
 			(at 43.18 109.22 90)
 			(hide yes)
 			(show_name no)
@@ -6279,7 +6279,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 71.12 92.71 0)
 			(hide yes)
 			(show_name no)
@@ -6312,7 +6312,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A226MQ8NRNC"
+		(property "MPN" "GRM21BR61A226ME44L"
 			(at 71.12 92.71 0)
 			(hide yes)
 			(show_name no)
@@ -6370,7 +6370,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_SMD:SW_SPST_B3U-1000P"
 			(at 44.45 100.33 0)
 			(hide yes)
 			(show_name no)
@@ -6403,7 +6403,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "B3U-1000P"
 			(at 44.45 105.41 0)
 			(hide yes)
 			(show_name no)
@@ -6462,7 +6462,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 124.46 180.34 0)
 			(hide yes)
 			(show_name no)
@@ -6495,7 +6495,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF220JTCE"
 			(at 124.46 180.34 90)
 			(hide yes)
 			(show_name no)
@@ -6743,7 +6743,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "TC2030-IDC-NL (mating cable)"
 			(at 323.85 86.36 0)
 			(hide yes)
 			(show_name no)
@@ -6971,7 +6971,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 129.54 180.34 0)
 			(hide yes)
 			(show_name no)
@@ -7004,7 +7004,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF220JTCE"
 			(at 129.54 180.34 90)
 			(hide yes)
 			(show_name no)
@@ -7220,7 +7220,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 127 180.34 0)
 			(hide yes)
 			(show_name no)
@@ -7253,7 +7253,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF220JTCE"
 			(at 127 180.34 90)
 			(hide yes)
 			(show_name no)
@@ -7389,7 +7389,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 171.45 110.49 0)
 			(hide yes)
 			(show_name no)
@@ -7422,7 +7422,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "RC0402FR-07499RL"
 			(at 171.45 110.49 90)
 			(hide yes)
 			(show_name no)
@@ -7561,7 +7561,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 172.72 97.79 0)
 			(hide yes)
 			(show_name no)
@@ -7594,7 +7594,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF1002TCE"
 			(at 172.72 97.79 0)
 			(hide yes)
 			(show_name no)
@@ -7654,7 +7654,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 306.07 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -7687,7 +7687,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05A105KA5NQNC"
+		(property "MPN" "DNP"
 			(at 306.07 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -7823,7 +7823,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_SMD:SW_SPST_B3U-1000P"
 			(at 189.23 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -7856,7 +7856,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "B3U-1000P"
 			(at 189.23 100.33 0)
 			(hide yes)
 			(show_name no)
@@ -7915,7 +7915,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 121.92 180.34 0)
 			(hide yes)
 			(show_name no)
@@ -7948,7 +7948,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF220JTCE"
 			(at 121.92 180.34 90)
 			(hide yes)
 			(show_name no)
@@ -8008,7 +8008,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 66.04 102.87 0)
 			(hide yes)
 			(show_name no)
@@ -8041,7 +8041,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF1002TCE"
 			(at 66.04 102.87 0)
 			(hide yes)
 			(show_name no)
@@ -8179,7 +8179,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 63.5 92.71 0)
 			(hide yes)
 			(show_name no)
@@ -8212,7 +8212,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05B104KB54PNC"
+		(property "MPN" "GRM155R71C104KA88D"
 			(at 63.5 92.71 0)
 			(hide yes)
 			(show_name no)
@@ -8273,7 +8273,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 179.07 113.03 0)
 			(hide yes)
 			(show_name no)
@@ -8306,7 +8306,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "N/A (PCB test pad)"
 			(at 179.07 107.95 90)
 			(hide yes)
 			(show_name no)
@@ -8361,7 +8361,7 @@
 				)
 			)
 		)
-		(property "Footprint" "PCM_Espressif:ESP32-S31-WROOM-3"
+		(property "Footprint" "all:ESP32-S31-WROOM-3"
 			(at 122.174 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -8394,7 +8394,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "ESP32-S31-WROOM-3-N16R16V"
 			(at 121.92 132.08 0)
 			(hide yes)
 			(show_name no)
@@ -8746,7 +8746,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 179.07 115.57 0)
 			(hide yes)
 			(show_name no)
@@ -8779,7 +8779,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "N/A (PCB test pad)"
 			(at 179.07 110.49 90)
 			(hide yes)
 			(show_name no)

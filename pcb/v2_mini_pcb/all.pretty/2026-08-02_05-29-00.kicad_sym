@@ -1,18 +1,18 @@
 (kicad_symbol_lib (version 20211014) (generator kicad_symbol_editor)
-  (symbol "BQ25622RYKR" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+  (symbol "BQ25622ERYKR" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
     (property "Reference" "U" (id 0) (at 22.86 10.16 0)
       (effects (font (size 1.524 1.524)))
     )
-    (property "Value" "BQ25622RYKR" (id 1) (at 22.86 7.62 0)
+    (property "Value" "BQ25622ERYKR" (id 1) (at 22.86 7.62 0)
       (effects (font (size 1.524 1.524)))
     )
     (property "Footprint" "WQFN-HR18__RYK_TEX" (id 2) (at 0 0 0)
       (effects (font (size 1.27 1.27) italic) hide)
     )
-    (property "Datasheet" "https://www.ti.com/lit/gpn/bq25622" (id 3) (at 0 0 0)
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/bq25622e.pdf" (id 3) (at 0 0 0)
       (effects (font (size 1.27 1.27) italic) hide)
     )
-    (property "ki_keywords" "BQ25622RYKR" (id 4) (at 0 0 0)
+    (property "ki_keywords" "BQ25622ERYKR" (id 4) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "ki_locked" "" (id 5) (at 0 0 0)
@@ -21,7 +21,7 @@
     (property "ki_fp_filters" "WQFN-HR18__RYK_TEX" (id 6) (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "BQ25622RYKR_0_1"
+    (symbol "BQ25622ERYKR_0_1"
       (polyline
         (pts
           (xy 7.62 5.08)
