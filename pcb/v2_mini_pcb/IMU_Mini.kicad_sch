@@ -2297,7 +2297,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 93.98 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -2330,7 +2330,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "GRM188R61A106ME69D"
 			(at 93.98 63.5 90)
 			(hide yes)
 			(show_name no)
@@ -2546,7 +2546,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 99.06 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -2579,7 +2579,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05A105KA5NQNC"
+		(property "MPN" "GRM155R60J105KE19D"
 			(at 99.06 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -2797,7 +2797,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 107.95 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -2830,7 +2830,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05B104KB54PNC"
+		(property "MPN" "GRM155R71C104KA88D"
 			(at 107.95 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -2890,7 +2890,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 88.9 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -2923,7 +2923,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05B104KB54PNC"
+		(property "MPN" "GRM155R71C104KA88D"
 			(at 88.9 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -2983,7 +2983,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 36.83 64.77 0)
 			(hide yes)
 			(show_name no)
@@ -3016,7 +3016,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF1002TCE"
 			(at 36.83 64.77 0)
 			(hide yes)
 			(show_name no)
@@ -3153,7 +3153,7 @@
 				)
 			)
 		)
-		(property "Footprint" "SCH16T-K01-1:XDCR_SCH16T-K01-1"
+		(property "Footprint" "all:XDCR_SCH16T-K01-1"
 			(at 67.31 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -3380,7 +3380,7 @@
 				(justify bottom)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "SCH16T-K01-1"
 			(at 67.31 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -3503,7 +3503,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 93.98 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -3536,7 +3536,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05A105KA5NQNC"
+		(property "MPN" "GRM155R60J105KE19D"
 			(at 93.98 71.12 90)
 			(hide yes)
 			(show_name no)

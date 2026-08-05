@@ -1993,7 +1993,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "all:BQ25622RYKR"
+		(symbol "all:BQ25622ERYKR"
 			(pin_names
 				(offset 0.254)
 			)
@@ -2012,7 +2012,7 @@
 					)
 				)
 			)
-			(property "Value" "BQ25622RYKR"
+			(property "Value" "BQ25622ERYKR"
 				(at 22.86 7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2034,7 +2034,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "https://www.ti.com/lit/gpn/bq25622"
+			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/bq25622e.pdf"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2067,7 +2067,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "BQ25622RYKR"
+			(property "ki_keywords" "BQ25622ERYKR"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -2089,7 +2089,7 @@
 					)
 				)
 			)
-			(symbol "BQ25622RYKR_0_1"
+			(symbol "BQ25622ERYKR_0_1"
 				(polyline
 					(pts
 						(xy 7.62 5.08) (xy 7.62 -25.4)
@@ -6201,7 +6201,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 48.26 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -6234,7 +6234,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "GRM188R61A106ME69D"
 			(at 48.26 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -6294,7 +6294,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 81.28 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -6327,7 +6327,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05A105KA5NQNC"
+		(property "MPN" "DNP"
 			(at 81.28 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -6464,7 +6464,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 105.41 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -6497,7 +6497,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF7502TCE"
 			(at 105.41 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -6557,7 +6557,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 215.9 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -6590,7 +6590,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "C2012X5R1E106K125AB"
 			(at 215.9 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -6728,7 +6728,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 99.06 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -6761,7 +6761,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF1003TCE"
 			(at 99.06 68.58 90)
 			(hide yes)
 			(show_name no)
@@ -6897,7 +6897,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 140.97 86.36 0)
 			(hide yes)
 			(show_name no)
@@ -6930,7 +6930,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "CRCW040230K1FKED"
 			(at 140.97 86.36 90)
 			(hide yes)
 			(show_name no)
@@ -6988,7 +6988,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TPS63802DLAR:VREG_TPS63802DLAR"
+		(property "Footprint" "all:VREG_TPS63802DLAR"
 			(at 67.31 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -7070,7 +7070,7 @@
 				(justify bottom)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "TPS63802DLAR"
 			(at 67.31 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -7785,7 +7785,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "GRM21BR61A226ME44L"
 			(at 240.03 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -7845,7 +7845,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 82.55 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -7878,7 +7878,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF5101TCE"
 			(at 82.55 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -7935,7 +7935,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 149.86 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -7968,7 +7968,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "NCU18XH103F60RB"
 			(at 151.13 88.9 90)
 			(hide yes)
 			(show_name no)
@@ -8027,7 +8027,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 129.54 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -8060,7 +8060,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF5101TCE"
 			(at 129.54 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -8198,7 +8198,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 129.54 132.08 0)
 			(hide yes)
 			(show_name no)
@@ -8231,7 +8231,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF5101TCE"
 			(at 129.54 132.08 0)
 			(hide yes)
 			(show_name no)
@@ -8401,7 +8401,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "TPD4EUSB30DQAR"
 			(at 105.41 93.98 0)
 			(hide yes)
 			(show_name no)
@@ -8717,7 +8717,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 153.67 83.82 0)
 			(hide yes)
 			(show_name no)
@@ -8750,7 +8750,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "RC0402FR-075K23L"
 			(at 153.67 83.82 90)
 			(hide yes)
 			(show_name no)
@@ -8807,7 +8807,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_0805_2012Metric"
 			(at 111.76 168.148 90)
 			(hide yes)
 			(show_name no)
@@ -8840,7 +8840,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "MPZ2012S601ATD25"
 			(at 111.76 166.37 90)
 			(hide yes)
 			(show_name no)
@@ -8976,7 +8976,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 207.01 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -9009,7 +9009,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05A475MP5NRNC"
+		(property "MPN" "GRM188R61E475KE11D"
 			(at 207.01 81.28 90)
 			(hide yes)
 			(show_name no)
@@ -9302,7 +9302,7 @@
 				)
 			)
 		)
-		(property "Footprint" "MAX17048G_T10:SON50P200X200X80-9N"
+		(property "Footprint" "all:SON50P200X200X80-9N"
 			(at 212.09 127 0)
 			(hide yes)
 			(show_name no)
@@ -9336,7 +9336,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "MAX17048G+T10"
 			(at 212.09 127 0)
 			(hide yes)
 			(show_name no)
@@ -9575,7 +9575,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 191.77 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -9608,7 +9608,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF1002TCE"
 			(at 191.77 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -9665,7 +9665,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 210.82 86.36 0)
 			(hide yes)
 			(show_name no)
@@ -9698,7 +9698,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10B473KB8NNNC"
+		(property "MPN" "GRM155R71E473KA88D"
 			(at 210.82 86.36 90)
 			(hide yes)
 			(show_name no)
@@ -9915,7 +9915,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 213.36 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -9948,7 +9948,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF1002TCE"
 			(at 213.36 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -10008,7 +10008,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 205.74 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -10041,7 +10041,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05B104KB54PNC"
+		(property "MPN" "GRM155R71H104KE14D"
 			(at 205.74 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -10290,7 +10290,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "GRM21BR61A226ME44L"
 			(at 223.52 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -10428,7 +10428,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 205.74 99.06 0)
 			(hide yes)
 			(show_name no)
@@ -10461,7 +10461,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF1002TCE"
 			(at 205.74 99.06 0)
 			(hide yes)
 			(show_name no)
@@ -10566,7 +10566,7 @@
 		)
 	)
 	(symbol
-		(lib_id "all:BQ25622RYKR")
+		(lib_id "all:BQ25622ERYKR")
 		(at 205.74 78.74 0)
 		(mirror y)
 		(unit 1)
@@ -10587,7 +10587,7 @@
 				)
 			)
 		)
-		(property "Value" "BQ25622RYKR"
+		(property "Value" "BQ25622ERYKR"
 			(at 182.88 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10597,7 +10597,7 @@
 				)
 			)
 		)
-		(property "Footprint" "WQFN-HR18__RYK_TEX"
+		(property "Footprint" "all:WQFN-HR18__RYK_TEX"
 			(at 205.74 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -10609,7 +10609,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/bq25622"
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/bq25622e.pdf"
 			(at 205.74 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -10621,7 +10621,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "BQ25622E 1-cell 3A I2C charger with NVDC power path"
 			(at 205.74 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -10632,7 +10632,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "BQ25622ERYKR"
 			(at 205.74 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -10738,7 +10738,7 @@
 				)
 			)
 		)
-		(property "Footprint" "USB4105-GF-A:GCT_USB4105-GF-A"
+		(property "Footprint" "all:GCT_USB4105-GF-A"
 			(at 53.34 85.09 0)
 			(hide yes)
 			(show_name no)
@@ -10820,7 +10820,7 @@
 				(justify bottom)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "USB4105-GF-A"
 			(at 53.34 85.09 0)
 			(hide yes)
 			(show_name no)
@@ -10919,7 +10919,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 238.76 119.38 0)
 			(hide yes)
 			(show_name no)
@@ -10952,7 +10952,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05B104KB54PNC"
+		(property "MPN" "GRM155R71C104KA88D"
 			(at 238.76 119.38 90)
 			(hide yes)
 			(show_name no)
@@ -11087,7 +11087,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_0805_2012Metric"
 			(at 111.76 159.258 90)
 			(hide yes)
 			(show_name no)
@@ -11120,7 +11120,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "MPZ2012S601ATD25"
 			(at 111.76 157.48 90)
 			(hide yes)
 			(show_name no)
@@ -11213,7 +11213,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "GRM21BR61A226ME44L"
 			(at 231.14 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -11504,7 +11504,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 226.06 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -11537,7 +11537,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF1002TCE"
 			(at 226.06 82.55 90)
 			(hide yes)
 			(show_name no)
@@ -11597,7 +11597,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 156.21 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -11630,7 +11630,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05A105KA5NQNC"
+		(property "MPN" "GMK107AB7105KAHT"
 			(at 156.21 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -11690,7 +11690,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 88.9 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -11723,7 +11723,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A226MQ8NRNC"
+		(property "MPN" "GRM188R61A226ME15D"
 			(at 88.9 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -11783,7 +11783,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_Murata_DFE201610P"
 			(at 50.8 176.53 0)
 			(hide yes)
 			(show_name no)
@@ -11816,7 +11816,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "DFE201612E-R47M=P2"
 			(at 50.8 176.53 0)
 			(hide yes)
 			(show_name no)
@@ -11876,7 +11876,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_01005_0402Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 77.47 99.06 0)
 			(hide yes)
 			(show_name no)
@@ -11909,7 +11909,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL05A105KA5NQNC"
+		(property "MPN" "DNP"
 			(at 77.47 99.06 0)
 			(hide yes)
 			(show_name no)
@@ -11969,7 +11969,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 74.93 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -12002,7 +12002,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "0402WGF5101TCE"
 			(at 74.93 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -12059,7 +12059,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_1008_2520Metric"
 			(at 222.25 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -12092,7 +12092,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "DFE252012F-1R0M=P2"
 			(at 222.25 88.9 90)
 			(hide yes)
 			(show_name no)
@@ -12389,7 +12389,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 85.09 160.02 0)
 			(hide yes)
 			(show_name no)
@@ -12422,7 +12422,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "RC0603FR-07511KL"
 			(at 85.09 160.02 0)
 			(hide yes)
 			(show_name no)
@@ -12482,7 +12482,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 85.09 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -12515,7 +12515,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "RC0603FR-0791KL"
 			(at 85.09 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -12572,7 +12572,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 152.4 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -12605,7 +12605,7 @@
 				)
 			)
 		)
-		(property "MPN" ""
+		(property "MPN" "RC0402FR-075K62L"
 			(at 152.4 81.28 90)
 			(hide yes)
 			(show_name no)

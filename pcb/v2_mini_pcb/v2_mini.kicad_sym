@@ -1306,7 +1306,7 @@
       )
     )
   )
-  (symbol "BQ25622RYK"
+  (symbol "BQ25622ERYKR"
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
@@ -1316,7 +1316,7 @@
         (font (size 1.27 1.27))
       )
     )
-    (property "Value" "BQ25622RYK"
+    (property "Value" "BQ25622ERYKR"
       (at 0 -2.54 0)
       (effects
         (font (size 1.27 1.27))
@@ -1329,21 +1329,21 @@
       )
       (hide yes)
     )
-    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/bq25622.pdf"
+    (property "Datasheet" "https://www.ti.com/lit/ds/symlink/bq25622e.pdf"
       (at 0 -7.62 0)
       (effects
         (font (size 1.27 1.27))
       )
       (hide yes)
     )
-    (property "Description" "BQ25622 1-cell 3.5A I2C charger with NVDC power path"
+    (property "Description" "BQ25622E 1-cell 3A I2C charger with NVDC power path"
       (at 0 -10.16 0)
       (effects
         (font (size 1.27 1.27))
       )
       (hide yes)
     )
-    (symbol "BQ25622RYK_0_1"
+    (symbol "BQ25622ERYKR_0_1"
       (rectangle
         (start -7.62 -12.7)
         (end 7.62 12.7)
@@ -1351,7 +1351,7 @@
         (fill (type background))
       )
     )
-    (symbol "BQ25622RYK_1_1"
+    (symbol "BQ25622ERYKR_1_1"
       (pin power_in line
         (at -10.16 10.16 0)
         (length 2.54)
