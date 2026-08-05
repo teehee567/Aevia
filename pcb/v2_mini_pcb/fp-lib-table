@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "all")(type "KiCad")(uri "${KIPRJMOD}/all.pretty")(options "")(descr "Existing Open Race V2 Mini project footprints"))
+)

@@ -17,6 +17,16 @@
 	)
 	(bus
 		(pts
+			(xy 140.97 115.57) (xy 140.97 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d95eab3-a291-476d-ada0-1f25db58a936")
+	)
+	(bus
+		(pts
 			(xy 101.6 95.25) (xy 115.57 95.25)
 		)
 		(stroke
@@ -193,6 +203,62 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647"
 					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 127 127)
+		(size 26.67 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "7336fb98-a0f9-496a-8177-e3e3b101e734")
+		(property "Sheetname" "HID"
+			(at 127 126.2884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "hid.kicad_sch"
+			(at 127 142.8246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "{HID}" bidirectional
+			(at 140.97 127 90)
+			(uuid "dcc5bcc6-659a-4a4f-908e-e1dfb9c7e20b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "v2_mini"
+				(path "/4318b369-034c-40ef-a05b-b7d2541c0647"
+					(page "7")
 				)
 			)
 		)
@@ -400,6 +466,16 @@
 		(pin "{USB_IF}" bidirectional
 			(at 115.57 60.96 180)
 			(uuid "589fa231-a818-45eb-b01e-c7bbc52f196f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "{HID}" bidirectional
+			(at 140.97 115.57 270)
+			(uuid "2317caf7-36aa-4ff4-bb85-3d1aa68cbfe7")
 			(effects
 				(font
 					(size 1.27 1.27)

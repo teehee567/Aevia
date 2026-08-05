@@ -573,19 +573,19 @@
           "group_by": true,
           "label": "DNP",
           "name": "${DNP}",
-          "show": true
+          "show": false
         },
         {
           "group_by": true,
           "label": "Exclude from BOM",
           "name": "${EXCLUDE_FROM_BOM}",
-          "show": true
+          "show": false
         },
         {
           "group_by": true,
           "label": "Exclude from Board",
           "name": "${EXCLUDE_FROM_BOARD}",
-          "show": true
+          "show": false
         },
         {
           "group_by": true,
@@ -609,12 +609,6 @@
           "group_by": false,
           "label": "CREATOR",
           "name": "CREATOR",
-          "show": false
-        },
-        {
-          "group_by": false,
-          "label": "MANUFACTURER",
-          "name": "MANUFACTURER",
           "show": false
         },
         {
@@ -736,6 +730,60 @@
           "label": "MPN",
           "name": "MPN",
           "show": true
+        },
+        {
+          "group_by": false,
+          "label": "DUPLICATE",
+          "name": "DUPLICATE",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Supplier",
+          "name": "Supplier",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Tolerance",
+          "name": "Tolerance",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "DigiKey_PN",
+          "name": "DigiKey_PN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Dielectric",
+          "name": "Dielectric",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Voltage",
+          "name": "Voltage",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MANUFACTURER",
+          "name": "Manufacturer",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "JLCPCB_PN",
+          "name": "JLCPCB_PN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC",
+          "name": "LCSC",
+          "show": false
         }
       ],
       "filter_string": "",
@@ -756,6 +804,11 @@
         "GNSS_PVT",
         "GNSS_RTK",
         "GNSS_ERR"
+      ],
+      "HID": [
+        "HDI_SCL",
+        "HDI_SDA",
+        "LED_EN"
       ],
       "IMU_IF": [
         "IMU_SCLK",
@@ -846,7 +899,7 @@
         "uuid": "4318b369-034c-40ef-a05b-b7d2541c0647"
       }
     ],
-    "used_designators": "U1-3,U6-10,#PWR1-77,L1,L4-5,R1-31,#FLG1-12,J1-7,C1-40,TH1,BT1,FB1-2,D1-2,Q1,SW1-2,TP1-2",
+    "used_designators": "HG1,U1-10,#PWR1-81,L1-2,L4-5,R1-35,#FLG1-12,J1-7,C1-40,TH1,BT1,FB1-2,D1-4,Q1,SW1-2,TP1-2",
     "variants": []
   },
   "sheets": [
@@ -873,6 +926,10 @@
     [
       "0a25b8a8-ad00-432b-a1e7-4a7291f71ca1",
       "Storage + Display"
+    ],
+    [
+      "7336fb98-a0f9-496a-8177-e3e3b101e734",
+      "HID"
     ]
   ],
   "text_variables": {},
