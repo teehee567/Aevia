@@ -8,7 +8,7 @@
 - microSD uses the ESP32 4-bit SDIO pins.
 - The Adafruit 4520 display uses a separate SPI interface through its 24-pin FPC connector.
 - USB-C supplies 5 V, carries native ESP32 USB Serial/JTAG, and has CC/data ESD protection.
-- BQ25622 handles 1S charging and the power path.
+- BQ25622E handles 1S charging and the power path.
 - TPS63802 generates the 3.3 V system rail.
 - MAX17048 is fitted for battery state-of-charge reporting.
 - SW1 resets the ESP32 through `EN`; SW2 is the GPIO61 boot/user button.
@@ -20,7 +20,7 @@
 | U2 | MCU, Wi-Fi, Bluetooth | ESP32-S31-WROOM-3 |
 | U1 | GNSS | Unicore UM980 |
 | U3 | IMU | SCH16T-K01-1 |
-| U8 | 1S charger and power path | BQ25622RYKR |
+| U8 | 1S charger and power path | BQ25622ERYKR |
 | U9 | Fuel gauge | MAX17048G_T10 |
 | U10 | 3.3 V buck-boost | TPS63802DLAR |
 | U6 | USB D+/D-/CC ESD | TPD4EUSB30 |
@@ -32,7 +32,7 @@
 
 ```mermaid
 flowchart LR
-    USB[USB-C 5 V] --> CHG[BQ25622]
+    USB[USB-C 5 V] --> CHG[BQ25622E]
     BAT[1S battery] <--> CHG
     BAT --> FG[MAX17048]
     CHG --> RAW[3V3_RAW / charger SYS]
@@ -43,7 +43,7 @@ flowchart LR
     V33 -. unfinished .-> IMU[+3V3_IMU]
 ```
 
-- BQ25622 uses L4 = 1 uH. TPS63802 uses L5 = 0.47 uH.
+- BQ25622E uses L4 = 1 uH. TPS63802 uses L5 = 0.47 uH.
 - TPS63802 feedback is 511 kOhm / 91 kOhm for 3.3 V.
 - USB CC1 and CC2 each have a 5.1 kOhm `Rd`.
 - TH1 is a 10 kOhm NTC in the charger temperature network.
@@ -98,6 +98,10 @@ These are the nets drawn on the MCU sheet. Most peripheral nets are not yet join
 - Put the ESP32 module antenna at a plastic enclosure edge and keep copper, battery, display metal and cables out of its antenna keepout.
 - Keep the UM980 RF path short, 50 ohm and away from USB, SD/display clocks and both switching stages.
 - Put the SCH16T on a rigid area away from USB, buttons, card insertion and regulator inductors.
-- Keep the BQ25622 and TPS63802 switching loops tight with their capacitors and inductors on the same layer.
+- Keep the BQ25622E and TPS63802 switching loops tight with their capacitors and inductors on the same layer.
 - Use continuous ground references. Do not split GNSS or IMU ground planes.
 - Prove the board outline by placement before keeping any previous size target.
+
+
+## Notes
+- SD card part does not need pullups [here](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s31/schematic-checklist.html#sd-mmc-host-controller) says "When using slot0, the GPIO power domain is internally powered, so external pull-up resistors are not required"
