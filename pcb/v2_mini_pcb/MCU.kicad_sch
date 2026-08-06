@@ -3576,7 +3576,7 @@
 		(uuid "e5cad8eb-a767-49f5-97f6-a9a1a9d0bb26")
 	)
 	(bus_entry
-		(at 212.09 46.99)
+		(at 207.01 46.99)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3603,7 +3603,7 @@
 		(uuid "07276b62-b860-47ed-9a3f-4720e92ef71a")
 	)
 	(bus_entry
-		(at 212.09 41.91)
+		(at 207.01 41.91)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3684,7 +3684,7 @@
 		(uuid "3a508c2f-7d56-4551-a2a1-1fd3375704b2")
 	)
 	(bus_entry
-		(at 254 44.45)
+		(at 232.41 41.91)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3702,7 +3702,7 @@
 		(uuid "4147f94b-e006-4072-b4e4-2e0b43b26f6f")
 	)
 	(bus_entry
-		(at 254 34.29)
+		(at 232.41 31.75)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3720,7 +3720,7 @@
 		(uuid "487bb69d-411b-463b-be8e-e68f277d571d")
 	)
 	(bus_entry
-		(at 254 39.37)
+		(at 232.41 36.83)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3738,7 +3738,7 @@
 		(uuid "5872b0ac-600f-4ee9-a570-436a974fadc6")
 	)
 	(bus_entry
-		(at 212.09 36.83)
+		(at 207.01 36.83)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3774,7 +3774,7 @@
 		(uuid "67c4906c-2b3f-4f12-a3ba-55ebeb0bd9e6")
 	)
 	(bus_entry
-		(at 212.09 31.75)
+		(at 207.01 31.75)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3819,7 +3819,7 @@
 		(uuid "a0091566-b6f4-45e2-a73d-0c08b92d7f55")
 	)
 	(bus_entry
-		(at 212.09 52.07)
+		(at 207.01 52.07)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3855,7 +3855,7 @@
 		(uuid "b27fbfae-fd1c-4255-95c6-92747726739a")
 	)
 	(bus_entry
-		(at 212.09 57.15)
+		(at 207.01 57.15)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3918,7 +3918,7 @@
 		(uuid "d6ca276e-25fd-4720-a0f0-2df645a8faeb")
 	)
 	(bus_entry
-		(at 212.09 62.23)
+		(at 207.01 62.23)
 		(size -2.54 2.54)
 		(stroke
 			(width 0)
@@ -3976,7 +3976,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 44.45) (xy 194.31 44.45)
+			(xy 204.47 44.45) (xy 189.23 44.45)
 		)
 		(stroke
 			(width 0)
@@ -4196,7 +4196,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 39.37) (xy 194.31 39.37)
+			(xy 204.47 39.37) (xy 189.23 39.37)
 		)
 		(stroke
 			(width 0)
@@ -4316,7 +4316,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 64.77) (xy 194.31 64.77)
+			(xy 204.47 64.77) (xy 189.23 64.77)
 		)
 		(stroke
 			(width 0)
@@ -4416,7 +4416,7 @@
 	)
 	(bus
 		(pts
-			(xy 212.09 46.99) (xy 212.09 52.07)
+			(xy 207.01 46.99) (xy 207.01 52.07)
 		)
 		(stroke
 			(width 0)
@@ -4446,7 +4446,7 @@
 	)
 	(bus
 		(pts
-			(xy 212.09 52.07) (xy 212.09 57.15)
+			(xy 207.01 52.07) (xy 207.01 57.15)
 		)
 		(stroke
 			(width 0)
@@ -4586,7 +4586,7 @@
 	)
 	(wire
 		(pts
-			(xy 236.22 36.83) (xy 251.46 36.83)
+			(xy 214.63 34.29) (xy 229.87 34.29)
 		)
 		(stroke
 			(width 0)
@@ -4626,7 +4626,7 @@
 	)
 	(wire
 		(pts
-			(xy 251.46 41.91) (xy 236.22 41.91)
+			(xy 229.87 39.37) (xy 214.63 39.37)
 		)
 		(stroke
 			(width 0)
@@ -4646,7 +4646,7 @@
 	)
 	(bus
 		(pts
-			(xy 212.09 57.15) (xy 212.09 62.23)
+			(xy 207.01 57.15) (xy 207.01 62.23)
 		)
 		(stroke
 			(width 0)
@@ -4696,7 +4696,7 @@
 	)
 	(bus
 		(pts
-			(xy 212.09 26.67) (xy 212.09 46.99)
+			(xy 207.01 26.67) (xy 207.01 46.99)
 		)
 		(stroke
 			(width 0)
@@ -4716,7 +4716,7 @@
 	)
 	(wire
 		(pts
-			(xy 194.31 34.29) (xy 209.55 34.29)
+			(xy 189.23 34.29) (xy 204.47 34.29)
 		)
 		(stroke
 			(width 0)
@@ -4756,7 +4756,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 54.61) (xy 194.31 54.61)
+			(xy 204.47 54.61) (xy 189.23 54.61)
 		)
 		(stroke
 			(width 0)
@@ -4796,7 +4796,7 @@
 	)
 	(bus
 		(pts
-			(xy 254 29.21) (xy 254 44.45)
+			(xy 232.41 26.67) (xy 232.41 41.91)
 		)
 		(stroke
 			(width 0)
@@ -4856,7 +4856,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 59.69) (xy 194.31 59.69)
+			(xy 204.47 59.69) (xy 189.23 59.69)
 		)
 		(stroke
 			(width 0)
@@ -5086,7 +5086,7 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 49.53) (xy 194.31 49.53)
+			(xy 204.47 49.53) (xy 189.23 49.53)
 		)
 		(stroke
 			(width 0)
@@ -5116,7 +5116,7 @@
 	)
 	(wire
 		(pts
-			(xy 251.46 46.99) (xy 236.22 46.99)
+			(xy 229.87 44.45) (xy 214.63 44.45)
 		)
 		(stroke
 			(width 0)
@@ -5355,7 +5355,7 @@
 		(uuid "0d9be8c1-b9cc-4488-8ed4-8946fb1aa0ce")
 	)
 	(label "LCD_DC"
-		(at 194.31 54.61 0)
+		(at 189.23 54.61 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5375,7 +5375,7 @@
 		(uuid "0dc4be26-a96a-4ada-a578-b2309274df82")
 	)
 	(label "HDI_SCL"
-		(at 236.22 36.83 0)
+		(at 214.63 34.29 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5505,7 +5505,7 @@
 		(uuid "41b1d919-c936-4f50-b44e-cc47625289b5")
 	)
 	(label "LCD_TE"
-		(at 194.31 64.77 0)
+		(at 189.23 64.77 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5525,7 +5525,7 @@
 		(uuid "432bb096-76ca-4a86-8842-91346b2ed25d")
 	)
 	(label "LCD_CSN"
-		(at 194.31 44.45 0)
+		(at 189.23 44.45 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5615,7 +5615,7 @@
 		(uuid "5a70215f-9159-4dee-8553-2e2b26088cab")
 	)
 	(label "LCD_RN"
-		(at 194.31 34.29 0)
+		(at 189.23 34.29 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5865,7 +5865,7 @@
 		(uuid "b8498e9b-bb90-4ad8-8657-636c0c0712c4")
 	)
 	(label "LCD_SDA"
-		(at 194.31 59.69 0)
+		(at 189.23 59.69 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5885,7 +5885,7 @@
 		(uuid "ba1f6cab-3963-4850-9c56-e2a2d9bfd97e")
 	)
 	(label "LCD_BACK"
-		(at 194.31 39.37 0)
+		(at 189.23 39.37 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5925,7 +5925,7 @@
 		(uuid "c3e12ad9-8a57-40c5-90cb-7ee7a45d59c4")
 	)
 	(label "LCD_SCLK"
-		(at 194.31 49.53 0)
+		(at 189.23 49.53 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5985,7 +5985,7 @@
 		(uuid "d40014c4-d65e-404d-9108-2a5f1cd22e16")
 	)
 	(label "HDI_SDA"
-		(at 236.22 41.91 0)
+		(at 214.63 39.37 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6055,7 +6055,7 @@
 		(uuid "df41a7f4-6770-4ab6-bd7b-d3fd79234518")
 	)
 	(label "LED_EN"
-		(at 236.22 46.99 0)
+		(at 214.63 44.45 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6239,7 +6239,7 @@
 	)
 	(hierarchical_label "{HID}"
 		(shape bidirectional)
-		(at 254 29.29 0)
+		(at 232.41 26.75 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6261,7 +6261,7 @@
 	)
 	(hierarchical_label "{LCD}"
 		(shape bidirectional)
-		(at 212.09 26.67 0)
+		(at 207.01 26.67 0)
 		(effects
 			(font
 				(size 1.27 1.27)
