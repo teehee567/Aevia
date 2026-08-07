@@ -103,5 +103,8 @@ These are the nets drawn on the MCU sheet. Most peripheral nets are not yet join
 - Prove the board outline by placement before keeping any previous size target.
 
 
+## JLCPCB STACKUP
+`JLC06161H-3313`
+
 ## Notes
 - SD card part does not need pullups [here](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s31/schematic-checklist.html#sd-mmc-host-controller) says "When using slot0, the GPIO power domain is internally powered, so external pull-up resistors are not required"
