@@ -3956,6 +3956,12 @@
 		(uuid "28c9aef3-79a2-4a9d-8721-38782a35a4f6")
 	)
 	(junction
+		(at 82.55 67.31)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "294313cb-6db7-4598-b229-dedf53a14266")
+	)
+	(junction
 		(at 80.01 67.31)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4092,6 +4098,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "995d2726-8fe2-4231-b795-afb590439e80")
+	)
+	(junction
+		(at 82.55 69.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9b50863e-2f0b-47a7-a0c0-c09c08469bd9")
 	)
 	(junction
 		(at 81.28 77.47)
@@ -4364,6 +4376,16 @@
 	)
 	(wire
 		(pts
+			(xy 82.55 72.39) (xy 82.55 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "04399f1a-6180-4160-9ea9-2b742791aadf")
+	)
+	(wire
+		(pts
 			(xy 115.57 116.84) (xy 149.86 116.84)
 		)
 		(stroke
@@ -4404,7 +4426,7 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 67.31) (xy 86.36 67.31)
+			(xy 80.01 67.31) (xy 82.55 67.31)
 		)
 		(stroke
 			(width 0)
@@ -4714,7 +4736,7 @@
 	)
 	(wire
 		(pts
-			(xy 74.93 69.85) (xy 86.36 69.85)
+			(xy 74.93 69.85) (xy 82.55 69.85)
 		)
 		(stroke
 			(width 0)
@@ -4842,16 +4864,6 @@
 		)
 		(uuid "61cf1ca9-b57a-4fbc-9410-4e73fba1a934")
 	)
-	(wire
-		(pts
-			(xy 119.38 82.55) (xy 118.11 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "62f7d7c5-de04-4478-88d3-bbf05fa7ceb0")
-	)
 	(bus
 		(pts
 			(xy 118.11 36.83) (xy 118.11 41.91)
@@ -4891,6 +4903,16 @@
 			(type default)
 		)
 		(uuid "6eaf53be-e602-47f6-afc9-22a2028eb582")
+	)
+	(wire
+		(pts
+			(xy 82.55 67.31) (xy 86.36 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6fa12f43-4d9c-46ef-af8b-21d76031feeb")
 	)
 	(wire
 		(pts
@@ -4991,6 +5013,16 @@
 			(type default)
 		)
 		(uuid "89627b52-91df-424b-aa4c-e73b2539771b")
+	)
+	(wire
+		(pts
+			(xy 82.55 69.85) (xy 86.36 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8976d193-5f10-4515-befa-f91562ee608d")
 	)
 	(wire
 		(pts
@@ -5191,6 +5223,16 @@
 			(type default)
 		)
 		(uuid "b530981e-e0af-4364-a346-e2aa2075b75c")
+	)
+	(wire
+		(pts
+			(xy 82.55 66.04) (xy 82.55 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b5643699-5d7c-4966-809c-74a4b38d8904")
 	)
 	(wire
 		(pts
@@ -5462,16 +5504,6 @@
 		)
 		(uuid "e7d33ebd-8d3e-44e4-9645-3b0893c4d0ba")
 	)
-	(wire
-		(pts
-			(xy 119.38 77.47) (xy 118.11 77.47)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "eb02300f-4b2d-47c2-8812-21de62a3c00c")
-	)
 	(bus
 		(pts
 			(xy 81.28 16.51) (xy 81.28 36.83)
@@ -5562,6 +5594,26 @@
 		)
 		(uuid "ff1bf1ea-30e5-4b8f-8f09-d5d6bc12fb09")
 	)
+	(label "USB_CC1_pre"
+		(at 82.55 72.39 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "079f6777-2cc0-4215-8a15-d57de20ccc46")
+	)
+	(label "USB_CC2_pre"
+		(at 118.11 82.55 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0e042fee-319d-4ede-a485-5c42d86dba34")
+	)
 	(label "3V3_RAW"
 		(at 19.05 128.27 0)
 		(effects
@@ -5602,15 +5654,15 @@
 		)
 		(uuid "28df074f-24f2-4dfe-a37f-3c3b8c686182")
 	)
-	(label "USB_CC2"
-		(at 119.38 82.55 0)
+	(label "USB_CC2_pre"
+		(at 82.55 66.04 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "3059f4f4-a167-46a5-9220-a63650b3153d")
+		(uuid "2997d6df-0d39-4060-b849-834522b05626")
 	)
 	(label "BAT_ALRT"
 		(at 63.5 44.45 0)
@@ -5622,16 +5674,6 @@
 		)
 		(uuid "3c085bce-96bf-4746-81bb-de8164e8c06e")
 	)
-	(label "USB_CC1"
-		(at 119.38 77.47 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "48507d44-4572-4392-875e-ade8eab50b78")
-	)
 	(label "USB_DN"
 		(at 100.33 29.21 0)
 		(effects
@@ -5641,6 +5683,16 @@
 			(justify left bottom)
 		)
 		(uuid "4b34bf6f-7349-428f-b7f1-fdba6210ed8d")
+	)
+	(label "USB_CC1_pre"
+		(at 118.11 77.47 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4cb6acae-0172-40e9-846f-69bc8d973ad8")
 	)
 	(label "USB_DP"
 		(at 100.33 24.13 0)
@@ -5701,26 +5753,6 @@
 			(justify left bottom)
 		)
 		(uuid "7b6b2054-e9f2-44b7-9dba-b3d05098d002")
-	)
-	(label "USB_CC1"
-		(at 81.28 69.85 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "7baabe0e-f6f5-461d-96a2-5417ebd0a949")
-	)
-	(label "USB_CC2"
-		(at 85.09 67.31 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "8c409c98-2892-4891-ba18-9feb106dc1c4")
 	)
 	(label "POW_SCL"
 		(at 115.57 116.84 0)

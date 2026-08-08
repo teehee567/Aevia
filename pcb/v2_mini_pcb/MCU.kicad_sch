@@ -3528,10 +3528,6 @@
 		(uuid "02a01bc9-662f-4d1b-ac1f-db757e0061a0")
 	)
 	(no_connect
-		(at 165.1 158.75)
-		(uuid "3236112b-f778-4ac3-8938-ca2fd14e8d07")
-	)
-	(no_connect
 		(at 78.74 115.57)
 		(uuid "3bafcef1-96f5-494d-82c2-8144edf3af3e")
 	)
@@ -3558,6 +3554,10 @@
 	(no_connect
 		(at 165.1 125.73)
 		(uuid "a94d1267-dc96-48f4-9899-211d7f7a46b3")
+	)
+	(no_connect
+		(at 78.74 133.35)
+		(uuid "affaae59-bcf8-4fa2-a7d5-8bc863118b7a")
 	)
 	(no_connect
 		(at 137.16 175.26)
@@ -4693,16 +4693,6 @@
 		)
 		(uuid "8b008873-6cd8-453a-a3eb-50a3cbeb414a")
 	)
-	(wire
-		(pts
-			(xy 62.23 133.35) (xy 78.74 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8b762770-5fcb-4633-9325-40d2cf51b2f8")
-	)
 	(bus
 		(pts
 			(xy 207.01 26.67) (xy 207.01 46.99)
@@ -4962,6 +4952,16 @@
 			(type default)
 		)
 		(uuid "bc31cbed-e513-4940-a7af-141477edb407")
+	)
+	(wire
+		(pts
+			(xy 181.61 158.75) (xy 165.1 158.75)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c2f5a4a9-8547-43aa-9ae9-118c77767f7e")
 	)
 	(wire
 		(pts
@@ -5833,6 +5833,16 @@
 		)
 		(uuid "9d211848-195b-483c-8f24-94de7b51eebe")
 	)
+	(label "LED_EN"
+		(at 181.61 158.75 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9d25ca3e-e153-4d2d-9e45-c705e3d29d55")
+	)
 	(label "GNSS_TXD1"
 		(at 181.61 143.51 180)
 		(effects
@@ -6142,16 +6152,6 @@
 			(justify left bottom)
 		)
 		(uuid "e3fd1ae1-2d71-4359-ad2d-cb8f13176829")
-	)
-	(label "LED_EN"
-		(at 62.23 133.35 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ea775d09-dc99-45b4-9f25-55b2fb363bec")
 	)
 	(label "LCD_CSN"
 		(at 62.23 158.75 0)
