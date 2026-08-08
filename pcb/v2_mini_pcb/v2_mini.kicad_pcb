@@ -9594,13 +9594,13 @@
 	(footprint "Inductor_SMD:L_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "7f5bde5a-ce7d-4488-ae56-26950615388a")
-		(at 98.8 80.8)
+		(at 98.81 82.79)
 		(descr "Inductor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 80, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "inductor")
 		(property "Reference" "FB1"
 			(at 0 -1.55 0)
 			(layer "F.SilkS")
-			(uuid "09ad647d-c721-4c91-8821-faab1d6c1d2d")
+			(uuid "e8601488-1219-4a97-ba4d-91c0a11732c0")
 			(effects
 				(font
 					(size 1 1)
@@ -9611,7 +9611,7 @@
 		(property "Value" "BLM21SP601SN1D"
 			(at 0 1.55 0)
 			(layer "F.Fab")
-			(uuid "49585a1f-897a-48b0-97d2-45ed105f7255")
+			(uuid "c3a663f4-a043-469e-ba93-c88391cc453c")
 			(effects
 				(font
 					(size 1 1)
@@ -9623,7 +9623,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "283039b2-54f5-4d67-beae-a3f6c3c0853f")
+			(uuid "4ac070f2-a837-49b0-a5a5-15edbe9db48f")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9634,7 +9634,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "13752831-1af8-490f-b929-89940082ee36")
+			(uuid "3e6954f5-c695-4447-8d2f-bf2d8c041e4a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17666,13 +17666,13 @@
 	(footprint "Inductor_SMD:L_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "dfa2d3df-96ba-42a4-afad-46d75eeb94f3")
-		(at 98.81 82.79)
+		(at 98.8 80.8)
 		(descr "Inductor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 80, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "inductor")
 		(property "Reference" "FB2"
 			(at 0 -1.55 0)
 			(layer "F.SilkS")
-			(uuid "2afeb11d-935f-4aab-be8f-61b5abcf3184")
+			(uuid "a47551bb-3854-4e71-856b-4f50a83dbe19")
 			(effects
 				(font
 					(size 1 1)
@@ -17683,7 +17683,7 @@
 		(property "Value" "BLM21SP601SN1D"
 			(at 0 1.55 0)
 			(layer "F.Fab")
-			(uuid "f6cb6e30-2721-46a2-9c04-5a0400e8234e")
+			(uuid "eb2c1beb-80d8-4268-aaa2-d101ebdf4ef4")
 			(effects
 				(font
 					(size 1 1)
@@ -17695,7 +17695,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "f6567e55-a72b-47f4-ae18-0082e8279996")
+			(uuid "0efee257-28f8-4f72-9c59-4cab2c03e2d8")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17706,7 +17706,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "58d07894-3838-4a2e-83d7-1848710d6a79")
+			(uuid "bb9ad13b-fcfd-4bc6-b890-87d06987ee8e")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33320,28 +33320,20 @@
 		(uuid "0022f4ef-7029-4737-b5ac-c023fe067386")
 	)
 	(via
-		(at 99.7 81.19)
+		(at 99.78 83.19)
 		(size 0.5)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
 		(net "+3V3_GNSS")
-		(uuid "255630ac-522e-49c2-ad0a-51b56749ebd0")
+		(uuid "2583fcba-714e-4584-b017-9bc90dd74984")
 	)
 	(via
-		(at 99.72 80.46)
+		(at 100.24 82.83)
 		(size 0.5)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
 		(net "+3V3_GNSS")
-		(uuid "2fd57418-aa19-4c13-9b70-cacfc40421c9")
-	)
-	(via
-		(at 100.2 80.79)
-		(size 0.5)
-		(drill 0.3)
-		(layers "F.Cu" "B.Cu")
-		(net "+3V3_GNSS")
-		(uuid "37f2fcc6-281b-4368-879c-0066929919ac")
+		(uuid "2f318e54-f2b0-4b19-a29c-711df95e2433")
 	)
 	(via
 		(at 103.22 103.23)
@@ -33390,6 +33382,14 @@
 		(layers "F.Cu" "B.Cu")
 		(net "+3V3_GNSS")
 		(uuid "8beb825b-40d7-4b07-80b6-6668b1fceb7a")
+	)
+	(via
+		(at 99.8 82.47)
+		(size 0.5)
+		(drill 0.3)
+		(layers "F.Cu" "B.Cu")
+		(net "+3V3_GNSS")
+		(uuid "accf724a-b533-4b7c-aa40-1615d86c4bbf")
 	)
 	(via
 		(at 103.52 102.7)
@@ -33472,12 +33472,20 @@
 		(uuid "397b8685-d60d-45f5-8cac-faaef45d4bfe")
 	)
 	(segment
-		(start 100.2 80.79)
-		(end 102.27 82.86)
+		(start 103.186041 102.383959)
+		(end 103.09 102.287918)
 		(width 1)
 		(layer "In2.Cu")
 		(net "+3V3_GNSS")
-		(uuid "40297877-9d9d-49a1-8076-33a83c21c66d")
+		(uuid "4675de49-9d17-4264-9558-e49784dfdb37")
+	)
+	(segment
+		(start 103.09 102.287918)
+		(end 103.09 82.86)
+		(width 1)
+		(layer "In2.Cu")
+		(net "+3V3_GNSS")
+		(uuid "68c47970-ea04-45fe-9704-816d840e53f3")
 	)
 	(segment
 		(start 103.186041 102.383959)
@@ -33488,22 +33496,6 @@
 		(uuid "72a16183-18b0-4f0e-97d9-0b022ef7df4f")
 	)
 	(segment
-		(start 100.2 80.79)
-		(end 99.72 80.79)
-		(width 1)
-		(layer "In2.Cu")
-		(net "+3V3_GNSS")
-		(uuid "78e210cd-8805-40cf-8075-936d4166b5d3")
-	)
-	(segment
-		(start 103.09 82.86)
-		(end 103.09 102.287918)
-		(width 1)
-		(layer "In2.Cu")
-		(net "+3V3_GNSS")
-		(uuid "bec22222-cc72-4418-b86f-2b5c5c96fb59")
-	)
-	(segment
 		(start 103.52 102.7)
 		(end 104.36 102.7)
 		(width 1)
@@ -33512,20 +33504,12 @@
 		(uuid "ccf525cc-9827-4b60-a52f-c0b7d3155b44")
 	)
 	(segment
-		(start 102.27 82.86)
-		(end 103.09 82.86)
+		(start 103.09 82.86)
+		(end 99.88 82.86)
 		(width 1)
 		(layer "In2.Cu")
 		(net "+3V3_GNSS")
-		(uuid "d0d1aede-5aeb-4fc8-8c81-ad77a62e3467")
-	)
-	(segment
-		(start 103.09 102.287918)
-		(end 103.186041 102.383959)
-		(width 1)
-		(layer "In2.Cu")
-		(net "+3V3_GNSS")
-		(uuid "d777a708-e4ff-45f9-ab5b-38544262e378")
+		(uuid "fc56d085-4deb-43b2-9524-dc38b8d8f3c6")
 	)
 	(via
 		(at 83.599028 99.128792)
@@ -34541,20 +34525,28 @@
 		(uuid "d3b78056-3bae-439f-9e58-03c1bfe43991")
 	)
 	(via
-		(at 99.78 83.19)
+		(at 99.7 81.19)
 		(size 0.5)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
 		(net "+3V3_IMU")
-		(uuid "2583fcba-714e-4584-b017-9bc90dd74984")
+		(uuid "255630ac-522e-49c2-ad0a-51b56749ebd0")
 	)
 	(via
-		(at 100.24 82.83)
+		(at 99.72 80.46)
 		(size 0.5)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
 		(net "+3V3_IMU")
-		(uuid "2f318e54-f2b0-4b19-a29c-711df95e2433")
+		(uuid "2fd57418-aa19-4c13-9b70-cacfc40421c9")
+	)
+	(via
+		(at 100.2 80.79)
+		(size 0.5)
+		(drill 0.3)
+		(layers "F.Cu" "B.Cu")
+		(net "+3V3_IMU")
+		(uuid "37f2fcc6-281b-4368-879c-0066929919ac")
 	)
 	(via
 		(at 131.03 98.4125)
@@ -34579,14 +34571,6 @@
 		(layers "F.Cu" "B.Cu")
 		(net "+3V3_IMU")
 		(uuid "9100d994-bbc4-4b25-85f4-ab263831012a")
-	)
-	(via
-		(at 99.8 82.47)
-		(size 0.5)
-		(drill 0.3)
-		(layers "F.Cu" "B.Cu")
-		(net "+3V3_IMU")
-		(uuid "accf724a-b533-4b7c-aa40-1615d86c4bbf")
 	)
 	(via
 		(at 128.14 84.35)
@@ -34645,12 +34629,68 @@
 		(uuid "8ad2e579-247e-46e9-81a7-e4fc928b8622")
 	)
 	(segment
+		(start 131.03 86.0825)
+		(end 131.03 98.4125)
+		(width 0.4)
+		(layer "B.Cu")
+		(net "+3V3_IMU")
+		(uuid "bbe31880-cbaa-42dd-97e6-b5caf4fcf265")
+	)
+	(segment
+		(start 126.02 84.35)
+		(end 128.14 84.35)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "056a97d0-ed5d-4889-9a00-fa834e011d77")
+	)
+	(segment
+		(start 100.05 80.79)
+		(end 99.72 80.46)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "0c76c8eb-f77d-468e-ae87-73b7c71bdc66")
+	)
+	(segment
 		(start 128.66 83.83)
 		(end 128.14 84.35)
 		(width 0.2)
 		(layer "In2.Cu")
 		(net "+3V3_IMU")
 		(uuid "4b12c4b9-9178-4d6a-baa7-4bc7bd7e6d13")
+	)
+	(segment
+		(start 99.8 81.19)
+		(end 100.2 80.79)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "6b7c90ca-587e-41e5-afca-9178c8021db5")
+	)
+	(segment
+		(start 125.12 80.27)
+		(end 125.12 83.63)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "6ea47e62-ae74-46f4-b46c-1fc1dfaa6b7d")
+	)
+	(segment
+		(start 125.3 83.63)
+		(end 126.02 84.35)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "85e77629-23db-48d6-a081-7961bb5f34e3")
+	)
+	(segment
+		(start 125.12 83.63)
+		(end 125.3 83.63)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "ace6f432-5f91-4466-8310-6bb0fa342f82")
 	)
 	(segment
 		(start 131.05 83.38)
@@ -34661,12 +34701,52 @@
 		(uuid "ae6ee648-f70a-46ba-ac80-5ceb98886f17")
 	)
 	(segment
+		(start 100.2 80.79)
+		(end 100.05 80.79)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "b3d10e7f-bdf6-47a0-b359-8b2036b99930")
+	)
+	(segment
 		(start 130.6 83.83)
 		(end 128.66 83.83)
 		(width 0.2)
 		(layer "In2.Cu")
 		(net "+3V3_IMU")
 		(uuid "b70bcdce-7ec4-4aea-a110-92b353e6aec4")
+	)
+	(segment
+		(start 101.65 79.34)
+		(end 124.19 79.34)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "ccf722f6-2bfd-4a5f-ad22-53ab634038a4")
+	)
+	(segment
+		(start 100.2 80.79)
+		(end 101.65 79.34)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "ce874a0c-1a79-4c31-beaa-12802c45c17b")
+	)
+	(segment
+		(start 124.19 79.34)
+		(end 125.12 80.27)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "dda463f9-960b-4325-98e7-12db31aef92a")
+	)
+	(segment
+		(start 99.7 81.19)
+		(end 99.8 81.19)
+		(width 0.4)
+		(layer "In2.Cu")
+		(net "+3V3_IMU")
+		(uuid "e3a4b497-716d-4f4c-aba2-750d7d4bebf5")
 	)
 	(segment
 		(start 111.17 85.09)
