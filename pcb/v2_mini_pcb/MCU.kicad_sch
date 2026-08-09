@@ -3677,6 +3677,10 @@
 		(uuid "7a1c9367-c3b7-4ed0-adc9-fc841e6fecdc")
 	)
 	(no_connect
+		(at 328.93 88.9)
+		(uuid "7edaa038-f20f-4de9-a96a-05fcb6b9a1ec")
+	)
+	(no_connect
 		(at 165.1 102.87)
 		(uuid "8934bbf5-360a-44be-a83a-fd1c39b2a7ea")
 	)
@@ -7517,85 +7521,6 @@
 			(project "v2_mini"
 				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/d810a1dc-5c9a-4ac6-8c4b-d9616121b31e"
 					(reference "J5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 328.93 88.9 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "44c170bb-0155-44c6-8983-c675c0bb360b")
-		(property "Reference" "#PWR075"
-			(at 325.12 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 332.74 88.8999 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 328.93 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 328.93 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 328.93 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0b748014-6747-4f25-bdbd-08e2145fdc16")
-		)
-		(instances
-			(project "v2_mini"
-				(path "/4318b369-034c-40ef-a05b-b7d2541c0647/d810a1dc-5c9a-4ac6-8c4b-d9616121b31e"
-					(reference "#PWR075")
 					(unit 1)
 				)
 			)
