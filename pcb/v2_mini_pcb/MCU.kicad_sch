@@ -3575,7 +3575,7 @@
 		(uuid "2c945ce6-408c-435c-81df-4ea57def066e")
 	)
 	(junction
-		(at 254 199.39)
+		(at 284.48 218.44)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2d0f48a0-4326-4cd5-ba72-1deebc8caa57")
@@ -3587,7 +3587,7 @@
 		(uuid "593159be-f347-4686-ae7a-176ddf74854d")
 	)
 	(junction
-		(at 247.65 199.39)
+		(at 278.13 218.44)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6bde8a59-d7b6-4468-a7a7-9eb9bff3bbea")
@@ -3617,7 +3617,7 @@
 		(uuid "bf3f1c86-6080-4204-a369-7ab017b24bfa")
 	)
 	(junction
-		(at 261.62 199.39)
+		(at 292.1 218.44)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c1fc6819-c815-4d92-ab24-77bbb3c23571")
@@ -3689,20 +3689,12 @@
 		(uuid "963b1670-d724-4d0b-b250-93792f1eedd4")
 	)
 	(no_connect
-		(at 165.1 161.29)
-		(uuid "9f0e7c2e-6ff5-4583-8100-c08c1b4e9eb4")
-	)
-	(no_connect
 		(at 165.1 115.57)
 		(uuid "a0c45a4d-b2bf-4233-aced-769b6a7f95e1")
 	)
 	(no_connect
 		(at 165.1 125.73)
 		(uuid "a94d1267-dc96-48f4-9899-211d7f7a46b3")
-	)
-	(no_connect
-		(at 78.74 133.35)
-		(uuid "affaae59-bcf8-4fa2-a7d5-8bc863118b7a")
 	)
 	(no_connect
 		(at 137.16 175.26)
@@ -3755,6 +3747,15 @@
 			(type default)
 		)
 		(uuid "0918c106-421d-4fd9-afbd-32d65e71784b")
+	)
+	(bus_entry
+		(at 55.88 62.23)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0dce00c5-5b35-44a0-8fe2-24c4ef68da6f")
 	)
 	(bus_entry
 		(at 88.9 36.83)
@@ -4045,6 +4046,15 @@
 		(uuid "cc27a54a-6e49-42e2-9b1e-b02a1a19cf40")
 	)
 	(bus_entry
+		(at 55.88 67.31)
+		(size -2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce94afdb-7a52-43f8-84a9-3ccc856e2062")
+	)
+	(bus_entry
 		(at 119.38 46.99)
 		(size -2.54 2.54)
 		(stroke
@@ -4187,6 +4197,16 @@
 			(type default)
 		)
 		(uuid "137852e9-1fa8-4573-a978-866d914acce7")
+	)
+	(wire
+		(pts
+			(xy 62.23 133.35) (xy 78.74 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "14309219-fe0d-4147-a8f2-7bc8c86102b3")
 	)
 	(wire
 		(pts
@@ -4638,6 +4658,16 @@
 		)
 		(uuid "65b81ea8-4cde-481e-a8ab-2e6678b27970")
 	)
+	(bus
+		(pts
+			(xy 55.88 57.15) (xy 55.88 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "670e0c89-7eac-4c2f-87de-990114e18481")
+	)
 	(wire
 		(pts
 			(xy 62.23 120.65) (xy 78.74 120.65)
@@ -4830,7 +4860,7 @@
 	)
 	(wire
 		(pts
-			(xy 254 199.39) (xy 261.62 199.39)
+			(xy 284.48 218.44) (xy 292.1 218.44)
 		)
 		(stroke
 			(width 0)
@@ -4970,6 +5000,16 @@
 	)
 	(wire
 		(pts
+			(xy 53.34 64.77) (xy 38.1 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a2747e25-fadf-4b6b-acfb-93bf2aa2f1c8")
+	)
+	(wire
+		(pts
 			(xy 62.23 95.25) (xy 63.5 95.25)
 		)
 		(stroke
@@ -5000,7 +5040,7 @@
 	)
 	(wire
 		(pts
-			(xy 261.62 199.39) (xy 270.51 199.39)
+			(xy 292.1 218.44) (xy 300.99 218.44)
 		)
 		(stroke
 			(width 0)
@@ -5180,7 +5220,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 199.39) (xy 254 199.39)
+			(xy 278.13 218.44) (xy 284.48 218.44)
 		)
 		(stroke
 			(width 0)
@@ -5257,6 +5297,16 @@
 			(type default)
 		)
 		(uuid "ce4294b1-d511-4410-88eb-e0851b7d6359")
+	)
+	(wire
+		(pts
+			(xy 53.34 69.85) (xy 38.1 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d0d475d9-f5b8-4437-8edb-381479828158")
 	)
 	(wire
 		(pts
@@ -5470,6 +5520,16 @@
 	)
 	(wire
 		(pts
+			(xy 165.1 161.29) (xy 181.61 161.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f54a0e9c-0365-4ec4-a023-db57552174cd")
+	)
+	(wire
+		(pts
 			(xy 111.76 191.77) (xy 111.76 175.26)
 		)
 		(stroke
@@ -5597,6 +5657,16 @@
 			(justify left bottom)
 		)
 		(uuid "13d9f34d-d0f9-4931-b78d-18abb5a8faa6")
+	)
+	(label "PWR_INT_N"
+		(at 38.1 64.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1613d82f-7018-432e-a742-7c9ecc16e074")
 	)
 	(label "SD_CLK"
 		(at 163.83 34.29 0)
@@ -5878,6 +5948,16 @@
 		)
 		(uuid "67b1505f-3f00-4cd8-af6d-393ed51b317e")
 	)
+	(label "PWR_INT_N"
+		(at 181.61 161.29 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "68ecdc4d-f28d-4ffc-93d3-dfc91bde52ec")
+	)
 	(label "IMU_CS_N"
 		(at 132.08 49.53 0)
 		(effects
@@ -5977,6 +6057,16 @@
 			(justify left bottom)
 		)
 		(uuid "7b9295c5-b375-4105-8909-3574ec428e24")
+	)
+	(label "PWR_KILL_N"
+		(at 38.1 69.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8c566ed6-9416-4ef7-b9df-01709f0b9d9d")
 	)
 	(label "SD_D0"
 		(at 106.68 191.77 90)
@@ -6257,6 +6347,16 @@
 			(justify left bottom)
 		)
 		(uuid "d7758739-d6c2-481f-b8fc-67fe356fa86b")
+	)
+	(label "PWR_KILL_N"
+		(at 62.23 133.35 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d8058aaa-1260-4e18-92ea-c2f60e710c08")
 	)
 	(label "LCD_DC"
 		(at 62.23 161.29 0)
@@ -6590,7 +6690,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 270.51 201.93 180)
+		(at 300.99 220.98 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6601,7 +6701,7 @@
 		(fields_autoplaced yes)
 		(uuid "1956ab15-c35e-426d-891e-c380636a10f8")
 		(property "Reference" "H7"
-			(at 273.05 201.9299 0)
+			(at 303.53 220.9799 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6612,7 +6712,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 273.05 204.4699 0)
+			(at 303.53 223.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6623,7 +6723,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad"
-			(at 270.51 201.93 0)
+			(at 300.99 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6634,7 +6734,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 270.51 201.93 0)
+			(at 300.99 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6645,7 +6745,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 270.51 201.93 0)
+			(at 300.99 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7528,7 +7628,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 261.62 201.93 180)
+		(at 292.1 220.98 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7539,7 +7639,7 @@
 		(fields_autoplaced yes)
 		(uuid "462b21b4-b9d2-429b-9957-e3be7b35a899")
 		(property "Reference" "H6"
-			(at 264.16 201.9299 0)
+			(at 294.64 220.9799 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7550,7 +7650,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 264.16 204.4699 0)
+			(at 294.64 223.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7561,7 +7661,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad"
-			(at 261.62 201.93 0)
+			(at 292.1 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7572,7 +7672,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 261.62 201.93 0)
+			(at 292.1 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7583,7 +7683,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 261.62 201.93 0)
+			(at 292.1 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7934,7 +8034,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 254 201.93 180)
+		(at 284.48 220.98 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7945,7 +8045,7 @@
 		(fields_autoplaced yes)
 		(uuid "7146e9ae-ace2-42ef-a231-e8912c01aec0")
 		(property "Reference" "H5"
-			(at 256.54 201.9299 0)
+			(at 287.02 220.9799 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7956,7 +8056,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 256.54 204.4699 0)
+			(at 287.02 223.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7967,7 +8067,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad"
-			(at 254 201.93 0)
+			(at 284.48 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7978,7 +8078,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 254 201.93 0)
+			(at 284.48 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7989,7 +8089,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 254 201.93 0)
+			(at 284.48 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8197,7 +8297,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 247.65 199.39 180)
+		(at 278.13 218.44 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8208,7 +8308,7 @@
 		(fields_autoplaced yes)
 		(uuid "82386896-ce70-4cdb-86b0-5e73a03cdbf6")
 		(property "Reference" "#PWR089"
-			(at 247.65 193.04 0)
+			(at 278.13 212.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8219,7 +8319,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 247.65 194.31 0)
+			(at 278.13 213.36 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8229,7 +8329,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 247.65 199.39 0)
+			(at 278.13 218.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8240,7 +8340,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 247.65 199.39 0)
+			(at 278.13 218.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8251,7 +8351,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 247.65 199.39 0)
+			(at 278.13 218.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8864,7 +8964,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 247.65 201.93 180)
+		(at 278.13 220.98 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8875,7 +8975,7 @@
 		(fields_autoplaced yes)
 		(uuid "c1d75be4-135a-4999-ae70-836ea28fed6d")
 		(property "Reference" "H4"
-			(at 250.19 201.9299 0)
+			(at 280.67 220.9799 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8886,7 +8986,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 250.19 204.4699 0)
+			(at 280.67 223.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8897,7 +8997,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad"
-			(at 247.65 201.93 0)
+			(at 278.13 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8908,7 +9008,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 247.65 201.93 0)
+			(at 278.13 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8919,7 +9019,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 247.65 201.93 0)
+			(at 278.13 220.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
