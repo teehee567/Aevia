@@ -5574,6 +5574,16 @@
 		)
 		(uuid "0dc4be26-a96a-4ada-a578-b2309274df82")
 	)
+	(label "USB_DN"
+		(at 124.46 191.77 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0ef7b0ef-3a9e-44db-975f-c6f45ff11057")
+	)
 	(label "HDI_SCL"
 		(at 214.63 34.29 0)
 		(effects
@@ -5823,6 +5833,16 @@
 			(justify left bottom)
 		)
 		(uuid "5a70215f-9159-4dee-8553-2e2b26088cab")
+	)
+	(label "USB_DP"
+		(at 121.92 191.77 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5afe479f-51ce-437b-aa6d-912f8b637ac6")
 	)
 	(label "LCD_RN"
 		(at 189.23 34.29 0)
@@ -6244,16 +6264,6 @@
 		)
 		(uuid "daccdd20-c376-4e9e-a9f3-70a145fd7180")
 	)
-	(label "USB_DN"
-		(at 121.92 191.77 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "db062c3b-e58f-4ffa-b398-75195395a354")
-	)
 	(label "MAIN_SDA"
 		(at 62.23 130.81 0)
 		(effects
@@ -6303,16 +6313,6 @@
 			(justify left bottom)
 		)
 		(uuid "e0ba010c-0d94-4d3d-9fa0-4ebf496465cf")
-	)
-	(label "USB_DP"
-		(at 124.46 191.77 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "e24ae1c5-c11f-493c-bc67-38fa0a25ed7f")
 	)
 	(label "GNSS_TXD1"
 		(at 101.6 34.29 0)

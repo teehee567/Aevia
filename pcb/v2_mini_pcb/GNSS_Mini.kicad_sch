@@ -3364,6 +3364,12 @@
 		(uuid "6104985b-adac-472c-87a5-9fbedabe8586")
 	)
 	(junction
+		(at 130.81 80.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "69f900bc-579b-4fcf-a10b-70ed06996473")
+	)
+	(junction
 		(at 110.49 59.69)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3380,12 +3386,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8611d67f-d5a5-4e62-b4f1-f5e5e153326b")
-	)
-	(junction
-		(at 130.81 80.01)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "8777e839-e0c0-4a7e-b5cb-6c8041f98d6e")
 	)
 	(junction
 		(at 142.24 54.61)
@@ -5126,7 +5126,7 @@
 	)
 	(symbol
 		(lib_id "Device:D_TVS")
-		(at 127 80.01 0)
+		(at 127 80.01 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5136,7 +5136,7 @@
 		(dnp no)
 		(uuid "5219e867-a482-43f6-8fb0-880b03b1f225")
 		(property "Reference" "D2"
-			(at 122.936 78.232 0)
+			(at 131.064 81.788 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5146,7 +5146,7 @@
 			)
 		)
 		(property "Value" ""
-			(at 124.714 82.042 0)
+			(at 129.286 77.978 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
