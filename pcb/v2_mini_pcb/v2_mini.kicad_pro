@@ -160,8 +160,8 @@
         "min_text_thickness": 0.08,
         "min_through_hole_diameter": 0.3,
         "min_track_width": 0.1,
-        "min_via_annular_width": 0.1,
-        "min_via_diameter": 0.5,
+        "min_via_annular_width": 0.05,
+        "min_via_diameter": 0.4,
         "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
@@ -249,6 +249,10 @@
         {
           "diameter": 0.0,
           "drill": 0.0
+        },
+        {
+          "diameter": 0.4,
+          "drill": 0.3
         },
         {
           "diameter": 0.5,
@@ -568,7 +572,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "production",
       "specctra_dsn": "",
       "vrml": ""
     },
@@ -945,7 +949,7 @@
         "uuid": "4318b369-034c-40ef-a05b-b7d2541c0647"
       }
     ],
-    "used_designators": "",
+    "used_designators": "HG1,U1-10,L1-2,L4-5,#PWR1-92,J1-7,R1-36,#FLG1-12,C1-41,TH1,BT1,FB1-2,D1-4,Q1,SW1-7,TP1-2,H1-7",
     "variants": []
   },
   "sheets": [
