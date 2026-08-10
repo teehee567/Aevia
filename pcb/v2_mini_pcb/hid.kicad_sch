@@ -6431,7 +6431,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do"
 			(at 38.1 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -6453,7 +6453,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "CL10A106KP8NNND"
 			(at 38.1 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -6475,29 +6475,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 38.1 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C19702"
-			(at 38.1 66.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+		(property "Supplier" "DigiKey"
 			(at 38.1 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -6541,6 +6519,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND" (at 38.1 66.04 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "46217aca-bdda-4c9d-b348-85e831e39d06")
 		)
@@ -6960,7 +6941,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/download/specsheet/CC0805MKX5R8BB226"
 			(at 82.55 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -6982,7 +6963,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "CC0805MKX5R8BB226"
 			(at 82.55 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -6993,7 +6974,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "YAGEO"
 			(at 82.55 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -7004,29 +6985,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C45783"
-			(at 82.55 67.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C45783"
-			(at 82.55 67.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+		(property "Supplier" "DigiKey"
 			(at 82.55 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -7070,6 +7029,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "311-1903-1-ND" (at 82.55 67.31 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "f162e4e8-6b90-4c8f-b26e-07b897db4589")
 		)

@@ -4675,7 +4675,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 118.11 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4697,7 +4697,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 118.11 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4708,7 +4708,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 118.11 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4719,7 +4719,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
+		(property "Supplier" "DigiKey"
 			(at 118.11 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4730,29 +4730,7 @@
 				)
 			)
 		)
-		(property "JLCPCB_PN" "C15850"
-			(at 118.11 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
-			(at 118.11 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 118.11 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -4785,6 +4763,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "445-14418-1-ND" (at 118.11 57.15 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "29541e8f-129f-4d3c-bc9c-c12e1278d318")
 		)
@@ -4999,7 +4980,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 133.35 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -5021,7 +5002,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 133.35 81.28 90)
 			(hide yes)
 			(show_name no)
@@ -5032,7 +5013,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 133.35 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -5043,7 +5024,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
+		(property "Supplier" "DigiKey"
 			(at 133.35 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -5054,29 +5035,7 @@
 				)
 			)
 		)
-		(property "JLCPCB_PN" "C15850"
-			(at 133.35 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
-			(at 133.35 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 133.35 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -5109,6 +5068,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "445-14418-1-ND" (at 133.35 81.28 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "a7e4bbe8-0348-403d-baec-2ad2ec52652e")
 		)
@@ -5335,7 +5297,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 59.69 110.49 0)
 			(hide yes)
 			(show_name no)
@@ -5357,7 +5319,7 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 59.69 110.49 90)
 			(hide yes)
 			(show_name no)
@@ -5368,6 +5330,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "YAGEO" (at 59.69 110.49 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 59.69 110.49 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Supplier" "DigiKey" (at 59.69 110.49 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50V" (at 59.69 110.49 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "1%" (at 59.69 110.49 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063W" (at 59.69 110.49 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Temperature_Coefficient" "±100ppm/°C" (at 59.69 110.49 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "2"
 			(uuid "9c192f40-6b11-4361-9308-c47717c748a9")
 		)
@@ -5743,7 +5726,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 62.23 64.77 0)
 			(hide yes)
 			(show_name no)
@@ -5765,7 +5748,7 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 62.23 64.77 0)
 			(hide yes)
 			(show_name no)
@@ -5776,6 +5759,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "YAGEO" (at 62.23 64.77 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 62.23 64.77 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Supplier" "DigiKey" (at 62.23 64.77 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50V" (at 62.23 64.77 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "1%" (at 62.23 64.77 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063W" (at 62.23 64.77 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Temperature_Coefficient" "±100ppm/°C" (at 62.23 64.77 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "53d7e161-32c9-47e8-9aae-99c1bf1d3c03")
 		)
@@ -6478,7 +6482,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 59.69 113.03 0)
 			(hide yes)
 			(show_name no)
@@ -6500,7 +6504,7 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 59.69 113.03 90)
 			(hide yes)
 			(show_name no)
@@ -6511,6 +6515,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "YAGEO" (at 59.69 113.03 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 59.69 113.03 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Supplier" "DigiKey" (at 59.69 113.03 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50V" (at 59.69 113.03 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "1%" (at 59.69 113.03 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063W" (at 59.69 113.03 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Temperature_Coefficient" "±100ppm/°C" (at 59.69 113.03 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "2"
 			(uuid "305e28d3-b549-4bac-8a88-65e526d1d2c3")
 		)
@@ -7141,7 +7166,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 110.49 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7163,7 +7188,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 110.49 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7174,7 +7199,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 110.49 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7185,7 +7210,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
+		(property "Supplier" "DigiKey"
 			(at 110.49 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7196,29 +7221,7 @@
 				)
 			)
 		)
-		(property "JLCPCB_PN" "C15850"
-			(at 110.49 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
-			(at 110.49 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 110.49 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7251,6 +7254,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "445-14418-1-ND" (at 110.49 57.15 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "f4102e6e-70bb-4173-b737-19b530b3b3c5")
 		)
@@ -7482,7 +7488,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 133.35 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7504,7 +7510,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 133.35 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7515,7 +7521,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 133.35 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7526,7 +7532,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
+		(property "Supplier" "DigiKey"
 			(at 133.35 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7537,29 +7543,7 @@
 				)
 			)
 		)
-		(property "JLCPCB_PN" "C15850"
-			(at 133.35 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
-			(at 133.35 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 133.35 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7592,6 +7576,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "445-14418-1-ND" (at 133.35 57.15 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "c04e5dfa-e82d-40aa-b563-526072e0ae0b")
 		)
@@ -7652,7 +7639,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 125.73 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7674,7 +7661,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 125.73 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7685,7 +7672,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 125.73 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7696,7 +7683,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
+		(property "Supplier" "DigiKey"
 			(at 125.73 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7707,29 +7694,7 @@
 				)
 			)
 		)
-		(property "JLCPCB_PN" "C15850"
-			(at 125.73 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
-			(at 125.73 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 125.73 57.15 0)
 			(hide yes)
 			(show_name no)
@@ -7762,6 +7727,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "445-14418-1-ND" (at 125.73 57.15 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "0c71ef80-61b1-419d-9be8-9910c389fee4")
 		)
