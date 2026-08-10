@@ -1,0 +1,133 @@
+(footprint "L_Samsung_CIGT201610"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Samsung CIGT201610 shielded thin-film metal-composite power inductor, 2.0x1.6x1.0mm, https://product.samsungsem.com/pi/CIGT201610EHR47MN.do")
+	(tags "power inductor shielded thin-film metal-composite 2016")
+	(property "Reference" "REF**"
+		(at 0 -1.75 0)
+		(layer "F.SilkS")
+		(uuid "deeb4ee6-1f27-4c58-a218-039ecfb8589b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "L_Samsung_CIGT201610"
+		(at 0 1.75 0)
+		(layer "F.Fab")
+		(uuid "e110039b-89a0-4dea-90af-f8d43dd98892")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://media.digikey.com/pdf/Data%20Sheets/Samsung%20PDFs/CIGT201610EHR47MNE_Spec.pdf"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "25872766-ea96-4f16-923e-d4745401f9ae")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "Samsung CIGT201610 2016-metric power-inductor land pattern"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bead7ecd-b099-422e-b9ea-d4781648c87f")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -1.11 -1.06)
+		(end 1.11 -1.06)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "8ce1d08c-e00d-4cf9-b7cc-4065d488258a")
+	)
+	(fp_line
+		(start 1.11 1.06)
+		(end -1.11 1.06)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "72b80a1f-ae3e-4467-a7ca-4d474bd65a17")
+	)
+	(fp_rect
+		(start -1.25 -1.05)
+		(end 1.25 1.05)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "cb4a0531-6df8-44cf-925a-5a958b90239f")
+	)
+	(fp_rect
+		(start -1 -0.8)
+		(end 1 0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "e93c4047-fdb4-42c3-b55d-838d1c900424")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "08009526-c65c-4ec1-8e29-cb373080ce47")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -0.725 0)
+		(size 0.55 1.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(roundrect_rratio 0.25)
+		(uuid "9bc96220-f62a-4373-a94a-b7ce66dba999")
+	)
+	(pad "2" smd roundrect
+		(at 0.725 0)
+		(size 0.55 1.6)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(roundrect_rratio 0.25)
+		(uuid "f59d8a6f-6cc9-450a-b652-02b661f96669")
+	)
+	(embedded_fonts no)
+	(model "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Murata_DFE201610P.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

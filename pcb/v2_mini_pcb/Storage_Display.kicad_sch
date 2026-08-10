@@ -3412,7 +3412,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 173.99 80.01 0)
 			(hide yes)
 			(show_name no)
@@ -3434,7 +3434,7 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 173.99 80.01 90)
 			(hide yes)
 			(show_name no)
@@ -3445,6 +3445,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "YAGEO" (at 173.99 80.01 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 173.99 80.01 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Supplier" "DigiKey" (at 173.99 80.01 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50V" (at 173.99 80.01 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "1%" (at 173.99 80.01 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063W" (at 173.99 80.01 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Temperature_Coefficient" "±100ppm/°C" (at 173.99 80.01 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "2"
 			(uuid "e6bd6ef9-af6d-4268-a503-d50d91a3111d")
 		)
@@ -3581,7 +3602,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 173.99 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -3603,7 +3624,7 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 173.99 77.47 90)
 			(hide yes)
 			(show_name no)
@@ -3614,6 +3635,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "YAGEO" (at 173.99 77.47 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 173.99 77.47 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Supplier" "DigiKey" (at 173.99 77.47 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50V" (at 173.99 77.47 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "1%" (at 173.99 77.47 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063W" (at 173.99 77.47 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Temperature_Coefficient" "±100ppm/°C" (at 173.99 77.47 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "2"
 			(uuid "2d1c1d77-4fb8-4c22-a360-2fb5b2c4edfc")
 		)
@@ -5400,7 +5442,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-07100KL"
 			(at 165.1 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -5422,7 +5464,7 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1003TCE"
+		(property "MPN" "RC0402FR-07100KL"
 			(at 165.1 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -5433,6 +5475,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "YAGEO" (at 165.1 53.34 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "DigiKey_PN" "311-100KLRCT-ND" (at 165.1 53.34 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Supplier" "DigiKey" (at 165.1 53.34 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50V" (at 165.1 53.34 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "1%" (at 165.1 53.34 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063W" (at 165.1 53.34 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Temperature_Coefficient" "±100ppm/°C" (at 165.1 53.34 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "2"
 			(uuid "912a2495-c156-430c-a347-97d25188315a")
 		)
@@ -5492,7 +5555,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do"
 			(at 177.8 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -5514,7 +5577,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "CL10A106KP8NNND"
 			(at 177.8 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -5536,29 +5599,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 177.8 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C19702"
-			(at 177.8 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+		(property "Supplier" "DigiKey"
 			(at 177.8 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -5602,6 +5643,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND" (at 177.8 71.12 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "1632f8d3-3315-47ec-8ae9-9af221e71565")
 		)
@@ -5741,7 +5785,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do"
 			(at 109.22 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -5763,7 +5807,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "CL10A106KP8NNND"
 			(at 109.22 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -5785,29 +5829,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 109.22 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C19702"
-			(at 109.22 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+		(property "Supplier" "DigiKey"
 			(at 109.22 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -5851,6 +5873,9 @@
 				)
 			)
 		)
+    (property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND" (at 109.22 73.66 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "a6a9f119-3f54-41cf-a00c-4bdf5be57589")
 		)
@@ -6169,7 +6194,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0722RL"
 			(at 55.88 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -6191,7 +6216,7 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF220JTCE"
+		(property "MPN" "RC0402FR-0722RL"
 			(at 55.88 81.28 90)
 			(hide yes)
 			(show_name no)
@@ -6202,6 +6227,27 @@
 				)
 			)
 		)
+    (property "Manufacturer" "YAGEO" (at 55.88 81.28 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "DigiKey_PN" "311-22.0LRCT-ND" (at 55.88 81.28 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Supplier" "DigiKey" (at 55.88 81.28 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Voltage" "50V" (at 55.88 81.28 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Tolerance" "1%" (at 55.88 81.28 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Power" "0.063W" (at 55.88 81.28 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (property "Temperature_Coefficient" "±100ppm/°C" (at 55.88 81.28 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
 		(pin "1"
 			(uuid "5fdf7557-aa91-46ee-bfb6-1bcfcd0fc60c")
 		)

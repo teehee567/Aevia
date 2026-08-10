@@ -207,7 +207,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/download/specsheet/CC0805MKX5R8BB226"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -241,7 +241,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "CC0805MKX5R8BB226"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -254,7 +254,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "YAGEO"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -267,33 +267,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C45783"
-			(at 0 0 270)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "24d11406-f39a-437d-aae6-903ac3adda82")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C45783"
-			(at 0 0 270)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "40b4085c-5f6d-4308-82ec-e4929a6a3374")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -338,6 +314,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b153392f-c1c3-4fd8-b265-9cb213b546fc")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "51363799-7624-40f6-8443-fe564c74019f")
 			(effects
 				(font
 					(size 1 1)
@@ -640,7 +629,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0722RL"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -674,12 +663,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF220JTCE"
+		(property "MPN" "RC0402FR-0722RL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "de2fdb2d-31b6-401d-a106-533ed95467aa")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6a423ea3-d939-43d7-9cbe-bb7a9e670d26")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0LRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e52f723c-67be-4986-919a-5bfdc6f26663")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "10f5fe15-3c08-4bfe-ab97-ad3d9fccb9d3")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5af08ec1-5b4b-47bb-98c6-249ca2f7202f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "88c629a4-94fd-4efb-a81b-124003cfadb6")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2f740e82-c062-450d-b74a-c7cc5d33f1ba")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1508832e-b586-4adb-9aab-1b64c95f798e")
 			(effects
 				(font
 					(size 1 1)
@@ -3806,7 +3886,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0722RL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -3840,12 +3920,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF220JTCE"
+		(property "MPN" "RC0402FR-0722RL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "1ae37668-7ca2-4180-9105-934e4ed57361")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ef0f3862-0275-4bdb-9983-bafb55fb31cc")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0LRCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f926576f-d12c-4bf7-88eb-6fd3da4887d5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "366f047d-5c49-45cb-b121-881055618924")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "af4a5a12-1304-46a0-bcef-4e870e1b9eb9")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2eba8905-1f35-4431-a97b-4cf64db4397f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ae275493-85fa-40f6-8bec-bd3fd6407f75")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c40b4a59-9062-4576-85c5-5d8022793814")
 			(effects
 				(font
 					(size 1 1)
@@ -5142,7 +5313,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.seielect.com/catalog/sei-rmcf_rmcp.pdf"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -5176,12 +5347,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF7502TCE"
+		(property "MPN" "RMCF0402FT75K0"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "599eb580-f46a-414b-8294-623009ea2fd1")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Stackpole Electronics Inc"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8b08ada9-986f-4fe9-8dd8-0facaea21901")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "RMCF0402FT75K0CT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ba8b06c1-3bb9-4bb0-94d8-279c17ee1971")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6cfdebc5-83cd-4498-b9ae-4900035cb244")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "65a8a5d9-ba43-4c17-8642-2611056ba0a7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "49ce05ab-905d-4e07-80d1-ee50ae79e8e2")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ffcb293d-553a-4265-8e3b-3fa448c88141")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "82fea8e9-9b16-4634-9617-d47d007cf6e7")
 			(effects
 				(font
 					(size 1 1)
@@ -5313,7 +5575,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/download/specsheet/CC0805MKX5R8BB226"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -5347,7 +5609,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "CC0805MKX5R8BB226"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5360,7 +5622,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "YAGEO"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5373,33 +5635,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C45783"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "abff21b4-a224-43fd-a53f-00a6f0a30fd8")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C45783"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ff8f215f-0c05-45d6-9e0c-f347706ee311")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5444,6 +5682,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "d1e560da-915a-445f-b690-adbe18153667")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d7958fdb-cb97-4f4c-a919-b48a7ebbcbdc")
 			(effects
 				(font
 					(size 1 1)
@@ -6168,7 +6419,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -6202,12 +6453,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "cf8b0c7c-0a33-4966-99c3-d1a58271db83")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0ee518b4-eb73-4bdc-b6e7-d230e90cba47")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1b8c3b6c-2399-4773-b9b6-7524aefd7b37")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b590c579-0652-4f60-ad46-bb8435647d0c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9119b8ed-acf5-4d2f-bca8-d360359eb96e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8de909ea-045f-48f6-aa24-e7b8277becfa")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "78f561d2-e971-4be9-87bb-b9908a2b3b52")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ebbb6f9d-3e53-430d-bfee-00c1881a4b38")
 			(effects
 				(font
 					(size 1 1)
@@ -6339,7 +6681,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -6373,7 +6715,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -6386,7 +6728,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -6399,33 +6741,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "84d01bd7-b421-4dcb-8ad0-18d90289e15e")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d0a44769-6754-4048-94f8-db3268fbcb3e")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -6438,7 +6756,7 @@
 				)
 			)
 		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -6470,6 +6788,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4d54904c-ecc6-4f81-92ce-00fa79a6b2fe")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "445-14418-1-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "54e542df-c246-403b-aad3-deff72b8c9c5")
 			(effects
 				(font
 					(size 1 1)
@@ -7497,7 +7828,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -7531,7 +7862,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7544,7 +7875,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7557,33 +7888,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7ed4dd5e-1bbf-43d6-8d65-7487c3e922fb")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "6f445f04-e4a4-4a89-812c-a837b173c75f")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7596,7 +7903,7 @@
 				)
 			)
 		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7628,6 +7935,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "49ac55fd-c6e9-48c8-bead-0375f31b7bcc")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "445-14418-1-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ae856828-0d41-4402-bea1-1465caebe0fa")
 			(effects
 				(font
 					(size 1 1)
@@ -7759,7 +8079,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -7793,7 +8113,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7806,7 +8126,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7819,33 +8139,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "1c73a1f5-ec12-42e9-a24e-4e0c41224ec6")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "9cf2d3bf-d214-4e2c-b186-922467630d8e")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7858,7 +8154,7 @@
 				)
 			)
 		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -7890,6 +8186,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "0e290f7b-36a4-44b0-bb14-0e01ff826529")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "445-14418-1-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "335f6566-1d3b-4d68-a4b4-9cbbfea4ed01")
 			(effects
 				(font
 					(size 1 1)
@@ -8142,7 +8451,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -8176,12 +8485,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "31b85468-5812-4d67-a1cc-1791550583a7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "74dbcfe2-c395-4dcf-9110-bc425904e7ac")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "88ce695c-e684-4c3c-b733-10a0e571fd68")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "af8a5cd4-c7a5-4253-93be-400bdda93694")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "eed5c7fc-571f-4460-8da1-2f7ccd9e8e07")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "73852405-ff02-4b9b-8afe-c5fae6075ab7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ede3e685-4fbe-442b-9c06-78a84427352d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ac69ff82-4e81-4cd7-af4e-feb8ebfdf490")
 			(effects
 				(font
 					(size 1 1)
@@ -8313,7 +8713,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -8347,12 +8747,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "fe384ff6-5952-44a3-9d3a-3b950ad7fac1")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "69653faa-cc4d-4ace-97ad-4e02815d32da")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6df630d1-18ff-476a-9002-d440061d3ec0")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ff416308-b8c7-4cb0-9146-55df40489da0")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "42246a40-71de-4f72-88d3-e785c6babd5b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f3faa627-80bb-4548-8b71-e5e897154c08")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f9212589-dea8-4083-894e-882fcad63ee3")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e244e9c5-4a68-4ac8-8249-8940295ea1bf")
 			(effects
 				(font
 					(size 1 1)
@@ -9374,12 +9865,12 @@
 			)
 		)
 	)
-	(footprint "Inductor_SMD:L_Murata_DFE201610P"
+	(footprint "all:L_Samsung_CIGT201610"
 		(layer "F.Cu")
 		(uuid "80f93c8a-4961-49af-92dd-3d455be1457e")
 		(at 92.23 79.8)
-		(descr "Inductor, Murata, DFE201610P, 2.0x1.6x1.0mm, (https://www.murata.com/~/media/webrenewal/products/inductor/chip/tokoproducts/wirewoundmetalalloychiptype/m_dfe201610p.ashx)")
-		(tags "power chip flatwire")
+		(descr "Samsung CIGT201610 shielded thin-film metal-composite power inductor, 2.0x1.6x1.0mm, https://product.samsungsem.com/pi/CIGT201610EHR47MN.do")
+		(tags "power inductor shielded thin-film metal-composite 2016")
 		(property "Reference" "L5"
 			(at 0 -1.75 0)
 			(layer "F.SilkS")
@@ -9402,7 +9893,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://media.digikey.com/pdf/Data%20Sheets/Samsung%20PDFs/CIGT201610EHR47MNE_Spec.pdf"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -9413,7 +9904,7 @@
 				)
 			)
 		)
-		(property "Description" "Inductor"
+		(property "Description" "470 nH shielded thin-film metal-composite power inductor, 4.8 A, 22 mOhm max, 2016 metric"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -9436,12 +9927,144 @@
 				)
 			)
 		)
-		(property "MPN" "DFE201612E-R47M=P2"
+		(property "MPN" "CIGT201610EHR47MNE"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f654703c-e595-415f-a534-54c5f5af8ac2")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8ceb5a50-072f-4ac6-8fdd-4df490d8a219")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "1276-6902-1-ND"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "05b8887c-0171-4c60-b488-193d85f90ad2")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "59e29db9-b44a-4ec6-8cd4-7154b6bbe97b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "±20%"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "166c1441-f583-436f-996a-50148917c87c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DCR" "22 mOhm max"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1934bb7e-cb97-4f81-9bee-9f7822258165")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Current_Rating" "4.8 A"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f68ea4a1-ecd7-43f6-ac18-d0e0812fc111")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Saturation_Current" "5.5 A max (5.9 A typ) @ 30% inductance drop"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "de1cbdf1-e5de-4c1c-afc5-19a930226567")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Operating_Voltage" "20 V DC max"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "67252d75-6e46-474f-94db-5c78ed017959")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40°C to +125°C"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "01cfe2c8-773b-4a5e-aedb-f5dcb27dfa84")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Shielding" "Shielded"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d5219281-5e43-45ed-85f1-c9d2e9070bcd")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Construction" "Thin film, metal composite"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a4e81ee8-c707-45f5-924e-96cd026279b0")
 			(effects
 				(font
 					(size 1 1)
@@ -9575,7 +10198,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/download/specsheet/CC0805MKX5R8BB226"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -9609,7 +10232,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "CC0805MKX5R8BB226"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9622,7 +10245,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "YAGEO"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9635,33 +10258,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C45783"
-			(at 0 0 270)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "dc33ecc7-f9f5-4ff4-8dba-6fedcbc296bb")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C45783"
-			(at 0 0 270)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "23054c08-60ae-4d7e-bc30-2d3283835080")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9706,6 +10305,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a6409557-60f2-4d3e-a4ae-8ecfe7c91d8a")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "311d0e76-28f3-4290-8829-365fe9573a93")
 			(effects
 				(font
 					(size 1 1)
@@ -9837,7 +10449,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -9871,12 +10483,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "76600f9b-0476-4344-a1fd-75b64423a307")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "90abce7a-fd9a-49b2-89d9-3c8d7eba6308")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ecd080a4-08d5-4e6f-99fd-21aef6bc203d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f5d413c0-a1bc-4a82-8d33-563a01dadfbd")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "08354485-0f94-4926-9495-1dd3a40c8bd7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1dd38c34-d314-4500-9af3-b6435ccb44dc")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "972b9dc8-7c5d-46ad-9ebb-321334248038")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5a6fdfdf-d192-43f8-8edc-a3e1c5a43ed5")
 			(effects
 				(font
 					(size 1 1)
@@ -10314,7 +11017,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -10348,7 +11051,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10361,7 +11064,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10374,33 +11077,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "0ef84587-9367-4773-9fb9-b70b61ae1900")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "2ec0eeed-4baa-4a13-b02f-8c21996b94b5")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10413,7 +11092,7 @@
 				)
 			)
 		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10445,6 +11124,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "2231429a-ca74-4b1d-a98c-2db908216fc8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "445-14418-1-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "607c8946-2208-4cb5-900f-da0d5fa8e740")
 			(effects
 				(font
 					(size 1 1)
@@ -12614,7 +13306,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0722KL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -12648,12 +13340,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF2202TCE"
+		(property "MPN" "RC0402FR-0722KL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "e63374f2-ca36-4471-875f-dc3acc3aaaaf")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b9ef7549-85a8-4ed3-b27f-28ccb41bf207")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0KLRCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e1d7c498-dfa4-4060-8fb8-bb12ea70dde7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4e51c827-2645-46f7-9363-022f38bd5462")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "48b92e53-b729-4a27-8f3d-4dcccc0dc036")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "212fd4a0-4da7-43c5-91b7-90f784d43d0f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f87168e5-88ad-4a5d-9aba-9c435b44323b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6fe5d136-d066-4ee0-b478-63dd117b3244")
 			(effects
 				(font
 					(size 1 1)
@@ -13462,7 +14245,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0722RL"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -13496,12 +14279,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF220JTCE"
+		(property "MPN" "RC0402FR-0722RL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "21bb5747-9ff4-42bf-b518-e014e0d46acb")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ce0165d4-afe8-4340-9ed0-5cdd9ebd087d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0LRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "316f6e2a-8ffa-451c-9868-66d1ba44a7b2")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c8970df5-7127-4b24-9e34-d2dabff6dbb5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bd35b64d-f599-4c31-b9fe-ccaa27229ad5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "cb846583-eeb5-4a25-8c4c-bb194ba38787")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "3017e2e7-7256-4c05-8209-9aff4e55a85a")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7287a02b-80e0-4007-8c1f-918104609e78")
 			(effects
 				(font
 					(size 1 1)
@@ -13633,7 +14507,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/download/specsheet/CC0805MKX5R8BB226"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -13667,7 +14541,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "CC0805MKX5R8BB226"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13680,7 +14554,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "YAGEO"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13693,33 +14567,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C45783"
-			(at 0 0 270)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "c6554047-a9c0-4a5d-a2b7-133ff0c4c4b2")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C45783"
-			(at 0 0 270)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d36cfdaa-0a63-4050-9534-43c417764183")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13764,6 +14614,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "bd4f253a-60b4-4f7c-a295-b6a51bc5fd26")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "cadbd576-9b45-470e-84c2-97ec48341679")
 			(effects
 				(font
 					(size 1 1)
@@ -13895,7 +14758,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -13929,7 +14792,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13942,7 +14805,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13955,33 +14818,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "a21c2c9f-2104-4c93-ad0d-726052160731")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "539d32d9-1abe-4721-9177-33b48dfc0fa9")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13994,7 +14833,7 @@
 				)
 			)
 		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -14026,6 +14865,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "33f94b1c-506d-4c9c-9878-52614112383e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "445-14418-1-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e412c978-ee33-4a4a-afd9-805a366e0ba3")
 			(effects
 				(font
 					(size 1 1)
@@ -14157,7 +15009,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0722KL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -14191,12 +15043,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF2202TCE"
+		(property "MPN" "RC0402FR-0722KL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "de311b8d-a596-4e75-b23b-163ea3ac14eb")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5069266e-5b9f-4125-8cfe-381f399654ef")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0KLRCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "3a8a8369-c779-477d-874f-d4557c6ec71f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d1910aca-7b99-4ee5-bad7-f03f4f6587a3")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6368c23a-c5ea-4c1b-bc38-8f8624f4bd45")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0e897fd5-5a8f-4767-8bd8-ddd49911710e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bda0ef07-71f2-4f60-977d-95f85e08cb08")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f36d01e0-7685-4aa6-b710-e3f9ef8c7d61")
 			(effects
 				(font
 					(size 1 1)
@@ -14761,7 +15704,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/5485/MCASG168AB7105KTNA01_SS.pdf"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -14795,7 +15738,7 @@
 				)
 			)
 		)
-		(property "MPN" "GMK107AB7105KAHT"
+		(property "MPN" "MCASG168AB7105KTNA01"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -14821,7 +15764,7 @@
 				)
 			)
 		)
-		(property "DigiKey_PN" "587-3352-1-ND"
+		(property "DigiKey_PN" "587-MCASG168AB7105KTNA01CT-ND"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -15010,7 +15953,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-07100KL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -15044,12 +15987,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1003TCE"
+		(property "MPN" "RC0402FR-07100KL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "96eb74cf-0402-4fa1-bec8-a9003442b943")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a92e9fe3-526f-4d73-877c-8cbd059c277d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-100KLRCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "17d6dd47-ae38-4e9f-a4fd-ba361ca962be")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "01feb56c-982f-4ac5-b2f4-86e5c111370e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "da479a34-01b5-4d17-9116-36c0500f6427")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4307951e-7c1b-43d2-b620-5b09fd291fb8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "fd3b33be-b85c-4a2f-ae86-695a71dea0c5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "5583460d-fd42-4cec-a7fe-46f5f076e281")
 			(effects
 				(font
 					(size 1 1)
@@ -15540,7 +16574,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -15574,12 +16608,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "91d59168-082c-445b-9a3f-1f3656bbdc24")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "308a0abd-5b30-4ce3-a1ce-f93428d7f6ea")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "17e2fe35-ac06-4184-8347-568df4e56949")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "286f4741-7511-44ef-9621-738f121efd71")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c9a94f9d-62cb-4199-9bb3-08bf16ff5696")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "afe07648-3e72-4d4e-978b-02d6f3a59680")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7dae95f9-56bd-45bc-b070-df2bce566833")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f131f410-7e94-456f-82eb-3eee9ae1cc52")
 			(effects
 				(font
 					(size 1 1)
@@ -15882,7 +17007,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0722RL"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -15916,12 +17041,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF220JTCE"
+		(property "MPN" "RC0402FR-0722RL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4adb255f-7159-4df7-b367-6eabf6fc39ef")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0326c413-508b-4cbb-a740-d99e7fd7b7c5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0LRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a4880ec3-f2a9-4803-a223-762f1d56fe80")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f86854ef-29c0-4c56-9761-03d8b5470afe")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e1039fd5-f3f0-4977-b0a3-f4f2a833bb55")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6a49a152-f3e8-4a15-8db0-33ce5b6b2d23")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ab1b381a-2434-46f0-bf5c-0e71dc9434d6")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "21fefe14-7a65-4967-a468-63ecb2d92a54")
 			(effects
 				(font
 					(size 1 1)
@@ -16053,7 +17269,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-075K1L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -16087,12 +17303,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF5101TCE"
+		(property "MPN" "RC0402FR-075K1L"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "0e1dad27-21b2-4421-873b-75cfc9035dc8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2b2a7a40-dcc3-4dbc-9f11-80a7e1b52c5a")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-5.10KLRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9b8fa118-75d7-4963-b80f-8470fc9afaf7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7e204448-e764-4e17-83fd-3d8242bb85b5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "db1b18af-d35f-478a-8802-d6e517af6851")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "775fd0dc-74ae-4de4-bd48-72f4b13fc435")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "23cad7a2-f894-403a-aca9-bb0402eb8a3d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "80aa3e8f-5699-4a88-82ff-316839db646e")
 			(effects
 				(font
 					(size 1 1)
@@ -16486,7 +17793,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -16520,12 +17827,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4a05d7cb-1833-4b2b-aa2b-f4daf1d58366")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c199d1ad-d25f-40ee-af3c-873a6b710ac0")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "44a73f3a-dbe1-431d-a5d8-b462479cc30b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "40b21129-dfc7-4c61-bd11-f48421f778c2")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "8f467751-b65c-47e7-b410-0aebd28b56f8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a47afce6-3b75-49fa-81b5-b058251462f5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4bc815ef-627c-46f9-850a-8a4f7a839cf5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b8b68411-d9fb-447e-9d58-163b8f834441")
 			(effects
 				(font
 					(size 1 1)
@@ -16778,7 +18176,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/mlcc/catalog/mlcc_commercial_general_en.pdf"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -16812,7 +18210,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL21A106KAYNNNE"
+		(property "MPN" "C2012X5R1V106K125AC"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -16825,7 +18223,7 @@
 				)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "TDK"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -16838,33 +18236,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "f931a844-de68-45e4-badc-d7cd0b238632")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C15850"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "ac99a88a-8ac8-4adc-9530-9ec1ba6901a3")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -16877,7 +18251,7 @@
 				)
 			)
 		)
-		(property "Voltage" "25V"
+		(property "Voltage" "35V"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -16909,6 +18283,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "0561b627-9fa0-4cb6-9e6c-6594c5c3167d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "445-14418-1-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "643f8103-d8ae-4981-a56c-1b3dc140c377")
 			(effects
 				(font
 					(size 1 1)
@@ -17040,7 +18427,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -17074,12 +18461,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "2aac8a4f-6a9a-433e-85e7-125e41d69231")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d6d9f723-57a4-486b-8681-f3714c7b5a3f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e7bbd345-f4da-4ddb-8d61-b7794dd025ae")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "834659ba-3c81-4033-95ad-0077d8eee03c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c09b94db-0dcb-4f71-aea7-27c050f71e12")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "64b1e8ed-3abe-4665-81a8-61defdcf325e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "d82d2a94-c29f-4d75-9d72-befeffc83e02")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "de9607b5-6091-4b52-a350-9c8e6ac0372b")
 			(effects
 				(font
 					(size 1 1)
@@ -17644,7 +19122,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -17678,7 +19156,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "CL10A106KP8NNND"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -17704,33 +19182,9 @@
 				)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "55e90e7a-48e4-4a83-a017-597b174a1088")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "JLCPCB_PN" "C19702"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "8d683d24-762b-4094-8cb9-0c48af232c6c")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -17775,6 +19229,19 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6b64df00-b221-4a82-bee6-c63031db7b82")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9106b3fb-6b44-467b-9792-5914d0418485")
 			(effects
 				(font
 					(size 1 1)
@@ -17906,7 +19373,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-075K1L"
 			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
@@ -17940,12 +19407,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF5101TCE"
+		(property "MPN" "RC0402FR-075K1L"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6088eda2-e868-460e-a7ae-03129e7cdf78")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "932d8dd3-0fed-408b-ac15-6ae6aa0ad2bb")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-5.10KLRCT-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c1b2f1fd-e4bf-400d-b5ec-d8db35839ed1")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2c434434-e537-4788-a992-2ea4cddf9f35")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "67ee0571-30b2-4026-8b7a-307e011ce6f1")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9c5c9ea8-b2d8-4391-8996-97bc970a8f63")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "44ad2005-6348-4492-9513-4b777fde7540")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "04aa3f9e-cd87-48b0-b297-7cdd4636ed29")
 			(effects
 				(font
 					(size 1 1)
@@ -18077,7 +19635,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -18111,12 +19669,103 @@
 				)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "65994fdb-97ec-4b1a-906b-7967f0e352e4")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "a25f1240-b13a-4eea-abae-d12bd3730840")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c1432ad0-591e-4c3f-89d8-4685ca0007d7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "7254f73d-f8ff-4a46-863b-662a3d4404c8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "257639ad-261b-4d61-be74-81566d137d1f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "b990495d-997d-4c23-8778-13b6cd11f11d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2a3af050-316f-42f4-ad51-7ca073fa2550")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "afa47e29-9bd6-47cf-9e5b-e1c627dfe2df")
 			(effects
 				(font
 					(size 1 1)
@@ -21979,7 +23628,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -22016,12 +23665,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "5c399210-3276-4b96-9c64-374c716cefa1")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "aafb8c52-6a26-49c6-b7d2-04cf45cd1d97")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "48c527e6-9bb4-43f3-874e-81cb341f092c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "c2f70ffa-7bbe-42ac-a568-97be3983b908")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "ced2f9dd-0341-4a5c-89b7-bed115dd313a")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "633eaedf-bd45-4a07-9e10-be072b0bea5b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "0815a152-fe22-41c1-81c6-7595964f5b67")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "33229edc-3a21-4894-adb5-e5264c36b54a")
 			(effects
 				(font
 					(size 1 1)
@@ -22667,7 +24414,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -22704,12 +24451,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "c7f7cf4c-e2cc-4b13-86db-7a92557a6023")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "073bd0da-6c0d-43ce-8c99-cd29a5e67244")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "5f697927-3cf9-4016-84ae-3c8ac5f2773b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "e912ae4c-b6aa-4ecb-851b-c8913e4694b4")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "b18b2987-59e8-4535-bc3f-94bfc82f0846")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "d734f48f-ffb8-4d88-8491-bdc37a55a0e0")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "7c360904-2f5e-4431-a9a2-b12f73cd7422")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "c9006307-b50e-4638-a5e1-702288b485c1")
 			(effects
 				(font
 					(size 1 1)
@@ -22845,7 +24690,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-075K1L"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -22882,12 +24727,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF5101TCE"
+		(property "MPN" "RC0402FR-075K1L"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "21c7d89c-d017-4c6e-90aa-5c471711c6a0")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "24b6e983-17ec-4268-9be1-dd15c78138f4")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-5.10KLRCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "5408d137-3ebd-45a7-8f98-541afdb9b094")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "7f1c8ede-46d5-4296-9533-fc2e29ad5098")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "3ae70f82-1ba9-4bb3-907e-aafcbc3148c8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "2d27d2d7-9b84-414c-ae6a-6e550ce3521c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "a86505c6-84a2-4e56-9ffa-8d332e167e4e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "a618fb51-eb41-4525-bf00-c575e17055a0")
 			(effects
 				(font
 					(size 1 1)
@@ -23151,7 +25094,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -23188,12 +25131,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "35359f4e-9932-4e26-ade6-f4faaacd770d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "7da704cc-bf73-49ec-8fcc-59058fa9980f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "085a851b-ae35-4cc0-9e92-e5c26c8b2ce6")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "fdc4dccb-ee7d-4f8b-b44e-8bdd257666ac")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "efb15b78-1fd1-4aac-b0c2-319d6fb420ad")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "36740464-fb57-4013-b12e-1c6e83e3f8c8")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "cb505687-3c66-46f4-8dc5-7047182d3bbd")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "2a1228b4-2bf6-432e-a35b-927cd4d5c7b8")
 			(effects
 				(font
 					(size 1 1)
@@ -23329,7 +25370,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -23366,12 +25407,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "e592d732-f6a2-4a7e-9b70-aaf72d492811")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "75818966-4bac-4379-a904-282134bd2bc3")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "6c8f3fab-6e53-4d3c-bffa-8356ff9ccbc5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "59638496-7410-4f88-8007-c8dd4bfa0c9f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "eac028ee-6075-4731-8832-d623fbe1da04")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "8b7ac26a-85ad-4177-9aa6-27345c43b8ff")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "11007789-c9d3-4b62-95a9-e807b7fc2dc7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "e4bed68a-d5c1-4b10-8c1b-0b8b82a08678")
 			(effects
 				(font
 					(size 1 1)
@@ -23507,7 +25646,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -23544,12 +25683,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "743b9fbe-ea7b-4226-8f58-7d1c270931de")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "1c6d6aa2-c606-4af7-b282-32327ec27ba1")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "cf463569-678f-4228-85f3-ac2642db4db7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "bb2c2477-de94-4ade-8697-3f7691235737")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "54ef04db-d2ae-443d-9b32-f24584577dd5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "bf137fb4-0d7e-42e8-a159-5cacbbf90b38")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "10a7082b-20ba-467b-9a21-54344b05c445")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "0efc8fbb-e4b6-4016-bd57-3092a2c57641")
 			(effects
 				(font
 					(size 1 1)
@@ -24632,7 +26869,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -24669,7 +26906,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "CL10A106KP8NNND"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -24697,35 +26934,9 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "f308eaf0-847e-4968-ba1b-4731882bcf03")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "JLCPCB_PN" "C19702"
-			(at 0 0 90)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "b3fdc847-ba46-40ea-b678-133f2e985c2b")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -24773,6 +26984,20 @@
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "4e308807-ab91-4e7f-9ed4-a7f76a608367")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "1dc44db6-63a5-40e9-b4b2-c2c2bb52c2e6")
 			(effects
 				(font
 					(size 1 1)
@@ -25882,7 +28107,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -25919,7 +28144,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "CL10A106KP8NNND"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -25947,35 +28172,9 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "858995b0-a3e6-4451-a998-2b86a06e176e")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "JLCPCB_PN" "C19702"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "d1ebdd72-f61c-4902-9dba-40a93e40fa8d")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -26023,6 +28222,20 @@
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "e4d0a256-fcc1-447b-b831-3052feb0157d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "2f8f59c5-dad4-43f1-9dfe-2dfcdeff7b55")
 			(effects
 				(font
 					(size 1 1)
@@ -26435,7 +28648,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0722RL"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -26472,12 +28685,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF220JTCE"
+		(property "MPN" "RC0402FR-0722RL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "d40c84a9-0783-4270-a080-13f90835818d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "911732bb-2b04-4878-864f-e6b7e7ce0d97")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0LRCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "c4eec09f-fd1b-47e5-9c29-3e40bad49bb6")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "1a7168f8-062c-4b4c-9694-c86f7652e9a5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "764f6698-bdb6-4ca9-902b-178c2d24a211")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "aeb35ca3-d8cd-4f92-9694-b86c37f7b95a")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "188930dd-f149-4754-bca6-401c9b40ca1e")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "1a25bc0f-d355-4073-b84e-ef07e64b52bf")
 			(effects
 				(font
 					(size 1 1)
@@ -26613,7 +28924,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://yageogroup.com/download/specsheet/CC0805MKX5R8BB226"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -26650,7 +28961,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "CL21A226MAQNNNE"
+		(property "MPN" "CC0805MKX5R8BB226"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -26664,7 +28975,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Manufacturer" "Samsung Electro-Mechanics"
+		(property "Manufacturer" "YAGEO"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -26678,35 +28989,9 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC" "C45783"
-			(at 0 0 270)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "9309e855-c50d-4ab5-a033-e4b87a622146")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "JLCPCB_PN" "C45783"
-			(at 0 0 270)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "09280916-0626-46d1-9338-ea8ac5ae630b")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -26754,6 +29039,20 @@
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "7832b786-c39e-4db7-b80d-b204c4f26b7c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "0c094c86-ccc7-4188-a7e9-7dc1bc383ecc")
 			(effects
 				(font
 					(size 1 1)
@@ -28025,7 +30324,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -28062,7 +30361,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "CL10A106KP8NNND"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -28090,35 +30389,9 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "5310539b-8e35-4962-ae8e-bd692a1d97df")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "JLCPCB_PN" "C19702"
-			(at 0 0 180)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "bf57850e-c2f8-4f04-b93c-dcfa512920fb")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -28166,6 +30439,20 @@
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "f844bd41-b0ae-48b6-b508-f80318c90696")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "86a93de3-a428-44cc-963b-d4dd11492267")
 			(effects
 				(font
 					(size 1 1)
@@ -29408,7 +31695,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://product.samsungsem.com/mlcc/CL10A106KP8NNN.do"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -29445,7 +31732,7 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "CL10A106KP8NNNC"
+		(property "MPN" "CL10A106KP8NNND"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -29473,35 +31760,9 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC" "C19702"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "3f8e0cd9-8aaa-4d04-9ae2-7d0a4cf66d17")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "JLCPCB_PN" "C19702"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "87276ace-04bb-40c4-9115-b0f5c8493b3d")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
-		(property "Supplier" "JLCPCB Basic"
+
+
+		(property "Supplier" "DigiKey"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -29549,6 +31810,20 @@
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "10eee885-4c24-44de-affe-33ef3802033f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "8cc7ebfc-8ac9-403d-95e2-7e7d56454392")
 			(effects
 				(font
 					(size 1 1)
@@ -29684,7 +31959,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-07100KL"
 			(at 0 0 90)
 			(layer "B.Fab")
 			(hide yes)
@@ -29721,12 +31996,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF1003TCE"
+		(property "MPN" "RC0402FR-07100KL"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "354cec30-74a0-42ea-a9d2-bdea2c4097bf")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "e9281baa-0a5a-4f74-b9cc-15e99ff71eae")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-100KLRCT-ND"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "fd4725b9-e176-47a2-873e-0ebbbd7dee59")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "d9214e54-edf8-4db8-8f2f-1fd6b1a523d7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "3cb3e572-5412-43b8-b500-d167c898f0d9")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "92ad97eb-ce0f-48dc-9fe2-fbd9f97db51f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "e2a7382a-1453-4f5a-952a-937aac24760c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 270)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "fee3b414-8a1f-4a0f-8b32-42105bd885bb")
 			(effects
 				(font
 					(size 1 1)
@@ -31478,7 +33851,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-0710KL"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -31515,12 +33888,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF1002TCE"
+		(property "MPN" "RC0402FR-0710KL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "ebd046bb-af98-4d44-8f57-2e1ca6fa2075")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "789d5b24-e802-433f-b0f3-bef2adb490b6")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "9baf1f51-0894-4099-ae88-3c5c9c9cbc47")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "37deb313-b1fe-4eb6-bc39-4dae47aeeaa2")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "e3fcf89d-d7ad-42a2-863c-a8c9cd521f92")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "ddecb62d-b5c9-41ca-a8a3-ee2e88dfba9b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "404367f4-c0f6-42be-b844-ea30931bcb8f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "13ed6089-64cc-495e-9da7-949551e5864f")
 			(effects
 				(font
 					(size 1 1)
@@ -31656,7 +34127,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.yageogroup.com/component-documentation/download/specsheet/RC0402FR-075K1L"
 			(at 0 0 0)
 			(layer "B.Fab")
 			(hide yes)
@@ -31693,12 +34164,110 @@
 				(justify mirror)
 			)
 		)
-		(property "MPN" "0402WGF5101TCE"
+		(property "MPN" "RC0402FR-075K1L"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "6c8529e4-69bb-4a18-bac4-5307972885f4")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "3ec8a0af-8f18-4f80-8973-35c5ee73ebb7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "DigiKey_PN" "311-5.10KLRCT-ND"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "2a2b35a2-7a45-4825-9957-02d435cd2aea")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "bee48f19-6880-4224-a319-aad3ddda0eb5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "4d017303-1301-410f-89c1-3c5d55f845af")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "e6ef89fe-e30b-4aec-be31-2b7469918eea")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "c1c70923-9d75-41a9-b90c-4ca8907fd188")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "2896e316-2679-457a-a992-23ef46ec39f0")
 			(effects
 				(font
 					(size 1 1)
