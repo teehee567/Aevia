@@ -6519,9 +6519,17 @@
 				)
 			)
 		)
-    (property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND" (at 38.1 66.04 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND"
+			(at 38.1 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "46217aca-bdda-4c9d-b348-85e831e39d06")
 		)
@@ -7029,9 +7037,17 @@
 				)
 			)
 		)
-    (property "DigiKey_PN" "311-1903-1-ND" (at 82.55 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 82.55 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f162e4e8-6b90-4c8f-b26e-07b897db4589")
 		)

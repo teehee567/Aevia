@@ -6670,6 +6670,17 @@
 				(justify bottom)
 			)
 		)
+		(property "MPN" "DF58-2P-1.2V(21)"
+			(at 247.65 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "a3811182-8119-48e7-b980-946ccb1e52cf")
 		)
@@ -7132,9 +7143,17 @@
 				)
 			)
 		)
-    (property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND" (at 34.29 125.73 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND"
+			(at 34.29 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "86b138bf-05ab-4122-81f3-7b5b840a4946")
 		)
@@ -7646,27 +7665,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Stackpole Electronics Inc" (at 105.41 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "RMCF0402FT75K0CT-ND" (at 105.41 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 105.41 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 105.41 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 105.41 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 105.41 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 105.41 58.42 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Stackpole Electronics Inc"
+			(at 105.41 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "RMCF0402FT75K0CT-ND"
+			(at 105.41 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 105.41 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 105.41 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 105.41 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 105.41 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 105.41 58.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "def67056-9f75-442b-8681-2d9b257c440d")
 		)
@@ -7815,9 +7890,17 @@
 				)
 			)
 		)
-    (property "DigiKey_PN" "445-14418-1-ND" (at 215.9 62.23 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "DigiKey_PN" "445-14418-1-ND"
+			(at 215.9 62.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "1234211b-9144-45be-ba22-056bd3b73a46")
 		)
@@ -7989,27 +8072,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 99.06 54.61 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-100KLRCT-ND" (at 99.06 54.61 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 99.06 54.61 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 99.06 54.61 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 99.06 54.61 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 99.06 54.61 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 99.06 54.61 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 99.06 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-100KLRCT-ND"
+			(at 99.06 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 99.06 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 99.06 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 99.06 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 99.06 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 99.06 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "d73b041e-e9d5-4bbc-ae63-8598bd10a429")
 		)
@@ -8885,9 +9024,17 @@
 				)
 			)
 		)
-    (property "DigiKey_PN" "311-1903-1-ND" (at 240.03 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 240.03 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "bcd05ce7-1a63-4a5d-83a4-68515cb8dbc9")
 		)
@@ -8980,27 +9127,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 80.01 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-5.10KLRCT-ND" (at 80.01 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 80.01 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 80.01 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 80.01 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 80.01 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 80.01 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 80.01 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-5.10KLRCT-ND"
+			(at 80.01 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 80.01 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 80.01 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 80.01 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 80.01 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 80.01 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6c5ccdd7-5d02-4cf0-a091-209cb2264a91")
 		)
@@ -9289,27 +9492,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 200.66 151.13 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 200.66 151.13 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 200.66 151.13 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 200.66 151.13 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 200.66 151.13 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 200.66 151.13 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 200.66 151.13 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 200.66 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 200.66 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 200.66 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 200.66 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 200.66 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 200.66 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 200.66 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e443a618-0f36-4707-b35d-8376c0207d5b")
 		)
@@ -10832,27 +11091,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 191.77 105.41 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 191.77 105.41 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 191.77 105.41 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 191.77 105.41 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 191.77 105.41 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 191.77 105.41 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 191.77 105.41 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 191.77 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 191.77 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 191.77 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 191.77 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 191.77 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 191.77 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 191.77 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "89fd82c9-2a5b-400a-8a1a-9a45f4b9d92e")
 		)
@@ -11259,27 +11574,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 213.36 87.63 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 213.36 87.63 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 213.36 87.63 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 213.36 87.63 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 213.36 87.63 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 213.36 87.63 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 213.36 87.63 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 213.36 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 213.36 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 213.36 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 213.36 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 213.36 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 213.36 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 213.36 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "55910ccd-5406-43e4-b5b9-263481b7fe48")
 		)
@@ -11754,9 +12125,17 @@
 				)
 			)
 		)
-    (property "DigiKey_PN" "311-1903-1-ND" (at 223.52 82.55 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 223.52 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a61ce54c-7d02-497e-b144-32ba56482848")
 		)
@@ -11928,27 +12307,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 205.74 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 205.74 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 205.74 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 205.74 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 205.74 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 205.74 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 205.74 85.09 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 205.74 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 205.74 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 205.74 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 205.74 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 205.74 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 205.74 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 205.74 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "0cfd7adb-0d53-4d62-bbc9-a1a5d108e8ce")
 		)
@@ -12833,9 +13268,17 @@
 				)
 			)
 		)
-    (property "DigiKey_PN" "311-1903-1-ND" (at 231.14 74.93 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "DigiKey_PN" "311-1903-1-ND"
+			(at 231.14 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "d2e297de-6065-4c4b-a084-4804f26cd279")
 		)
@@ -13082,27 +13525,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 226.06 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 226.06 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 226.06 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 226.06 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 226.06 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 226.06 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 226.06 68.58 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 226.06 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 226.06 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 226.06 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 226.06 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 226.06 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 226.06 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 226.06 68.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "182721ff-26b8-4613-b673-8f4a897f085e")
 		)
@@ -13592,39 +14091,127 @@
 				)
 			)
 		)
-    (property "Manufacturer" "Samsung Electro-Mechanics" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "1276-6902-1-ND" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "±20%" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DCR" "22 mOhm max" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Current_Rating" "4.8 A" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Saturation_Current" "5.5 A max (5.9 A typ) @ 30% inductance drop" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Voltage" "20 V DC max" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Operating_Temperature" "-40°C to +125°C" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Shielding" "Shielded" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Construction" "Thin film, metal composite" (at 36.83 147.32 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "1276-6902-1-ND"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "±20%"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DCR" "22 mOhm max"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Current_Rating" "4.8 A"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Saturation_Current" "5.5 A max (5.9 A typ) @ 30% inductance drop"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Voltage" "20 V DC max"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Operating_Temperature" "-40°C to +125°C"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Shielding" "Shielded"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Construction" "Thin film, metal composite"
+			(at 36.83 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "60ff448c-18d6-466b-a8d1-ba6562478efd")
 		)
@@ -13810,27 +14397,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 74.93 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-5.10KLRCT-ND" (at 74.93 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 74.93 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 74.93 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 74.93 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 74.93 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 74.93 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 74.93 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-5.10KLRCT-ND"
+			(at 74.93 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 74.93 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 74.93 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 74.93 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 74.93 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 74.93 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "8f4b4278-4a43-4ea5-9190-96cc29cad8fb")
 		)
@@ -14013,27 +14656,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 88.9 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-22.0KLRCT-ND" (at 88.9 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 88.9 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 88.9 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 88.9 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 88.9 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 88.9 67.31 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 88.9 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0KLRCT-ND"
+			(at 88.9 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 88.9 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 88.9 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 88.9 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 88.9 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 88.9 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "ec4616fb-b864-4397-88c7-5bb7fc7810ae")
 		)
@@ -14127,27 +14826,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 204.47 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 204.47 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 204.47 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 204.47 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 204.47 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 204.47 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 204.47 148.59 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 204.47 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 204.47 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 204.47 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 204.47 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 204.47 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 204.47 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 204.47 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "1bd3ac54-211d-4903-8cf4-9b75e35deeed")
 		)
@@ -14410,27 +15165,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 88.9 69.85 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-22.0KLRCT-ND" (at 88.9 69.85 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 88.9 69.85 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 88.9 69.85 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 88.9 69.85 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 88.9 69.85 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 88.9 69.85 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 88.9 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-22.0KLRCT-ND"
+			(at 88.9 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 88.9 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 88.9 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 88.9 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 88.9 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 88.9 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "9c83924e-0811-4ad5-8763-97b95605f2cf")
 		)

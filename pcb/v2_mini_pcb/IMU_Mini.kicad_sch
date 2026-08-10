@@ -2396,9 +2396,17 @@
 				)
 			)
 		)
-    (property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND" (at 93.98 63.5 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "DigiKey_PN" "1276-CL10A106KP8NNNDCT-ND"
+			(at 93.98 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "50dd33cb-d994-4bc5-8c89-dbee866158e4")
 		)
@@ -3316,27 +3324,83 @@
 				)
 			)
 		)
-    (property "Manufacturer" "YAGEO" (at 36.83 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "DigiKey_PN" "311-10.0KLRCT-ND" (at 36.83 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Supplier" "DigiKey" (at 36.83 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Voltage" "50V" (at 36.83 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Tolerance" "1%" (at 36.83 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Power" "0.063W" (at 36.83 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
-    (property "Temperature_Coefficient" "±100ppm/°C" (at 36.83 64.77 0)
-      (effects (font (size 1.27 1.27)) (hide yes))
-    )
+		(property "Manufacturer" "YAGEO"
+			(at 36.83 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "DigiKey_PN" "311-10.0KLRCT-ND"
+			(at 36.83 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 36.83 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Voltage" "50V"
+			(at 36.83 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Tolerance" "1%"
+			(at 36.83 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Power" "0.063W"
+			(at 36.83 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Temperature_Coefficient" "±100ppm/°C"
+			(at 36.83 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f99ac9ca-d411-46e9-ae87-d6360e38f250")
 		)
