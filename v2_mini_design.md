@@ -1,110 +1,89 @@
 # Open Race V2 Mini
 
-## Current design
+V2 Mini is a battery-powered GNSS, motion, storage, and display board built around the ESP32-S31 module. The KiCad project and production BOM define the hardware. This page is only a short map of the design, so it leaves out pin allocations, routing details, and most passive components.
 
-- ESP32-S31-WROOM-3
-- UM980 provides GNSS over two UARTs plus PPS and status signals.
-- SCH16T-K01 provides IMU data over a dedicated SPI bus.
-- microSD uses the ESP32 4-bit SDIO pins.
-- The Adafruit 4520 display uses a separate SPI interface through its 24-pin FPC connector.
-- USB-C supplies 5 V, carries native ESP32 USB Serial/JTAG, and has CC/data ESD protection.
-- BQ25622E handles 1S charging and the power path.
-- TPS63802 generates the 3.3 V system rail.
-- MAX17048 is fitted for battery state-of-charge reporting.
-- SW1 resets the ESP32 through `EN`; SW2 is the GPIO61 boot/user button.
-
-## Main parts
-
-| Ref | Function | Part in schematic |
-|---|---|---|
-| U2 | MCU, Wi-Fi, Bluetooth | ESP32-S31-WROOM-3 |
-| U1 | GNSS | Unicore UM980 |
-| U3 | IMU | SCH16T-K01-1 |
-| U8 | 1S charger and power path | BQ25622ERYKR |
-| U9 | Fuel gauge | MAX17048G_T10 |
-| U10 | 3.3 V buck-boost | TPS63802DLAR |
-| U6 | USB D+/D-/CC ESD | TPD4EUSB30 |
-| J6 | USB-C | GCT USB4105-GF-A |
-| J2 | microSD | Amphenol GTFP08441BEU |
-| J3 | Adafruit 4520 display FPC | Amphenol SFV24R-2STE1HLF, 24-pin 0.5 mm bottom contact |
-
-## Power
+## High-level design
 
 ```mermaid
 flowchart LR
-    USB[USB-C 5 V] --> CHG[BQ25622E]
-    BAT[1S battery] <--> CHG
-    BAT --> FG[MAX17048]
-    CHG --> RAW[3V3_RAW / charger SYS]
-    RAW --> REG[TPS63802]
-    REG --> V33[+3V3]
-    V33 --> MCU[ESP32 / SD / display]
-    V33 -. unfinished .-> GNSS[+3V3_GNSS]
-    V33 -. unfinished .-> IMU[+3V3_IMU]
+    MCU["ESP32-S31-WROOM-3<br/>main processor and radio"]
+    GNSS["UM980 GNSS<br/>U.FL antenna"]
+    IMU["SCH16T-K01-1<br/>6-axis IMU"]
+    SD["microSD<br/>4-bit SDIO"]
+    LCD["24-pin display FPC<br/>serial display interface"]
+    UI["Four UI buttons and four RGB LEDs<br/>TCA9536 + LP5813"]
+    USB["USB-C<br/>power and native USB data"]
+    PM["Power management<br/>charger, fuel gauge and on/off control"]
+
+    MCU <-->|"Two UARTs, PPS and status"| GNSS
+    MCU <-->|"SPI, data-ready and reset"| IMU
+    MCU <-->|"4-bit SDIO"| SD
+    MCU -->|"Display and backlight control"| LCD
+    MCU <-->|"Shared I2C control bus"| UI
+    MCU <-->|"I2C and status signals"| PM
+    MCU <--> USB
 ```
 
-- BQ25622E uses L4 = 1 uH. TPS63802 uses L5 = 0.47 uH.
-- TPS63802 feedback is 511 kOhm / 91 kOhm for 3.3 V.
-- USB CC1 and CC2 each have a 5.1 kOhm `Rd`.
-- TH1 is a 10 kOhm NTC in the charger temperature network.
-- `QON` is currently unconnected. There is no charger wake button.
-- BT1 and TH1 are schematic symbols; a physical battery/NTC connector is not yet defined.
-- FB1 and FB2 are intended to feed the GNSS and IMU filtered rails, but their outputs are currently dangling. The sensor rails are not complete.
+The ESP32 module is the main processor and wireless interface. The UM980 supplies GNSS data over two UARTs, with PPS, reset, and status lines. The SCH16T uses a separate SPI bus with data-ready and reset signals.
 
-## ESP32 pin allocation
+The microSD socket uses 4-bit SDIO. The display connects through a 24-pin FPC and has a MOSFET-switched backlight. The display panel itself is not a fitted PCB BOM item.
 
-These are the nets drawn on the MCU sheet. Most peripheral nets are not yet joined across the top-level hierarchy.
+Four user buttons are read through the TCA9536 GPIO expander, and the LP5813 drives four RGB LEDs. The other three buttons are reset, boot/user, and power. The power-management ICs, LED driver, and GPIO expander share the board's I2C control bus.
 
-| Interface | ESP32 pins / nets |
-|---|---|
-| Native USB | GPIO33 `USB_DN`, GPIO34 `USB_DP`, each through 22 ohm |
-| USB-C CC sense | GPIO43 `USB_CC1`, GPIO45 `USB_CC2` |
-| Power I2C | GPIO6 `POW_SCL`, GPIO7 `POW_SDA` |
-| Charger/gauge status | GPIO0 `CHG_INT`, GPIO1 `CHG_STAT`, GPIO2 `BAT_ALRT` |
-| IMU SPI | GPIO9 reset, 10 CS, 11 MOSI, 12 SCLK, 13 MISO, 14 DRDY |
-| Display | GPIO4 backlight, 5 TE, 15 reset, 16 SCLK, 17 SDA, 18 CS, 19 D/C |
-| microSD SDIO | GPIO20-23 D0-D3, GPIO24 CLK, GPIO25 CMD |
-| GNSS UART 1 | GPIO46 `GNSS_TXD1`, GPIO47 `GNSS_RXD1` |
-| GNSS UART 2 | GPIO48 `GNSS_TXD2`, GPIO49 `GNSS_RXD2` |
-| GNSS control/status | GPIO42 PPS, GPIO44 reset, GPIO50 PVT, GPIO51 RTK, GPIO52 error |
-| User button | GPIO61 to ground |
-| Recovery UART | GPIO58 TX through 499 ohm to TP2; GPIO59 RX to TP1 |
+USB-C provides 5 V input and native USB data. The TPD4EUSB30 protects D+, D-, CC1, and CC2. The board also senses VBUS and both CC lines.
 
-## Peripheral notes
+## Power tree
 
-### GNSS
+```mermaid
+flowchart TD
+    USB["USB-C J6<br/>5 V VBUS"] --> CHG["BQ25622 U8<br/>1-cell charger and NVDC power path"]
+    BAT["1-cell battery J4"] <--> CHG
+    BAT --> GAUGE["MAX17048 U9<br/>fuel gauge"]
+    CHG --> RAW["3V3_RAW<br/>BQ25622 SYS rail"]
 
-- U1 supply pins and four 10 uF capacitors plus one 100 nF bypass capacitor are on the local `VCC` net. That net does not yet have a completed source connection.
-- Both UARTs, PPS, reset, PVT, RTK and error status are drawn.
-- J1 is the coaxial antenna connector. C1, L1, C2, C3, C35 and D2 form the RF/bias/protection network.
-- The antenna-bias node has no completed supply connection in the exported netlist.
+    RAW --> CTRL["MAX16169 U7<br/>power-button controller"]
+    BUTTON["Power button SW7"] --> CTRL
+    RAW --> REG["TPS63802 U10<br/>3.3 V buck-boost"]
+    CTRL -->|"GATE_EN"| REG
 
-### IMU
+    REG --> V33["+3V3"]
+    V33 --> CORE["ESP32, microSD, display and user interface"]
+    V33 --> FB1["FB1"] --> VGNSS["+3V3_GNSS"] --> GNSS["UM980 and antenna bias"]
+    V33 --> FB2["FB2"] --> VIMU["+3V3_IMU"] --> IMU["SCH16T"]
+```
 
-- U3 has dedicated SPI, data-ready and reset signals.
-- Bypass network: 10 uF on VREGA, 1 uF on VREGD, and two 100 nF plus one 1 uF capacitor on the 3.3 V pins.
+The schematic calls the BQ25622 SYS output `3V3_RAW`. The TPS63802 turns that raw rail into the regulated `+3V3` system rail. FB1 and FB2 then provide filtered supplies for the GNSS receiver and IMU.
 
-### Storage and display
+The MAX16169 stays on the raw rail and controls the TPS63802 enable input. SW7 is the power button. The ESP32 receives the power-button interrupt and can request a controlled shutdown. The MAX17048 measures the battery state of charge, while the BQ25622 handles charging and power-path status. TH1 is a fitted 10 kOhm NTC in the charger temperature-sense network.
 
-- J2 is wired for 4-bit SDIO, not shared SPI. R19 is a 22 ohm series resistor on SD clock. Card detect is unused.
-- The selected display is the bare [Adafruit 4520](https://www.adafruit.com/product/4520): 1.3-inch, 240 x 240 IPS, ST7789 controller and no breakout PCB.
-- J3 is the matching Amphenol SFV24R-2STE1HLF 24-pin, 0.5 mm-pitch bottom-contact FPC connector.
-- Display signals are `LCD_SCLK`, `LCD_SDA`, `LCD_CSN`, `LCD_DC`, `LCD_RN` and `LCD_TE`.
-- Q1 is an N-MOS low-side backlight switch driven by `LCD_BACK`; R4 is 15 ohm and R5 is a 100 kOhm gate pulldown.
-- The display has no touch interface.
+## Main fitted parts
 
-## Layout priorities
+The part numbers below come from the production BOM rather than the shortened values shown on some schematic symbols.
 
-- Put the ESP32 module antenna at a plastic enclosure edge and keep copper, battery, display metal and cables out of its antenna keepout.
-- Keep the UM980 RF path short, 50 ohm and away from USB, SD/display clocks and both switching stages.
-- Put the SCH16T on a rigid area away from USB, buttons, card insertion and regulator inductors.
-- Keep the BQ25622E and TPS63802 switching loops tight with their capacitors and inductors on the same layer.
-- Use continuous ground references. Do not split GNSS or IMU ground planes.
-- Prove the board outline by placement before keeping any previous size target.
+| Ref | Ordered part | Purpose |
+|---|---|---|
+| U2 | `ESP32-S31-WROOM-3-N16R16V` | Main processor and wireless module |
+| U1 | `UM980` | GNSS receiver |
+| U3 | `SCH16T-K01-1` | 6-axis accelerometer and gyroscope |
+| U4 | `LP5813ADRRR` | I2C RGB LED driver |
+| U5 | `TCA9536ADTMR` | GPIO expander for the four UI buttons |
+| U6 | `TPD4EUSB30DQAR` | USB data and CC ESD protection |
+| U7 | `MAX16169AALTA+T` | Power-button and regulator-enable control |
+| U8 | `BQ25622ERYKR` | 1-cell charger and NVDC power path |
+| U9 | `MAX17048G+T10` | Battery fuel gauge |
+| U10 | `TPS63802DLAR` | 3.3 V buck-boost regulator |
+| D32-D35 | `MSL0402RGBU1` | Four RGB indicators |
+| SW1-SW7 | `B3U-1000P` | Reset, boot/user, four UI buttons, and power |
+| TH1 | `NCU18XH103F60RB` | 10 kOhm charger temperature sensor |
+| J1 | `U.FL-R-SMT-1(01)` | GNSS antenna connector |
+| J2 | `GTFP08441BEU` | microSD socket |
+| J3 | `SFV24R-2STE1HLF` | 24-pin display FPC connector |
+| J4 | `DF58-2P-1.2V(21)` | 1-cell battery connector |
+| J6 | `USB4105-GF-A` | USB-C connector |
 
+## Hardware source files
 
-## JLCPCB STACKUP
-`JLC06161H-3313`
-
-## Notes
-- SD card part does not need pullups [here](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s31/schematic-checklist.html#sd-mmc-host-controller) says "When using slot0, the GPIO power domain is internally powered, so external pull-up resistors are not required"
+- [Root schematic](pcb/v2_mini_pcb/v2_mini.kicad_sch)
+- [PCB layout](pcb/v2_mini_pcb/v2_mini.kicad_pcb)
+- [Production BOM](pcb/v2_mini_pcb/production/digikey_bom.csv)
+- [BOM exclusions](pcb/v2_mini_pcb/production/bom_exclusions.csv)
