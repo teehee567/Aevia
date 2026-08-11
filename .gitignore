@@ -1,6 +1,7 @@
 pcb-backups/
 .history/
 *.lck
+*.kicad_prl
 
 
 debug
