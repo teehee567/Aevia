@@ -1,6 +1,6 @@
 # Open Race V2 Mini
 
-V2 Mini is a battery-powered GNSS, motion, storage, and display board built around the ESP32-S31 module. The KiCad project and production BOM define the hardware. This page is only a short map of the design, so it leaves out pin allocations, routing details, and most passive components.
+V2 Mini is a battery-powered GNSS and motion board built around the ESP32-S31 module. It has microSD storage, a display interface, physical controls, and native USB. Use the KiCad project and production BOM for build details. This page leaves out pin allocations, routing, and most passive components.
 
 ## High-level design
 
@@ -10,7 +10,7 @@ flowchart LR
     GNSS["UM980 GNSS<br/>U.FL antenna"]
     IMU["SCH16T-K01-1<br/>6-axis IMU"]
     SD["microSD<br/>4-bit SDIO"]
-    LCD["24-pin display FPC<br/>serial display interface"]
+    LCD["Adafruit 4520 display<br/>24-pin SPI FPC interface"]
     UI["Four UI buttons and four RGB LEDs<br/>TCA9536 + LP5813"]
     USB["USB-C<br/>power and native USB data"]
     PM["Power management<br/>charger, fuel gauge and on/off control"]
@@ -24,11 +24,11 @@ flowchart LR
     MCU <--> USB
 ```
 
-The ESP32 module is the main processor and wireless interface. The UM980 supplies GNSS data over two UARTs, with PPS, reset, and status lines. The SCH16T uses a separate SPI bus with data-ready and reset signals.
+The ESP32 module handles processing, radio, and the board's main interfaces. The UM980 sends GNSS data over two UARTs and also has PPS, reset, and status connections. The SCH16T uses a separate SPI bus with data-ready and reset signals.
 
-The microSD socket uses 4-bit SDIO. The display connects through a 24-pin FPC and has a MOSFET-switched backlight. The display panel itself is not a fitted PCB BOM item.
+The microSD socket uses 4-bit SDIO. The selected display is the Adafruit 4520, connected through the 24-pin FPC with a MOSFET-switched backlight. The display panel itself is not a fitted PCB BOM item.
 
-Four user buttons are read through the TCA9536 GPIO expander, and the LP5813 drives four RGB LEDs. The other three buttons are reset, boot/user, and power. The power-management ICs, LED driver, and GPIO expander share the board's I2C control bus.
+Four user buttons connect through the TCA9536 GPIO expander, and the LP5813 drives four RGB LEDs. Reset and boot/user connect directly to the ESP32. The power button connects to the MAX16169. The charger, fuel gauge, LED driver, and GPIO expander share the board's I2C control bus.
 
 USB-C provides 5 V input and native USB data. The TPD4EUSB30 protects D+, D-, CC1, and CC2. The board also senses VBUS and both CC lines.
 
@@ -52,9 +52,11 @@ flowchart TD
     V33 --> FB2["FB2"] --> VIMU["+3V3_IMU"] --> IMU["SCH16T"]
 ```
 
-The schematic calls the BQ25622 SYS output `3V3_RAW`. The TPS63802 turns that raw rail into the regulated `+3V3` system rail. FB1 and FB2 then provide filtered supplies for the GNSS receiver and IMU.
+The schematic name `3V3_RAW` refers to the BQ25622 SYS rail. The TPS63802 turns it into the regulated `+3V3` system rail. FB1 and FB2 provide filtered supplies for the GNSS receiver and IMU.
 
-The MAX16169 stays on the raw rail and controls the TPS63802 enable input. SW7 is the power button. The ESP32 receives the power-button interrupt and can request a controlled shutdown. The MAX17048 measures the battery state of charge, while the BQ25622 handles charging and power-path status. TH1 is a fitted 10 kOhm NTC in the charger temperature-sense network.
+The MAX16169 runs from the raw rail and controls the TPS63802 enable input. SW7 connects to its pushbutton input. Its interrupt output goes to the ESP32, and the ESP32 has a separate shutdown control back to it. The MAX17048 measures battery state of charge, while the BQ25622 handles charging and reports power-path status. TH1 is a fitted 10 kOhm NTC in the charger temperature-sense network.
+
+The board expects a 1-cell battery with the matching 2-pin Hirose DF58 connection for J4. The PCB-side connector is `DF58-2P-1.2V(21)`.
 
 ## Main fitted parts
 
@@ -77,7 +79,7 @@ The part numbers below come from the production BOM rather than the shortened va
 | TH1 | `NCU18XH103F60RB` | 10 kOhm charger temperature sensor |
 | J1 | `U.FL-R-SMT-1(01)` | GNSS antenna connector |
 | J2 | `GTFP08441BEU` | microSD socket |
-| J3 | `SFV24R-2STE1HLF` | 24-pin display FPC connector |
+| J3 | `SFV24R-2STE1HLF` | 24-pin FPC connector for the Adafruit 4520 display |
 | J4 | `DF58-2P-1.2V(21)` | 1-cell battery connector |
 | J6 | `USB4105-GF-A` | USB-C connector |
 
