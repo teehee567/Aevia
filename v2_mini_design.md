@@ -89,3 +89,14 @@ The part numbers below come from the production BOM rather than the shortened va
 - [PCB layout](pcb/v2_mini_pcb/v2_mini.kicad_pcb)
 - [Production BOM](pcb/v2_mini_pcb/production/digikey_bom.csv)
 - [BOM exclusions](pcb/v2_mini_pcb/production/bom_exclusions.csv)
+
+
+
+# Total production cost for single person for everything - tools
+
+- Board + stencil - 142.30AUD with 50 coupon
+- digikey - 200AUD
+- gnss module - 120AUD
+- antenna - 37AUD
+- battery - 15AUD
+total: ~500AUD
