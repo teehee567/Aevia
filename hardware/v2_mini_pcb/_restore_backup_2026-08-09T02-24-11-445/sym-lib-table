@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "open-race-v2")(type "KiCad")(uri "C:/Users/me/Documents/Github/open-race/pcb/v2_pcb/open-race-v2.kicad_sym")(options "")(descr "Verified V2 UM980 and SCH16T symbols"))
+  (lib (name "v2_mini")(type "KiCad")(uri "C:/Users/me/Documents/Github/open-race/pcb/v2_mini_pcb/v2_mini.kicad_sym")(options "")(descr "Open Race V2 Mini project-local symbols"))
+)
