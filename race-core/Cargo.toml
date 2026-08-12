@@ -1,8 +1,0 @@
-[package]
-name = "race-core"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-ublox = { version = "0.10.0", default-features = false, features = ["ubx_proto27", "alloc"] }
-log = "0.4"
