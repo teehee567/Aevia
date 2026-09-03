@@ -1,0 +1,11 @@
+[build]
+target = "riscv32imafc-unknown-none-elf"
+
+[target.riscv32imafc-unknown-none-elf]
+runner = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/run.ps1"
+rustflags = [
+    "-C",
+    "link-arg=-Tlinkall.x",
+    "-C",
+    "force-frame-pointers",
+]

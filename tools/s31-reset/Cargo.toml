@@ -1,0 +1,12 @@
+[package]
+name = "s31-reset"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+espflash = { version = "4.5.0", default-features = false, features = ["serialport"] }
+serialport = { version = "4.7.3", default-features = false }
+
+[workspace]
+
