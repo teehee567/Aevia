@@ -127,7 +127,7 @@ pub(super) fn position_observation(time: SessionTime, position: Vector3<f32>) ->
         velocity_independent_timing_sigma_s: 0.0,
         shared_jacobians: SharedMeasurementJacobians::default(),
         receiver_healthy: true,
-        quality_state: GnssState::Fixed,
+        quality_state: GnssState::Healthy,
         quality_timing: TimingQuality::PpsCorrelated,
     }
 }

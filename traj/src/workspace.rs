@@ -196,7 +196,7 @@ impl LivePsramWorkspace {
 // PSRAM is cache-attached and is touched by bounded history/metric work on the
 // live path. Its capacity is a fixed profile contract, while exact cache-
 // contention latency still requires measurement on the fitted module.
-const LIVE_PSRAM_BUDGET_BYTES: usize = 1_024 * 1_024;
+const LIVE_PSRAM_BUDGET_BYTES: usize = crate::config::LiveResourceLimits::V2_MINI_RTS.psram_bytes;
 const LIVE_PSRAM_ROLLBACK_MARGIN_BYTES: usize = 32 * 1_024;
 const _: () = assert!(
     size_of::<LivePsramWorkspace>() + LIVE_PSRAM_ROLLBACK_MARGIN_BYTES <= LIVE_PSRAM_BUDGET_BYTES,

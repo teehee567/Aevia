@@ -7,9 +7,7 @@ use super::bridge::{
     BRIDGE_VELOCITY, DenseBridgeInput, DenseBridgeLinearization, DenseConditionalBridge,
     dense_kinematic_covariance,
 };
-use super::math::{
-    add, cross, dot, norm, norm_upper, query_to_metric, scale, upper_add, upper_mul, vector,
-};
+use super::math::{add, cross, dot, norm, query_to_metric, scale, vector};
 use super::quality::{conservative_covariance, conservative_observability, conservative_quality};
 use crate::error::{QueryError, ValidationError};
 use crate::math::{UnitQuaternion, Vector3};
@@ -147,6 +145,13 @@ impl DenseSegment {
         input: &DenseBridgeInput,
     ) -> Result<(Self, DenseConditionalBridge), ValidationError> {
         let mut segment = Self::new(start, end)?;
+        if input
+            .coupled
+            .as_ref()
+            .is_some_and(|model| model.duration_seconds != segment.duration_seconds)
+        {
+            return Err(ValidationError::InvalidTimeSpan);
+        }
         if !input
             .reintegrated_position_ecef_m
             .iter()
@@ -651,36 +656,6 @@ impl DenseSegment {
             orientation: base.orientation,
         })
     }
-
-    /// Conservative Euclidean upper bound for a rigid point's kth normalized
-    /// parameter derivative over the complete dense segment.
-    pub(super) fn point_derivative_norm_bound(&self, order: usize, lever_body_m: [f64; 3]) -> f64 {
-        let mut component_bounds = [0.0; 3];
-        for (axis, bound) in component_bounds.iter_mut().enumerate() {
-            let [c0, c1, c2, c3] = self.position_coefficient[axis];
-            *bound = match order {
-                0 => c0.abs() + c1.abs() + c2.abs() + c3.abs(),
-                1 => c1.abs() + 2.0 * c2.abs() + 3.0 * c3.abs(),
-                2 => 2.0 * c2.abs() + 6.0 * c3.abs(),
-                3 => 6.0 * c3.abs(),
-                _ => 0.0,
-            };
-        }
-        let base = norm_upper(component_bounds);
-        let rotation = if lever_body_m == [0.0; 3] {
-            0.0
-        } else {
-            let mut rotation = norm_upper(lever_body_m);
-            let phi = self
-                .derived_orientation_bridge()
-                .map_or(f64::INFINITY, OrientationBridge::derivative_norm_bound);
-            for _ in 0..order {
-                rotation = upper_mul(rotation, phi);
-            }
-            rotation
-        };
-        upper_add(base, rotation)
-    }
 }
 
 impl OrientationBridge {
@@ -715,13 +690,6 @@ impl OrientationBridge {
             cross(self.endpoint_correction_body, rotated_integrated),
         );
         Ok((orientation, rate, rate_derivative, rate_second_derivative))
-    }
-
-    pub(super) fn derivative_norm_bound(self) -> f64 {
-        upper_add(
-            norm_upper(self.integrated_rotation_body),
-            norm_upper(self.endpoint_correction_body),
-        )
     }
 }
 

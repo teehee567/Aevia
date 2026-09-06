@@ -28,6 +28,10 @@ pub(super) struct PropagationModel {
     pub(super) consider_transition: DMatrix<f64>,
     pub(super) process_covariance: DMatrix<f64>,
     pub(super) sample_influence: DMatrix<f64>,
+    pub(super) continuous: DMatrix<f64>,
+    pub(super) noise_density: DMatrix<f64>,
+    pub(super) consider_rate_mapping: DMatrix<f64>,
+    pub(super) sample_rate_mapping: DMatrix<f64>,
 }
 
 pub(super) fn refresh_inertial_kinematics(
@@ -36,9 +40,17 @@ pub(super) fn refresh_inertial_kinematics(
 ) -> Result<(), ProcessError> {
     let rotation = matrix3_from_array(nominal.orientation_ecef_from_body.rotation_matrix());
     let earth_rate_body = rotation.transpose() * Vector3::new(0.0, 0.0, EARTH_RATE_RAD_S);
-    nominal.specific_force_body = imu.specific_force_body;
+    nominal.specific_force_body =
+        core::array::from_fn(|i| imu.specific_force_body[i] - nominal.imu_sample_error_body[i]);
     nominal.angular_rate_body = array3(
-        vector3(imu.angular_rate_body) - vector3(nominal.gyroscope_bias_body) - earth_rate_body,
+        vector3(imu.angular_rate_body)
+            - vector3(nominal.gyroscope_bias_body)
+            - earth_rate_body
+            - Vector3::new(
+                nominal.imu_sample_error_body[3],
+                nominal.imu_sample_error_body[4],
+                nominal.imu_sample_error_body[5],
+            ),
     );
     if nominal.is_finite() {
         Ok(())
@@ -50,7 +62,7 @@ pub(super) fn refresh_inertial_kinematics(
 /// Integrates a frozen continuous model, including a constant-input map and
 /// all continuous-noise cross terms. Scaling bounds the exponential and
 /// Lyapunov series before exact interval doubling.
-pub(super) fn discretize_inertial_model(
+pub(crate) fn discretize_inertial_model(
     continuous: &DMatrix<f64>,
     noise_density: &DMatrix<f64>,
     dt: f64,
@@ -267,8 +279,12 @@ pub(super) fn propagation_model(
     let velocity = vector3(current.velocity_ecef);
     let accelerometer_bias = vector3(current.accelerometer_bias_body);
     let gyroscope_bias = vector3(current.gyroscope_bias_body);
-    let specific_force = vector3(imu.specific_force_body) - accelerometer_bias;
-    let measured_rate = vector3(imu.angular_rate_body) - gyroscope_bias;
+    let specific_force = vector3(imu.specific_force_body)
+        - accelerometer_bias
+        - Vector3::from_column_slice(&current.imu_sample_error_body[..3]);
+    let measured_rate = vector3(imu.angular_rate_body)
+        - gyroscope_bias
+        - Vector3::from_column_slice(&current.imu_sample_error_body[3..]);
     let earth_rate_ecef = Vector3::new(0.0, 0.0, EARTH_RATE_RAD_S);
     let initial_rotation = matrix3_from_array(current.orientation_ecef_from_body.rotation_matrix());
     let earth_rate_body = initial_rotation.transpose() * earth_rate_ecef;
@@ -396,7 +412,7 @@ pub(super) fn propagation_model(
     }
     let (transition, input_integral, process_covariance) =
         discretize_inertial_model(&continuous, &noise_density, dt)?;
-    let sample_influence = &input_integral * sample_rate_mapping;
+    let sample_influence = &input_integral * &sample_rate_mapping;
 
     let body_from_sensor = matrix3_from_array(
         config
@@ -441,7 +457,7 @@ pub(super) fn propagation_model(
             | SharedParameterKind::SurveyMetres => {}
         }
     }
-    let consider_transition = input_integral * consider_rate_mapping;
+    let consider_transition = input_integral * &consider_rate_mapping;
 
     let nominal = StoredNominal {
         time: current.time,
@@ -451,6 +467,7 @@ pub(super) fn propagation_model(
         accelerometer_bias_body: current.accelerometer_bias_body,
         gyroscope_bias_body: current.gyroscope_bias_body,
         colored_gnss_error: colored,
+        imu_sample_error_body: current.imu_sample_error_body,
         specific_force_body: imu.specific_force_body,
         angular_rate_body: array3(body_relative_ecef_rate),
     };
@@ -463,6 +480,10 @@ pub(super) fn propagation_model(
         consider_transition,
         process_covariance: symmetric(process_covariance),
         sample_influence,
+        continuous,
+        noise_density: symmetric(noise_density),
+        consider_rate_mapping,
+        sample_rate_mapping,
     })
 }
 

@@ -1,5 +1,8 @@
 //! Behavioral tests for the embedded delayed-filter orchestrator.
 
+#[path = "smoothing_lifecycle_tests.rs"]
+mod smoothing_lifecycle;
+
 use core::mem::size_of;
 
 use crate::{
@@ -38,6 +41,7 @@ fn with_large_stack(test: fn()) {
 fn config() -> LiveCoreConfig {
     LiveCoreConfig {
         fusion_delay_ns: 10_000_000,
+        smoothing_lag_ns: 0,
         navigation_period_ns: 2_500_000,
         bias_correction_validity_norm: 1.0,
         mechanization: MechanizationContext::new(
@@ -153,10 +157,108 @@ fn gnss(time_ns: i64, sequence: u64, x: f32) -> Scheduled<GnssObservation> {
             velocity_independent_timing_sigma_s: 0.0,
             shared_jacobians: super::super::eskf::SharedMeasurementJacobians::default(),
             receiver_healthy: true,
-            quality_state: GnssState::Fixed,
+            quality_state: GnssState::Healthy,
             quality_timing: TimingQuality::PpsCorrelated,
         },
     }
+}
+
+fn smoothed_run(credits: u16, with_gnss: bool) -> (std::vec::Vec<DenseSegment>, NavState) {
+    let mut history = LiveCoreHistory::new();
+    let mut tuning = config();
+    tuning.smoothing_lag_ns = 100_000_000;
+    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &history).unwrap();
+    let mut core = LiveCore::attach(&mut state, &mut history);
+    if with_gnss {
+        core.ingest_gnss(gnss(100_000_000, 1, 1.0)).unwrap();
+        core.ingest_gnss(gnss(170_000_000, 2, 1.2)).unwrap();
+    }
+    for millisecond in 0..250 {
+        core.ingest(LiveCoreInput::Imu(imu(
+            millisecond * 1_000_000,
+            (millisecond + 1) * 1_000_000,
+        )))
+        .unwrap();
+    }
+    let mut segments = std::vec::Vec::new();
+    let mut calls = 0;
+    loop {
+        let report = core.drain(&mut WorkQuota::new(credits)).unwrap();
+        while let Some(segment) = core.pop_corrected_segment() {
+            segments.push(segment);
+        }
+        calls += 1;
+        assert!(calls < 10_000, "smoothing did not make bounded progress");
+        if report.blocked_on == DrainBlock::AwaitingDelayedFrontier {
+            break;
+        }
+    }
+    let status = core.status().unwrap();
+    assert_eq!(
+        status.corrected_frontier,
+        Some(SessionTime::from_ns(240_000_000))
+    );
+    assert_eq!(
+        status.published_frontier,
+        Some(SessionTime::from_ns(140_000_000))
+    );
+    assert_eq!(
+        core.present_state().unwrap().time,
+        SessionTime::from_ns(250_000_000)
+    );
+    core.finish().unwrap();
+    loop {
+        let report = core.drain(&mut WorkQuota::new(credits)).unwrap();
+        while let Some(segment) = core.pop_corrected_segment() {
+            segments.push(segment);
+        }
+        calls += 1;
+        assert!(calls < 10_000, "smoother tail did not finish");
+        if report.blocked_on == DrainBlock::Finished {
+            break;
+        }
+    }
+    assert!(core.status().unwrap().drained);
+    assert_eq!(
+        core.status().unwrap().published_frontier,
+        Some(SessionTime::from_ns(250_000_000))
+    );
+    (segments, *core.corrected_state())
+}
+
+#[test]
+fn rts_later_gnss_corrects_history_and_preserves_final_endpoint_and_boundaries() {
+    with_large_stack(|| {
+        let (segments, filtered) = smoothed_run(u16::MAX, true);
+        assert_eq!(segments.len(), 100);
+        assert!(segments[0].start.state.position_n.x > 0.1);
+        assert!(segments[0].start.covariance.position[(0, 0)] < 1.0);
+        assert_eq!(segments.last().unwrap().end.state, filtered);
+        for pair in segments.windows(2) {
+            assert_eq!(pair[0].end, pair[1].start, "published boundary was revised");
+        }
+    });
+}
+
+#[test]
+fn rts_quota_partition_does_not_change_published_trajectory() {
+    with_large_stack(|| {
+        let (whole, whole_end) = smoothed_run(u16::MAX, true);
+        let (chunked, chunked_end) = smoothed_run(96, true);
+        assert_eq!(whole_end, chunked_end);
+        assert_eq!(whole, chunked);
+    });
+}
+
+#[test]
+fn rts_no_gnss_does_not_invent_a_correction() {
+    with_large_stack(|| {
+        let (segments, _) = smoothed_run(96, false);
+        for segment in segments {
+            assert!(segment.end.state.position_n.norm() < 1.0e-6);
+            assert!(segment.end.state.velocity_n.norm() < 1.0e-5);
+        }
+    });
 }
 
 fn anchor(generation: u32, origin: Vector3<f64>, yaw: f64) -> EcefAnchor {
@@ -331,7 +433,7 @@ fn one_drain_preserves_all_accepted_gnss_quality_transitions_in_order() {
         let mut core = LiveCore::attach(&mut state, &mut history);
         let first = gnss(2_500_000, 1, 0.0);
         let mut second = gnss(5_000_000, 2, 0.0);
-        second.value.quality_state = GnssState::Float;
+        second.value.quality_timing = TimingQuality::Modeled;
         assert_eq!(core.ingest_gnss(first).unwrap(), EnqueueDisposition::Queued);
         assert_eq!(
             core.ingest_gnss(second).unwrap(),
@@ -349,7 +451,7 @@ fn one_drain_preserves_all_accepted_gnss_quality_transitions_in_order() {
             updates.next(),
             Some(GnssQualityUpdate {
                 epoch: SessionTime::from_ns(2_500_000),
-                state: GnssState::Fixed,
+                state: GnssState::Healthy,
                 timing: TimingQuality::PpsCorrelated,
                 downweighted: false,
             })
@@ -358,8 +460,8 @@ fn one_drain_preserves_all_accepted_gnss_quality_transitions_in_order() {
             updates.next(),
             Some(GnssQualityUpdate {
                 epoch: SessionTime::from_ns(5_000_000),
-                state: GnssState::Float,
-                timing: TimingQuality::PpsCorrelated,
+                state: GnssState::Healthy,
+                timing: TimingQuality::Modeled,
                 downweighted: false,
             })
         );

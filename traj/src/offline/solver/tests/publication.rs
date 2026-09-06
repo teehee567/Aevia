@@ -7,16 +7,20 @@ fn sixty_minute_high_rate_offline_preflight_is_bounded_and_accounts_for_both_fil
     let consider = DMatrix::zeros(0, 0);
     let state =
         state_store_resource_bounds(NAVIGATION_DIMENSION, &consider, maximum_records).unwrap();
-    let trajectory = Trajectory::offline_storage_bounds(maximum_segments).unwrap();
+    let trajectory = Trajectory::offline_storage_bounds_with_covariance(
+        maximum_segments,
+        NAVIGATION_DIMENSION + 6,
+    )
+    .unwrap();
     let temporary_storage_bytes = state
         .seekable_temporary_bytes
         .checked_add(trajectory.seekable_temporary_bytes)
         .unwrap();
-    assert_eq!(state.record_bytes, 15_109);
-    assert_eq!(state.seekable_temporary_bytes, 80_228_805_173);
-    assert_eq!(trajectory.record_bytes, 3_241);
-    assert_eq!(trajectory.seekable_temporary_bytes, 17_209_710_064);
-    assert_eq!(temporary_storage_bytes, 97_438_515_237);
+    assert_eq!(state.record_bytes, 28_415);
+    assert_eq!(state.seekable_temporary_bytes, 150_883_678_479);
+    assert_eq!(trajectory.record_bytes, 32_289);
+    assert_eq!(trajectory.seekable_temporary_bytes, 171_454_590_064);
+    assert_eq!(temporary_storage_bytes, 322_338_268_543);
     let limits = OfflineResourceLimits {
         peak_memory_bytes: 256 * 1_024 * 1_024,
         temporary_storage_bytes,
@@ -127,8 +131,12 @@ fn offline_event_projection_uses_both_endpoints_and_shared_consider() {
     first.filtered_covariance = covariance.clone();
     first.smoothed_covariance = Some(covariance.clone());
     first.smoothed = Some(nominal(0, 0.0));
+    first.predicted_sample = StoredImuSample::zeros(NAVIGATION_DIMENSION, 3);
+    first.filtered_sample = first.predicted_sample.clone();
+    first.smoothed_sample = Some(first.filtered_sample.clone());
     first.consider_transition = DMatrix::zeros(NAVIGATION_DIMENSION, 3);
-    let mut backward = DMatrix::identity(NAVIGATION_DIMENSION + 3, NAVIGATION_DIMENSION + 3);
+    let mut backward =
+        DMatrix::identity(NAVIGATION_DIMENSION + 3 + 6, NAVIGATION_DIMENSION + 3 + 6);
     for index in 0..NAVIGATION_DIMENSION {
         backward[(index, index)] = 0.5;
     }
@@ -138,6 +146,9 @@ fn offline_event_projection_uses_both_endpoints_and_shared_consider() {
     second.filtered_covariance = covariance.clone();
     second.smoothed_covariance = Some(covariance);
     second.smoothed = Some(nominal(1_000_000_000, 0.0));
+    second.predicted_sample = StoredImuSample::zeros(NAVIGATION_DIMENSION, 3);
+    second.filtered_sample = second.predicted_sample.clone();
+    second.smoothed_sample = Some(second.filtered_sample.clone());
     second.consider_transition = DMatrix::zeros(NAVIGATION_DIMENSION, 3);
     planned.store.push(&first).unwrap();
     planned.store.push(&second).unwrap();
@@ -158,7 +169,7 @@ fn offline_event_projection_uses_both_endpoints_and_shared_consider() {
     let quality = EstimateQuality {
         stage: EstimateStage::Finalized,
         validity: Validity::Nominal,
-        gnss: GnssState::Fixed,
+        gnss: GnssState::Healthy,
         timing: TimingQuality::PpsCorrelated,
         integrity: Integrity::Monitored,
         covariance: CovarianceConditioning::UnconditionalModel,
@@ -209,6 +220,7 @@ fn offline_event_projection_uses_both_endpoints_and_shared_consider() {
             knot(SessionTime::from_ns(0)),
             knot(SessionTime::from_ns(1_000_000_000)),
             DenseBridgeInput {
+                coupled: None,
                 covariance_available: true,
                 endpoint_joint_covariance,
                 acceleration_spectral_density_ecef: [
@@ -250,7 +262,7 @@ fn offline_event_projection_uses_both_endpoints_and_shared_consider() {
         },
         gate: Some(GateId::new(1)),
         gate_survey_coefficient_s_per_m: 1.0,
-        gate_survey_variance_m2: Some(0.0),
+        gate_survey_uncertainty: crate::metric::GateSurveyUncertainty::Exact,
     };
     let midpoint = event(0.5, 500_000_000);
     let FieldValue::Available(midpoint_variance) =
@@ -281,11 +293,114 @@ fn offline_event_projection_uses_both_endpoints_and_shared_consider() {
     assert!((start_variance + end_variance - 2.0 * cross - 4.0).abs() < 1.0e-12);
 
     let uncertain_survey = EventTimeSensitivity {
-        gate_survey_variance_m2: Some(0.01),
+        gate_survey_uncertainty: crate::metric::GateSurveyUncertainty::UnspecifiedVariance(0.01),
         ..midpoint
     };
     assert_eq!(
         provider.event_time_variance_s2(&trajectory, &uncertain_survey),
         FieldValue::Unavailable(UnavailableReason::MissingCorrelation)
     );
+
+    let independent = EventTimeSensitivity {
+        gate_survey_uncertainty: crate::metric::GateSurveyUncertainty::Independent(0.01),
+        ..start
+    };
+    assert_eq!(
+        provider.event_time_variance_s2(&trajectory, &independent),
+        FieldValue::Available(4.26)
+    );
+    let independent_end = EventTimeSensitivity {
+        parameter: 1.0,
+        time: end.time,
+        ..independent
+    };
+    assert_eq!(
+        provider.event_time_cross_covariance_s2(&trajectory, &independent, &independent_end),
+        FieldValue::Available(2.26)
+    );
+
+    // A surveyed ECEF displacement may be correlated with navigation. Keep
+    // that cross block and check that a repeated gate cancels its shared error.
+    drop(provider);
+    let survey_catalog = ConsiderCatalog {
+        parameters: vec![ParameterCoordinate {
+            id: SharedParameterId::new(10),
+            kind: SharedParameterKind::SurveyMetres,
+            validity: span,
+            start: 0,
+            dimension: 3,
+        }],
+        clocks: Vec::new(),
+        covariance: consider.clone(),
+    };
+    for index in 0..2 {
+        let mut step = planned.store.get(index).unwrap();
+        step.smoothed_covariance.as_mut().unwrap().state_consider[(POSITION, 0)] = 0.25;
+        planned.store.set(index, &step).unwrap();
+    }
+    let mut first_step = planned.store.get(0).unwrap();
+    let second_step = planned.store.get(1).unwrap();
+    let last_joint = joint_covariance(
+        second_step.smoothed_covariance.as_ref().unwrap(),
+        second_step.smoothed_sample.as_ref().unwrap(),
+        &consider,
+    );
+    let d = last_joint.nrows();
+    let mut adjacent = DMatrix::zeros(d, d);
+    for axis in 0..NAVIGATION_DIMENSION {
+        adjacent[(axis, axis)] = 2.0;
+    }
+    for axis in 0..3 {
+        adjacent[(NAVIGATION_DIMENSION + axis, NAVIGATION_DIMENSION + axis)] = 0.25;
+    }
+    adjacent[(POSITION, NAVIGATION_DIMENSION)] = 0.25;
+    adjacent[(NAVIGATION_DIMENSION, POSITION)] = 0.25;
+    first_step.smoothed_backward_gain = Some(
+        solve_psd(&last_joint, &adjacent.transpose())
+            .unwrap()
+            .transpose(),
+    );
+    planned.store.set(0, &first_step).unwrap();
+    let origin = [ReferencePoint::new(
+        point.id(),
+        ReferencePointKind::ImuSensingCenter,
+        BodyLeverArm::new(0.0, 0.0, 0.0).unwrap(),
+        SharedParameterId::new(10),
+        MeasurementUncertainty::Provided(Covariance3::diagonal(0.0, 0.0, 0.0).unwrap()),
+    )];
+    let mut provider = OfflineMetricUncertainty::new(
+        planned.store.as_mut(),
+        &origin,
+        &survey_catalog,
+        SharedUncertaintyTreatment::SchmidtConsider,
+    );
+    let shared = EventTimeSensitivity {
+        gate_survey_uncertainty: crate::metric::GateSurveyUncertainty::Shared(
+            SharedParameterId::new(10),
+        ),
+        ..start
+    };
+    let shared_end = EventTimeSensitivity {
+        parameter: 1.0,
+        time: end.time,
+        ..shared
+    };
+    let available = |value| match value {
+        FieldValue::Available(value) => value,
+        other => panic!("{other:?}"),
+    };
+    let variance = available(provider.event_time_variance_s2(&trajectory, &shared));
+    let cross =
+        available(provider.event_time_cross_covariance_s2(&trajectory, &shared, &shared_end));
+    assert!((variance - 3.75).abs() < 1.0e-12);
+    assert!((cross - 1.75).abs() < 1.0e-12);
+    assert!((2.0 * variance - 2.0 * cross - 4.0).abs() < 1.0e-12);
+    let fixed = StateSensitivity {
+        position: [2.0, 0.0, 0.0],
+        velocity: [0.0; 3],
+        attitude: [0.0; 3],
+    };
+    let value_variance = available(provider.event_value_variance(&trajectory, &shared, fixed, 3.0));
+    // Total state coefficient is 2+3=5; the survey coefficient is only -3.
+    assert!((value_variance - 94.75).abs() < 1.0e-10);
 }

@@ -3,6 +3,20 @@
 use super::*;
 
 #[test]
+fn navigation_profile_bounds_the_live_smoothing_lag() {
+    let mut profile = processing_spec().engine.navigation_profile;
+    for lag_ns in [0, 1, 100_000_000] {
+        profile.smoothing_lag = DurationNs::from_ns(lag_ns);
+        assert_eq!(profile.validate(), Ok(profile));
+    }
+    profile.smoothing_lag = DurationNs::from_ns(100_000_001);
+    assert_eq!(
+        profile.validate(),
+        Err(ValidationError::IncompatibleDefinition)
+    );
+}
+
+#[test]
 fn live_preflight_rejects_unimplemented_nhc_profile_claim() {
     let spec = processing_spec();
     let metrics = spec
@@ -16,7 +30,7 @@ fn live_preflight_rejects_unimplemented_nhc_profile_claim() {
             session_id: SessionId::from_bytes([3; 16]),
             engine,
             metrics: &metrics,
-            resources: LiveResourceLimits::V2_MINI_INITIAL,
+            resources: LiveResourceLimits::V2_MINI_RTS,
             initial_heading: Some(InitialHeading::new(0.0, variance(1.0)).unwrap()),
             initial_clock_prior: initial_clock_prior(),
         })
@@ -43,7 +57,7 @@ fn live_preflight_rejects_body_axis_metric_without_supplied_heading() {
             session_id: SessionId::from_bytes([4; 16]),
             engine: spec.engine,
             metrics: &metrics,
-            resources: LiveResourceLimits::V2_MINI_INITIAL,
+            resources: LiveResourceLimits::V2_MINI_RTS,
             initial_heading: None,
             initial_clock_prior: initial_clock_prior(),
         })
@@ -78,7 +92,7 @@ fn live_preflight_rejects_offset_acceleration_change_point() {
             session_id: SessionId::from_bytes([5; 16]),
             engine: spec.engine,
             metrics: &metrics,
-            resources: LiveResourceLimits::V2_MINI_INITIAL,
+            resources: LiveResourceLimits::V2_MINI_RTS,
             initial_heading: Some(InitialHeading::new(0.0, variance(1.0)).unwrap()),
             initial_clock_prior: initial_clock_prior(),
         })

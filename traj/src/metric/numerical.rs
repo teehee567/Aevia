@@ -85,7 +85,7 @@ impl NumericalWorkBudget {
         )
     }
 
-    #[cfg(test)]
+    #[cfg(any(test, feature = "offline"))]
     pub(crate) const fn root_only(root_evaluations: u32) -> Self {
         Self::new(root_evaluations, 0)
     }
@@ -586,13 +586,14 @@ where
         let tolerance = interval
             .absolute_tolerance
             .max(relative_tolerance * local.value.abs());
-        if local.absolute_error <= tolerance
-            || (interval.upper - interval.lower) <= f64::EPSILON * 32.0
-        {
+        if local.absolute_error <= tolerance {
             value += local.value;
             error += local.absolute_error;
         } else {
             let midpoint = (interval.lower + interval.upper) * 0.5;
+            if midpoint <= interval.lower || midpoint >= interval.upper {
+                return Err(MetricError::NumericalFailure);
+            }
             let half_tolerance = interval.absolute_tolerance * 0.5;
             stack
                 .push(QuadratureInterval {

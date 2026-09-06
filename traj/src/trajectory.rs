@@ -34,7 +34,10 @@ use std::sync::{Arc, Mutex};
 mod bridge;
 #[cfg(feature = "offline")]
 mod codec;
+#[cfg(feature = "offline")]
+mod coupled;
 mod dense;
+mod enclosed;
 mod jets;
 mod math;
 mod metric_queries;
@@ -44,6 +47,8 @@ mod roots;
 mod storage;
 #[cfg(feature = "offline")]
 pub(crate) use bridge::{DenseBridgeInput, DenseBridgeLinearization};
+#[cfg(feature = "offline")]
+pub(crate) use coupled::CoupledDenseBridge;
 #[cfg(feature = "offline")]
 pub(crate) use storage::OfflineTrajectoryStorageBounds;
 
@@ -86,6 +91,10 @@ pub struct KinematicEstimate {
     pub velocity: EcefVelocity,
     pub orientation_ecef_from_body: OrientationEcefFromBody,
     pub angular_rate_body_relative_ecef: BodyAngularRate,
+    /// Support of the finite angular-input average used in an offset-point
+    /// velocity covariance. White gyro noise has no instantaneous rate
+    /// variance; the mean remains the derivative of the selected dense curve.
+    pub angular_rate_uncertainty_support: Option<TimeSpan>,
     /// Angular acceleration is unavailable until the selected dense model has
     /// a qualified derivative and uncertainty bandwidth.
     pub angular_acceleration_body_relative_ecef: FieldValue<BodyAngularAcceleration>,

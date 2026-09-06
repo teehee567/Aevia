@@ -28,6 +28,90 @@ use crate::{
 };
 
 #[test]
+fn explicitly_independent_gate_survey_contributes_to_event_variance() {
+    let trajectory = eastbound_trajectory(10.0, 10.0, 10.0);
+    let mut gate = super::support::east_gate(1, 10.0, 1.0);
+    gate.survey_uncertainty = crate::metric::GateSurveyUncertainty::UnspecifiedVariance(0.04);
+    let gate = gate.with_independent_survey().unwrap();
+    let state = trajectory
+        .scalar_kinematics_at_parameter(0, 1.0, ReferencePointId::new(1))
+        .unwrap();
+    let event = super::super::uncertainty::gate_event_sensitivity(
+        0,
+        1.0,
+        &state,
+        &gate,
+        ReferencePointId::new(1),
+    )
+    .unwrap();
+    let mut provider = TrajectoryMarginalUncertainty;
+    let FieldValue::Available(variance) = provider.event_time_variance_s2(&trajectory, &event)
+    else {
+        panic!("declared independent survey uncertainty must be available");
+    };
+    let exact = EventTimeSensitivity {
+        gate_survey_uncertainty: crate::metric::GateSurveyUncertainty::Exact,
+        ..event
+    };
+    let FieldValue::Available(exact_variance) =
+        provider.event_time_variance_s2(&trajectory, &exact)
+    else {
+        panic!("exact gate variance must be available");
+    };
+    assert!((variance - exact_variance - 0.04 / 100.0).abs() < 1.0e-14);
+}
+
+#[test]
+fn shared_survey_binding_retains_identity_and_the_ecef_event_derivative() {
+    use crate::{ids::SharedParameterId, metric::GateSurveyUncertainty};
+
+    let trajectory = eastbound_trajectory(10.0, 10.0, 10.0);
+    let mut unbound = super::support::east_gate(1, 10.0, 1.0);
+    unbound.survey_uncertainty = GateSurveyUncertainty::UnspecifiedVariance(0.04);
+    let independent = unbound.with_independent_survey().unwrap();
+    let first = unbound
+        .with_shared_survey_parameter(SharedParameterId::new(9))
+        .unwrap();
+    let second = unbound
+        .with_shared_survey_parameter(SharedParameterId::new(10))
+        .unwrap();
+    assert_ne!(
+        unbound.canonical_digest_v1(),
+        independent.canonical_digest_v1()
+    );
+    assert_ne!(first.canonical_digest_v1(), second.canonical_digest_v1());
+    assert_eq!(first.canonical_digest_v1(), first.canonical_digest_v1());
+    assert!(
+        unbound
+            .with_shared_survey_parameter(SharedParameterId::new(0))
+            .is_err()
+    );
+
+    let state = trajectory
+        .scalar_kinematics_at_parameter(0, 1.0, ReferencePointId::new(1))
+        .unwrap();
+    let event = super::super::uncertainty::gate_event_sensitivity(
+        0,
+        1.0,
+        &state,
+        &first,
+        ReferencePointId::new(1),
+    )
+    .unwrap();
+    assert_eq!(
+        event.gate_survey_uncertainty,
+        GateSurveyUncertainty::Shared(SharedParameterId::new(9))
+    );
+    // Moving the gate one metre east delays this 10 m/s crossing by 0.1 s.
+    assert_eq!(event.state.position.map(|value| -value), [0.0, 0.1, 0.0]);
+    let mut provider = TrajectoryMarginalUncertainty;
+    assert_eq!(
+        provider.event_time_variance_s2(&trajectory, &event),
+        FieldValue::Unavailable(UnavailableReason::MissingCorrelation),
+    );
+}
+
+#[test]
 fn endpoint_gate_survey_without_declared_state_correlation_fails_closed() {
     let trajectory = eastbound_trajectory(10.0, 10.0, 10.0);
     let gate = FiniteGate::new(
@@ -227,7 +311,7 @@ fn reused_gate_survey_covariance_is_not_counted_as_independent() {
         state: StateSensitivity::ZERO,
         gate: Some(GateId::new(7)),
         gate_survey_coefficient_s_per_m: 0.1,
-        gate_survey_variance_m2: Some(0.04),
+        gate_survey_uncertainty: crate::metric::GateSurveyUncertainty::Independent(0.04),
     };
     let start = GateCrossingReport {
         definition: MetricDefinitionId::new(1),

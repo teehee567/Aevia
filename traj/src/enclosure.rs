@@ -1,16 +1,16 @@
-//! Private deterministic interval primitives for the planned `EnclosureV1`.
+//! Allocator-free outward interval arithmetic for the production root graph.
 //!
-//! This module deliberately has no public seam and performs no allocation.
-//! Its two scalar adapters execute arithmetic through `fpmath`'s software
-//! IEEE-754 types.  It is not wired into live capability selection yet: the
-//! complete rigid-point/SO(3), ellipsoid-normal, and derivative expression
-//! graph must use these primitives and pass the external qualification
-//! campaign before that would be sound.
+//! Binary64 production arithmetic requires IEEE-754 round-to-nearest with
+//! gradual underflow and no implicit contraction. Every operation expands
+//! outwards; pinned `fpmath` elementary functions use their documented error
+//! bounds. Target qualification remains separate from this source contract.
+//! Software scalar adapters are retained only as host regression oracles.
 
 #![allow(dead_code)]
 
 use core::ops::{Add, Div, Mul, Neg, Sub};
 
+#[cfg(test)]
 use fpmath::{SoftF32, SoftF64};
 
 // fpmath documents < 0.5 ULP for sqrt and < 1 ULP for sin/cos. Two representable
@@ -49,6 +49,44 @@ pub(crate) trait EnclosureScalar:
     fn sin_cos(self) -> (Self, Self);
 }
 
+impl EnclosureScalar for f64 {
+    fn from_f64_enclosing(value: f64) -> Result<(Self, Self), EnclosureError> {
+        if value.is_finite() {
+            Ok((value, value))
+        } else {
+            Err(EnclosureError::NonFinite)
+        }
+    }
+    fn zero() -> Self {
+        0.0
+    }
+    fn one() -> Self {
+        1.0
+    }
+    fn neg_one() -> Self {
+        -1.0
+    }
+    fn to_f64(self) -> f64 {
+        self
+    }
+    fn is_finite(self) -> bool {
+        self.is_finite()
+    }
+    fn next_down(self) -> Self {
+        self.next_down()
+    }
+    fn next_up(self) -> Self {
+        self.next_up()
+    }
+    fn sqrt(self) -> Self {
+        fpmath::sqrt(self)
+    }
+    fn sin_cos(self) -> (Self, Self) {
+        (fpmath::sin(self), fpmath::cos(self))
+    }
+}
+
+#[cfg(test)]
 impl EnclosureScalar for SoftF32 {
     fn from_f64_enclosing(value: f64) -> Result<(Self, Self), EnclosureError> {
         let (lower, upper) = f32_enclosure_bits_from_f64(value)?;
@@ -114,6 +152,7 @@ impl EnclosureScalar for SoftF32 {
     }
 }
 
+#[cfg(test)]
 impl EnclosureScalar for SoftF64 {
     fn from_f64_enclosing(value: f64) -> Result<(Self, Self), EnclosureError> {
         if !value.is_finite() {
@@ -260,8 +299,11 @@ pub(crate) struct EnclosureV1<S: EnclosureScalar> {
     upper: S,
 }
 
+#[cfg(test)]
 pub(crate) type LiveEnclosureV1 = EnclosureV1<SoftF32>;
+#[cfg(test)]
 pub(crate) type OfflineEnclosureV1 = EnclosureV1<SoftF64>;
+pub(crate) type NativeEnclosureV1 = EnclosureV1<f64>;
 
 impl<S: EnclosureScalar> EnclosureV1<S> {
     fn new(lower: S, upper: S) -> Result<Self, EnclosureError> {
@@ -292,14 +334,14 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
         Self::new(value, value)
     }
 
-    fn zero() -> Self {
+    pub(crate) fn zero() -> Self {
         Self {
             lower: S::zero(),
             upper: S::zero(),
         }
     }
 
-    fn one() -> Self {
+    pub(crate) fn one() -> Self {
         Self {
             lower: S::one(),
             upper: S::one(),
@@ -337,6 +379,12 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
     }
 
     pub(crate) fn add(self, rhs: Self) -> Result<Self, EnclosureError> {
+        if rhs.lower == S::zero() && rhs.upper == S::zero() {
+            return Ok(self);
+        }
+        if self.lower == S::zero() && self.upper == S::zero() {
+            return Ok(rhs);
+        }
         Self::new(
             (self.lower + rhs.lower).next_down(),
             (self.upper + rhs.upper).next_up(),
@@ -351,6 +399,11 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
     }
 
     pub(crate) fn mul(self, rhs: Self) -> Result<Self, EnclosureError> {
+        if (rhs.lower == S::zero() && rhs.upper == S::zero())
+            || (self.lower == S::zero() && self.upper == S::zero())
+        {
+            return Ok(Self::zero());
+        }
         let products = [
             self.lower * rhs.lower,
             self.lower * rhs.upper,
@@ -456,14 +509,20 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
         )
     }
 
-    /// Simultaneous sine/cosine enclosure. Within the SO(3)/geodetic principal
-    /// range endpoint evaluations are combined with explicit extrema. Outside
-    /// that range the conservative periodic result is exactly `[-1, 1]`.
+    /// Endpoint evaluations plus every enclosed multiple of pi/2. Extrema
+    /// indices use an outward interval quotient, so uncertain range reduction
+    /// can only widen the answer. Wide or unresolvable reductions use [-1,1].
     pub(crate) fn sin_cos(self) -> Result<(Self, Self), EnclosureError> {
         let unit = Self::new(S::neg_one(), S::one())?;
-        let pi = Self::point_f64(core::f64::consts::PI)?.widen(TRANSCENDENTAL_EXPANSION_ULPS)?;
-        let negative_pi = pi.neg()?;
-        if self.lower < negative_pi.lower || self.upper > pi.upper {
+        let half_pi =
+            Self::point_f64(core::f64::consts::FRAC_PI_2)?.widen(TRANSCENDENTAL_EXPANSION_ULPS)?;
+        let indices = self.div(half_pi)?;
+        let first = fpmath::ceil(indices.lower_f64());
+        let last = fpmath::floor(indices.upper_f64());
+        if last - first >= 4.0
+            || first.abs() > 4_503_599_627_370_496.0
+            || last.abs() > 4_503_599_627_370_496.0
+        {
             return Ok((unit, unit));
         }
 
@@ -472,19 +531,13 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
         let mut sin = interval_from_approximate_endpoints(sin_lower, sin_upper)?;
         let mut cos = interval_from_approximate_endpoints(cos_lower, cos_upper)?;
 
-        let half_pi =
-            Self::point_f64(core::f64::consts::FRAC_PI_2)?.widen(TRANSCENDENTAL_EXPANSION_ULPS)?;
-        if self.overlaps(half_pi) {
-            sin.upper = S::one();
-        }
-        if self.overlaps(half_pi.neg()?) {
-            sin.lower = S::neg_one();
-        }
-        if self.contains_zero() {
-            cos.upper = S::one();
-        }
-        if self.overlaps(pi) || self.overlaps(negative_pi) {
-            cos.lower = S::neg_one();
+        for index in (first as i64)..=(last as i64) {
+            match index.rem_euclid(4) {
+                0 => cos.upper = S::one(),
+                1 => sin.upper = S::one(),
+                2 => cos.lower = S::neg_one(),
+                _ => sin.lower = S::neg_one(),
+            }
         }
         Ok((
             Self::new(sin.lower, sin.upper)?,
@@ -676,11 +729,18 @@ pub(crate) fn rodrigues_rotate<S: EnclosureScalar>(
     rotation_vector: [f64; 3],
     vector: [f64; 3],
 ) -> Result<[EnclosureV1<S>; 3], EnclosureError> {
+    rodrigues_rotate_enclosed(parameter, rotation_vector, enclose_vector(vector)?)
+}
+
+pub(crate) fn rodrigues_rotate_enclosed<S: EnclosureScalar>(
+    parameter: EnclosureV1<S>,
+    rotation_vector: [f64; 3],
+    source: [EnclosureV1<S>; 3],
+) -> Result<[EnclosureV1<S>; 3], EnclosureError> {
     if parameter.lower_f64() < 0.0 || parameter.upper_f64() > 1.0 {
         return Err(EnclosureError::Domain);
     }
     let phi = enclose_vector(rotation_vector)?;
-    let source = enclose_vector(vector)?;
     if rotation_vector == [0.0; 3] {
         return Ok(source);
     }
@@ -820,6 +880,24 @@ pub(crate) fn ellipsoid_up_jet<S: EnclosureScalar>(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn native_scalar_keeps_gradual_underflow_inside_its_bounds() {
+        let tiny = NativeEnclosureV1::point_f64(1.0e-200).unwrap();
+        let underflow = tiny.mul(tiny).unwrap();
+        assert!(underflow.lower_f64() <= 0.0);
+        assert!(underflow.upper_f64() > 0.0);
+        let negative = tiny.neg().unwrap().mul(tiny).unwrap();
+        assert!(negative.lower_f64() < 0.0);
+        assert!(negative.upper_f64() >= 0.0);
+        // sqrt(2^-1074) = 2^-537 exactly, including at the smallest input.
+        let root = NativeEnclosureV1::point_f64(f64::from_bits(1))
+            .unwrap()
+            .sqrt()
+            .unwrap();
+        let exact = f64::from_bits(486_u64 << 52);
+        assert!(root.lower_f64() < exact && root.upper_f64() > exact);
+    }
 
     fn assert_contains(interval: LiveEnclosureV1, value: f64) {
         assert!(

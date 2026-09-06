@@ -4,9 +4,7 @@ use crate::{
     config::{EngineConfig, GnssCorrelationPolicy, SharedParameterKind, UncertaintyModelKind},
     error::ProcessError,
     frame::ReferencePointKind,
-    observation::{
-        GnssSolutionObservation, InputDisposition, ReceiverHealth, RtkState, SolutionClass,
-    },
+    observation::{GnssSolutionObservation, InputDisposition, ReceiverHealth},
     offline::store::StoredNominal,
     quality::{GnssState, TimingQuality},
     time::{ObservationTime, SessionTime, TimingBasis},
@@ -42,7 +40,7 @@ impl<'a> OfflineFilter<'a> {
             return Ok(MeasurementOutcome::rejected(self.state_dimension));
         }
         let current_nominal = self.nominal.clone().ok_or(ProcessError::InvalidEvidence)?;
-        let linearization_nominal = if self.relinearized {
+        let mut linearization_nominal = if self.relinearized {
             let guide = guide
                 .or(self.guide_nominal.as_ref())
                 .ok_or(ProcessError::NumericalNonConvergence)?;
@@ -53,6 +51,9 @@ impl<'a> OfflineFilter<'a> {
         } else {
             current_nominal
         };
+        if let Some(imu) = &self.held_imu {
+            super::inertial::refresh_inertial_kinematics(&mut linearization_nominal, imu)?;
+        }
         let nominal = &linearization_nominal;
         let lever = self
             .config
@@ -293,14 +294,14 @@ impl<'a> OfflineFilter<'a> {
             self.relinearized.then_some(nominal),
             self.damping,
         )?;
+        if let (Some(nominal), Some(imu)) = (self.nominal.as_mut(), self.held_imu.as_ref()) {
+            super::inertial::refresh_inertial_kinematics(nominal, imu)?;
+        }
         if matches!(
             result.disposition,
             InputDisposition::Fused | InputDisposition::Downweighted
         ) {
-            self.gnss_state = gnss_state(
-                solution.rtk_state(),
-                receiver_is_healthy(solution, field, self.config),
-            );
+            self.gnss_state = gnss_state(receiver_is_healthy(solution, field, self.config));
             self.timing_quality = match field {
                 GnssField::Position | GnssField::Joint => timing_quality(
                     solution
@@ -419,12 +420,15 @@ impl<'a> OfflineFilter<'a> {
         {
             return Err(ProcessError::InvalidEvidence);
         }
+        if let Some(nominal) = self.nominal.as_mut() {
+            nominal.imu_sample_error_body = [0.0; 6];
+        }
         self.active_imu_sample = Some(ActiveImuSample {
             start: imu.start,
             end: imu.time,
             covariance_body,
             state_cross: state_cross.clone(),
-            stored_interior_cut: false,
+            consider_cross: DMatrix::zeros(6, self.catalog.covariance.nrows()),
         });
         if self
             .nominal
@@ -706,18 +710,14 @@ pub(super) fn should_reject_solution(
     field: GnssField,
     config: &EngineConfig<'_>,
 ) -> bool {
-    let position_invalid = solution
-        .position()
-        .is_none_or(|value| matches!(value.solution_class, SolutionClass::Invalid));
-    let velocity_invalid = solution
-        .velocity()
-        .is_none_or(|value| matches!(value.solution_class, SolutionClass::Invalid));
-    let invalid_class = match field {
+    let position_invalid = solution.position().is_none_or(|value| !value.valid);
+    let velocity_invalid = solution.velocity().is_none_or(|value| !value.valid);
+    let invalid_measurement = match field {
         GnssField::Position => position_invalid,
         GnssField::Velocity => velocity_invalid,
         GnssField::Joint => position_invalid || velocity_invalid,
     };
-    invalid_class || !receiver_is_healthy(solution, field, config)
+    invalid_measurement || !receiver_is_healthy(solution, field, config)
 }
 
 pub(super) fn validate_antenna(
@@ -836,17 +836,11 @@ pub(super) fn diagnostic_information_age_at<T: Copy>(
         .and_then(|age| age.checked_add(measurement_time.independent_one_sigma.as_ns()))
 }
 
-pub(super) fn gnss_state(state: RtkState, healthy: bool) -> GnssState {
-    if !healthy {
-        return GnssState::Suspect;
-    }
-    match state {
-        RtkState::Fixed => GnssState::Fixed,
-        RtkState::Float => GnssState::Float,
-        RtkState::Dgps => GnssState::Dgps,
-        RtkState::Ppp => GnssState::Ppp,
-        RtkState::Standalone => GnssState::Standalone,
-        RtkState::Invalid => GnssState::Suspect,
+pub(super) fn gnss_state(healthy: bool) -> GnssState {
+    if healthy {
+        GnssState::Healthy
+    } else {
+        GnssState::Suspect
     }
 }
 

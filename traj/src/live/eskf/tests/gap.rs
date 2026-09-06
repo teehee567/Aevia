@@ -14,7 +14,7 @@ use crate::{
 };
 use nalgebra::{Matrix3, Vector3};
 
-fn gap_batch(
+pub(super) fn gap_batch(
     start_ns: i64,
     end_ns: i64,
     elapsed_ns: u32,

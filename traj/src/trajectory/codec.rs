@@ -8,7 +8,7 @@ use super::bridge::{
 };
 use super::dense::DenseSegment;
 #[cfg(feature = "offline")]
-use super::storage::{BackedSegmentRecord, OFFLINE_SEGMENT_PAYLOAD_BYTES};
+use super::storage::{BackedSegmentRecord, OFFLINE_SEGMENT_PAYLOAD_BYTES, coupled_payload_bytes};
 use crate::error::ValidationError;
 use crate::frame::{BodyVector, EcefPosition, EcefVelocity, OrientationEcefFromBody};
 use crate::math::UnitQuaternion;
@@ -65,7 +65,34 @@ pub(super) fn encode_offline_segment_record(
     }
     encode_offline_knot(target, start);
     encode_offline_knot(target, end);
-    if target.len() as u64 != OFFLINE_SEGMENT_PAYLOAD_BYTES {
+    let dimension = input.coupled.as_ref().map_or(0, |value| value.dimension());
+    if let Some(model) = &input.coupled {
+        target.extend_from_slice(&(dimension as u64).to_le_bytes());
+        target.extend_from_slice(&(model.state_dimension as u64).to_le_bytes());
+        for matrix in [
+            &model.continuous,
+            &model.noise_density,
+            &model.endpoint_joint,
+            &model.start_to_reference,
+            &model.end_to_reference,
+            &model.rate_mapping,
+        ] {
+            for value in matrix.iter() {
+                put_offline_f64(target, *value);
+            }
+        }
+        for id in &model.parameter_ids {
+            target.extend_from_slice(&id.to_le_bytes());
+        }
+        for value in core::iter::once(&model.duration_seconds)
+            .chain(model.reference_start_orientation.iter())
+            .chain(model.reference_body_rate.iter())
+            .chain(model.gyro_density.iter().flatten())
+        {
+            put_offline_f64(target, *value);
+        }
+    }
+    if target.len() as u64 != coupled_payload_bytes(dimension)? {
         return Err(ValidationError::CapacityExceeded);
     }
     Ok(())
@@ -118,7 +145,7 @@ pub(super) fn decode_offline_segment_record(
     bytes: &[u8],
     ordinal: usize,
 ) -> Result<BackedSegmentRecord, ValidationError> {
-    if bytes.len() as u64 != OFFLINE_SEGMENT_PAYLOAD_BYTES {
+    if (bytes.len() as u64) < OFFLINE_SEGMENT_PAYLOAD_BYTES {
         return Err(ValidationError::CapacityExceeded);
     }
     let mut cursor = OfflineDecodeCursor { bytes, position: 0 };
@@ -143,6 +170,40 @@ pub(super) fn decode_offline_segment_record(
     let integrated_rotation_body = cursor.array3()?;
     let start_decoded = cursor.knot()?;
     let end_decoded = cursor.knot()?;
+    let coupled = if cursor.position < bytes.len() {
+        let d = usize::try_from(cursor.u64()?).map_err(|_| ValidationError::CapacityExceeded)?;
+        let n = usize::try_from(cursor.u64()?).map_err(|_| ValidationError::CapacityExceeded)?;
+        if coupled_payload_bytes(d)? != bytes.len() as u64 || d == 0 {
+            return Err(ValidationError::CapacityExceeded);
+        }
+        let continuous = cursor.dynamic_matrix(d, d)?;
+        let noise_density = cursor.dynamic_matrix(d, d)?;
+        let endpoint_joint = cursor.dynamic_matrix(2 * d, 2 * d)?;
+        let start_to_reference = cursor.dynamic_matrix(d, d)?;
+        let end_to_reference = cursor.dynamic_matrix(d, d)?;
+        let rate_mapping = cursor.dynamic_matrix(3, d)?;
+        let mut parameter_ids = Vec::with_capacity(d);
+        for _ in 0..d {
+            parameter_ids.push(cursor.u64()?);
+        }
+        Some(Box::new(super::coupled::CoupledDenseBridge {
+            state_dimension: n,
+            continuous,
+            noise_density,
+            endpoint_joint,
+            start_to_reference,
+            end_to_reference,
+            rate_mapping,
+            parameter_ids,
+            duration_seconds: cursor.f64()?,
+            reference_start_orientation: cursor.array4()?,
+            reference_body_rate: cursor.array3()?,
+            gyro_density: cursor.matrix3()?,
+            cache: Default::default(),
+        }))
+    } else {
+        None
+    };
     if cursor.position != bytes.len() {
         return Err(ValidationError::IncompatibleDefinition);
     }
@@ -152,6 +213,7 @@ pub(super) fn decode_offline_segment_record(
     let start = start_decoded.into_knot(start_covariance)?;
     let end = end_decoded.into_knot(end_covariance)?;
     let input = DenseBridgeInput {
+        coupled,
         covariance_available,
         endpoint_joint_covariance,
         acceleration_spectral_density_ecef,
@@ -233,6 +295,17 @@ pub(super) struct OfflineDecodeCursor<'a> {
 
 #[cfg(feature = "offline")]
 impl OfflineDecodeCursor<'_> {
+    fn dynamic_matrix(
+        &mut self,
+        rows: usize,
+        columns: usize,
+    ) -> Result<nalgebra::DMatrix<f64>, ValidationError> {
+        let mut matrix = nalgebra::DMatrix::zeros(rows, columns);
+        for value in matrix.iter_mut() {
+            *value = self.f64()?;
+        }
+        Ok(matrix)
+    }
     pub(super) fn take<const N: usize>(&mut self) -> Result<[u8; N], ValidationError> {
         let end = self
             .position
@@ -381,11 +454,8 @@ pub(super) fn decode_validity(value: u8) -> Result<Validity, ValidationError> {
 #[cfg(feature = "offline")]
 pub(super) fn encode_gnss_state(value: GnssState) -> u8 {
     match value {
-        GnssState::Fixed => 0,
-        GnssState::Float => 1,
-        GnssState::Standalone => 2,
-        GnssState::Dgps => 3,
-        GnssState::Ppp => 4,
+        // Use a new tag so old readers cannot mistake generic health for RTK fixed.
+        GnssState::Healthy => 7,
         GnssState::Absent => 5,
         GnssState::Suspect => 6,
     }
@@ -394,11 +464,8 @@ pub(super) fn encode_gnss_state(value: GnssState) -> u8 {
 #[cfg(feature = "offline")]
 pub(super) fn decode_gnss_state(value: u8) -> Result<GnssState, ValidationError> {
     match value {
-        0 => Ok(GnssState::Fixed),
-        1 => Ok(GnssState::Float),
-        2 => Ok(GnssState::Standalone),
-        3 => Ok(GnssState::Dgps),
-        4 => Ok(GnssState::Ppp),
+        // Legacy positioning-mode tags all represented accepted GNSS evidence.
+        0..=4 | 7 => Ok(GnssState::Healthy),
         5 => Ok(GnssState::Absent),
         6 => Ok(GnssState::Suspect),
         _ => Err(ValidationError::IncompatibleDefinition),

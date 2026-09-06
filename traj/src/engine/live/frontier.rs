@@ -32,7 +32,9 @@ impl LiveSession<'_, '_> {
         let clock_boundary_reached = clock_boundary.is_some_and(|at| {
             let core = LiveCore::attach(&mut self.internal.core, &mut self.psram.history);
             core.status().is_ok_and(|status| {
-                status.corrected_frontier == Some(at) && status.corrected_state_time == at
+                status.corrected_frontier == Some(at)
+                    && status.corrected_state_time == at
+                    && status.published_frontier == Some(at)
             })
         });
         // A corrected-history capacity stop is resumed by the caller's next
@@ -71,7 +73,8 @@ impl LiveSession<'_, '_> {
         let should_reanchor = {
             let core = LiveCore::attach(&mut self.internal.core, &mut self.psram.history);
             let status = core.status().map_err(map_core_step_error)?;
-            status.corrected_frontier == Some(core.corrected_state().time)
+            core.reanchor_ready()
+                && status.corrected_frontier == Some(core.corrected_state().time)
                 && self
                     .reanchor_monitor
                     .observe(core.corrected_state().position_n)
@@ -111,47 +114,36 @@ impl LiveSession<'_, '_> {
             return Ok(None);
         }
         let anchor = self.anchor.ok_or(StepError::WorkspaceContract)?;
-        let mut evidence = self.last_gnss_evidence;
-        let mut quality_updates = report.gnss_quality_updates().peekable();
         let mut first = None;
         let mut last = None;
         loop {
             let segment = {
                 let mut core = LiveCore::attach(&mut self.internal.core, &mut self.psram.history);
-                core.pop_corrected_segment()
+                core.pop_corrected_segment_with_quality()
             };
-            let Some(segment) = segment else {
+            let Some((segment, start_evidence, end_evidence)) = segment else {
                 break;
             };
             let integrated_attitude_delta = segment.integrated_attitude_delta();
-            while quality_updates
-                .peek()
-                .is_some_and(|update| update.epoch <= segment.start.state.time)
-            {
-                evidence = quality_updates.next().map(Into::into);
-            }
+            // Each endpoint retains the evidence available at its forward
+            // epoch. The latest present-time evidence may be newer than
+            // these delayed, now-smoothed trajectory endpoints.
             let start_observability =
                 corrected_observability(segment.start, &anchor, &self.engine, self.heading_source)?;
             let start_quality = self.quality_at(
                 EstimateStage::Finalized,
                 segment.degraded,
                 segment.start.state.time,
-                evidence,
+                start_evidence.map(Into::into),
                 segment.degraded_input,
             );
-            while quality_updates
-                .peek()
-                .is_some_and(|update| update.epoch <= segment.end.state.time)
-            {
-                evidence = quality_updates.next().map(Into::into);
-            }
             let end_observability =
                 corrected_observability(segment.end, &anchor, &self.engine, self.heading_source)?;
             let end_quality = self.quality_at(
                 EstimateStage::Finalized,
                 segment.degraded,
                 segment.end.state.time,
-                evidence,
+                end_evidence.map(Into::into),
                 segment.degraded_input,
             );
             let start = trajectory_knot(
@@ -185,10 +177,9 @@ impl LiveSession<'_, '_> {
             first.get_or_insert(start.time);
             last = Some(end.time);
         }
-        for update in quality_updates {
-            evidence = Some(update.into());
+        if let Some(update) = report.gnss_quality_updates().last() {
+            self.commit_gnss_evidence(Some(update.into()));
         }
-        self.commit_gnss_evidence(evidence);
         first
             .zip(last)
             .map(|(start, end)| TimeSpan::new(start, end).map_err(StepError::InvalidObservation))
@@ -216,7 +207,7 @@ impl LiveSession<'_, '_> {
         self.predictor_gap = status.predictor_gap;
         self.predictor_degraded_input = status.predictor_degraded_input;
         Ok(PublicCoreStatus {
-            navigation_watermark: status.corrected_frontier,
+            navigation_watermark: status.published_frontier,
         })
     }
 

@@ -13,9 +13,7 @@ use crate::live::{
     EcefAnchor, EnqueueDisposition, GnssObservation, LiveCore, OrderKey, Scheduled,
     SharedMeasurementJacobians,
 };
-use crate::observation::{
-    GnssSolutionObservation, InputDisposition, ReceiverHealth, RtkState, SolutionClass,
-};
+use crate::observation::{GnssSolutionObservation, InputDisposition, ReceiverHealth};
 use crate::quality::{GnssState, Integrity, TimingQuality};
 use crate::time::{ObservationTime, SessionTime, TimingBasis};
 use crate::uncertainty::{Covariance3, MeasurementUncertainty};
@@ -111,10 +109,8 @@ impl LiveSession<'_, '_> {
             }
         }
 
-        let valid_position =
-            position.filter(|value| value.solution_class != SolutionClass::Invalid);
-        let valid_velocity =
-            velocity.filter(|value| value.solution_class != SolutionClass::Invalid);
+        let valid_position = position.filter(|value| value.valid);
+        let valid_velocity = velocity.filter(|value| value.valid);
         if valid_position.is_none() && valid_velocity.is_none() {
             self.diagnostics.gnss_updates_rejected =
                 self.diagnostics.gnss_updates_rejected.saturating_add(1);
@@ -319,7 +315,7 @@ impl LiveSession<'_, '_> {
                     )?,
                     shared_jacobians: shared,
                     receiver_healthy,
-                    quality_state: gnss_state(observation.rtk_state(), receiver_healthy),
+                    quality_state: gnss_state(receiver_healthy),
                     quality_timing: timing_quality(position.time),
                 },
             });
@@ -363,10 +359,7 @@ impl LiveSession<'_, '_> {
                         velocity_independent_timing_sigma_s: 0.0,
                         shared_jacobians: shared,
                         receiver_healthy: position_receiver_healthy,
-                        quality_state: gnss_state(
-                            observation.rtk_state(),
-                            position_receiver_healthy,
-                        ),
+                        quality_state: gnss_state(position_receiver_healthy),
                         quality_timing: timing_quality(position.time),
                     },
                 });
@@ -410,10 +403,7 @@ impl LiveSession<'_, '_> {
                         )?,
                         shared_jacobians: shared,
                         receiver_healthy: velocity_receiver_healthy,
-                        quality_state: gnss_state(
-                            observation.rtk_state(),
-                            velocity_receiver_healthy,
-                        ),
+                        quality_state: gnss_state(velocity_receiver_healthy),
                         quality_timing: timing_quality(velocity.time),
                     },
                 });
@@ -530,17 +520,11 @@ fn diagnostic_information_age_at<T: Copy>(
         .and_then(|age| age.checked_add(measurement_time.independent_one_sigma.as_ns()))
 }
 
-pub(super) fn gnss_state(state: RtkState, healthy: bool) -> GnssState {
-    if !healthy {
-        return GnssState::Suspect;
-    }
-    match state {
-        RtkState::Fixed => GnssState::Fixed,
-        RtkState::Float => GnssState::Float,
-        RtkState::Dgps => GnssState::Dgps,
-        RtkState::Ppp => GnssState::Ppp,
-        RtkState::Standalone => GnssState::Standalone,
-        RtkState::Invalid => GnssState::Suspect,
+pub(super) fn gnss_state(healthy: bool) -> GnssState {
+    if healthy {
+        GnssState::Healthy
+    } else {
+        GnssState::Suspect
     }
 }
 

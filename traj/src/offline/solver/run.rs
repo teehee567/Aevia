@@ -174,8 +174,11 @@ pub(crate) fn run_offline<S: EvidenceSource, K: ResultSink>(
         &scan.catalog.covariance,
         scan.maximum_records,
     )?;
-    let trajectory_store_bounds = Trajectory::offline_storage_bounds(maximum_segments)
-        .map_err(|_| ProcessError::ResourceLimit)?;
+    let trajectory_store_bounds = Trajectory::offline_storage_bounds_with_covariance(
+        maximum_segments,
+        state_dimension + scan.catalog.covariance.nrows() + 6,
+    )
+    .map_err(|_| ProcessError::ResourceLimit)?;
     let storage_plan =
         choose_offline_storage_plan(state_store_bounds, trajectory_store_bounds, limits)?;
     let total_work = scan

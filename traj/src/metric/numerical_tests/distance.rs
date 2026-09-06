@@ -19,6 +19,143 @@ use crate::{
     time::SessionTime,
 };
 
+fn push_curved_arc(trajectory: &mut crate::trajectory::Trajectory, index: i64, pieces: i64) {
+    let direction = if index % 2 == 0 { 1.0 } else { -1.0 };
+    let knot = |piece: i64| {
+        let u = piece as f64 / pieces as f64;
+        let mut knot = eastbound_knot(
+            index * 1_000_000_000 + piece * 1_000_000_000 / pieces,
+            0.0,
+            0.0,
+        );
+        knot.position_ecef = EcefPosition::new(
+            6_378_137.0 + index as f64 + u,
+            5.0 * direction * (u * u - u),
+            0.0,
+        )
+        .unwrap();
+        knot.velocity_ecef = EcefVelocity::new(1.0, direction * (10.0 * u - 5.0), 0.0).unwrap();
+        knot
+    };
+    for piece in 0..pieces {
+        trajectory
+            .push_hermite_segment(knot(piece), knot(piece + 1))
+            .unwrap();
+    }
+}
+
+#[test]
+fn distance_tolerance_applies_to_the_whole_multisegment_measurement() {
+    for pieces in [1, 4] {
+        let mut trajectory = test_trajectory();
+        for index in 0..16 {
+            push_curved_arc(&mut trajectory, index, pieces);
+        }
+        let tolerance = 1.0e-5;
+        let mut plan = MetricPlan::new(310);
+        plan.push(MetricDefinition::Distance(DistancePlan {
+            definition: MetricDefinitionId::new(36),
+            quantity: DistanceQuantity::Spatial3d,
+            reference_point: ReferencePointId::new(1),
+            absolute_tolerance_m: tolerance,
+            relative_tolerance: 0.0,
+        }))
+        .unwrap();
+        let results = plan.evaluate(&trajectory).unwrap();
+        let MetricResultValue::Distance(report) = results.as_slice()[0].value else {
+            panic!("distance expected")
+        };
+        assert!(
+            report.numerical_error_m <= tolerance,
+            "reported error {} exceeds whole-distance tolerance {}",
+            report.numerical_error_m,
+            tolerance
+        );
+        let expected = 16.0 * (5.0 * 26.0_f64.sqrt() + 5.0_f64.asinh()) / 10.0;
+        assert!((report.metres - expected).abs() <= tolerance);
+    }
+}
+
+#[test]
+fn cumulative_live_distance_consumes_one_absolute_error_allowance() {
+    use super::super::{
+        distance::live_distance_report,
+        numerical::{MetricEvaluationLimits, NumericalWorkBudget},
+    };
+    let plan = DistancePlan {
+        definition: MetricDefinitionId::new(37),
+        quantity: DistanceQuantity::Spatial3d,
+        reference_point: ReferencePointId::new(1),
+        absolute_tolerance_m: 1.0e-5,
+        relative_tolerance: 0.0,
+    };
+    let mut previous = None;
+    for index in 0..16 {
+        let mut trajectory = test_trajectory();
+        push_curved_arc(&mut trajectory, index, 1);
+        let limits = MetricEvaluationLimits::default();
+        let report = live_distance_report(
+            &trajectory,
+            plan,
+            previous,
+            SessionTime::from_ns(index * 1_000_000_000),
+            SessionTime::from_ns((index + 1) * 1_000_000_000),
+            true,
+            limits,
+            &mut NumericalWorkBudget::from_limits(limits),
+        )
+        .unwrap();
+        assert!(report.numerical_error_m <= plan.absolute_tolerance_m);
+        previous = Some(report);
+    }
+    let expected = 16.0 * (5.0 * 26.0_f64.sqrt() + 5.0_f64.asinh()) / 10.0;
+    assert!((previous.unwrap().metres - expected).abs() <= plan.absolute_tolerance_m);
+}
+
+#[test]
+fn signed_distance_relative_allowance_uses_the_net_measurement() {
+    use crate::{
+        frame::OrientationEcefFromBody,
+        math::{UnitQuaternion, Vector3},
+    };
+    let mut trajectory = test_trajectory();
+    let mut start = eastbound_knot(0, 0.0, 0.0);
+    start.position_ecef = EcefPosition::new(6_378_137.0, 0.0, 0.0).unwrap();
+    start.velocity_ecef = EcefVelocity::new(1_000.0, 0.0, 0.0).unwrap();
+    let mut middle = start;
+    middle.time = SessionTime::from_ns(1_000_000_000);
+    middle.position_ecef = EcefPosition::new(6_379_137.0, 0.0, 0.0).unwrap();
+    middle.orientation_ecef_from_body = OrientationEcefFromBody::from_quaternion(
+        UnitQuaternion::from_rotation_vector(Vector3::new(0.0, 0.0, 8.0).unwrap()).unwrap(),
+    );
+    trajectory
+        .push_rolling_imu_segment(start, middle, [0.0, 0.0, 8.0])
+        .unwrap();
+    // The signed body distance of the first rotating segment is
+    // 1000*sin(8)/8. The second continuous segment cancels that distance.
+    let displacement = -1_000.0 * 8.0_f64.sin() / (8.0 * 8.0_f64.cos());
+    let mut end = middle;
+    end.time = SessionTime::from_ns(2_000_000_000);
+    end.position_ecef = EcefPosition::new(6_379_137.0 + displacement, 0.0, 0.0).unwrap();
+    end.velocity_ecef = EcefVelocity::new(2.0 * displacement - 1_000.0, 0.0, 0.0).unwrap();
+    trajectory.push_hermite_segment(middle, end).unwrap();
+    let mut plan = MetricPlan::new(311);
+    plan.push(MetricDefinition::Distance(DistancePlan {
+        definition: MetricDefinitionId::new(38),
+        quantity: DistanceQuantity::BodyLongitudinalSigned,
+        reference_point: ReferencePointId::new(1),
+        absolute_tolerance_m: 1.0e-7,
+        relative_tolerance: 0.1,
+    }))
+    .unwrap();
+    let results = plan.evaluate(&trajectory).unwrap();
+    let MetricResultValue::Distance(report) = results.as_slice()[0].value else {
+        panic!("distance expected")
+    };
+    assert!(report.numerical_error_m <= 1.0e-7_f64.max(0.1 * report.metres.abs()));
+    assert!(report.metres.abs() <= 1.0e-7);
+}
+
 #[test]
 fn continuous_distance_is_independent_of_export_sampling() {
     let trajectory = eastbound_trajectory(10.0, 10.0, 10.0);

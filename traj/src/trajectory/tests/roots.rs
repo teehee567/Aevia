@@ -1,6 +1,38 @@
 use super::*;
 
 #[test]
+fn offset_gate_resolves_small_displacement_at_large_ecef_anchor() {
+    let mut trajectory = trajectory();
+    let lease = trajectory.segment_lease(0).unwrap();
+    let mut start = lease.segment().start;
+    drop(lease);
+    trajectory.clear_segments_preserving_reference_points();
+    start.position_ecef = EcefPosition::new(6_378_137.0, 0.0, 0.0).unwrap();
+    start.velocity_ecef = EcefVelocity::new(0.0, 0.0, 0.0).unwrap();
+    start.orientation_ecef_from_body =
+        OrientationEcefFromBody::from_quaternion(UnitQuaternion::IDENTITY);
+    let mut end = start;
+    end.time = SessionTime::from_ns(start.time.as_ns() + 1_000_000_000);
+    end.orientation_ecef_from_body = OrientationEcefFromBody::from_quaternion(
+        UnitQuaternion::from_rotation_vector(Vector3::new(0.0, 0.0, 1.0).unwrap()).unwrap(),
+    );
+    trajectory.push_hermite_segment(start, end).unwrap();
+    let center = 6_378_137.8;
+    let roots = trajectory
+        .gate_roots(
+            0,
+            ReferencePointId::new(2),
+            [center, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            1.0e-9,
+            1.0e-12,
+        )
+        .unwrap();
+    assert_eq!(roots.len(), 1);
+    assert!((roots[0] - (center - 6_378_137.0_f64).acos()).abs() <= 1.0e-9);
+}
+
+#[test]
 fn offset_gate_isolator_finds_narrow_rotational_pair() {
     let frame = TerrestrialFrame::new(
         FrameId::new(1),
@@ -144,6 +176,33 @@ fn interval_isolator_budget_exhaustion_is_not_false_no_root() {
             unresolved,
         ),
         Err(MetricError::EvaluationBudgetExceeded)
+    );
+}
+
+#[test]
+fn interval_midpoint_zero_is_not_proof_of_an_endpoint_root() {
+    let unresolved = |_lower: f64, _upper: f64| {
+        Ok(ScalarEnclosure {
+            value_estimate: 0.0,
+            derivative_estimate: 1.0,
+            value: OutwardInterval::new(-1.0, 1.0)?,
+            derivative: OutwardInterval::new(0.5, 1.5)?,
+        })
+    };
+    assert_eq!(
+        isolate_enclosed_roots(
+            0.5,
+            0.5,
+            1.0e-9,
+            1.0e-12,
+            EndpointOwnership {
+                lower: true,
+                upper: true
+            },
+            8,
+            unresolved
+        ),
+        Err(MetricError::AmbiguousRoot)
     );
 }
 

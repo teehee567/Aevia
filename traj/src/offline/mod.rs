@@ -4,10 +4,9 @@
 //! transactional result sink, and the completed engine-owned trajectory.  All
 //! matrices, solver state, and seekable state-store handles remain private.
 //!
-//! Offline smoothing currently requires each nonzero interval-average IMU
-//! sample covariance to span at most one stored propagation edge. A GNSS or
-//! clock cut inside such a support returns `ProcessError::CapabilityUnavailable`;
-//! captured live replay retains the sample latent and supports those cuts.
+//! Offline smoothing retains each interval-average IMU sample's six error
+//! coordinates through asynchronous measurement and clock cuts, including
+//! posterior correlations with navigation and static calibration parameters.
 //! Missing IMU support also requires an explicit supported reinitialization.
 //! Dense means remain available when the full inertial covariance cannot be
 //! represented by the offline conditional bridge; interior uncertainty is
@@ -29,5 +28,5 @@ pub use ports::{
 pub use solver::{OfflineRun, OfflineRunSummary, PosteriorSamplingAvailability};
 
 pub(crate) use ports::{CapturedTranscriptDigestV1, SinkTransaction};
-pub(crate) use solver::{drive_captured_replay, run_offline};
+pub(crate) use solver::{PsdSolver, drive_captured_replay, run_offline};
 pub(crate) use store::{FIXED_RECORD_HEADER_BYTES, FixedRecordStore, FixedRecordStoreKind};

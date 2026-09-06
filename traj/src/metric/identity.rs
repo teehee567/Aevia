@@ -10,6 +10,69 @@ use crate::{
     time::TimeSpan,
 };
 
+pub(super) fn gate_definition_digest_v1(
+    gate: &super::definition::FiniteGate,
+) -> crate::ids::ContentDigestV1 {
+    use super::definition::{CrossingDirection, GateSurveyUncertainty};
+    use sha2::{Digest, Sha256};
+
+    let mut digest = Sha256::new();
+    digest.update(b"aevia.finite-gate.v1\0");
+    digest.update(gate.id.get().to_le_bytes());
+    digest.update(gate.frame.get().to_le_bytes());
+    for value in gate
+        .center_ecef_m
+        .iter()
+        .chain(gate.normal_ecef.iter())
+        .chain(gate.width_axis_ecef.iter())
+        .chain(gate.height_axis_ecef.iter())
+        .copied()
+        .chain([
+            gate.width_m,
+            gate.height_m,
+            gate.minimum_normal_speed_mps,
+            gate.rearm_distance_m,
+        ])
+    {
+        digest.update(
+            (if value == 0.0 { 0.0 } else { value })
+                .to_bits()
+                .to_le_bytes(),
+        );
+    }
+    digest.update([match gate.direction {
+        CrossingDirection::NegativeToPositive => 0,
+        CrossingDirection::PositiveToNegative => 1,
+        CrossingDirection::Either => 2,
+    }]);
+    digest.update(gate.minimum_crossing_interval.as_ns().to_le_bytes());
+    match gate.survey_uncertainty {
+        GateSurveyUncertainty::Exact => digest.update([0]),
+        GateSurveyUncertainty::Unspecified => digest.update([1]),
+        GateSurveyUncertainty::UnspecifiedVariance(variance) => {
+            digest.update([2]);
+            digest.update(
+                (if variance == 0.0 { 0.0 } else { variance })
+                    .to_bits()
+                    .to_le_bytes(),
+            );
+        }
+        GateSurveyUncertainty::Independent(variance) => {
+            digest.update([3]);
+            digest.update(
+                (if variance == 0.0 { 0.0 } else { variance })
+                    .to_bits()
+                    .to_le_bytes(),
+            );
+        }
+        GateSurveyUncertainty::Shared(id) => {
+            digest.update([4]);
+            digest.update(id.get().to_le_bytes());
+        }
+    }
+    crate::ids::ContentDigestV1::from_bytes(digest.finalize().into())
+}
+
 /// Encodes the engine-owned canonical v1 identity of one metric value.
 ///
 /// Result artifact codecs intentionally live in a separate package. Captured

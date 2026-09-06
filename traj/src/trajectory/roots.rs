@@ -1,7 +1,9 @@
 //! Budgeted interval root isolation and endpoint ownership.
 
 use super::MAX_SEGMENT_ROOTS;
-use super::math::{midpoint, upper_add, upper_mul};
+use super::math::midpoint;
+#[cfg(test)]
+use super::math::{upper_add, upper_mul};
 use crate::metric::{MetricError, NumericalWorkBudget};
 use heapless::Vec as FixedVec;
 
@@ -14,10 +16,8 @@ pub(super) const MAX_ROOT_ISOLATION_STACK: usize = 96;
 /// unproductive split once adjacent floating-point parameters are reached.
 pub(super) const MAX_ROOT_ISOLATION_DEPTH: u8 = 64;
 
-/// Closed, conservatively expanded scalar interval used by the current native
-/// `f64` Taylor backend. This is not the plan's qualified `EnclosureV1`; live
-/// preflight keeps non-polynomial uses unavailable unless the exact backend is
-/// covered by a measured numeric attestation.
+/// Scalar interval returned by the outward expression graph. Live preflight
+/// requires qualification evidence for its exact backend and target.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(super) struct OutwardInterval {
     pub(super) lower: f64,
@@ -33,9 +33,16 @@ impl OutwardInterval {
         Ok(Self { lower, upper })
     }
 
+    #[cfg(test)]
     pub(super) fn around(center: f64, radius: f64) -> Result<Self, MetricError> {
         if !center.is_finite() || !radius.is_finite() || radius < 0.0 {
             return Err(MetricError::NumericalFailure);
+        }
+        if radius == 0.0 {
+            return Ok(Self {
+                lower: center,
+                upper: center,
+            });
         }
         Ok(Self {
             lower: (center - radius).next_down(),
@@ -45,6 +52,10 @@ impl OutwardInterval {
 
     pub(super) fn intersects_zero_band(self, tolerance: f64) -> bool {
         self.lower <= tolerance && self.upper >= -tolerance
+    }
+
+    pub(super) fn contained_in_zero_band(self, tolerance: f64) -> bool {
+        self.lower >= -tolerance && self.upper <= tolerance
     }
 
     pub(super) fn strict_sign_outside(self, tolerance: f64) -> i8 {
@@ -74,7 +85,9 @@ pub(super) struct ScalarJet {
     pub(super) derivative: f64,
     pub(super) second_derivative: f64,
     pub(super) value_roundoff: f64,
+    #[cfg_attr(not(test), allow(dead_code))]
     pub(super) derivative_roundoff: f64,
+    #[cfg_attr(not(test), allow(dead_code))]
     pub(super) second_derivative_roundoff: f64,
 }
 
@@ -91,6 +104,7 @@ pub(super) struct EndpointOwnership {
     pub(super) upper: bool,
 }
 
+#[cfg(test)]
 pub(super) fn taylor_enclosure(
     jet: ScalarJet,
     supplied_second_derivative_bound: f64,
@@ -130,12 +144,26 @@ pub(super) fn taylor_enclosure(
     Ok(ScalarEnclosure {
         value_estimate: jet.value,
         derivative_estimate: jet.derivative,
-        value: OutwardInterval::around(jet.value, value_radius)?,
-        derivative: OutwardInterval::around(jet.derivative, derivative_radius)?,
+        value: OutwardInterval::around(
+            jet.value,
+            if lower == upper {
+                jet.value_roundoff
+            } else {
+                value_radius
+            },
+        )?,
+        derivative: OutwardInterval::around(
+            jet.derivative,
+            if lower == upper {
+                jet.derivative_roundoff
+            } else {
+                derivative_radius
+            },
+        )?,
     })
 }
 
-/// Bounded interval branch-and-bound for the private native Taylor backend. A
+/// Bounded interval branch-and-bound for the outward expression backend. A
 /// cell is discarded only after its expanded value interval excludes the
 /// configured zero band. A monotonic cell may be refined once opposite
 /// endpoint signs prove a root. Every other unresolved cell is subdivided or
@@ -262,11 +290,11 @@ where
                 push_owned_root(&mut roots, root, lower, upper, x_tolerance, ownership)?;
                 continue;
             }
-            if left.value_estimate == 0.0 {
+            if left.value.contained_in_zero_band(0.0) {
                 push_owned_root(&mut roots, cell.lower, lower, upper, x_tolerance, ownership)?;
                 continue;
             }
-            if right.value_estimate == 0.0 {
+            if right.value.contained_in_zero_band(0.0) {
                 push_owned_root(&mut roots, cell.upper, lower, upper, x_tolerance, ownership)?;
                 continue;
             }
@@ -332,8 +360,8 @@ where
                     .total_cmp(&right.1.value_estimate.abs())
             })
             .ok_or(MetricError::NumericalFailure)?;
-        let exact_point_zero = candidate.1.value_estimate == 0.0;
-        let stationary_near_zero = candidate.1.value_estimate.abs() <= value_tolerance
+        let exact_point_zero = candidate.1.value.contained_in_zero_band(0.0);
+        let stationary_near_zero = candidate.1.value.contained_in_zero_band(value_tolerance)
             && candidate.1.derivative.intersects_zero_band(0.0);
         if exact_point_zero || stationary_near_zero {
             push_owned_root(
@@ -360,7 +388,7 @@ where
                 budget,
             )?;
             let contact = evaluate_root_oracle(&oracle, stationary, stationary, budget)?;
-            if contact.value_estimate.abs() <= value_tolerance {
+            if contact.value.contained_in_zero_band(value_tolerance) {
                 push_owned_root(&mut roots, stationary, lower, upper, x_tolerance, ownership)?;
                 continue;
             }
@@ -436,10 +464,10 @@ where
     };
     let mut left_sign = interval_of(left).strict_sign_outside(value_tolerance);
     let right_sign = interval_of(right).strict_sign_outside(value_tolerance);
-    if !derivative && left.value_estimate.abs() <= value_tolerance {
+    if !derivative && left.value.contained_in_zero_band(value_tolerance) {
         return Ok(lower);
     }
-    if !derivative && right.value_estimate.abs() <= value_tolerance {
+    if !derivative && right.value.contained_in_zero_band(value_tolerance) {
         return Ok(upper);
     }
     if left_sign * right_sign >= 0 {
@@ -452,7 +480,7 @@ where
             break;
         }
         let center = evaluate_root_oracle(oracle, center_parameter, center_parameter, budget)?;
-        if estimate_of(center).abs() <= value_tolerance {
+        if interval_of(center).contained_in_zero_band(value_tolerance) {
             return Ok(center_parameter);
         }
         let center_sign = interval_of(center).strict_sign_outside(value_tolerance);
@@ -487,9 +515,7 @@ pub(super) fn maybe_push_endpoint(
     x_tolerance: f64,
     ownership: EndpointOwnership,
 ) -> Result<(), MetricError> {
-    if enclosure.value_estimate.abs() <= value_tolerance
-        && enclosure.value.intersects_zero_band(value_tolerance)
-    {
+    if enclosure.value.contained_in_zero_band(value_tolerance) {
         push_owned_root(roots, candidate, lower, upper, x_tolerance, ownership)?;
     }
     Ok(())

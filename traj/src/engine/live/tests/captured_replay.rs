@@ -8,6 +8,134 @@ fn prepared_captured_replay_runs_live_core_and_commits_complete_result() {
 }
 
 #[test]
+fn captured_replay_matches_smoothed_publication_and_bounded_finish_tail() {
+    with_large_stack(|| {
+        let terminal = SessionTime::from_ns(170_000_000);
+        let span = TimeSpan::new(SessionTime::ZERO, terminal).unwrap();
+        let mut spec = processing_spec_for_span(span);
+        spec.engine.navigation_profile.smoothing_lag = DurationNs::from_ns(100_000_000);
+        spec.engine.navigation_profile.revision += 1;
+        spec.engine.navigation_profile.digest = digest(84);
+        spec.engine.digest = digest(85);
+        let QualificationStatus::Qualified {
+            specification,
+            report,
+        } = spec.engine.qualification
+        else {
+            unreachable!();
+        };
+        let mut report = *report;
+        report.configuration_digest = spec.engine.digest;
+        report.report_digest = digest(86);
+        spec.engine.qualification = QualificationStatus::Qualified {
+            specification,
+            report: std::boxed::Box::leak(std::boxed::Box::new(report)),
+        };
+
+        let mut observations = replay_observations().to_vec();
+        observations.push(position_update(
+            2,
+            25_000_000,
+            0.0,
+            healthy_at(25_000_000),
+            None,
+        ));
+        for time_ns in (35_000_000..=terminal.as_ns()).step_by(5_000_000) {
+            if time_ns == 150_000_000 {
+                // This later accepted fix revisits already-retained states
+                // before a sequence of bounded finish calls flushes the tail.
+                observations.push(position_update(
+                    3,
+                    145_000_000,
+                    0.05,
+                    healthy_at(145_000_000),
+                    None,
+                ));
+            }
+            observations.push(stationary_imu((time_ns / 5_000_000) as u64, time_ns));
+        }
+        let (contract, steps, finishes, captured_summary) =
+            recorded_call_sequence(&spec, &observations, false);
+        assert!(captured_summary.diagnostics.gnss_updates_fused >= 2);
+        assert!(finishes.len() > 1);
+        assert!(
+            finishes[..finishes.len() - 1]
+                .iter()
+                .all(|call| !call.expected_complete && call.expected_summary_digest.is_none())
+        );
+        assert_eq!(captured_summary.terminal_time, Some(terminal));
+
+        let mut events = vec![
+            EvidenceEvent::ReplayContract {
+                record_sequence: 0,
+                contract,
+            },
+            EvidenceEvent::ClockModel {
+                record_sequence: 1,
+                model: ClockModelEvidence {
+                    model: ClockModelId::new(1),
+                    segment: ClockSegmentId::new(1),
+                    validity: span,
+                    reference_time: SessionTime::ZERO,
+                    offset_ns: 0.0,
+                    fractional_drift: 0.0,
+                    covariance_upper: [1.0, 0.0, 1.0],
+                    cross_covariance_with_prior: &[0.0; 12],
+                },
+            },
+        ];
+        for (observation, call) in observations.iter().zip(&steps) {
+            events.push(EvidenceEvent::Observation {
+                record_sequence: events.len() as u64,
+                observation,
+            });
+            events.push(EvidenceEvent::LiveStepCall {
+                record_sequence: events.len() as u64,
+                call: *call,
+            });
+        }
+        events.push(EvidenceEvent::LiveStepCall {
+            record_sequence: events.len() as u64,
+            call: *steps.last().unwrap(),
+        });
+        for finish in finishes {
+            events.push(EvidenceEvent::LiveFinishCall {
+                record_sequence: events.len() as u64,
+                call: finish,
+            });
+        }
+        let terminal_record_sequence = events.len() as u64;
+        events.push(EvidenceEvent::End {
+            record_sequence: terminal_record_sequence,
+            end: EvidenceEnd {
+                span,
+                terminal_record_sequence,
+                source_logical_digest: digest(50),
+            },
+        });
+        let manifest = captured_manifest(&spec, contract, events.len() as u64);
+        let prepared = TrajectoryEngine::process(spec)
+            .preflight(manifest, offline_limits())
+            .unwrap();
+        let mut source = SliceEvidenceSource::new(manifest, &events);
+        let mut sink = RecordingSink::default();
+        let result = prepared.run(&mut source, &mut sink, run_control()).unwrap();
+
+        // Replay validates every recorded update, completion flag and final
+        // summary digest before the transaction becomes visible.
+        assert_eq!(result.trajectory.span().unwrap().end(), terminal);
+        assert_eq!(sink.backend, Some(ProcessingLevel::CapturedReplay));
+        assert_eq!(sink.commits, 1);
+        assert_eq!(sink.aborts, 0);
+        assert_eq!(
+            sink.metric_results,
+            usize::from(captured_summary.finalized_metric_results)
+        );
+        assert_eq!(sink.states, result.summary.state_count);
+    });
+}
+
+#[test]
 fn process_preflight_rejects_a_manifest_for_a_different_selection_set() {
     let (spec, mut manifest, _) = replay_fixture(false);
     manifest.normalization_digest = digest(51);

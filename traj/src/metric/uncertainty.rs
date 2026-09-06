@@ -3,7 +3,7 @@
 #[cfg(any(test, feature = "offline"))]
 use super::definition::DistancePlan;
 use super::{
-    definition::{FiniteGate, SpeedQuantity},
+    definition::{FiniteGate, GateSurveyUncertainty, SpeedQuantity},
     geometry::{add, dot, norm, scale, sub},
     report::GateCrossingReport,
 };
@@ -68,10 +68,39 @@ pub(crate) struct EventTimeSensitivity {
     pub(crate) state: StateSensitivity,
     pub(crate) gate: Option<GateId>,
     pub(crate) gate_survey_coefficient_s_per_m: f64,
-    pub(crate) gate_survey_variance_m2: Option<f64>,
+    /// Shared ECEF survey derivative is `-state.position`; independent scalar
+    /// survey errors use `gate_survey_coefficient_s_per_m` and the physical gate ID.
+    pub(crate) gate_survey_uncertainty: GateSurveyUncertainty,
 }
 
 pub(crate) trait MetricUncertaintyProvider {
+    /// Variance of a value evaluated at an uncertain event time. Keeping the
+    /// fixed-time derivative separate preserves its correlation with the
+    /// event's survey and trajectory terms.
+    fn event_value_variance(
+        &mut self,
+        trajectory: &Trajectory,
+        event: &EventTimeSensitivity,
+        fixed_time: StateSensitivity,
+        event_slope: f64,
+    ) -> FieldValue<f64> {
+        let covariance = match self.kinematic_covariance_at(
+            trajectory,
+            event.segment_index,
+            event.parameter,
+            event.reference_point,
+        ) {
+            Ok(value) => value,
+            Err(reason) => return FieldValue::Unavailable(reason),
+        };
+        let result =
+            projected_state_variance(covariance, fixed_time.add(event.state.scaled(event_slope)))
+                .and_then(|variance| {
+                    independent_gate_survey_variance(event)
+                        .map(|survey| variance + event_slope.powi(2) * survey)
+                });
+        result.map_or_else(FieldValue::Unavailable, FieldValue::Available)
+    }
     fn kinematic_covariance_at(
         &mut self,
         trajectory: &Trajectory,
@@ -92,9 +121,9 @@ pub(crate) trait MetricUncertaintyProvider {
     /// Projects one complete implicit-event sensitivity through the retained
     /// joint model. Host smoothers override this operation so an interior
     /// event can use both dense-segment endpoints and their shared-parameter
-    /// cross terms. The current public gate model does not declare survey
-    /// independence or expose a stable shared-parameter identity, so the
-    /// marginal-only adapter accepts only an exact (zero-variance) survey.
+    /// cross terms. The marginal-only adapter also accepts an explicitly
+    /// independent scalar survey; shared catalog parameters require a provider
+    /// retaining their covariance with navigation.
     fn event_time_variance_s2(
         &mut self,
         trajectory: &Trajectory,
@@ -113,15 +142,9 @@ pub(crate) trait MetricUncertaintyProvider {
             Ok(value) => value,
             Err(reason) => return FieldValue::Unavailable(reason),
         };
-        let survey_variance = match (event.gate, event.gate_survey_variance_m2) {
-            (Some(_), Some(0.0)) => 0.0,
-            (Some(_), Some(_)) => {
-                return FieldValue::Unavailable(UnavailableReason::MissingCorrelation);
-            }
-            (Some(_), None) => {
-                return FieldValue::Unavailable(UnavailableReason::MissingUncertainty);
-            }
-            (None, _) => 0.0,
+        let survey_variance = match independent_gate_survey_variance(event) {
+            Ok(value) => value,
+            Err(reason) => return FieldValue::Unavailable(reason),
         };
         FieldValue::Available(state_variance + survey_variance)
     }
@@ -139,6 +162,30 @@ pub(crate) trait MetricUncertaintyProvider {
     }
 }
 
+fn independent_gate_survey_variance(
+    event: &EventTimeSensitivity,
+) -> Result<f64, UnavailableReason> {
+    if event.gate.is_none() {
+        return Ok(0.0);
+    }
+    let variance = match event.gate_survey_uncertainty {
+        GateSurveyUncertainty::Exact => 0.0,
+        GateSurveyUncertainty::Independent(variance) => variance,
+        GateSurveyUncertainty::Unspecified => return Err(UnavailableReason::MissingUncertainty),
+        GateSurveyUncertainty::UnspecifiedVariance(_) | GateSurveyUncertainty::Shared(_) => {
+            return Err(UnavailableReason::MissingCorrelation);
+        }
+    };
+    if !variance.is_finite() || variance < 0.0 {
+        return Err(UnavailableReason::MissingUncertainty);
+    }
+    let projected = event.gate_survey_coefficient_s_per_m.powi(2) * variance;
+    if !projected.is_finite() {
+        return Err(UnavailableReason::IllConditioned);
+    }
+    Ok(projected)
+}
+
 /// Shared survey contribution for two events on the same physical gate. A
 /// full provider adds this to its retained trajectory/shared-parameter cross
 /// terms; returning this term alone as the complete event covariance would be
@@ -149,11 +196,19 @@ pub(crate) fn shared_gate_survey_time_covariance_s2(
     second: &EventTimeSensitivity,
 ) -> Option<f64> {
     let gate = first.gate?;
+    let (
+        GateSurveyUncertainty::Independent(first_variance),
+        GateSurveyUncertainty::Independent(second_variance),
+    ) = (
+        first.gate_survey_uncertainty,
+        second.gate_survey_uncertainty,
+    )
+    else {
+        return None;
+    };
     if second.gate != Some(gate) {
         return None;
     }
-    let first_variance = first.gate_survey_variance_m2?;
-    let second_variance = second.gate_survey_variance_m2?;
     if first_variance != second_variance {
         return None;
     }
@@ -210,7 +265,7 @@ pub(super) fn gate_event_sensitivity(
         },
         gate: Some(gate.id),
         gate_survey_coefficient_s_per_m: derivative.recip(),
-        gate_survey_variance_m2: gate.survey_variance_normal_m2,
+        gate_survey_uncertainty: gate.survey_uncertainty,
     })
 }
 
@@ -236,7 +291,7 @@ pub(super) fn speed_event_sensitivity(
         state: gradient.scaled(-slope_mps2.recip()),
         gate: None,
         gate_survey_coefficient_s_per_m: 0.0,
-        gate_survey_variance_m2: None,
+        gate_survey_uncertainty: GateSurveyUncertainty::Exact,
     })
 }
 
@@ -284,26 +339,10 @@ pub(super) fn gate_crossing_speed_one_sigma(
         Ok(value) => value,
         Err(reason) => return FieldValue::Unavailable(reason),
     };
-    let total = fixed_time.add(event.state.scaled(speed_slope_mps2));
-    let covariance = match provider.kinematic_covariance_at(
-        trajectory,
-        event.segment_index,
-        event.parameter,
-        event.reference_point,
-    ) {
-        Ok(value) => value,
-        Err(reason) => return FieldValue::Unavailable(reason),
-    };
-    let state_variance = match projected_state_variance(covariance, total) {
-        Ok(value) => value,
-        Err(reason) => return FieldValue::Unavailable(reason),
-    };
-    let survey_variance = match event.gate_survey_variance_m2 {
-        Some(0.0) => 0.0,
-        Some(_) => return FieldValue::Unavailable(UnavailableReason::MissingCorrelation),
-        None => return FieldValue::Unavailable(UnavailableReason::MissingUncertainty),
-    };
-    sigma_from_variance(state_variance + survey_variance)
+    match provider.event_value_variance(trajectory, &event, fixed_time, speed_slope_mps2) {
+        FieldValue::Available(variance) => sigma_from_variance(variance),
+        FieldValue::Unavailable(reason) => FieldValue::Unavailable(reason),
+    }
 }
 
 pub(super) fn speed_target_uncertainty(

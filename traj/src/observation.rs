@@ -277,53 +277,6 @@ pub enum ImuIntegrationEligibility {
     RejectSpecificForce,
 }
 
-/// Receiver method used to produce a velocity vector.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum VelocityMethod {
-    /// Receiver Doppler solution.
-    Doppler,
-    /// Time-differenced carrier phase.
-    Tdcp,
-    /// Differenced position solutions.
-    DifferencedPvt,
-    /// Receiver did not identify the method.
-    Unknown,
-}
-
-/// Receiver solution class for a position or velocity field.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum SolutionClass {
-    /// Carrier-phase integer-fixed solution.
-    RtkFixed,
-    /// Carrier-phase float solution.
-    RtkFloat,
-    /// Code-based differential solution.
-    Dgps,
-    /// Precise point positioning solution.
-    Ppp,
-    /// Standalone receiver solution.
-    Standalone,
-    /// Field is explicitly invalid.
-    Invalid,
-}
-
-/// Receiver-wide RTK state retained independently from field solution classes.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum RtkState {
-    /// Integer-fixed RTK.
-    Fixed,
-    /// Float RTK.
-    Float,
-    /// Differential code solution.
-    Dgps,
-    /// Precise point positioning.
-    Ppp,
-    /// Standalone solution.
-    Standalone,
-    /// No valid positioning solution.
-    Invalid,
-}
-
 /// Receiver health reported by the accepted firmware profile.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ReceiverHealth {
@@ -343,19 +296,19 @@ pub struct GnssPosition {
     /// Antenna reference-point ECEF position in metres.
     pub value: EcefPosition,
     /// Position measurement epoch, independent of velocity time.
+    /// The caller must account for receiver latency in the effective time.
     pub time: ObservationTime,
     /// Named terrestrial frame realization and epoch.
     pub frame: FrameId,
     /// Full/diagonal covariance or configured model.
     pub uncertainty: MeasurementUncertainty<Covariance3>,
-    /// Receiver position solution class.
-    pub solution_class: SolutionClass,
-    /// Receiver-reported position latency when available.
-    pub receiver_latency: Option<DurationNs>,
+    /// Whether the prepared measurement is valid for fusion.
+    /// Invalid fields remain recordable but are never used by the estimator.
+    pub valid: bool,
 }
 
 impl GnssPosition {
-    /// Validates checked effective-time arithmetic. Invalid solution classes
+    /// Validates checked effective-time arithmetic. Invalid measurements
     /// remain representable evidence and are rejected by fusion policy.
     pub fn validate(self) -> Result<Self, ValidationError> {
         self.time.effective_time()?;
@@ -369,50 +322,24 @@ pub struct GnssVelocity {
     /// Antenna reference-point ECEF vector velocity in metres per second.
     pub value: EcefVelocity,
     /// Velocity measurement epoch, independent of position time.
+    /// The caller must account for receiver latency in the effective time.
     pub time: ObservationTime,
     /// Named terrestrial frame realization and epoch.
     pub frame: FrameId,
     /// Full/diagonal covariance or configured model.
     pub uncertainty: MeasurementUncertainty<Covariance3>,
-    /// Receiver velocity solution class.
-    pub solution_class: SolutionClass,
-    /// How the receiver obtained this vector velocity.
-    pub method: VelocityMethod,
-    /// Receiver-reported velocity latency when available.
-    pub receiver_latency: Option<DurationNs>,
+    /// Whether the prepared measurement is valid for fusion.
+    /// Invalid fields remain recordable but are never used by the estimator.
+    pub valid: bool,
 }
 
 impl GnssVelocity {
-    /// Validates checked effective-time arithmetic. Invalid solution classes
+    /// Validates checked effective-time arithmetic. Invalid measurements
     /// remain representable evidence and are rejected by fusion policy.
     pub fn validate(self) -> Result<Self, ValidationError> {
         self.time.effective_time()?;
         Ok(self)
     }
-}
-
-/// Dilution-of-precision values retained as receiver diagnostics.
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub struct DilutionOfPrecision {
-    /// Position DOP.
-    pub position: Option<NonNegativeF64>,
-    /// Horizontal DOP.
-    pub horizontal: Option<NonNegativeF64>,
-    /// Vertical DOP.
-    pub vertical: Option<NonNegativeF64>,
-    /// Time DOP.
-    pub time: Option<NonNegativeF64>,
-}
-
-/// Receiver-used satellite and signal counts.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct UsedSignalSummary {
-    /// Number of satellites used in the solution.
-    pub satellites: u16,
-    /// Number of signal observations used in the solution.
-    pub signals: u16,
-    /// Digest of the complete used-signal mask when captured.
-    pub mask_digest: Option<ContentDigestV1>,
 }
 
 /// One independently timed receiver diagnostic.
@@ -434,13 +361,9 @@ impl<T: Copy> TimedDiagnostic<T> {
     }
 }
 
-/// Independently optional and timed receiver health/context diagnostics.
+/// Independently optional and timed receiver health and freshness diagnostics.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct GnssDiagnostics {
-    /// DOP context from the configured receiver log.
-    pub dop: Option<TimedDiagnostic<DilutionOfPrecision>>,
-    /// Used-satellite/signal context.
-    pub used_signals: Option<TimedDiagnostic<UsedSignalSummary>>,
     /// Correction age.
     pub correction_age: Option<TimedDiagnostic<DurationNs>>,
     /// Overall solution age.
@@ -452,12 +375,6 @@ pub struct GnssDiagnostics {
 impl GnssDiagnostics {
     /// Validates timing on every present diagnostic.
     pub fn validate(self) -> Result<Self, ValidationError> {
-        if let Some(value) = self.dop {
-            value.validate()?;
-        }
-        if let Some(value) = self.used_signals {
-            value.validate()?;
-        }
         if let Some(value) = self.correction_age {
             value.validate()?;
         }
@@ -479,7 +396,6 @@ pub struct GnssSolutionObservation {
     position: Option<GnssPosition>,
     velocity: Option<GnssVelocity>,
     position_velocity_cross_covariance: Option<CrossCovariance3>,
-    rtk_state: RtkState,
     diagnostics: GnssDiagnostics,
 }
 
@@ -492,7 +408,6 @@ impl GnssSolutionObservation {
         position: Option<GnssPosition>,
         velocity: Option<GnssVelocity>,
         position_velocity_cross_covariance: Option<CrossCovariance3>,
-        rtk_state: RtkState,
         diagnostics: GnssDiagnostics,
     ) -> Result<Self, ValidationError> {
         if position.is_none() && velocity.is_none() {
@@ -526,7 +441,6 @@ impl GnssSolutionObservation {
             position,
             velocity,
             position_velocity_cross_covariance,
-            rtk_state,
             diagnostics,
         })
     }
@@ -559,12 +473,6 @@ impl GnssSolutionObservation {
     #[must_use]
     pub const fn position_velocity_cross_covariance(self) -> Option<CrossCovariance3> {
         self.position_velocity_cross_covariance
-    }
-
-    /// Returns receiver-wide RTK state.
-    #[must_use]
-    pub const fn rtk_state(self) -> RtkState {
-        self.rtk_state
     }
 
     /// Returns independently timed diagnostics.
@@ -1392,23 +1300,17 @@ mod tests {
                 time: observation_time(100),
                 frame: FrameId::new(4),
                 uncertainty: MeasurementUncertainty::Provided(covariance),
-                solution_class: SolutionClass::RtkFixed,
-                receiver_latency: Some(DurationNs::from_ns(1_000)),
+                valid: true,
             }),
             Some(GnssVelocity {
                 value: EcefVelocity::new(4.0, 5.0, 6.0).unwrap(),
                 time: observation_time(90),
                 frame: FrameId::new(4),
                 uncertainty: MeasurementUncertainty::Provided(covariance),
-                solution_class: SolutionClass::RtkFixed,
-                method: VelocityMethod::Doppler,
-                receiver_latency: Some(DurationNs::from_ns(2_000)),
+                valid: true,
             }),
             Some(CrossCovariance3::from_matrix([[0.0; 3]; 3]).unwrap()),
-            RtkState::Fixed,
             GnssDiagnostics {
-                dop: None,
-                used_signals: None,
                 correction_age: None,
                 solution_age: None,
                 health: None,
@@ -1446,23 +1348,17 @@ mod tests {
                 time: observation_time(100),
                 frame: FrameId::new(4),
                 uncertainty: modeled,
-                solution_class: SolutionClass::Standalone,
-                receiver_latency: None,
+                valid: true,
             }),
             Some(GnssVelocity {
                 value: EcefVelocity::new(0.0, 0.0, 0.0).unwrap(),
                 time: observation_time(100),
                 frame: FrameId::new(4),
                 uncertainty: modeled,
-                solution_class: SolutionClass::Standalone,
-                method: VelocityMethod::Unknown,
-                receiver_latency: None,
+                valid: true,
             }),
             Some(CrossCovariance3::from_matrix([[0.0; 3]; 3]).unwrap()),
-            RtkState::Standalone,
             GnssDiagnostics {
-                dop: None,
-                used_signals: None,
                 correction_age: None,
                 solution_age: None,
                 health: None,

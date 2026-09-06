@@ -11,7 +11,9 @@ pub(crate) mod initializer;
 pub(crate) mod predictor;
 pub(crate) mod preintegration;
 pub(crate) mod reanchor;
+mod rts_window;
 pub(crate) mod scheduler;
+pub(crate) mod smoothing;
 pub(crate) mod state;
 
 pub(crate) use core::{

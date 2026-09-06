@@ -47,7 +47,7 @@ pub(super) fn test_quality() -> EstimateQuality {
     EstimateQuality {
         stage: EstimateStage::Finalized,
         validity: Validity::Nominal,
-        gnss: GnssState::Fixed,
+        gnss: GnssState::Healthy,
         timing: TimingQuality::PpsCorrelated,
         integrity: Integrity::Monitored,
         covariance: CovarianceConditioning::UnconditionalModel,

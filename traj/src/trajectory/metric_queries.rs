@@ -2,19 +2,11 @@
 
 #[cfg(feature = "offline")]
 use super::bridge::DenseBridgeLinearization;
-use super::jets::{
-    speed_extremum_equation_jet, speed_extremum_second_bound, speed_threshold_equation_jet,
-    speed_threshold_second_bound, speed_value_jet,
-};
-use super::math::{
-    dot, dot_abs_sum, midpoint, norm, norm_upper, query_to_metric, roundoff_guard, scale, sub,
-    tangent_basis, upper_mul, vector,
-};
+use super::enclosed::RootExpression;
+use super::jets::speed_value_jet;
+use super::math::{dot, norm, query_to_metric, scale, sub, tangent_basis, vector};
 use super::quality::conservative_quality;
-use super::roots::{
-    EndpointOwnership, ScalarJet, filter_owned_roots, isolate_enclosed_roots_with_budget,
-    taylor_enclosure,
-};
+use super::roots::{EndpointOwnership, filter_owned_roots, isolate_enclosed_roots_with_budget};
 use super::{KinematicEstimate, MAX_SEGMENT_ROOTS, ScalarKinematics, Trajectory};
 #[cfg(feature = "offline")]
 use crate::error::QueryError;
@@ -180,7 +172,7 @@ impl Trajectory {
 
     /// Endpoint Jacobians of one host conditional bridge in the kinematic
     /// ordering `[position, velocity, right attitude error]`.
-    #[cfg(feature = "offline")]
+    #[cfg(all(test, feature = "offline"))]
     pub(crate) fn dense_bridge_linearization_at_parameter(
         &self,
         index: usize,
@@ -194,11 +186,96 @@ impl Trajectory {
         segment.bridge_endpoint_jacobians(parameter)
     }
 
+    #[cfg(feature = "offline")]
+    pub(crate) fn has_conditional_bridge(&self, index: usize) -> Result<bool, QueryError> {
+        Ok(self.segment_lease(index)?.conditional_bridge().is_some())
+    }
+
+    /// Complete point transform, including attitude/rate/lever correlations.
+    #[cfg(feature = "offline")]
+    pub(crate) fn dense_point_linearization(
+        &self,
+        index: usize,
+        parameter: f64,
+        reference_point: ReferencePointId,
+    ) -> Result<DenseBridgeLinearization, QueryError> {
+        let lease = self.segment_lease(index)?;
+        let segment = lease.segment();
+        let bridge = lease
+            .conditional_bridge()
+            .ok_or(QueryError::TrajectoryInvalid)?;
+        let reference = self.reference_point_for_query(reference_point)?;
+        if let Some(model) = &bridge.coupled {
+            let h = model.point_projection(
+                segment.duration_seconds,
+                parameter,
+                &segment.base_kinematics(parameter)?,
+                reference,
+            )?;
+            let linear = model.linearization(segment.duration_seconds, parameter)?;
+            return Ok(DenseBridgeLinearization {
+                start_jacobian: &h * linear.start_jacobian,
+                end_jacobian: &h * linear.end_jacobian,
+            });
+        }
+        if reference.imu_to_point().components_m() != [0.0; 3] {
+            return Err(QueryError::ReferencePointUnavailable);
+        }
+        segment.bridge_endpoint_jacobians(parameter)
+    }
+
+    #[cfg(feature = "offline")]
+    pub(crate) fn dense_point_process_cross(
+        &self,
+        index: usize,
+        first: f64,
+        second: f64,
+        first_point: ReferencePointId,
+        second_point: ReferencePointId,
+    ) -> Result<DMatrix<f64>, QueryError> {
+        let lease = self.segment_lease(index)?;
+        let segment = lease.segment();
+        let bridge = lease
+            .conditional_bridge()
+            .ok_or(QueryError::TrajectoryInvalid)?;
+        if let Some(model) = &bridge.coupled {
+            let first_h = model.point_projection(
+                segment.duration_seconds,
+                first,
+                &segment.base_kinematics(first)?,
+                self.reference_point_for_query(first_point)?,
+            )?;
+            let second_h = model.point_projection(
+                segment.duration_seconds,
+                second,
+                &segment.base_kinematics(second)?,
+                self.reference_point_for_query(second_point)?,
+            )?;
+            return Ok(first_h
+                * model.conditional_cross(segment.duration_seconds, first, second)?
+                * second_h.transpose());
+        }
+        if self
+            .reference_point_for_query(first_point)?
+            .imu_to_point()
+            .components_m()
+            != [0.0; 3]
+            || self
+                .reference_point_for_query(second_point)?
+                .imu_to_point()
+                .components_m()
+                != [0.0; 3]
+        {
+            return Err(QueryError::ReferencePointUnavailable);
+        }
+        bridge.conditional_process_cross(segment.duration_seconds, first, second)
+    }
+
     /// Conditional process cross-covariance between two points in the same
     /// host bridge. Different process intervals are independent only after
     /// conditioning on their shared optimized endpoints; callers must retain
     /// the endpoint cross-time covariance separately.
-    #[cfg(feature = "offline")]
+    #[cfg(all(test, feature = "offline"))]
     pub(crate) fn dense_bridge_process_cross_covariance(
         &self,
         index: usize,
@@ -269,10 +346,7 @@ impl Trajectory {
             )?;
             return filter_owned_roots(roots, 0.0, 1.0, parameter_tolerance, ownership);
         }
-        let second_bound = upper_mul(
-            norm_upper(normal_ecef),
-            segment.point_derivative_norm_bound(2, lever),
-        );
+        let expression = RootExpression::new(segment, lever)?;
         isolate_enclosed_roots_with_budget(
             0.0,
             1.0,
@@ -280,30 +354,7 @@ impl Trajectory {
             value_tolerance,
             ownership,
             budget,
-            |lower, upper| {
-                let midpoint = midpoint(lower, upper);
-                let point = segment.point_jet(midpoint, lever)?;
-                let delta = sub(point.position, center_ecef);
-                let value_scale = dot_abs_sum(point.position, normal_ecef)
-                    + dot_abs_sum(center_ecef, normal_ecef);
-                let derivative_scale = dot_abs_sum(point.first, normal_ecef);
-                taylor_enclosure(
-                    ScalarJet {
-                        value: dot(delta, normal_ecef),
-                        derivative: dot(point.first, normal_ecef),
-                        second_derivative: dot(point.second, normal_ecef),
-                        value_roundoff: roundoff_guard(value_scale),
-                        derivative_roundoff: roundoff_guard(derivative_scale),
-                        second_derivative_roundoff: roundoff_guard(dot_abs_sum(
-                            point.second,
-                            normal_ecef,
-                        )),
-                    },
-                    second_bound,
-                    lower,
-                    upper,
-                )
-            },
+            |lower, upper| expression.gate(lower, upper, center_ecef, normal_ecef),
         )
     }
 
@@ -347,7 +398,7 @@ impl Trajectory {
             )?;
             return filter_owned_roots(roots, lower, upper, parameter_tolerance, ownership);
         }
-        let second_bound = speed_threshold_second_bound(segment, lever, quantity)?;
+        let expression = RootExpression::new(segment, lever)?;
         let equation_tolerance = match quantity {
             SpeedQuantity::BodyLongitudinalSigned => value_tolerance,
             SpeedQuantity::InstantaneousHorizontal
@@ -364,16 +415,13 @@ impl Trajectory {
             ownership,
             budget,
             |cell_lower, cell_upper| {
-                let parameter = midpoint(cell_lower, cell_upper);
-                let jet = speed_threshold_equation_jet(
-                    segment,
-                    lever,
+                expression.speed(
+                    cell_lower,
+                    cell_upper,
                     self.frame.ellipsoid(),
                     quantity,
-                    target_mps,
-                    parameter,
-                )?;
-                taylor_enclosure(jet, second_bound, cell_lower, cell_upper)
+                    Some(target_mps),
+                )
             },
         )
     }
@@ -451,7 +499,7 @@ impl Trajectory {
             )?;
             return filter_owned_roots(roots, 0.0, 1.0, parameter_tolerance, ownership);
         }
-        let second_bound = speed_extremum_second_bound(segment, lever, quantity)?;
+        let expression = RootExpression::new(segment, lever)?;
         isolate_enclosed_roots_with_budget(
             0.0,
             1.0,
@@ -460,15 +508,13 @@ impl Trajectory {
             ownership,
             budget,
             |cell_lower, cell_upper| {
-                let parameter = midpoint(cell_lower, cell_upper);
-                let jet = speed_extremum_equation_jet(
-                    segment,
-                    lever,
+                expression.speed(
+                    cell_lower,
+                    cell_upper,
                     self.frame.ellipsoid(),
                     quantity,
-                    parameter,
-                )?;
-                taylor_enclosure(jet, second_bound, cell_lower, cell_upper)
+                    None,
+                )
             },
         )
     }

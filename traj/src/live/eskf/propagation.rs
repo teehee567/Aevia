@@ -20,6 +20,7 @@ use crate::{
         preintegration::{
             BIAS_DIM, GapDerivativeCovariance, ImuSampleCovariance, PREINT_DIM, PreintegratedBatch,
         },
+        smoothing::{CONSIDER_START, GAP_START, SAMPLE_START},
         state::{ATT, MechanizationContext, NAV_DIM, NavMatrix, NavState, POS, VEL, so3_exp},
     },
     time::SessionTime,
@@ -84,6 +85,20 @@ impl Eskf {
             self.active_consider,
             &mut scratch.gamma,
         )?;
+        // Retain the actual mean-error transition before the bias-noise
+        // discretizer reuses `scratch.transition` for its quadrature powers.
+        scratch.rts_transition.nav.fill(0.0);
+        scratch.rts_transition.retain_sample = false;
+        scratch.rts_transition.retain_gap = false;
+        for row in 0..NAV_DIM {
+            for column in 0..NAV_DIM {
+                scratch.rts_transition.nav[(row, column)] = scratch.transition[(row, column)];
+            }
+            for shared in 0..self.active_consider {
+                scratch.rts_transition.nav[(row, CONSIDER_START + shared)] =
+                    scratch.gamma[(row, shared)];
+            }
+        }
 
         multiply_nav(&scratch.transition, &self.covariance, &mut scratch.nav_b);
         multiply_nav_right_transpose(&scratch.nav_b, &scratch.transition, &mut scratch.nav_a);
@@ -110,6 +125,15 @@ impl Eskf {
         let mut next_gap_derivative_covariance = GapDerivativeCovariance::zeros();
         if let Some(gap) = corrected.gap {
             multiply_preintegration_gap(&scratch.mapping, &gap.jacobian, &mut scratch.gap_b);
+            if self.gap_origin == Some(gap.origin) {
+                for row in 0..NAV_DIM {
+                    for latent in 0..BIAS_DIM {
+                        scratch.rts_transition.nav[(row, GAP_START + latent)] =
+                            scratch.gap_b[(row, latent)];
+                    }
+                }
+                scratch.rts_transition.retain_gap = gap.active_at_end;
+            }
             // `batch.covariance` already contains L C L'. When this is a
             // continuation, add the two cross terms with the retained P_xz.
             add_symmetric_cross_product(&mut scratch.nav_a, &scratch.gap_a, &scratch.gap_b);
@@ -161,6 +185,13 @@ impl Eskf {
             let prior = prior_sample_cross.ok_or(EskfError::ImuSampleLatentMismatch)?;
             multiply_nav_gap(&scratch.transition, prior, &mut scratch.gap_a);
             multiply_preintegration_gap(&scratch.mapping, &leading.jacobian, &mut scratch.gap_b);
+            for row in 0..NAV_DIM {
+                for latent in 0..BIAS_DIM {
+                    scratch.rts_transition.nav[(row, SAMPLE_START + latent)] =
+                        scratch.gap_b[(row, latent)];
+                }
+            }
+            scratch.rts_transition.retain_sample = leading.active_at_end;
             add_symmetric_cross_product(&mut self.covariance, &scratch.gap_a, &scratch.gap_b);
             if leading.active_at_end {
                 store_sample_cross_candidate(

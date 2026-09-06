@@ -13,7 +13,7 @@ use crate::{
         CovarianceConditioning, EstimateQuality, EstimateStage, GnssState, HeadingObservability,
         HeadingSource, Integrity, ObservabilityReport, TimingQuality, Validity,
     },
-    trajectory::{DenseBridgeInput, Trajectory, TrajectoryKnot},
+    trajectory::{CoupledDenseBridge, DenseBridgeInput, Trajectory, TrajectoryKnot},
 };
 
 use nalgebra::{DMatrix, Matrix3};
@@ -30,7 +30,7 @@ use super::{
         ATTITUDE, NAVIGATION_DIMENSION, POSITION, VELOCITY, array_matrix3, array3,
         kinematic_covariance, matrix3_from_array, matrix3_to_array, symmetric, symmetric3, vector3,
     },
-    smoothing::{augmented_covariance, boxminus},
+    smoothing::{augmented_covariance, boxminus, joint_covariance},
 };
 
 pub(super) fn build_trajectory(
@@ -45,7 +45,11 @@ pub(super) fn build_trajectory(
     trajectory
         .set_attachment_model(spec.engine.installation.attachment)
         .map_err(|_| ProcessError::InvalidEvidence)?;
-    trajectory.prepare_offline_storage(maximum_segments, backing_kind)?;
+    trajectory.prepare_offline_storage_with_covariance(
+        maximum_segments,
+        backing_kind,
+        store.dimensions().0 + store.dimensions().1 + 6,
+    )?;
     for point in spec.engine.installation.reference_points {
         trajectory
             .add_reference_point(*point)
@@ -158,8 +162,14 @@ pub(super) fn dense_bridge_input(
         .smoothed_covariance
         .as_ref()
         .ok_or(ProcessError::StorageCorrupt)?;
-    let start_augmented = augmented_covariance(start_covariance, &catalog.covariance);
-    let end_augmented = augmented_covariance(end_covariance, &catalog.covariance);
+    let start_augmented = start_step.smoothed_sample.as_ref().map_or_else(
+        || augmented_covariance(start_covariance, &catalog.covariance),
+        |sample| joint_covariance(start_covariance, sample, &catalog.covariance),
+    );
+    let end_augmented = end_step.smoothed_sample.as_ref().map_or_else(
+        || augmented_covariance(end_covariance, &catalog.covariance),
+        |sample| joint_covariance(end_covariance, sample, &catalog.covariance),
+    );
     let backward_gain = start_step
         .smoothed_backward_gain
         .as_ref()
@@ -190,6 +200,122 @@ pub(super) fn dense_bridge_input(
             endpoint_joint_covariance[row][column + 9] = cross[(state_row, state_column)];
             endpoint_joint_covariance[column + 9][row] = cross[(state_row, state_column)];
         }
+    }
+
+    if let Some(dynamics) = &end_step.dynamics {
+        let n = state_dimension;
+        let m = catalog.covariance.nrows();
+        let d = n + m + 6;
+        if start_augmented.nrows() != d {
+            return Err(ProcessError::StorageCorrupt);
+        }
+        let mut endpoint_joint = DMatrix::zeros(2 * d, 2 * d);
+        endpoint_joint
+            .view_mut((0, 0), (d, d))
+            .copy_from(&start_augmented);
+        endpoint_joint
+            .view_mut((d, d), (d, d))
+            .copy_from(&end_augmented);
+        endpoint_joint.view_mut((0, d), (d, d)).copy_from(&cross);
+        endpoint_joint
+            .view_mut((d, 0), (d, d))
+            .copy_from(&cross.transpose());
+        let start_residual = boxminus(start, &dynamics.reference_start, n)?;
+        let end_residual = boxminus(end, &dynamics.reference_end, n)?;
+        let start_reset = injection_reset(&start_residual)?;
+        let end_reset = injection_reset(&end_residual)?;
+        let mut start_to_reference = DMatrix::identity(d, d);
+        let mut end_to_reference = DMatrix::identity(d, d);
+        start_to_reference.view_mut((0, 0), (n, n)).copy_from(
+            &start_reset
+                .lu()
+                .solve(&DMatrix::identity(n, n))
+                .ok_or(ProcessError::NumericalNonConvergence)?,
+        );
+        end_to_reference.view_mut((0, 0), (n, n)).copy_from(
+            &end_reset
+                .lu()
+                .solve(&DMatrix::identity(n, n))
+                .ok_or(ProcessError::NumericalNonConvergence)?,
+        );
+        let mut continuous = DMatrix::zeros(d, d);
+        continuous
+            .view_mut((0, 0), (n, n))
+            .copy_from(&dynamics.continuous);
+        continuous
+            .view_mut((0, n), (n, m))
+            .copy_from(&dynamics.consider_rate_mapping);
+        continuous
+            .view_mut((0, n + m), (n, 6))
+            .copy_from(&dynamics.sample_rate_mapping);
+        let mut noise_density = DMatrix::zeros(d, d);
+        noise_density
+            .view_mut((0, 0), (n, n))
+            .copy_from(&dynamics.noise_density);
+        let mut rate_mapping = DMatrix::zeros(3, d);
+        let earth_body = matrix3_from_array(
+            dynamics
+                .reference_start
+                .orientation_ecef_from_body
+                .rotation_matrix(),
+        )
+        .transpose()
+            * nalgebra::Vector3::new(0.0, 0.0, super::math::EARTH_RATE_RAD_S);
+        rate_mapping
+            .view_mut((0, ATTITUDE), (3, 3))
+            .copy_from(&(-super::math::skew(&earth_body)));
+        for axis in 0..3 {
+            rate_mapping[(axis, super::math::GYROSCOPE_BIAS + axis)] = -1.0;
+            rate_mapping[(axis, n + m + 3 + axis)] = -1.0;
+        }
+        rate_mapping
+            .view_mut((0, n), (3, m))
+            .copy_from(&dynamics.consider_rate_mapping.rows(ATTITUDE, 3));
+        let mut parameter_ids = std::vec![0;d];
+        for parameter in &catalog.parameters {
+            if parameter.kind == crate::config::SharedParameterKind::LeverArmMetres
+                && parameter.dimension == 3
+            {
+                parameter_ids[n + parameter.start] = u64::from(parameter.id.get());
+            }
+        }
+        let model = CoupledDenseBridge {
+            state_dimension: n,
+            continuous,
+            noise_density,
+            endpoint_joint: symmetric(endpoint_joint),
+            start_to_reference,
+            end_to_reference,
+            rate_mapping,
+            parameter_ids,
+            duration_seconds: duration,
+            cache: Default::default(),
+            reference_start_orientation: dynamics
+                .reference_start
+                .orientation_ecef_from_body
+                .components_wxyz(),
+            reference_body_rate: core::array::from_fn(|axis| {
+                imu.angular_rate_body[axis]
+                    - dynamics.reference_start.gyroscope_bias_body[axis]
+                    - dynamics.reference_start.imu_sample_error_body[3 + axis]
+            }),
+            gyro_density: config.dynamics_profile.process_noise.gyroscope.to_matrix(),
+        };
+        model
+            .validate()
+            .map_err(|_| ProcessError::NumericalNonConvergence)?;
+        return Ok(DenseBridgeInput {
+            coupled: Some(Box::new(model)),
+            covariance_available: true,
+            endpoint_joint_covariance,
+            acceleration_spectral_density_ecef: [[0.0; 3]; 3],
+            attitude_spectral_density_body: [[0.0; 3]; 3],
+            acceleration_interval_average_covariance_ecef: [[0.0; 3]; 3],
+            angular_rate_interval_average_covariance_body: [[0.0; 3]; 3],
+            reintegrated_position_ecef_m: reintegrated.position_ecef,
+            reintegrated_velocity_ecef_mps: reintegrated.velocity_ecef,
+            integrated_rotation_body,
+        });
     }
 
     let end_residual = boxminus(end, &end_step.predicted, state_dimension)?;
@@ -247,6 +373,7 @@ pub(super) fn dense_bridge_input(
     };
 
     Ok(DenseBridgeInput {
+        coupled: None,
         covariance_available,
         endpoint_joint_covariance,
         acceleration_spectral_density_ecef,

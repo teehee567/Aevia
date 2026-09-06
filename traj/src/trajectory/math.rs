@@ -31,16 +31,6 @@ pub(super) fn upper_mul(left: f64, right: f64) -> f64 {
     }
 }
 
-pub(super) fn upper_div(numerator: f64, denominator: f64) -> f64 {
-    debug_assert!(numerator >= 0.0 && denominator > 0.0);
-    let value = numerator / denominator;
-    if value.is_finite() {
-        value.next_up()
-    } else {
-        f64::INFINITY
-    }
-}
-
 pub(super) fn norm_upper(value: [f64; 3]) -> f64 {
     let square = upper_add(
         upper_mul(value[0].abs(), value[0].abs()),
@@ -66,9 +56,8 @@ pub(super) fn roundoff_guard(scale: f64) -> f64 {
     if !scale.is_finite() {
         return f64::INFINITY;
     }
-    // This guard deliberately exceeds the operation count of every scalar jet
-    // above. MPFR and cross-target qualification must validate/tighten it for
-    // each approved numeric profile before live non-polynomial metrics ship.
+    // Numerical guard for singular point-speed conversions. Root exclusion
+    // and existence use the separate complete interval expression graph.
     upper_mul(512.0 * f64::EPSILON, upper_add(1.0, scale.abs()))
 }
 

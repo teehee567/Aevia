@@ -3,8 +3,9 @@
 use super::{
     ConsiderMeasurementCross, Eskf, EskfError, GapNavCrossCovariance, MAX_MEASUREMENT_DIM,
     MeasurementConsiderJacobian, MeasurementMatrix, MeasurementNavJacobian,
-    MeasurementSampleJacobian, MeasurementVector, NavMeasurementCross, SampleMeasurementCross,
-    covariance::condition_navigation_covariance, gnss::UpdateDecision, matrix::multiply_nav_gap,
+    MeasurementSampleJacobian, MeasurementVector, NavMeasurementCross, RtsUpdateCapture,
+    SampleMeasurementCross, covariance::condition_navigation_covariance, gnss::UpdateDecision,
+    matrix::multiply_nav_gap,
 };
 use crate::live::{
     preintegration::{BIAS_DIM, ImuSampleCovariance},
@@ -20,6 +21,7 @@ impl Eskf {
         maximum_inflation: f32,
         sample_covariance: Option<&ImuSampleCovariance>,
         sample_cross: Option<&mut GapNavCrossCovariance>,
+        capture: Option<&mut RtsUpdateCapture>,
     ) -> Result<UpdateDecision, EskfError> {
         if measurement.dimension == 0 || measurement.dimension > MAX_MEASUREMENT_DIM {
             return Err(EskfError::InvalidMeasurement);
@@ -167,6 +169,9 @@ impl Eskf {
         }
         let (repairs, normalized_repair) =
             condition_navigation_covariance(&mut candidate_covariance, &self.covariance_policy)?;
+        if let Some(capture) = capture {
+            capture.apply_update(&measurement, &kalman_gain, &attitude_reset)?;
+        }
 
         // Every fallible operation is complete. Commit the filter and its
         // caller-owned held-sample cross together, including the attitude

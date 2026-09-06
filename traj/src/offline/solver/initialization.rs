@@ -5,7 +5,7 @@ use crate::{
     error::ProcessError,
     frame::ReferenceEllipsoid,
     math::UnitQuaternion,
-    observation::{GnssSolutionObservation, InputDisposition, SolutionClass},
+    observation::{GnssSolutionObservation, InputDisposition},
     offline::store::{StateStore, StoredCovariance, StoredNominal},
     time::SessionTime,
 };
@@ -42,14 +42,14 @@ impl<'a> OfflineFilter<'a> {
         let position = position_solution
             .position()
             .ok_or(ProcessError::InvalidEvidence)?;
-        if matches!(position.solution_class, SolutionClass::Invalid) {
+        if !position.valid {
             return Err(ProcessError::InvalidEvidence);
         }
         ensure_frame(position.frame, self.config)?;
         let velocity = velocity_solution
             .velocity()
             .ok_or(ProcessError::InvalidEvidence)?;
-        if matches!(velocity.solution_class, SolutionClass::Invalid) {
+        if !velocity.valid {
             return Err(ProcessError::InvalidEvidence);
         }
         ensure_frame(velocity.frame, self.config)?;
@@ -314,7 +314,6 @@ impl<'a> OfflineFilter<'a> {
         self.install_active_imu_sample(&initial_imu, Some(initial_sample_cross))?;
         self.connected = false;
         self.gnss_state = gnss_state(
-            position_solution.rtk_state(),
             receiver_is_healthy(position_solution, GnssField::Position, self.config)
                 && receiver_is_healthy(velocity_solution, GnssField::Velocity, self.config),
         );
@@ -463,12 +462,13 @@ pub(super) fn initialization_pair_time(
         .time
         .effective_time()
         .map_err(|_| ProcessError::InvalidEvidence)?;
-    let compatible = position.time.clock_model == velocity.time.clock_model
+    let compatible = position.valid
+        && velocity.valid
+        && position.time.clock_model == velocity.time.clock_model
         && position.frame == velocity.frame
         && position_solution.id().source == velocity_solution.id().source
         && position_solution.antenna_reference_point()
-            == velocity_solution.antenna_reference_point()
-        && position_solution.rtk_state() == velocity_solution.rtk_state();
+            == velocity_solution.antenna_reference_point();
     Ok(compatible.then_some(position_time.max(velocity_time)))
 }
 
@@ -523,6 +523,7 @@ pub(super) fn initialized_nominal(
         accelerometer_bias_body,
         gyroscope_bias_body,
         colored_gnss_error: [0.0; 3],
+        imu_sample_error_body: [0.0; 6],
         specific_force_body: imu.specific_force_body,
         angular_rate_body: array3(angular_rate_body),
     }
