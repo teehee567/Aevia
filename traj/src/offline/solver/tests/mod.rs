@@ -21,8 +21,7 @@ use crate::{
     observation::{
         AxisStatus, GnssDiagnostics, GnssPosition, GnssSolutionObservation, GnssVelocity,
         ImuIntegrationEligibility, ImuObservation, ImuStatus, InputDisposition, LiveObservation,
-        ReceiverHealth, RtkState, SolutionClass, TimedAngularRate, TimedDiagnostic,
-        TimedSpecificForce, VelocityMethod,
+        ReceiverHealth, TimedAngularRate, TimedDiagnostic, TimedSpecificForce,
     },
     offline::{
         ports::{ControlChangeEvidence, EvidenceEnd, EvidenceEvent, EvidenceManifest},
@@ -55,11 +54,13 @@ use super::{
     smoothing::*,
 };
 
+mod distance_uncertainty;
 mod estimation;
 mod evidence;
 mod inertial;
 mod initialization;
 mod publication;
+mod reference_points;
 
 fn nominal(time: i64, position_x: f64) -> StoredNominal {
     StoredNominal {
@@ -70,6 +71,7 @@ fn nominal(time: i64, position_x: f64) -> StoredNominal {
         accelerometer_bias_body: [0.0; 3],
         gyroscope_bias_body: [0.0; 3],
         colored_gnss_error: [0.0; 3],
+        imu_sample_error_body: [0.0; 6],
         specific_force_body: [9.806_65, 0.0, 0.0],
         angular_rate_body: [0.0; 3],
     }
@@ -92,6 +94,11 @@ fn step(time: i64, filtered_x: f64, predicted_variance: f64, filtered_variance: 
         predicted_covariance: covariance(predicted_variance, 1.0),
         filtered_covariance: covariance(filtered_variance, 1.0),
         smoothed_covariance: None,
+        predicted_sample: StoredImuSample::zeros(NAVIGATION_DIMENSION, 1),
+        filtered_sample: StoredImuSample::zeros(NAVIGATION_DIMENSION, 1),
+        smoothed_sample: None,
+        adjacent_sample_cross: DMatrix::zeros(NAVIGATION_DIMENSION + 6, NAVIGATION_DIMENSION + 6),
+        dynamics: None,
         transition: DMatrix::identity(NAVIGATION_DIMENSION, NAVIGATION_DIMENSION),
         consider_transition: DMatrix::zeros(NAVIGATION_DIMENSION, 1),
         process_covariance: DMatrix::identity(NAVIGATION_DIMENSION, NAVIGATION_DIMENSION),
@@ -105,7 +112,7 @@ fn step(time: i64, filtered_x: f64, predicted_variance: f64, filtered_variance: 
         smoothed_backward_gain: None,
         adjacent_cross_covariance: DMatrix::identity(NAVIGATION_DIMENSION, NAVIGATION_DIMENSION),
         disposition: Some(InputDisposition::Fused),
-        gnss_state: GnssState::Fixed,
+        gnss_state: GnssState::Healthy,
         timing_quality: TimingQuality::PpsCorrelated,
         degraded_input: false,
         objective_contribution: 0.0,
@@ -223,23 +230,17 @@ fn gnss_solution(
             time,
             frame: FrameId::new(2),
             uncertainty,
-            solution_class: SolutionClass::RtkFixed,
-            receiver_latency: None,
+            valid: true,
         }),
         velocity_time.map(|time| GnssVelocity {
             value: EcefVelocity::new(0.0, 12.0, 0.0).unwrap(),
             time,
             frame: FrameId::new(2),
             uncertainty,
-            solution_class: SolutionClass::RtkFixed,
-            method: VelocityMethod::Doppler,
-            receiver_latency: None,
+            valid: true,
         }),
         None,
-        RtkState::Fixed,
         GnssDiagnostics {
-            dop: None,
-            used_signals: None,
             correction_age: correction_age.map(|(value, age)| TimedDiagnostic {
                 value: DurationNs::from_ns(value),
                 time: diagnostic_time,
@@ -270,10 +271,7 @@ fn with_health_diagnostic(
         solution.position(),
         solution.velocity(),
         solution.position_velocity_cross_covariance(),
-        solution.rtk_state(),
         GnssDiagnostics {
-            dop: None,
-            used_signals: None,
             correction_age: None,
             solution_age: None,
             health: Some(health),

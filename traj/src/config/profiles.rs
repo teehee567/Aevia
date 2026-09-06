@@ -315,7 +315,7 @@ impl EmbeddedLiveTuning {
     }
 }
 
-/// Live mechanization, delayed-fusion, and predictor behavior.
+/// Live mechanization, delayed fusion, smoothing, and predictor behavior.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct NavigationProfileSpec {
     /// Profile revision.
@@ -324,6 +324,10 @@ pub struct NavigationProfileSpec {
     pub navigation_cadence_hz: u16,
     /// Effective-time reorder delay.
     pub fusion_delay: DurationNs,
+    /// Additional fixed-lag extended RTS lookahead before trajectory and
+    /// metric publication. Zero keeps the forward-filter comparison path;
+    /// supported live profiles retain at most 100 milliseconds.
+    pub smoothing_lag: DurationNs,
     /// Additional retained history beyond the delay.
     pub history_guard: DurationNs,
     /// Largest complete-vector IMU gap that may be bridged.
@@ -362,6 +366,7 @@ impl NavigationProfileSpec {
             || self.navigation_cadence_hz < 200
             || self.navigation_cadence_hz > 400
             || history > 500_000_000
+            || self.smoothing_lag.as_ns() > 100_000_000
             || self.maximum_bridgeable_imu_gap.as_ns() > 10_000_000
             || self.maximum_bridgeable_imu_gap.as_ns() == 0
             || self.reanchor_distance_m.get() == 0.0

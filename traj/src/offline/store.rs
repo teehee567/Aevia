@@ -26,7 +26,7 @@ use crate::{
 
 const FILE_MAGIC: [u8; 8] = *b"AEVST01\0";
 const FILE_HEADER_BYTES: u64 = 64;
-const FILE_FORMAT_VERSION: u32 = 3;
+const FILE_FORMAT_VERSION: u32 = 4;
 const MAX_TEMPFILE_ATTEMPTS: u64 = 32;
 
 #[derive(Clone, Debug)]
@@ -38,6 +38,7 @@ pub(super) struct StoredNominal {
     pub accelerometer_bias_body: [f64; 3],
     pub gyroscope_bias_body: [f64; 3],
     pub colored_gnss_error: [f64; 3],
+    pub imu_sample_error_body: [f64; 6],
     pub specific_force_body: [f64; 3],
     pub angular_rate_body: [f64; 3],
 }
@@ -45,7 +46,7 @@ pub(super) struct StoredNominal {
 impl StoredNominal {
     fn encoded_len() -> usize {
         // time + p/v/q/ba/bg/colored/f/omega
-        8 + (3 + 3 + 4 + 3 + 3 + 3 + 3 + 3) * 8
+        8 + (3 + 3 + 4 + 3 + 3 + 3 + 6 + 3 + 3) * 8
     }
 
     fn encode(&self, bytes: &mut Vec<u8>) {
@@ -58,6 +59,7 @@ impl StoredNominal {
             .chain(self.accelerometer_bias_body.iter())
             .chain(self.gyroscope_bias_body.iter())
             .chain(self.colored_gnss_error.iter())
+            .chain(self.imu_sample_error_body.iter())
             .chain(self.specific_force_body.iter())
             .chain(self.angular_rate_body.iter())
         {
@@ -74,6 +76,10 @@ impl StoredNominal {
         let accelerometer_bias_body = cursor.array3()?;
         let gyroscope_bias_body = cursor.array3()?;
         let colored_gnss_error = cursor.array3()?;
+        let mut imu_sample_error_body = [0.0; 6];
+        for value in &mut imu_sample_error_body {
+            *value = cursor.f64()?;
+        }
         let specific_force_body = cursor.array3()?;
         let angular_rate_body = cursor.array3()?;
         Ok(Self {
@@ -84,6 +90,7 @@ impl StoredNominal {
             accelerometer_bias_body,
             gyroscope_bias_body,
             colored_gnss_error,
+            imu_sample_error_body,
             specific_force_body,
             angular_rate_body,
         })
@@ -97,6 +104,7 @@ impl StoredNominal {
             .chain(self.accelerometer_bias_body.iter())
             .chain(self.gyroscope_bias_body.iter())
             .chain(self.colored_gnss_error.iter())
+            .chain(self.imu_sample_error_body.iter())
             .chain(self.specific_force_body.iter())
             .chain(self.angular_rate_body.iter())
             .all(|value| value.is_finite())
@@ -129,6 +137,64 @@ impl StoredCovariance {
     fn all_finite(&self) -> bool {
         self.state.iter().all(|value| value.is_finite())
             && self.state_consider.iter().all(|value| value.is_finite())
+    }
+}
+
+/// Posterior of the held interval-average sample error. Its six estimable
+/// dimensions survive every interior measurement cut; at support boundaries
+/// they are replaced by the independent next sample.
+#[derive(Clone, Debug)]
+pub(super) struct StoredImuSample {
+    pub start: SessionTime,
+    pub end: SessionTime,
+    pub covariance_body: DMatrix<f64>,
+    pub state_cross: DMatrix<f64>,
+    pub consider_cross: DMatrix<f64>,
+}
+
+impl StoredImuSample {
+    #[cfg(test)]
+    pub(super) fn zeros(n: usize, m: usize) -> Self {
+        Self {
+            start: SessionTime::ZERO,
+            end: SessionTime::ZERO,
+            covariance_body: DMatrix::zeros(6, 6),
+            state_cross: DMatrix::zeros(n, 6),
+            consider_cross: DMatrix::zeros(6, m),
+        }
+    }
+    fn encoded_len(n: usize, m: usize) -> Option<usize> {
+        matrix_bytes(6, 6)?
+            .checked_add(matrix_bytes(n, 6)?)?
+            .checked_add(matrix_bytes(6, m)?)?
+            .checked_add(16)
+    }
+    fn encode(&self, bytes: &mut Vec<u8>) {
+        put_i64(bytes, self.start.as_ns());
+        put_i64(bytes, self.end.as_ns());
+        put_matrix(bytes, &self.covariance_body);
+        put_matrix(bytes, &self.state_cross);
+        put_matrix(bytes, &self.consider_cross);
+    }
+    fn decode(cursor: &mut DecodeCursor<'_>, n: usize, m: usize) -> Result<Self, StoreError> {
+        Ok(Self {
+            start: SessionTime::from_ns(cursor.i64()?),
+            end: SessionTime::from_ns(cursor.i64()?),
+            covariance_body: cursor.matrix(6, 6)?,
+            state_cross: cursor.matrix(n, 6)?,
+            consider_cross: cursor.matrix(6, m)?,
+        })
+    }
+    fn valid(&self, n: usize, m: usize) -> bool {
+        self.covariance_body.shape() == (6, 6)
+            && self.state_cross.shape() == (n, 6)
+            && self.consider_cross.shape() == (6, m)
+            && self
+                .covariance_body
+                .iter()
+                .chain(self.state_cross.iter())
+                .chain(self.consider_cross.iter())
+                .all(|v| v.is_finite())
     }
 }
 
@@ -188,6 +254,69 @@ impl StoredIntegrationImu {
     }
 }
 
+/// Frozen continuous model and its nominal tangent references for one edge.
+#[derive(Clone, Debug)]
+pub(super) struct StoredDynamics {
+    pub reference_start: StoredNominal,
+    pub reference_end: StoredNominal,
+    pub continuous: DMatrix<f64>,
+    pub noise_density: DMatrix<f64>,
+    pub consider_rate_mapping: DMatrix<f64>,
+    pub sample_rate_mapping: DMatrix<f64>,
+}
+impl StoredDynamics {
+    fn encoded_len(n: usize, m: usize) -> Option<usize> {
+        StoredNominal::encoded_len()
+            .checked_mul(2)?
+            .checked_add(matrix_bytes(n, n)?.checked_mul(2)?)?
+            .checked_add(matrix_bytes(n, m)?)?
+            .checked_add(matrix_bytes(n, 6)?)
+    }
+    fn zeros(n: usize, m: usize, nominal: &StoredNominal) -> Self {
+        Self {
+            reference_start: nominal.clone(),
+            reference_end: nominal.clone(),
+            continuous: DMatrix::zeros(n, n),
+            noise_density: DMatrix::zeros(n, n),
+            consider_rate_mapping: DMatrix::zeros(n, m),
+            sample_rate_mapping: DMatrix::zeros(n, 6),
+        }
+    }
+    fn encode(&self, bytes: &mut Vec<u8>) {
+        self.reference_start.encode(bytes);
+        self.reference_end.encode(bytes);
+        put_matrix(bytes, &self.continuous);
+        put_matrix(bytes, &self.noise_density);
+        put_matrix(bytes, &self.consider_rate_mapping);
+        put_matrix(bytes, &self.sample_rate_mapping);
+    }
+    fn decode(cursor: &mut DecodeCursor<'_>, n: usize, m: usize) -> Result<Self, StoreError> {
+        Ok(Self {
+            reference_start: StoredNominal::decode(cursor)?,
+            reference_end: StoredNominal::decode(cursor)?,
+            continuous: cursor.matrix(n, n)?,
+            noise_density: cursor.matrix(n, n)?,
+            consider_rate_mapping: cursor.matrix(n, m)?,
+            sample_rate_mapping: cursor.matrix(n, 6)?,
+        })
+    }
+    fn valid(&self, n: usize, m: usize) -> bool {
+        self.reference_start.is_finite()
+            && self.reference_end.is_finite()
+            && self.continuous.shape() == (n, n)
+            && self.noise_density.shape() == (n, n)
+            && self.consider_rate_mapping.shape() == (n, m)
+            && self.sample_rate_mapping.shape() == (n, 6)
+            && self
+                .continuous
+                .iter()
+                .chain(self.noise_density.iter())
+                .chain(self.consider_rate_mapping.iter())
+                .chain(self.sample_rate_mapping.iter())
+                .all(|v| v.is_finite())
+    }
+}
+
 #[derive(Clone, Debug)]
 pub(super) struct StoredStep {
     pub connected_from_previous: bool,
@@ -197,6 +326,13 @@ pub(super) struct StoredStep {
     pub predicted_covariance: StoredCovariance,
     pub filtered_covariance: StoredCovariance,
     pub smoothed_covariance: Option<StoredCovariance>,
+    pub predicted_sample: StoredImuSample,
+    pub filtered_sample: StoredImuSample,
+    pub smoothed_sample: Option<StoredImuSample>,
+    /// Filtered-to-predicted cross covariance in [navigation, held sample]
+    /// coordinates. Across a support boundary the sample columns refer to the
+    /// new independent sample; rows retain the completed sample's influence.
+    pub adjacent_sample_cross: DMatrix<f64>,
     /// Estimable-state transition from the previous stored epoch.
     pub transition: DMatrix<f64>,
     /// Fixed-mean consider sensitivity from the previous stored epoch.
@@ -205,10 +341,11 @@ pub(super) struct StoredStep {
     /// Immutable IMU interval used by `transition`/`process_covariance`.
     /// `None` is valid only for an initialization or discontinuous epoch.
     pub integration_imu: Option<StoredIntegrationImu>,
+    pub dynamics: Option<StoredDynamics>,
     pub reset_basis: DMatrix<f64>,
     /// Backward conditional from the next smoothed augmented error state into
     /// this one, expressed in both epochs' final smoothed tangent bases. The
-    /// augmented ordering is `[estimable state, fixed consider parameters]`.
+    /// augmented ordering is `[navigation state, fixed consider parameters, held sample error]`.
     /// It is populated by the RTS/consider pass and permits adjacent and
     /// arbitrary cross-time covariance recovery without an O(N^2) store.
     pub smoothed_backward_gain: Option<DMatrix<f64>>,
@@ -231,11 +368,25 @@ impl StoredStep {
         // flags/enums/objective + immutable integration IMU +
         // predicted/filtered/smoothed nominals + three covariance triples +
         // transition/Gamma/Q/reset/adjacent-cross.
-        let augmented_dimension = state_dimension.checked_add(consider_dimension)?;
-        17_usize
+        let augmented_dimension = state_dimension
+            .checked_add(consider_dimension)?
+            .checked_add(6)?;
+        19_usize
             .checked_add(StoredIntegrationImu::encoded_len())?
+            .checked_add(StoredDynamics::encoded_len(
+                state_dimension,
+                consider_dimension,
+            )?)?
             .checked_add(3_usize.checked_mul(nominal)?)?
             .checked_add(3_usize.checked_mul(covariance)?)?
+            .checked_add(3_usize.checked_mul(StoredImuSample::encoded_len(
+                state_dimension,
+                consider_dimension,
+            )?)?)?
+            .checked_add(matrix_bytes(
+                state_dimension.checked_add(6)?,
+                state_dimension.checked_add(6)?,
+            )?)?
             .checked_add(4_usize.checked_mul(matrix_bytes(state_dimension, state_dimension)?)?)?
             .checked_add(matrix_bytes(state_dimension, consider_dimension)?)?
             .checked_add(matrix_bytes(augmented_dimension, augmented_dimension)?)
@@ -251,7 +402,23 @@ impl StoredStep {
                 && value.state_consider.shape() == (state_dimension, consider_dimension)
                 && value.all_finite()
         };
-        if !self.predicted.is_finite()
+        if self
+            .dynamics
+            .as_ref()
+            .is_some_and(|d| !d.valid(state_dimension, consider_dimension))
+            || !self
+                .predicted_sample
+                .valid(state_dimension, consider_dimension)
+            || !self
+                .filtered_sample
+                .valid(state_dimension, consider_dimension)
+            || self
+                .smoothed_sample
+                .as_ref()
+                .is_some_and(|s| !s.valid(state_dimension, consider_dimension))
+            || self.adjacent_sample_cross.shape() != (state_dimension + 6, state_dimension + 6)
+            || !self.adjacent_sample_cross.iter().all(|v| v.is_finite())
+            || !self.predicted.is_finite()
             || !self.filtered.is_finite()
             || self
                 .smoothed
@@ -277,7 +444,9 @@ impl StoredStep {
                 .is_some_and(|value| value.end != self.filtered.time)
             || self.reset_basis.shape() != (state_dimension, state_dimension)
             || self.smoothed_backward_gain.as_ref().is_some_and(|value| {
-                let augmented_dimension = state_dimension.saturating_add(consider_dimension);
+                let augmented_dimension = state_dimension
+                    .saturating_add(consider_dimension)
+                    .saturating_add(6);
                 value.shape() != (augmented_dimension, augmented_dimension)
                     || !value.iter().all(|entry| entry.is_finite())
             })
@@ -324,6 +493,16 @@ impl StoredStep {
         bytes.push(u8::from(self.degraded_input));
         bytes.push(u8::from(self.smoothed_backward_gain.is_some()));
         bytes.push(u8::from(self.integration_imu.is_some()));
+        bytes.push(u8::from(self.smoothed_sample.is_some()));
+        bytes.push(u8::from(self.dynamics.is_some()));
+        self.dynamics
+            .as_ref()
+            .unwrap_or(&StoredDynamics::zeros(
+                state_dimension,
+                consider_dimension,
+                &self.filtered,
+            ))
+            .encode(&mut bytes);
         self.integration_imu
             .as_ref()
             .unwrap_or(&StoredIntegrationImu {
@@ -345,6 +524,13 @@ impl StoredStep {
             .as_ref()
             .unwrap_or(&self.filtered_covariance)
             .encode(&mut bytes);
+        self.predicted_sample.encode(&mut bytes);
+        self.filtered_sample.encode(&mut bytes);
+        self.smoothed_sample
+            .as_ref()
+            .unwrap_or(&self.filtered_sample)
+            .encode(&mut bytes);
+        put_matrix(&mut bytes, &self.adjacent_sample_cross);
         put_matrix(&mut bytes, &self.transition);
         put_matrix(&mut bytes, &self.consider_transition);
         put_matrix(&mut bytes, &self.process_covariance);
@@ -354,6 +540,7 @@ impl StoredStep {
         } else {
             let augmented_dimension = state_dimension
                 .checked_add(consider_dimension)
+                .and_then(|n| n.checked_add(6))
                 .ok_or(StoreError::IntegerOverflow)?;
             let zeros = augmented_dimension
                 .checked_mul(augmented_dimension)
@@ -391,6 +578,10 @@ impl StoredStep {
         let degraded_input = cursor.boolean()?;
         let has_smoothed_backward_gain = cursor.boolean()?;
         let has_integration_imu = cursor.boolean()?;
+        let has_smoothed_sample = cursor.boolean()?;
+        let has_dynamics = cursor.boolean()?;
+        let decoded_dynamics =
+            StoredDynamics::decode(&mut cursor, state_dimension, consider_dimension)?;
         let decoded_integration_imu = StoredIntegrationImu::decode(&mut cursor)?;
         let predicted = StoredNominal::decode(&mut cursor)?;
         let filtered = StoredNominal::decode(&mut cursor)?;
@@ -401,12 +592,20 @@ impl StoredStep {
             StoredCovariance::decode(&mut cursor, state_dimension, consider_dimension)?;
         let decoded_smoothed_covariance =
             StoredCovariance::decode(&mut cursor, state_dimension, consider_dimension)?;
+        let predicted_sample =
+            StoredImuSample::decode(&mut cursor, state_dimension, consider_dimension)?;
+        let filtered_sample =
+            StoredImuSample::decode(&mut cursor, state_dimension, consider_dimension)?;
+        let decoded_smoothed_sample =
+            StoredImuSample::decode(&mut cursor, state_dimension, consider_dimension)?;
+        let adjacent_sample_cross = cursor.matrix(state_dimension + 6, state_dimension + 6)?;
         let transition = cursor.matrix(state_dimension, state_dimension)?;
         let consider_transition = cursor.matrix(state_dimension, consider_dimension)?;
         let process_covariance = cursor.matrix(state_dimension, state_dimension)?;
         let reset_basis = cursor.matrix(state_dimension, state_dimension)?;
         let augmented_dimension = state_dimension
             .checked_add(consider_dimension)
+            .and_then(|n| n.checked_add(6))
             .ok_or(StoreError::IntegerOverflow)?;
         let decoded_smoothed_backward_gain =
             cursor.matrix(augmented_dimension, augmented_dimension)?;
@@ -423,10 +622,15 @@ impl StoredStep {
             predicted_covariance,
             filtered_covariance,
             smoothed_covariance: has_smoothed_covariance.then_some(decoded_smoothed_covariance),
+            predicted_sample,
+            filtered_sample,
+            smoothed_sample: has_smoothed_sample.then_some(decoded_smoothed_sample),
+            adjacent_sample_cross,
             transition,
             consider_transition,
             process_covariance,
             integration_imu: has_integration_imu.then_some(decoded_integration_imu),
+            dynamics: has_dynamics.then_some(decoded_dynamics),
             reset_basis,
             smoothed_backward_gain: has_smoothed_backward_gain
                 .then_some(decoded_smoothed_backward_gain),
@@ -1405,27 +1609,21 @@ fn decode_disposition(value: u8) -> Result<Option<InputDisposition>, StoreError>
 
 fn encode_gnss(value: GnssState) -> u8 {
     match value {
-        GnssState::Fixed => 0,
-        GnssState::Float => 1,
-        GnssState::Standalone => 2,
-        GnssState::Dgps => 3,
-        GnssState::Ppp => 4,
+        // Use a new tag so old readers cannot mistake generic health for RTK fixed.
+        GnssState::Healthy => 7,
         GnssState::Absent => 5,
         GnssState::Suspect => 6,
     }
 }
 
 fn decode_gnss(value: u8) -> Result<GnssState, StoreError> {
-    Ok(match value {
-        0 => GnssState::Fixed,
-        1 => GnssState::Float,
-        2 => GnssState::Standalone,
-        3 => GnssState::Dgps,
-        4 => GnssState::Ppp,
-        5 => GnssState::Absent,
-        6 => GnssState::Suspect,
-        _ => return Err(StoreError::Corrupt),
-    })
+    match value {
+        // Legacy positioning-mode tags all represented accepted GNSS evidence.
+        0..=4 | 7 => Ok(GnssState::Healthy),
+        5 => Ok(GnssState::Absent),
+        6 => Ok(GnssState::Suspect),
+        _ => Err(StoreError::Corrupt),
+    }
 }
 
 fn encode_timing(value: TimingQuality) -> u8 {
@@ -1477,6 +1675,19 @@ fn crc32c_matrix(matrix: &DMatrix<f64>) -> u32 {
 mod tests {
     use super::*;
 
+    #[test]
+    fn gnss_health_codec_preserves_legacy_health_and_rejects_unknown_tags() {
+        for legacy in 0..=4 {
+            assert_eq!(decode_gnss(legacy).unwrap(), GnssState::Healthy);
+        }
+        assert_eq!(encode_gnss(GnssState::Healthy), 7);
+        assert_eq!(decode_gnss(7).unwrap(), GnssState::Healthy);
+        assert_eq!(decode_gnss(5).unwrap(), GnssState::Absent);
+        assert_eq!(decode_gnss(6).unwrap(), GnssState::Suspect);
+        assert!(matches!(decode_gnss(8), Err(StoreError::Corrupt)));
+        assert!(matches!(decode_gnss(255), Err(StoreError::Corrupt)));
+    }
+
     fn nominal(time: i64) -> StoredNominal {
         StoredNominal {
             time: SessionTime::from_ns(time),
@@ -1486,6 +1697,7 @@ mod tests {
             accelerometer_bias_body: [0.01, 0.02, 0.03],
             gyroscope_bias_body: [0.001, 0.002, 0.003],
             colored_gnss_error: [0.1, 0.2, 0.3],
+            imu_sample_error_body: [0.0; 6],
             specific_force_body: [0.0, 0.0, 9.8],
             angular_rate_body: [0.0, 0.0, 0.1],
         }
@@ -1499,6 +1711,12 @@ mod tests {
     }
 
     fn step(n: usize, m: usize) -> StoredStep {
+        let mut sample = StoredImuSample::zeros(n, m);
+        sample.start = SessionTime::ZERO;
+        sample.end = SessionTime::from_ns(10);
+        sample.covariance_body = DMatrix::identity(6, 6) * 0.02;
+        sample.state_cross.fill(0.001);
+        sample.consider_cross.fill(0.0001);
         StoredStep {
             connected_from_previous: true,
             predicted: nominal(10),
@@ -1507,6 +1725,11 @@ mod tests {
             predicted_covariance: covariance(n, m),
             filtered_covariance: covariance(n, m),
             smoothed_covariance: Some(covariance(n, m)),
+            predicted_sample: sample.clone(),
+            filtered_sample: sample.clone(),
+            smoothed_sample: Some(sample),
+            adjacent_sample_cross: DMatrix::identity(n + 6, n + 6) * 0.5,
+            dynamics: None,
             transition: DMatrix::identity(n, n),
             consider_transition: DMatrix::zeros(n, m),
             process_covariance: DMatrix::identity(n, n) * 0.01,
@@ -1517,10 +1740,10 @@ mod tests {
                 specific_force_body: [1.0, 2.0, 3.0],
             }),
             reset_basis: DMatrix::identity(n, n),
-            smoothed_backward_gain: Some(DMatrix::identity(n + m, n + m) * 0.25),
+            smoothed_backward_gain: Some(DMatrix::identity(n + m + 6, n + m + 6) * 0.25),
             adjacent_cross_covariance: DMatrix::identity(n, n) * 0.5,
             disposition: Some(InputDisposition::Fused),
-            gnss_state: GnssState::Fixed,
+            gnss_state: GnssState::Healthy,
             timing_quality: TimingQuality::PpsCorrelated,
             degraded_input: false,
             objective_contribution: 3.5,
@@ -1536,6 +1759,22 @@ mod tests {
         assert_eq!(
             decoded.filtered.position_ecef,
             original.filtered.position_ecef
+        );
+        assert_eq!(
+            decoded.filtered_sample.covariance_body,
+            original.filtered_sample.covariance_body
+        );
+        assert_eq!(
+            decoded.predicted_sample.state_cross,
+            original.predicted_sample.state_cross
+        );
+        assert_eq!(
+            decoded.smoothed_sample.as_ref().unwrap().consider_cross,
+            original.smoothed_sample.as_ref().unwrap().consider_cross
+        );
+        assert_eq!(
+            decoded.adjacent_sample_cross,
+            original.adjacent_sample_cross
         );
         assert_eq!(decoded.transition, original.transition);
         assert_eq!(decoded.consider_transition, original.consider_transition);
@@ -1584,7 +1823,7 @@ mod tests {
             (store.path.clone(), store)
         };
         store.push(&step(15, 2)).unwrap();
-        assert_eq!(store.get(0).unwrap().gnss_state, GnssState::Fixed);
+        assert_eq!(store.get(0).unwrap().gnss_state, GnssState::Healthy);
         store.finish().unwrap();
         drop(store);
         assert!(!path.exists());

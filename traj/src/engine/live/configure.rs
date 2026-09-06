@@ -80,6 +80,8 @@ pub(super) fn make_live_core_config(
     Ok(LiveCoreConfig {
         fusion_delay_ns: i64::try_from(navigation.fusion_delay.as_ns())
             .map_err(|_| StepError::WorkspaceContract)?,
+        smoothing_lag_ns: i64::try_from(navigation.smoothing_lag.as_ns())
+            .map_err(|_| StepError::WorkspaceContract)?,
         navigation_period_ns,
         bias_correction_validity_norm: tuning.bias_correction_validity_norm.get() as f32,
         mechanization,

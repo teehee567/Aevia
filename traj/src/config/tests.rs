@@ -58,6 +58,22 @@ fn v2_resource_limits_reject_stack_outside_internal_sram() {
 }
 
 #[test]
+fn rts_psram_ceiling_is_explicit_and_bounded() {
+    assert_eq!(
+        LiveResourceLimits::V2_MINI_INITIAL.psram_bytes,
+        1_024 * 1_024
+    );
+    let mut limits = LiveResourceLimits::V2_MINI_RTS;
+    assert_eq!(limits.psram_bytes, 3 * 1_024 * 1_024);
+    assert_eq!(limits.validate_v2_mini(), Ok(limits));
+    limits.psram_bytes += 1;
+    assert_eq!(
+        limits.validate_v2_mini(),
+        Err(ValidationError::CapacityExceeded)
+    );
+}
+
+#[test]
 fn qualification_cannot_have_blank_numeric_gates() {
     let zero = NonNegativeF64::new(0.0).unwrap();
     let spec = QualificationSpecV1 {
@@ -282,8 +298,8 @@ fn qualification_requires_a_matching_passing_measured_report() {
     assert_eq!(status.live_root_enclosure(numeric_profile), None);
 
     let attestation = LiveRootEnclosureQualificationV1 {
-        backend_id: NATIVE_F64_TAYLOR_ROOT_BACKEND_ID,
-        backend_revision: NATIVE_F64_TAYLOR_ROOT_BACKEND_REVISION,
+        backend_id: ENCLOSURE_NATIVE_F64_ROOT_BACKEND_ID,
+        backend_revision: ENCLOSURE_NATIVE_F64_ROOT_BACKEND_REVISION,
         numeric_profile_digest: numeric_profile.digest,
         target_digest: passing.target_digest,
         toolchain_digest: numeric_profile.toolchain_digest,
@@ -313,6 +329,29 @@ fn qualification_requires_a_matching_passing_measured_report() {
     assert_eq!(
         attested_status.validate_numeric_attestations(numeric_profile),
         Ok(attested_status)
+    );
+    let legacy_report = QualificationReportV1 {
+        live_root_enclosure: Some(LiveRootEnclosureQualificationV1 {
+            backend_id: NATIVE_F64_TAYLOR_ROOT_BACKEND_ID,
+            backend_revision: NATIVE_F64_TAYLOR_ROOT_BACKEND_REVISION,
+            ..attestation
+        }),
+        ..passing
+    };
+    assert_eq!(
+        QualificationStatus::Qualified {
+            specification: &specification,
+            report: &legacy_report
+        }
+        .validate_numeric_attestations(numeric_profile),
+        Err(ValidationError::IncompatibleDefinition)
+    );
+    assert_eq!(
+        attested_status.validate_numeric_attestations(NumericProfileSpec {
+            fma_policy: FmaPolicy::Permitted,
+            ..numeric_profile
+        }),
+        Err(ValidationError::IncompatibleDefinition)
     );
 
     let mismatched_report = QualificationReportV1 {

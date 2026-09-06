@@ -29,7 +29,7 @@ use std::sync::{Arc, Mutex};
 use std::vec::Vec;
 
 #[cfg(feature = "offline")]
-pub(super) const OFFLINE_SEGMENT_MAGIC: [u8; 8] = *b"AEVTR03\0";
+pub(super) const OFFLINE_SEGMENT_MAGIC: [u8; 8] = *b"AEVTR04\0";
 
 #[cfg(feature = "offline")]
 pub(super) const OFFLINE_SEGMENT_CACHE_SLOTS: usize = 2;
@@ -47,6 +47,22 @@ pub(super) const OFFLINE_SEGMENT_PAYLOAD_BYTES: u64 = 2 * OFFLINE_KNOT_BYTES
 
 #[cfg(feature = "offline")]
 pub(super) const OFFLINE_BACKING_METADATA_ALLOWANCE_BYTES: u64 = 4 * 1_024;
+
+#[cfg(feature = "offline")]
+pub(super) fn coupled_payload_bytes(dimension: usize) -> Result<u64, ValidationError> {
+    if dimension == 0 {
+        return Ok(OFFLINE_SEGMENT_PAYLOAD_BYTES);
+    }
+    let d = u64::try_from(dimension).map_err(|_| ValidationError::CapacityExceeded)?;
+    d.checked_mul(d)
+        .and_then(|x| x.checked_mul(8))
+        .and_then(|x| d.checked_mul(4).and_then(|linear| x.checked_add(linear)))
+        .and_then(|x| x.checked_add(17))
+        .and_then(|x| x.checked_mul(8))
+        .and_then(|x| x.checked_add(16))
+        .and_then(|x| x.checked_add(OFFLINE_SEGMENT_PAYLOAD_BYTES))
+        .ok_or(ValidationError::CapacityExceeded)
+}
 
 #[cfg(feature = "offline")]
 pub(super) type SegmentStorage = std::vec::Vec<DenseSegment>;
@@ -96,15 +112,12 @@ impl OfflineSegmentBacking {
     pub(super) fn new(
         kind: FixedRecordStoreKind,
         maximum_segments: u64,
+        covariance_dimension: usize,
     ) -> Result<Self, ProcessError> {
-        let store = FixedRecordStore::new(
-            kind,
-            OFFLINE_SEGMENT_MAGIC,
-            OFFLINE_SEGMENT_PAYLOAD_BYTES,
-            maximum_segments,
-        )?;
-        let capacity = usize::try_from(OFFLINE_SEGMENT_PAYLOAD_BYTES)
-            .map_err(|_| ProcessError::ResourceLimit)?;
+        let payload =
+            coupled_payload_bytes(covariance_dimension).map_err(|_| ProcessError::ResourceLimit)?;
+        let store = FixedRecordStore::new(kind, OFFLINE_SEGMENT_MAGIC, payload, maximum_segments)?;
+        let capacity = usize::try_from(payload).map_err(|_| ProcessError::ResourceLimit)?;
         let mut io_buffer = Vec::new();
         io_buffer
             .try_reserve_exact(capacity)
@@ -279,14 +292,24 @@ impl Trajectory {
     /// replacement while an `Arc` lease is returned, each bridge's heap-owned
     /// 18-by-18 endpoint covariance, the reusable record I/O buffer, and a
     /// conservative fixed allowance for `Arc`/mutex/path/vector metadata.
-    #[cfg(feature = "offline")]
+    #[cfg(all(test, feature = "offline"))]
     pub(crate) fn offline_storage_bounds(
         maximum_segments: u64,
+    ) -> Result<OfflineTrajectoryStorageBounds, ValidationError> {
+        Self::offline_storage_bounds_with_covariance(maximum_segments, 0)
+    }
+
+    #[cfg(feature = "offline")]
+    pub(crate) fn offline_storage_bounds_with_covariance(
+        maximum_segments: u64,
+        covariance_dimension: usize,
     ) -> Result<OfflineTrajectoryStorageBounds, ValidationError> {
         if maximum_segments == 0 {
             return Err(ValidationError::CapacityExceeded);
         }
-        let record_bytes = OFFLINE_SEGMENT_PAYLOAD_BYTES
+        let payload = coupled_payload_bytes(covariance_dimension)?;
+        let extra = payload - OFFLINE_SEGMENT_PAYLOAD_BYTES;
+        let record_bytes = payload
             .checked_add(4)
             .ok_or(ValidationError::CapacityExceeded)?;
         let record_total = record_bytes
@@ -300,7 +323,9 @@ impl Trajectory {
                     >()
                     + 2 * core::mem::size_of::<usize>(),
             )
-            .map_err(|_| ValidationError::CapacityExceeded)?;
+            .map_err(|_| ValidationError::CapacityExceeded)?
+            .checked_add(extra)
+            .ok_or(ValidationError::CapacityExceeded)?;
         let decoded_slots = u64::try_from(OFFLINE_SEGMENT_CACHE_SLOTS + 1)
             .map_err(|_| ValidationError::CapacityExceeded)?;
         // Decoding constructs a validated bridge from a temporary input. The
@@ -313,7 +338,19 @@ impl Trajectory {
         .map_err(|_| ValidationError::CapacityExceeded)?;
         let cache_bytes = decoded_record_bytes
             .checked_mul(decoded_slots)
-            .and_then(|bytes| bytes.checked_add(OFFLINE_SEGMENT_PAYLOAD_BYTES))
+            .and_then(|bytes| bytes.checked_add(payload))
+            // Full-covariance construction/conditioning holds bounded dense
+            // matrices in addition to the decoded endpoint model. This covers
+            // three live models, each with 29 Taylor terms, two endpoint
+            // matrices, 16 cached transition/process pairs, a factorization,
+            // and query scratch. An extra record has at least 8*d*d doubles;
+            // 40 records leave room for the added three rate coordinates and
+            // matrix/vector metadata at the minimum supported d=21.
+            .and_then(|bytes| {
+                extra
+                    .checked_mul(40)
+                    .and_then(|scratch| bytes.checked_add(scratch))
+            })
             .and_then(|bytes| bytes.checked_add(transient_endpoint_covariance_bytes))
             .and_then(|bytes| bytes.checked_add(OFFLINE_BACKING_METADATA_ALLOWANCE_BYTES))
             .ok_or(ValidationError::CapacityExceeded)?;
@@ -329,11 +366,21 @@ impl Trajectory {
         })
     }
 
-    #[cfg(feature = "offline")]
+    #[cfg(all(test, feature = "offline"))]
     pub(crate) fn prepare_offline_storage(
         &mut self,
         maximum_segments: u64,
         kind: FixedRecordStoreKind,
+    ) -> Result<(), ProcessError> {
+        self.prepare_offline_storage_with_covariance(maximum_segments, kind, 0)
+    }
+
+    #[cfg(feature = "offline")]
+    pub(crate) fn prepare_offline_storage_with_covariance(
+        &mut self,
+        maximum_segments: u64,
+        kind: FixedRecordStoreKind,
+        covariance_dimension: usize,
     ) -> Result<(), ProcessError> {
         if self.offline_backing.is_some()
             || !self.segments.is_empty()
@@ -345,7 +392,7 @@ impl Trajectory {
         if maximum == 0 {
             return Err(ProcessError::ResourceLimit);
         }
-        let backing = OfflineSegmentBacking::new(kind, maximum_segments)?;
+        let backing = OfflineSegmentBacking::new(kind, maximum_segments, covariance_dimension)?;
         self.offline_backing = Some(Arc::new(Mutex::new(backing)));
         self.offline_segment_count = 0;
         self.offline_span = None;

@@ -168,6 +168,7 @@ pub(super) fn qualified_engine(validity: TimeSpan) -> EngineConfig<'static> {
         revision: 1,
         navigation_cadence_hz: 200,
         fusion_delay: DurationNs::from_ns(10_000_000),
+        smoothing_lag: DurationNs::ZERO,
         history_guard: DurationNs::from_ns(10_000_000),
         maximum_bridgeable_imu_gap: DurationNs::from_ns(5_000_000),
         reanchor_distance_m: nonnegative(100.0),
@@ -310,6 +311,10 @@ pub(super) const REPLAY_END_NS: i64 = 30_000_000;
 
 pub(super) fn processing_spec() -> ProcessingSpec<'static> {
     let span = TimeSpan::new(SessionTime::ZERO, SessionTime::from_ns(REPLAY_END_NS)).unwrap();
+    processing_spec_for_span(span)
+}
+
+pub(super) fn processing_spec_for_span(span: TimeSpan) -> ProcessingSpec<'static> {
     let engine = qualified_engine(span);
     let selections = std::boxed::Box::leak(
         [

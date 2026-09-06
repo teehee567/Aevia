@@ -83,6 +83,14 @@ impl LiveSession<'_, '_> {
                     .map_err(|_| StepError::EstimatorFailure)?;
             }
         }
+        let interval_seconds = interval
+            .end
+            .checked_duration_since(interval.start)
+            .filter(|duration| duration.as_ns() > 0)
+            .ok_or(StepError::EstimatorFailure)?
+            .as_seconds_f64() as f32;
+        let gyro_observation_covariance = interval.gyro_sample_covariance.to_matrix()
+            + self.imu_noise.gyro_covariance_density / interval_seconds;
         initializer
             .observe_imu(
                 interval.start,
@@ -93,6 +101,7 @@ impl LiveSession<'_, '_> {
                     .as_ns(),
                 interval.omega_ib_b,
                 interval.specific_force_b,
+                gyro_observation_covariance,
             )
             .map_err(|_| StepError::EstimatorFailure)?;
         let Some(anchor) = self.anchor else {
@@ -101,7 +110,7 @@ impl LiveSession<'_, '_> {
         };
         let earth_rate = earth_rate_n(&anchor)?;
         let Some(mut result) = initializer
-            .try_initialize(earth_rate)
+            .try_initialize(earth_rate, interval.specific_force_b)
             .map_err(|_| StepError::EstimatorFailure)?
         else {
             self.internal.initializer = Some(initializer);

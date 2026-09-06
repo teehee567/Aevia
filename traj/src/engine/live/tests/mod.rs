@@ -32,8 +32,8 @@ use crate::{
     observation::{
         AxisStatus, ClockAffineBridge, ClockDiscontinuityReason, ClockTransitionObservation,
         ClockTransitionUncertainty, GnssDiagnostics, GnssPosition, GnssSolutionObservation,
-        GnssVelocity, ImuObservation, ImuStatus, IndependentClockPrior, ReceiverHealth, RtkState,
-        SolutionClass, TimedAngularRate, TimedDiagnostic, TimedSpecificForce, VelocityMethod,
+        GnssVelocity, ImuObservation, ImuStatus, IndependentClockPrior, ReceiverHealth,
+        TimedAngularRate, TimedDiagnostic, TimedSpecificForce,
     },
     offline::{
         CAPTURED_REINITIALIZATION_SCHEMA_V2, CapturedReinitializationInputV2,
@@ -47,6 +47,7 @@ use crate::{
     uncertainty::{Covariance3, MeasurementUncertainty, SharedParameterCovariance, Variance},
 };
 
+mod dense_uncertainty;
 mod profile_fixture;
 use profile_fixture::*;
 
@@ -63,10 +64,13 @@ mod session_fixture;
 use session_fixture::*;
 
 mod gnss_quality;
+mod gnss_validity;
+mod moving_initialization;
 
 mod imu_quality;
 
 mod live_preflight;
+mod live_smoothing;
 
 mod clock_transitions;
 

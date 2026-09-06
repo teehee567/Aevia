@@ -308,3 +308,28 @@ fn psd_validation_rejects_asymmetry_without_a_unit_scale_floor() {
     let indefinite = DMatrix::from_row_slice(2, 2, &[tiny, 2.0 * tiny, 2.0 * tiny, tiny]);
     assert!(!matrix_is_psd(&indefinite));
 }
+
+#[test]
+fn covariance_supported_solve_preserves_deterministic_and_small_scaled_directions() {
+    let covariance = DMatrix::from_diagonal(&DVector::from_vec(std::vec![1.0e24, 1.0e-24, 0.0]));
+    let expected = DMatrix::from_column_slice(3, 1, &[2.0, 3.0, 0.0]);
+    let solved = solve_psd(&covariance, &(&covariance * &expected)).unwrap();
+    assert!((&solved - &expected).norm() < 1.0e-12);
+    let unsupported = DMatrix::from_column_slice(3, 1, &[0.0, 0.0, 1.0]);
+    assert_eq!(
+        solve_psd(&covariance, &unsupported),
+        Err(ProcessError::NumericalNonConvergence)
+    );
+    let factor = DMatrix::from_column_slice(3, 1, &[1.0e12, 1.0e-12, 0.0]);
+    let singular = &factor * factor.transpose();
+    let solved = solve_psd(&singular, &factor).unwrap();
+    let reconstructed = &singular * &solved;
+    for row in 0..2 {
+        assert!((reconstructed[(row, 0)] / factor[(row, 0)] - 1.0).abs() < 1.0e-12);
+    }
+    let indefinite = DMatrix::from_row_slice(2, 2, &[1.0, 2.0, 2.0, 1.0]);
+    assert_eq!(
+        solve_psd(&indefinite, &DMatrix::zeros(2, 1)),
+        Err(ProcessError::NumericalNonConvergence)
+    );
+}

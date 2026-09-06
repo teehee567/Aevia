@@ -37,6 +37,7 @@ pub(super) const BRIDGE_ATTITUDE: usize = 6;
 /// are different.
 #[cfg(feature = "offline")]
 pub(crate) struct DenseBridgeInput {
+    pub coupled: Option<Box<super::coupled::CoupledDenseBridge>>,
     /// Whether the independent process model below represents the solver's
     /// covariance. False preserves endpoint marginals and dense means while
     /// leaving interior uncertainty explicitly unavailable.
@@ -65,6 +66,7 @@ pub(crate) struct DenseBridgeLinearization {
 #[cfg(feature = "offline")]
 #[derive(Clone, Debug, PartialEq)]
 pub(super) struct DenseConditionalBridge {
+    pub(super) coupled: Option<Box<super::coupled::CoupledDenseBridge>>,
     pub(super) covariance_available: bool,
     pub(super) endpoint_joint_covariance:
         Box<[[f64; BRIDGE_ENDPOINT_DIMENSION]; BRIDGE_ENDPOINT_DIMENSION]>,
@@ -77,6 +79,9 @@ pub(super) struct DenseConditionalBridge {
 #[cfg(feature = "offline")]
 impl DenseConditionalBridge {
     pub(super) fn new(input: &DenseBridgeInput) -> Result<Self, ValidationError> {
+        if let Some(coupled) = &input.coupled {
+            coupled.validate()?;
+        }
         validate_symmetric_psd(
             &DMatrix::from_row_slice(
                 BRIDGE_ENDPOINT_DIMENSION,
@@ -120,6 +125,7 @@ impl DenseConditionalBridge {
             )?;
         }
         Ok(Self {
+            coupled: input.coupled.clone(),
             covariance_available: input.covariance_available,
             endpoint_joint_covariance: input.endpoint_joint_covariance.clone(),
             acceleration_spectral_density_ecef: input.acceleration_spectral_density_ecef,

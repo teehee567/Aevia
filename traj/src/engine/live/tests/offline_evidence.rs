@@ -92,11 +92,11 @@ fn offline_requested_span_excludes_later_manifest_observations_case() {
 }
 
 #[test]
-fn offline_rejects_smoothing_that_reuses_noisy_imu_across_stored_cuts() {
-    with_large_stack(offline_rejects_smoothing_that_reuses_noisy_imu_across_stored_cuts_case);
+fn offline_smooths_noisy_imu_across_asynchronous_measurement_cuts() {
+    with_large_stack(offline_smooths_noisy_imu_across_asynchronous_measurement_cuts_case);
 }
 
-fn offline_rejects_smoothing_that_reuses_noisy_imu_across_stored_cuts_case() {
+fn offline_smooths_noisy_imu_across_asynchronous_measurement_cuts_case() {
     let (mut spec, manifest, events) = replay_fixture(false);
     spec.policy = crate::config::ProcessingPolicy::require(ProcessingLevel::OfflineSmooth);
     let mut changed = events.to_vec();
@@ -116,15 +116,10 @@ fn offline_rejects_smoothing_that_reuses_noisy_imu_across_stored_cuts_case() {
         .unwrap();
     let mut source = SliceEvidenceSource::new(manifest, &changed);
     let mut sink = RecordingSink::default();
-    // The forward filter retains this sample's cross covariance, but
-    // adjacent-only RTS cannot smooth multiple stored cuts exactly until
-    // its persistent state also retains the shared sample latent.
-    assert!(matches!(
-        prepared.run(&mut source, &mut sink, run_control()),
-        Err(ProcessError::CapabilityUnavailable)
-    ));
-    assert_eq!(sink.commits, 0);
-    assert_eq!(sink.states, 0);
+    let result = prepared.run(&mut source, &mut sink, run_control()).unwrap();
+    assert!(result.summary.state_count >= 5);
+    assert_eq!(sink.commits, 1);
+    assert!(sink.states >= 5);
 }
 
 #[test]
@@ -170,4 +165,32 @@ fn offline_post_gap_span_requires_reinitialization_before_new_evidence_case() {
         Err(ProcessError::IncompleteEvidence)
     ));
     assert_eq!(sink.commits, 0);
+}
+
+#[test]
+fn offline_rank_deficient_clock_prior_preserves_publication() {
+    with_large_stack(|| {
+        let (mut spec, manifest, events) = replay_fixture(false);
+        spec.policy = crate::config::ProcessingPolicy::require(ProcessingLevel::OfflineSmooth);
+        let prepared = TrajectoryEngine::process(spec)
+            .preflight(manifest, offline_limits())
+            .unwrap();
+        let mut baseline_source = SliceEvidenceSource::new(manifest, &events);
+        let mut baseline_sink = RecordingSink::default();
+        let baseline = prepared.run(&mut baseline_source, &mut baseline_sink, run_control());
+        assert!(baseline.is_ok());
+        let mut changed = events.to_vec();
+        let EvidenceEvent::ClockModel { model, .. } = &mut changed[1] else {
+            unreachable!()
+        };
+        model.covariance_upper = [1.0, 0.0, 0.0];
+        model.validate(6).unwrap();
+        let mut source = SliceEvidenceSource::new(manifest, &changed);
+        let mut sink = RecordingSink::default();
+        let result = prepared.run(&mut source, &mut sink, run_control());
+        assert!(
+            result.is_ok(),
+            "a valid PSD clock prior should preserve smoothed trajectory publication"
+        );
+    });
 }

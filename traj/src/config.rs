@@ -28,7 +28,8 @@ pub use live::{
     MAX_INITIAL_CLOCK_SHARED_DIMENSION,
 };
 pub use numeric::{
-    FmaPolicy, LiveRootEnclosureQualificationV1, NATIVE_F64_TAYLOR_ROOT_BACKEND_ID,
+    ENCLOSURE_NATIVE_F64_ROOT_BACKEND_ID, ENCLOSURE_NATIVE_F64_ROOT_BACKEND_REVISION, FmaPolicy,
+    LiveRootEnclosureQualificationV1, NATIVE_F64_TAYLOR_ROOT_BACKEND_ID,
     NATIVE_F64_TAYLOR_ROOT_BACKEND_REVISION, NumericProfileSpec, ScalarPolicy,
 };
 pub use processing::{

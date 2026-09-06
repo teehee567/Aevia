@@ -8,7 +8,7 @@ use crate::{
     config::AttachmentModel,
     error::ValidationError,
     frame::ReferencePointKind,
-    ids::{FrameId, GateId, MetricDefinitionId, ReferencePointId, TargetId},
+    ids::{FrameId, GateId, MetricDefinitionId, ReferencePointId, SharedParameterId, TargetId},
     time::{DurationNs, SessionTime},
 };
 use heapless::Vec as FixedVec;
@@ -49,6 +49,38 @@ impl CrossingDirection {
     }
 }
 
+/// Correlation model for a gate's fixed survey displacement.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum GateSurveyUncertainty {
+    /// Gate displacement is treated as exact.
+    Exact,
+    /// A scalar marginal alone does not specify its correlation with navigation.
+    Unspecified,
+    /// Legacy normal-displacement variance in m² with unspecified correlation.
+    UnspecifiedVariance(f64),
+    /// The scalar normal displacement is independent of navigation and of
+    /// other gate IDs. Repeated crossings of this gate share the same error.
+    Independent(f64),
+    /// Three residual ECEF displacement coordinates in the engine's joint
+    /// `SurveyMetres` catalog. Their supplied mean must be zero: the resolved
+    /// gate center already includes the nominal survey correction.
+    Shared(SharedParameterId),
+}
+
+impl GateSurveyUncertainty {
+    pub(crate) fn validate(self) -> Result<(), ValidationError> {
+        match self {
+            Self::UnspecifiedVariance(variance) | Self::Independent(variance)
+                if !variance.is_finite() || variance < 0.0 =>
+            {
+                Err(ValidationError::InvalidMetricDefinition)
+            }
+            Self::Shared(id) if id.get() == 0 => Err(ValidationError::InvalidMetricDefinition),
+            _ => Ok(()),
+        }
+    }
+}
+
 /// A finite oriented gate in an already resolved ECEF frame.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct FiniteGate {
@@ -64,7 +96,7 @@ pub struct FiniteGate {
     pub minimum_normal_speed_mps: f64,
     pub rearm_distance_m: f64,
     pub minimum_crossing_interval: DurationNs,
-    pub survey_variance_normal_m2: Option<f64>,
+    pub survey_uncertainty: GateSurveyUncertainty,
 }
 
 impl FiniteGate {
@@ -121,8 +153,50 @@ impl FiniteGate {
             minimum_normal_speed_mps,
             rearm_distance_m,
             minimum_crossing_interval,
-            survey_variance_normal_m2,
+            survey_uncertainty: match survey_variance_normal_m2 {
+                None => GateSurveyUncertainty::Unspecified,
+                Some(0.0) => GateSurveyUncertainty::Exact,
+                Some(variance) => GateSurveyUncertainty::UnspecifiedVariance(variance),
+            },
         })
+    }
+
+    /// Declares the supplied normal survey variance independent of navigation
+    /// and other physical gates. Reusing this gate ID reuses that fixed error.
+    pub fn with_independent_survey(mut self) -> Result<Self, ValidationError> {
+        let variance = match self.survey_uncertainty {
+            GateSurveyUncertainty::Exact => 0.0,
+            GateSurveyUncertainty::UnspecifiedVariance(value)
+            | GateSurveyUncertainty::Independent(value) => value,
+            _ => return Err(ValidationError::InvalidMetricDefinition),
+        };
+        if !variance.is_finite() || variance < 0.0 {
+            return Err(ValidationError::InvalidMetricDefinition);
+        }
+        self.survey_uncertainty = GateSurveyUncertainty::Independent(variance);
+        Ok(self)
+    }
+
+    /// Binds survey displacement to a stable three-coordinate shared parameter.
+    /// Its joint covariance replaces the legacy scalar marginal; engine
+    /// preflight checks the kind, mean, and coordinate-operation accuracy.
+    pub fn with_shared_survey_parameter(
+        mut self,
+        parameter: SharedParameterId,
+    ) -> Result<Self, ValidationError> {
+        if parameter.get() == 0 {
+            return Err(ValidationError::InvalidMetricDefinition);
+        }
+        self.survey_uncertainty = GateSurveyUncertainty::Shared(parameter);
+        Ok(self)
+    }
+
+    /// Canonical gate-definition identity, including survey correlation and
+    /// shared parameter identity. A caller assembling a metric-plan digest
+    /// can bind this complete gate definition without relying on Debug output.
+    #[must_use]
+    pub fn canonical_digest_v1(&self) -> crate::ids::ContentDigestV1 {
+        super::identity::gate_definition_digest_v1(self)
     }
 
     pub(super) fn contains(&self, point_ecef_m: [f64; 3], tolerance_m: f64) -> bool {
@@ -138,7 +212,12 @@ pub struct DistancePlan {
     pub definition: MetricDefinitionId,
     pub quantity: DistanceQuantity,
     pub reference_point: ReferencePointId,
+    /// Absolute quadrature-error allowance for the complete measurement,
+    /// shared across all trajectory segments and speed-sign subdivisions.
     pub absolute_tolerance_m: f64,
+    /// Relative allowance for the complete signed or unsigned distance.
+    /// Reported numerical error must not exceed the larger of the absolute
+    /// allowance and this fraction of the absolute reported distance.
     pub relative_tolerance: f64,
 }
 
@@ -189,6 +268,7 @@ impl LapPlan {
     }
 
     pub fn push_gate(&mut self, gate: FiniteGate) -> Result<(), ValidationError> {
+        gate.survey_uncertainty.validate()?;
         if self.gates.iter().any(|present| present.id == gate.id) {
             return Err(ValidationError::InvalidMetricDefinition);
         }

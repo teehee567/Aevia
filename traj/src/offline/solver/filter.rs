@@ -5,7 +5,10 @@ use crate::{
     error::ProcessError,
     ids::ClockModelId,
     observation::{GnssSolutionObservation, ImuObservation, InputDisposition},
-    offline::store::{StateStore, StoredCovariance, StoredIntegrationImu, StoredNominal},
+    offline::store::{
+        StateStore, StoredCovariance, StoredDynamics, StoredImuSample, StoredIntegrationImu,
+        StoredNominal,
+    },
     quality::{DiagnosticCounts, GnssState, TimingQuality},
     time::{DurationNs, SessionTime},
 };
@@ -54,23 +57,18 @@ pub(super) struct ActiveImuSample {
     pub(super) end: SessionTime,
     pub(super) covariance_body: DMatrix<f64>,
     pub(super) state_cross: DMatrix<f64>,
-    pub(super) stored_interior_cut: bool,
+    pub(super) consider_cross: DMatrix<f64>,
 }
 
 impl ActiveImuSample {
-    pub(super) fn record_stored_propagation(
-        &mut self,
-        end: SessionTime,
-    ) -> Result<(), ProcessError> {
-        // The current RTS record contains navigation/consider state only.
-        // A held sample shared by two stored edges would make that sequence
-        // non-Markov. Refuse it until the smoother retains the sample latent;
-        // adjacent cross covariances alone do not recover the joint model.
-        if self.stored_interior_cut && self.covariance_body.amax() > 0.0 {
-            return Err(ProcessError::CapabilityUnavailable);
+    pub(super) fn stored(&self) -> StoredImuSample {
+        StoredImuSample {
+            start: self.start,
+            end: self.end,
+            covariance_body: self.covariance_body.clone(),
+            state_cross: self.state_cross.clone(),
+            consider_cross: self.consider_cross.clone(),
         }
-        self.stored_interior_cut = end < self.end;
-        Ok(())
     }
 }
 
@@ -179,7 +177,9 @@ pub(super) struct OfflineFilter<'a> {
     pub(super) process_accumulator: DMatrix<f64>,
     pub(super) sample_influence_accumulator: DMatrix<f64>,
     pub(super) last_stored_sample_cross: DMatrix<f64>,
+    pub(super) last_stored_sample: Option<StoredImuSample>,
     pub(super) integration_imu: Option<StoredIntegrationImu>,
+    pub(super) dynamics: Option<StoredDynamics>,
     pub(super) connected: bool,
     pub(super) gnss_state: GnssState,
     pub(super) timing_quality: TimingQuality,
@@ -232,7 +232,9 @@ impl<'a> OfflineFilter<'a> {
             process_accumulator: DMatrix::zeros(state_dimension, state_dimension),
             sample_influence_accumulator: DMatrix::zeros(state_dimension, 6),
             last_stored_sample_cross: DMatrix::zeros(state_dimension, 6),
+            last_stored_sample: None,
             integration_imu: None,
+            dynamics: None,
             connected: false,
             gnss_state: GnssState::Absent,
             timing_quality: TimingQuality::Modeled,
@@ -384,7 +386,9 @@ impl<'a> OfflineFilter<'a> {
         self.process_accumulator.fill(0.0);
         self.sample_influence_accumulator.fill(0.0);
         self.last_stored_sample_cross.fill(0.0);
+        self.last_stored_sample = None;
         self.integration_imu = None;
+        self.dynamics = None;
     }
 
     pub(super) fn process_imu(
@@ -455,6 +459,11 @@ impl<'a> OfflineFilter<'a> {
                 return Err(ProcessError::InvalidEvidence);
             }
             self.install_active_imu_sample(&held, None)?;
+            super::inertial::refresh_inertial_kinematics(
+                self.nominal.as_mut().ok_or(ProcessError::InvalidEvidence)?,
+                &held,
+            )?;
+            self.replace_stored_sample(store)?;
         }
         Ok(())
     }
@@ -508,6 +517,11 @@ impl<'a> OfflineFilter<'a> {
             .covariance
             .clone()
             .ok_or(ProcessError::InvalidEvidence)?;
+        let predicted_sample = self
+            .active_imu_sample
+            .as_ref()
+            .ok_or(ProcessError::IncompleteEvidence)?
+            .stored();
         let outcome = self.update_gnss(solution, field, time, guide)?;
         self.objective += outcome.objective;
         match outcome.disposition {
@@ -525,7 +539,7 @@ impl<'a> OfflineFilter<'a> {
             }
         }
         self.store_current(
-            Some((predicted, predicted_covariance)),
+            Some((predicted, predicted_covariance, predicted_sample)),
             Some((outcome.disposition, outcome.objective, outcome.reset_basis)),
             store,
         )?;

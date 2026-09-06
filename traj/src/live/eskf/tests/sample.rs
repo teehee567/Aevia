@@ -1,7 +1,7 @@
 //! Sample regression coverage.
 
 use super::super::{
-    Eskf, EskfError, EskfPropagationScratch, GapNavCrossCovariance, ProcessNoise,
+    Eskf, EskfError, EskfPropagationScratch, GapNavCrossCovariance, ProcessNoise, RtsUpdateCapture,
     gnss::{GnssObservation, UpdateDecision},
     update::LinearMeasurement,
 };
@@ -201,16 +201,36 @@ fn held_sample_gnss_matches_augmented_schmidt_oracle_with_clock_and_reset() {
     let expected = reset
         * (residual_map * prior * residual_map.transpose() + gain * noise * gain.transpose())
         * reset.transpose();
+    let mut capture = std::boxed::Box::new(RtsUpdateCapture::new());
     let result = filter
-        .update_gnss_with_imu_sample(
+        .update_gnss_with_imu_sample_and_smoothing(
             &observation,
             &zero_context(),
             gate(),
             Some(&sample_covariance),
             Some(&mut sample_cross),
+            Some(&mut capture),
         )
         .unwrap();
     assert!(matches!(result.joint, Some(UpdateDecision::Fused { .. })));
+    // Compare the captured pre-/post-update error cross to the independently
+    // assembled augmented Schmidt oracle, including nonzero attitude reset.
+    let expected_transform = reset * residual_map;
+    let mut captured_transform = SMatrix::<f64, NAV_DIM, AUGMENTED_DIM>::zeros();
+    for row in 0..NAV_DIM {
+        for column in 0..AUGMENTED_DIM {
+            let captured_column = if column < SAMPLE_START {
+                column
+            } else {
+                crate::live::smoothing::SAMPLE_START + column - SAMPLE_START
+            };
+            captured_transform[(row, column)] =
+                f64::from(capture.nav_transform[(row, captured_column)]);
+        }
+    }
+    assert!((captured_transform - expected_transform.fixed_rows::<NAV_DIM>(0)).norm() < 2.0e-6);
+    let expected_cross = prior * expected_transform.fixed_rows::<NAV_DIM>(0).transpose();
+    assert!((prior * captured_transform.transpose() - expected_cross).norm() < 2.0e-6);
     assert!(
         (augmented_covariance(&filter, &sample_covariance, &sample_cross) - expected).norm()
             < 3.0e-6
@@ -233,7 +253,7 @@ fn held_sample_gnss_matches_augmented_schmidt_oracle_with_clock_and_reset() {
     }
 }
 
-fn sample_batch(
+pub(super) fn sample_batch(
     start_ns: i64,
     end_ns: i64,
     covariance: &ImuSampleCovariance,

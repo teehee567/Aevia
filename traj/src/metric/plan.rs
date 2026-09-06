@@ -470,6 +470,9 @@ fn validate_definition(definition: &MetricDefinition) -> Result<(), ValidationEr
             if plan.gates.is_empty() || plan.maximum_occurrences_per_gate == 0 {
                 return Err(ValidationError::InvalidMetricDefinition);
             }
+            for gate in &plan.gates {
+                gate.survey_uncertainty.validate()?;
+            }
         }
         MetricDefinition::Drag(plan) => {
             if plan.targets.is_empty()

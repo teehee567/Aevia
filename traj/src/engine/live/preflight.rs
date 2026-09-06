@@ -82,7 +82,7 @@ pub(super) fn validate_live_metric_bindings(
     metrics: &crate::metric::LiveMetricPlan,
     initial_heading_available: bool,
 ) -> Result<(), PrepareError> {
-    validate_surveyed_gate_bindings(engine, metrics.plan())?;
+    validate_surveyed_gate_bindings(engine, metrics.plan(), None)?;
     let mut needs_non_polynomial_roots = false;
     for definition in metrics.plan().definitions() {
         let reference = match definition {

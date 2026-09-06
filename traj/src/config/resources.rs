@@ -3,7 +3,7 @@
 use crate::error::ValidationError;
 use crate::time::DurationNs;
 
-/// Initial live-resource ceilings for the complete V2 Mini firmware.
+/// Explicit live-resource ceilings for the complete V2 Mini firmware.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct LiveResourceLimits {
     /// Internal SRAM for engine state, stack, scratch, metrics, and hot history.
@@ -40,12 +40,21 @@ impl LiveResourceLimits {
         recorder_stall_coverage: DurationNs::from_ns(2_000_000_000),
     };
 
-    /// Validates non-zero bounds and containment within the initial V2 Mini
-    /// ceiling. A larger measured profile must use a distinct future contract.
+    /// Development ceiling for the bounded live extended RTS workspace.
+    /// This explicitly expands cold PSRAM from the original 1 MiB contract;
+    /// timing, linker placement, and stack use still require qualification on
+    /// the complete fitted firmware before release.
+    pub const V2_MINI_RTS: Self = Self {
+        psram_bytes: 3 * 1_024 * 1_024,
+        ..Self::V2_MINI_INITIAL
+    };
+
+    /// Validates non-zero bounds and containment within the current V2 Mini
+    /// RTS development ceiling. Validation does not attest hardware timing.
     pub const fn validate_v2_mini(self) -> Result<Self, ValidationError> {
         if self.internal_sram_bytes == 0
             || self.internal_sram_bytes > Self::V2_MINI_INITIAL.internal_sram_bytes
-            || self.psram_bytes > Self::V2_MINI_INITIAL.psram_bytes
+            || self.psram_bytes > Self::V2_MINI_RTS.psram_bytes
             || self.stack_bytes == 0
             || self.stack_bytes > Self::V2_MINI_INITIAL.stack_bytes
             || self.stack_bytes > self.internal_sram_bytes

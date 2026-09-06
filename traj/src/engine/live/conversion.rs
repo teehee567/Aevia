@@ -58,7 +58,10 @@ pub(super) fn project_nav_state(
     let q_ecef_from_n =
         NaUnitQuaternion::from_rotation_matrix(&Rotation3::from_matrix_unchecked(ecef_from_n));
     let q_n_from_body = state.orientation_n_from_b.cast::<f64>();
-    let q = q_ecef_from_n * q_n_from_body;
+    let mut q = q_ecef_from_n * q_n_from_body;
+    // The f32 filter's unit quaternion carries f32 rounding error. Normalize
+    // the computed f64 rotation before applying the public f64 unit tolerance.
+    q.renormalize();
     let raw = q.quaternion();
     let orientation = UnitQuaternion::from_wxyz([raw.w, raw.i, raw.j, raw.k])
         .map_err(StepError::InvalidObservation)?;
@@ -258,6 +261,7 @@ pub(super) fn map_core_step_error(error: LiveCoreError) -> StepError {
         LiveCoreError::InputClosed => StepError::AlreadyFinishing,
         LiveCoreError::MeasurementQueueRejected(EnqueueDisposition::CapacityExceeded)
         | LiveCoreError::RawImuHistoryFull
+        | LiveCoreError::SmoothingHistoryFull
         | LiveCoreError::PredictorHistoryFull => StepError::OutputCapacityExceeded,
         LiveCoreError::MeasurementQueueRejected(EnqueueDisposition::Duplicate) => {
             StepError::WorkspaceContract

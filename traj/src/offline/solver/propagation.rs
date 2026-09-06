@@ -4,18 +4,19 @@ use crate::{
     error::ProcessError,
     observation::InputDisposition,
     offline::store::{
-        StateStore, StoredCovariance, StoredIntegrationImu, StoredNominal, StoredStep,
+        StateStore, StoredCovariance, StoredDynamics, StoredImuSample, StoredIntegrationImu,
+        StoredNominal, StoredStep,
     },
     time::SessionTime,
 };
 
-use nalgebra::DMatrix;
+use nalgebra::{DMatrix, DVector};
 
 use super::{
     estimation::{injection_reset, left_solve, repair_covariance, right_solve},
     filter::{ActiveImuSample, HeldImu, OfflineFilter},
     inertial::{propagation_model, refresh_inertial_kinematics},
-    math::symmetric,
+    math::{copy_block, symmetric},
     smoothing::{boxminus, boxplus_with_reset},
 };
 
@@ -115,6 +116,7 @@ impl<'a> OfflineFilter<'a> {
                     self.state_dimension,
                     self.colored_error,
                 )?;
+                self.retain_dynamics(&guide_current, &dynamics, target);
                 let mut extrapolated_guide = dynamics.nominal.clone();
                 extrapolated_guide.time = target;
                 let guide_next = guide.unwrap_or(&extrapolated_guide);
@@ -143,6 +145,7 @@ impl<'a> OfflineFilter<'a> {
                     self.state_dimension,
                     self.colored_error,
                 )?;
+                self.retain_dynamics(&current_nominal, &dynamics, target);
                 (
                     dynamics.nominal,
                     dynamics.transition,
@@ -153,9 +156,11 @@ impl<'a> OfflineFilter<'a> {
             };
         let mut next_nominal = next_nominal;
         next_nominal.time = target;
+        next_nominal.imu_sample_error_body = current_nominal.imu_sample_error_body;
         refresh_inertial_kinematics(&mut next_nominal, imu)?;
 
-        let propagated_sample_cross = &transition * &active_sample.state_cross;
+        let propagated_sample_cross = &transition * &active_sample.state_cross
+            + &consider_transition * active_sample.consider_cross.transpose();
         let p_xx = &transition * &covariance.state * transition.transpose()
             + &transition * &covariance.state_consider * consider_transition.transpose()
             + &consider_transition * covariance.state_consider.transpose() * transition.transpose()
@@ -165,7 +170,8 @@ impl<'a> OfflineFilter<'a> {
             + &sample_influence * propagated_sample_cross.transpose()
             + &sample_influence * &active_sample.covariance_body * sample_influence.transpose();
         let propagated_state_consider = &transition * &covariance.state_consider
-            + &consider_transition * &self.catalog.covariance;
+            + &consider_transition * &self.catalog.covariance
+            + &sample_influence * &active_sample.consider_cross;
         covariance.state = symmetric(p_xx);
         covariance.state_consider = propagated_state_consider;
         repair_covariance(
@@ -206,13 +212,65 @@ impl<'a> OfflineFilter<'a> {
         Ok(())
     }
 
+    fn retain_dynamics(
+        &mut self,
+        reference: &StoredNominal,
+        model: &super::inertial::PropagationModel,
+        target: SessionTime,
+    ) {
+        let mut end = model.nominal.clone();
+        end.time = target;
+        self.dynamics = Some(StoredDynamics {
+            reference_start: reference.clone(),
+            reference_end: end,
+            continuous: model.continuous.clone(),
+            noise_density: model.noise_density.clone(),
+            consider_rate_mapping: model.consider_rate_mapping.clone(),
+            sample_rate_mapping: model.sample_rate_mapping.clone(),
+        });
+    }
+
+    /// Replace the completed support's latent by the next independent sample
+    /// at the same epoch without creating a zero-duration smoothing edge.
+    pub(super) fn replace_stored_sample(
+        &mut self,
+        store: &mut dyn StateStore,
+    ) -> Result<(), ProcessError> {
+        let nominal = self.nominal.as_ref().ok_or(ProcessError::InvalidEvidence)?;
+        if self.last_stored_time != Some(nominal.time) || store.len() == 0 {
+            return Ok(());
+        }
+        let sample = self
+            .active_imu_sample
+            .as_ref()
+            .ok_or(ProcessError::IncompleteEvidence)?
+            .stored();
+        let index = store.len() - 1;
+        let mut step = store.get(index).map_err(ProcessError::from)?;
+        step.predicted.imu_sample_error_body = [0.0; 6];
+        step.filtered = nominal.clone();
+        step.predicted_sample = sample.clone();
+        step.filtered_sample = sample.clone();
+        step.adjacent_sample_cross
+            .columns_mut(self.state_dimension, 6)
+            .fill(0.0);
+        store.set(index, &step).map_err(ProcessError::from)?;
+        self.last_stored_sample = Some(sample);
+        Ok(())
+    }
+
     pub(super) fn store_current(
         &mut self,
-        predicted_override: Option<(StoredNominal, StoredCovariance)>,
+        predicted_override: Option<(StoredNominal, StoredCovariance, StoredImuSample)>,
         measurement: Option<(InputDisposition, f64, DMatrix<f64>)>,
         store: &mut dyn StateStore,
     ) -> Result<(), ProcessError> {
         let filtered = self.nominal.clone().ok_or(ProcessError::InvalidEvidence)?;
+        let filtered_sample = self
+            .active_imu_sample
+            .as_ref()
+            .ok_or(ProcessError::IncompleteEvidence)?
+            .stored();
         let filtered_covariance = self
             .covariance
             .clone()
@@ -227,6 +285,10 @@ impl<'a> OfflineFilter<'a> {
             }
             existing.filtered = filtered.clone();
             existing.filtered_covariance = filtered_covariance.clone();
+            existing.filtered_sample = filtered_sample.clone();
+            if self.dynamics.is_some() {
+                existing.dynamics = self.dynamics.take();
+            }
             existing.gnss_state = self.gnss_state;
             existing.timing_quality = self.timing_quality;
             existing.degraded_input |= self.held_imu.as_ref().is_some_and(|imu| imu.degraded_input);
@@ -242,6 +304,7 @@ impl<'a> OfflineFilter<'a> {
             }
             store.set(index, &existing).map_err(ProcessError::from)?;
             self.last_stored_covariance = Some(filtered_covariance);
+            self.last_stored_sample = Some(filtered_sample);
             self.transition_accumulator.fill(0.0);
             self.transition_accumulator.fill_diagonal(1.0);
             self.consider_transition_accumulator.fill(0.0);
@@ -254,20 +317,25 @@ impl<'a> OfflineFilter<'a> {
             return Ok(());
         }
 
-        let (predicted, predicted_covariance) =
-            predicted_override.unwrap_or_else(|| (filtered.clone(), filtered_covariance.clone()));
-        if self.last_stored_time.is_some() {
-            if let Some(sample) = self.active_imu_sample.as_mut() {
-                sample.record_stored_propagation(filtered.time)?;
-            }
-        }
+        let (predicted, predicted_covariance, predicted_sample) = predicted_override
+            .unwrap_or_else(|| {
+                (
+                    filtered.clone(),
+                    filtered_covariance.clone(),
+                    filtered_sample.clone(),
+                )
+            });
         let consider_dimension = self.catalog.covariance.nrows();
-        let sample_covariance = self.active_imu_sample.as_ref().map_or_else(
+        let sample_covariance = self.last_stored_sample.as_ref().map_or_else(
             || DMatrix::zeros(6, 6),
             |sample| sample.covariance_body.clone(),
         );
-        let propagated_stored_sample_cross =
-            &self.transition_accumulator * &self.last_stored_sample_cross;
+        let propagated_stored_sample_cross = &self.transition_accumulator
+            * &self.last_stored_sample_cross
+            + self.last_stored_sample.as_ref().map_or_else(
+                || DMatrix::zeros(self.state_dimension, 6),
+                |sample| &self.consider_transition_accumulator * sample.consider_cross.transpose(),
+            );
         let sample_process = &propagated_stored_sample_cross
             * self.sample_influence_accumulator.transpose()
             + &self.sample_influence_accumulator * propagated_stored_sample_cross.transpose()
@@ -282,6 +350,33 @@ impl<'a> OfflineFilter<'a> {
                     + &self.last_stored_sample_cross * self.sample_influence_accumulator.transpose()
             },
         );
+        let mut adjacent_sample_cross =
+            DMatrix::zeros(self.state_dimension + 6, self.state_dimension + 6);
+        copy_block(&adjacent_cross_covariance, &mut adjacent_sample_cross, 0, 0);
+        if let Some(previous) = &self.last_stored_sample {
+            copy_block(
+                &previous.state_cross,
+                &mut adjacent_sample_cross,
+                0,
+                self.state_dimension,
+            );
+            let sample_to_next = previous.state_cross.transpose()
+                * self.transition_accumulator.transpose()
+                + &previous.consider_cross * self.consider_transition_accumulator.transpose()
+                + &previous.covariance_body * self.sample_influence_accumulator.transpose();
+            copy_block(
+                &sample_to_next,
+                &mut adjacent_sample_cross,
+                self.state_dimension,
+                0,
+            );
+            copy_block(
+                &previous.covariance_body,
+                &mut adjacent_sample_cross,
+                self.state_dimension,
+                self.state_dimension,
+            );
+        }
         let reset_basis = measurement.as_ref().map_or_else(
             || DMatrix::identity(self.state_dimension, self.state_dimension),
             |value| value.2.clone(),
@@ -294,10 +389,15 @@ impl<'a> OfflineFilter<'a> {
             predicted_covariance,
             filtered_covariance: filtered_covariance.clone(),
             smoothed_covariance: None,
+            predicted_sample,
+            filtered_sample: filtered_sample.clone(),
+            smoothed_sample: None,
+            adjacent_sample_cross,
             transition: self.transition_accumulator.clone(),
             consider_transition: self.consider_transition_accumulator.clone(),
             process_covariance: symmetric(&self.process_accumulator + sample_process),
             integration_imu: self.integration_imu.take(),
+            dynamics: self.dynamics.take(),
             reset_basis,
             smoothed_backward_gain: None,
             adjacent_cross_covariance,
@@ -315,6 +415,7 @@ impl<'a> OfflineFilter<'a> {
         store.push(&step).map_err(ProcessError::from)?;
         self.last_stored_time = Some(filtered.time);
         self.last_stored_covariance = Some(filtered_covariance);
+        self.last_stored_sample = Some(filtered_sample);
         self.transition_accumulator.fill(0.0);
         self.transition_accumulator.fill_diagonal(1.0);
         self.consider_transition_accumulator.fill(0.0);
@@ -382,7 +483,14 @@ pub(super) fn affine_propagation(
     let process_left = left_solve(&defect_reset, reference_process_covariance)?;
     let process_at_next_reference = right_solve(&process_left, &defect_reset.transpose())?;
     let sample_at_next_reference = left_solve(&defect_reset, reference_sample_influence)?;
-    let next_delta = dynamics_defect + &transition_at_next_reference * &current_delta;
+    let sample_delta = DVector::from_iterator(
+        6,
+        (0..6)
+            .map(|i| current.imu_sample_error_body[i] - reference_current.imu_sample_error_body[i]),
+    );
+    let next_delta = dynamics_defect
+        + &transition_at_next_reference * &current_delta
+        + &sample_at_next_reference * sample_delta;
     let (next, next_reset) = boxplus_with_reset(reference_next, &next_delta)?;
     let current_reset = injection_reset(&current_delta)?;
     let transition_in_reference = right_solve(&transition_at_next_reference, &current_reset)?;

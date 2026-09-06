@@ -23,8 +23,24 @@ pub(super) fn recorded_calls(
     [CapturedLiveStepCall; 8],
     CapturedLiveFinishCall,
 ) {
+    let (contract, steps, finishes, _) =
+        recorded_call_sequence(spec, observations, tamper_late_step_digest);
+    assert_eq!(finishes.len(), 1);
+    (contract, steps.try_into().unwrap(), finishes[0])
+}
+
+pub(super) fn recorded_call_sequence(
+    spec: &ProcessingSpec<'_>,
+    observations: &[LiveObservation],
+    tamper_late_step_digest: bool,
+) -> (
+    CapturedReplayContract,
+    Vec<CapturedLiveStepCall>,
+    Vec<CapturedLiveFinishCall>,
+    LiveSummary,
+) {
     let metric_limits = LiveMetricLimits::default();
-    let resources = LiveResourceLimits::V2_MINI_INITIAL;
+    let resources = LiveResourceLimits::V2_MINI_RTS;
     let live_metrics = spec.metrics.compile_live(metric_limits).unwrap();
     let plan = TrajectoryEngine::live(LiveSpec {
         session_id: SessionId::from_bytes([1; 16]),
@@ -46,13 +62,8 @@ pub(super) fn recorded_calls(
     );
     let mut session = plan.start(workspace).unwrap();
     let work = WorkQuota::new(128).unwrap();
-    let observation_record_sequences = [2_u64, 4, 6, 8, 10, 12, 14];
-    let mut steps = Vec::with_capacity(8);
-    for (call_index, (observation, record_sequence)) in observations
-        .iter()
-        .zip(observation_record_sequences)
-        .enumerate()
-    {
+    let mut steps = Vec::with_capacity(observations.len() + 1);
+    for (call_index, observation) in observations.iter().enumerate() {
         let update = session
             .step(LiveStep {
                 observation: Some(observation),
@@ -61,7 +72,7 @@ pub(super) fn recorded_calls(
             .unwrap();
         steps.push(CapturedLiveStepCall {
             call_index: u64::try_from(call_index).unwrap(),
-            observation_record_sequence: Some(record_sequence),
+            observation_record_sequence: Some(2 + 2 * call_index as u64),
             work,
             expected_bit_exact_update_digest: captured_update_digest_v1(&update).unwrap(),
         });
@@ -80,34 +91,42 @@ pub(super) fn recorded_calls(
         late_digest = ContentDigestV1::from_bytes(bytes);
     }
     steps.push(CapturedLiveStepCall {
-        call_index: 7,
+        call_index: observations.len() as u64,
         observation_record_sequence: None,
         work,
         expected_bit_exact_update_digest: late_digest,
     });
 
     let mut summary = LiveSummary::default();
-    let (complete, finish_digest) = {
-        let finish = session.finish(work, &mut summary).unwrap();
-        (
-            finish.complete,
-            captured_update_digest_v1(&finish.update).unwrap(),
-        )
-    };
-    assert!(complete);
-    let summary_digest = captured_summary_digest_v1(summary);
-    let finish = CapturedLiveFinishCall {
-        call_index: 8,
-        work,
-        expected_complete: true,
-        expected_bit_exact_update_digest: finish_digest,
-        expected_summary_digest: Some(summary_digest),
-    };
+    let mut finishes = Vec::new();
+    for _ in 0..128 {
+        let (complete, finish_digest) = {
+            let finish = session.finish(work, &mut summary).unwrap();
+            (
+                finish.complete,
+                captured_update_digest_v1(&finish.update).unwrap(),
+            )
+        };
+        finishes.push(CapturedLiveFinishCall {
+            call_index: (steps.len() + finishes.len()) as u64,
+            work,
+            expected_complete: complete,
+            expected_bit_exact_update_digest: finish_digest,
+            expected_summary_digest: complete.then(|| captured_summary_digest_v1(summary)),
+        });
+        if complete {
+            break;
+        }
+    }
+    assert!(finishes.last().unwrap().expected_complete);
     let mut transcript = CapturedTranscriptDigestV1::new();
     for step in &steps {
         transcript.observe_step(*step).unwrap();
     }
-    transcript.observe_finish(finish).unwrap();
+    for finish in &finishes {
+        transcript.observe_finish(*finish).unwrap();
+    }
+    let call_count = (steps.len() + finishes.len()) as u64;
     (
         CapturedReplayContract {
             version: crate::offline::CAPTURED_REPLAY_CONTRACT_V2,
@@ -116,16 +135,48 @@ pub(super) fn recorded_calls(
             configuration_digest: spec.engine.digest,
             navigation_profile_digest: spec.engine.navigation_profile.digest,
             metric_plan_digest: spec.result.metric_plan_digest,
-            maximum_call_count: 9,
-            maximum_total_work_units: 9 * u64::from(work.units()),
+            maximum_call_count: call_count,
+            maximum_total_work_units: call_count * u64::from(work.units()),
             metric_limits,
             resources,
             initial_heading: Some(InitialHeading::new(0.0, variance(1.0)).unwrap()),
             initial_clock_prior: initial_clock_prior(),
         },
-        steps.try_into().unwrap(),
-        finish,
+        steps,
+        finishes,
+        summary,
     )
+}
+
+pub(super) fn captured_manifest(
+    spec: &ProcessingSpec<'_>,
+    contract: CapturedReplayContract,
+    event_count: u64,
+) -> EvidenceManifest {
+    let capabilities = Capabilities::NONE
+        .with(Capability::CapturedReplay)
+        .with(Capability::OfflineSmooth)
+        .with(Capability::NormalizedImu)
+        .with(Capability::GnssSolution)
+        .with(Capability::Timing)
+        .with(Capability::Configuration)
+        .with(Capability::CompleteEnd);
+    EvidenceManifest {
+        session_id: SessionId::from_bytes([1; 16]),
+        source_logical_digest: digest(50),
+        normalization_digest: spec.evidence_lineage.canonical_digest_v1().unwrap(),
+        configuration_digest: spec.engine.digest,
+        span_capabilities: SpanCapabilities {
+            span: spec.span,
+            capabilities,
+            terminal_record_sequence: event_count - 1,
+            has_valid_end: true,
+        },
+        capabilities,
+        restartable: true,
+        estimated_event_count: Some(event_count),
+        captured_replay: Some(contract),
+    }
 }
 
 pub(super) fn replay_fixture(
@@ -139,30 +190,7 @@ pub(super) fn replay_fixture(
     let observations = std::boxed::Box::leak(std::boxed::Box::new(replay_observations()));
     let (contract, steps, finish) = recorded_calls(&spec, observations, tamper_late_step_digest);
     let source_digest = digest(50);
-    let capabilities = Capabilities::NONE
-        .with(Capability::CapturedReplay)
-        .with(Capability::OfflineSmooth)
-        .with(Capability::NormalizedImu)
-        .with(Capability::GnssSolution)
-        .with(Capability::Timing)
-        .with(Capability::Configuration)
-        .with(Capability::CompleteEnd);
-    let manifest = EvidenceManifest {
-        session_id: SessionId::from_bytes([1; 16]),
-        source_logical_digest: source_digest,
-        normalization_digest: spec.evidence_lineage.canonical_digest_v1().unwrap(),
-        configuration_digest: spec.engine.digest,
-        span_capabilities: SpanCapabilities {
-            span: spec.span,
-            capabilities,
-            terminal_record_sequence: 18,
-            has_valid_end: true,
-        },
-        capabilities,
-        restartable: true,
-        estimated_event_count: Some(19),
-        captured_replay: Some(contract),
-    };
+    let manifest = captured_manifest(&spec, contract, 19);
     static CLOCK_CROSS_COVARIANCE: [f64; 12] = [0.0; 12];
     let clock = ClockModelEvidence {
         model: ClockModelId::new(1),

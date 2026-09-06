@@ -9,14 +9,7 @@ fn gnss_quality_changes_only_after_an_actual_accepted_update() {
             fuse_nominal_position_at_25ms(session);
             let accepted = session.last_gnss_evidence;
 
-            let too_late = position_update(
-                3,
-                25_000_000,
-                0.0,
-                RtkState::Float,
-                healthy_at(25_000_000),
-                None,
-            );
+            let too_late = position_update(3, 25_000_000, 0.0, healthy_at(25_000_000), None);
             let update = session
                 .step(LiveStep {
                     observation: Some(&too_late),
@@ -30,14 +23,7 @@ fn gnss_quality_changes_only_after_an_actual_accepted_update() {
             drop(update);
             assert_eq!(session.last_gnss_evidence, accepted);
 
-            let outlier = position_update(
-                4,
-                30_000_000,
-                1_000_000.0,
-                RtkState::Float,
-                healthy_at(30_000_000),
-                None,
-            );
+            let outlier = position_update(4, 30_000_000, 1_000_000.0, healthy_at(30_000_000), None);
             session
                 .step(LiveStep {
                     observation: Some(&outlier),
@@ -77,7 +63,6 @@ fn stale_timed_diagnostics_are_rejected_without_becoming_quality_evidence() {
                 2,
                 25_000_000,
                 0.0,
-                RtkState::Fixed,
                 healthy_at(25_000_000),
                 Some(stale_solution_age),
             );
@@ -115,7 +100,7 @@ fn gnss_outage_ages_present_quality_and_live_phase_to_degraded() {
             fuse_nominal_position_at_25ms(session);
             {
                 let present = session.present_projection().unwrap().unwrap();
-                assert_eq!(present.quality.gnss, GnssState::Fixed);
+                assert_eq!(present.quality.gnss, GnssState::Healthy);
                 assert_eq!(present.quality.integrity, Integrity::Monitored);
                 assert_eq!(session.phase(), LivePhase::Navigating);
             }
@@ -140,23 +125,26 @@ fn gnss_outage_ages_present_quality_and_live_phase_to_degraded() {
 fn one_drain_stamps_each_historical_segment_from_ordered_fusion_evidence() {
     with_large_stack(|| {
         with_navigating_live_session(|session| {
-            let fixed = position_update(
-                2,
-                25_000_000,
-                0.0,
-                RtkState::Fixed,
-                healthy_at(25_000_000),
-                None,
+            let first = position_update(2, 25_000_000, 0.0, healthy_at(25_000_000), None);
+            let LiveObservation::GnssSolution(second) =
+                position_update(3, 35_000_000, 0.0, healthy_at(35_000_000), None)
+            else {
+                unreachable!();
+            };
+            let mut position = second.position().unwrap();
+            position.time.basis = TimingBasis::ModeledLatency;
+            let second = LiveObservation::GnssSolution(
+                GnssSolutionObservation::new(
+                    second.id(),
+                    second.antenna_reference_point(),
+                    Some(position),
+                    None,
+                    None,
+                    second.diagnostics(),
+                )
+                .unwrap(),
             );
-            let float = position_update(
-                3,
-                35_000_000,
-                0.0,
-                RtkState::Float,
-                healthy_at(35_000_000),
-                None,
-            );
-            for observation in [&fixed, &float] {
+            for observation in [&first, &second] {
                 session
                     .step(LiveStep {
                         observation: Some(observation),
@@ -203,7 +191,16 @@ fn one_drain_stamps_each_historical_segment_from_ordered_fusion_evidence() {
                     .unwrap()
                     .quality
                     .gnss,
-                GnssState::Fixed
+                GnssState::Healthy
+            );
+            assert_eq!(
+                session
+                    .trajectory()
+                    .state_at(SessionTime::from_ns(27_500_000), reference)
+                    .unwrap()
+                    .quality
+                    .timing,
+                TimingQuality::PpsCorrelated
             );
             assert_eq!(
                 session
@@ -212,7 +209,16 @@ fn one_drain_stamps_each_historical_segment_from_ordered_fusion_evidence() {
                     .unwrap()
                     .quality
                     .gnss,
-                GnssState::Float
+                GnssState::Healthy
+            );
+            assert_eq!(
+                session
+                    .trajectory()
+                    .state_at(SessionTime::from_ns(35_000_000), reference)
+                    .unwrap()
+                    .quality
+                    .timing,
+                TimingQuality::Modeled
             );
         });
     });

@@ -1,5 +1,24 @@
 use super::*;
 
+#[test]
+fn gnss_health_codec_accepts_legacy_modes_without_emitting_a_mode_tag() {
+    use super::super::codec::{decode_gnss_state, encode_gnss_state};
+
+    for legacy in 0..=4 {
+        assert_eq!(decode_gnss_state(legacy).unwrap(), GnssState::Healthy);
+    }
+    assert_eq!(encode_gnss_state(GnssState::Healthy), 7);
+    assert_eq!(decode_gnss_state(7).unwrap(), GnssState::Healthy);
+    assert_eq!(decode_gnss_state(5).unwrap(), GnssState::Absent);
+    assert_eq!(decode_gnss_state(6).unwrap(), GnssState::Suspect);
+    for state in [GnssState::Healthy, GnssState::Absent, GnssState::Suspect] {
+        // Captured-result digests use the discriminant directly.
+        assert_eq!(encode_gnss_state(state), state as u8);
+    }
+    assert!(decode_gnss_state(8).is_err());
+    assert!(decode_gnss_state(255).is_err());
+}
+
 #[cfg(feature = "offline")]
 #[test]
 fn conditional_bridge_uses_joint_endpoints_and_vanishes_at_boundaries() {
@@ -47,6 +66,7 @@ fn conditional_bridge_uses_joint_endpoints_and_vanishes_at_boundaries() {
             start,
             end,
             DenseBridgeInput {
+                coupled: None,
                 covariance_available: true,
                 endpoint_joint_covariance: joint,
                 acceleration_spectral_density_ecef: [

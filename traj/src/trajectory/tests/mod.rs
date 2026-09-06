@@ -42,6 +42,8 @@ use nalgebra::DMatrix;
 #[cfg(feature = "offline")]
 use std::boxed::Box;
 
+#[cfg(feature = "offline")]
+mod coupled_storage;
 mod kinematics;
 #[cfg(feature = "offline")]
 mod offline;
@@ -52,7 +54,7 @@ fn quality() -> EstimateQuality {
     EstimateQuality {
         stage: EstimateStage::Finalized,
         validity: Validity::Nominal,
-        gnss: GnssState::Fixed,
+        gnss: GnssState::Healthy,
         timing: TimingQuality::PpsCorrelated,
         integrity: Integrity::Monitored,
         covariance: CovarianceConditioning::UnconditionalModel,
@@ -176,6 +178,7 @@ fn offline_bridge_fixture(
         joint[axis + BRIDGE_KINEMATIC_DIMENSION][axis] = 0.5 * variance;
     }
     let input = DenseBridgeInput {
+        coupled: None,
         covariance_available,
         endpoint_joint_covariance: joint,
         acceleration_spectral_density_ecef: [[0.1, 0.0, 0.0], [0.0, 0.1, 0.0], [0.0, 0.0, 0.1]],

@@ -1,12 +1,17 @@
-//! Explicit navigation initialization and stationary-evidence handling.
+//! Stationary alignment with a conservative two-fix fallback for moving starts.
 
 use nalgebra::{Matrix3, Rotation3, UnitQuaternion, Vector3};
 
 use crate::time::SessionTime;
 
+use super::preintegration::CompactCovariance3;
 use super::state::{ACC_BIAS, ATT, GYRO_BIAS, NavMatrix, NavState, POS, VEL, skew};
 
 pub(crate) const STATIONARY_WINDOW_CAPACITY: usize = 512;
+const _: () = assert!(STATIONARY_WINDOW_CAPACITY < u16::MAX as usize);
+// In motion, specific force only supplies a provisional tilt: translational
+// acceleration is inseparable from gravity without doing dynamic alignment.
+const MOVING_TILT_VARIANCE: f32 = 1.0;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum InitializationPhase {
@@ -181,8 +186,10 @@ impl VectorMoments {
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) struct StationaryClassifier {
     scores: [f32; STATIONARY_WINDOW_CAPACITY],
-    head: usize,
-    len: usize,
+    // Compact ring indexes leave room for the initializer's full symmetric
+    // gyro-mean covariance inside the fixed live SRAM contract.
+    head: u16,
+    len: u16,
     score_sum: f32,
     stationary_probability: f32,
     stationary_latched: bool,
@@ -249,16 +256,16 @@ impl StationaryClassifier {
         let force_error = specific_force_b.norm() - self.config.gravity_magnitude;
         let score = omega_ib_b.norm_squared() / self.config.gyro_score_variance
             + force_error * force_error / self.config.force_norm_score_variance;
-        if self.len == STATIONARY_WINDOW_CAPACITY {
-            self.score_sum -= self.scores[self.head];
+        if usize::from(self.len) == STATIONARY_WINDOW_CAPACITY {
+            self.score_sum -= self.scores[usize::from(self.head)];
         } else {
             self.len += 1;
         }
-        self.scores[self.head] = score;
+        self.scores[usize::from(self.head)] = score;
         self.score_sum += score;
-        self.head = (self.head + 1) % STATIONARY_WINDOW_CAPACITY;
+        self.head = (self.head + 1) % STATIONARY_WINDOW_CAPACITY as u16;
 
-        let mean_score = self.score_sum / self.len as f32;
+        let mean_score = self.score_sum / f32::from(self.len);
         let fresh_gnss_nis = self
             .latest_zero_velocity_nis
             .filter(|(evidence_time, _)| {
@@ -288,7 +295,7 @@ impl StationaryClassifier {
         } else {
             prior
         };
-        if self.len >= usize::from(self.config.minimum_window_samples) {
+        if self.len >= self.config.minimum_window_samples {
             if fresh_gnss_nis.is_none() {
                 self.stationary_latched = false;
             } else if self.stationary_latched {
@@ -311,7 +318,7 @@ impl StationaryClassifier {
     }
 
     const fn decision_ready(&self) -> bool {
-        self.len >= self.config.minimum_window_samples as usize
+        self.len >= self.config.minimum_window_samples
     }
 }
 
@@ -322,7 +329,9 @@ pub(crate) struct Initializer {
     classifier: StationaryClassifier,
     force_moments: VectorMoments,
     gyro_moments: VectorMoments,
+    gyro_covariance_sum: CompactCovariance3,
     latest_fix: Option<GnssInitializationFix>,
+    previous_fix_evidence_time: Option<SessionTime>,
     supplied_yaw: Option<(f32, f32)>,
     dynamic_yaw: Option<DynamicYawCandidate>,
 }
@@ -338,7 +347,9 @@ impl Initializer {
             classifier: StationaryClassifier::new(config.stationary)?,
             force_moments: VectorMoments::new(),
             gyro_moments: VectorMoments::new(),
+            gyro_covariance_sum: CompactCovariance3::ZERO,
             latest_fix: None,
+            previous_fix_evidence_time: None,
             supplied_yaw: None,
             dynamic_yaw: None,
         })
@@ -359,6 +370,16 @@ impl Initializer {
         {
             return Err(InitializationError::NonFinite);
         }
+        if let Some(previous) = self.latest_fix {
+            if fix.evidence_oldest_time < previous.evidence_oldest_time {
+                return Ok(());
+            }
+            if fix.evidence_oldest_time > previous.evidence_oldest_time {
+                self.previous_fix_evidence_time = Some(previous.evidence_oldest_time);
+            }
+        }
+        // `time` advances whenever the engine extrapolates a cached fix. Only
+        // advancing receiver evidence counts as the second solution.
         self.classifier
             .observe_gnss_zero_velocity_nis(fix.evidence_oldest_time, fix.zero_velocity_nis);
         self.latest_fix = Some(fix);
@@ -371,11 +392,24 @@ impl Initializer {
         maximum_gnss_age_ns: u64,
         omega_ib_b: Vector3<f32>,
         specific_force_b: Vector3<f32>,
+        gyro_observation_covariance: Matrix3<f32>,
     ) -> Result<(), InitializationError> {
+        if !super::preintegration::covariance_density_is_valid(&gyro_observation_covariance) {
+            return Err(InitializationError::NonFinite);
+        }
         if self.latest_fix.is_some_and(|fix| {
             !evidence_is_fresh(time, fix.evidence_oldest_time, maximum_gnss_age_ns)
         }) {
             self.latest_fix = None;
+            self.previous_fix_evidence_time = None;
+        }
+        if self
+            .previous_fix_evidence_time
+            .is_some_and(|evidence_time| {
+                !evidence_is_fresh(time, evidence_time, maximum_gnss_age_ns)
+            })
+        {
+            self.previous_fix_evidence_time = None;
         }
         self.classifier
             .observe_imu(time, maximum_gnss_age_ns, omega_ib_b, specific_force_b)?;
@@ -385,6 +419,7 @@ impl Initializer {
             }
             self.force_moments.push(specific_force_b);
             self.gyro_moments.push(omega_ib_b);
+            self.accumulate_gyro_covariance(gyro_observation_covariance)?;
             if self.force_moments.count >= self.config.minimum_coarse_samples
                 && self.latest_fix.is_some()
             {
@@ -398,10 +433,12 @@ impl Initializer {
             // moving evidence can never contaminate an alignment mean.
             self.force_moments.push(specific_force_b);
             self.gyro_moments.push(omega_ib_b);
+            self.accumulate_gyro_covariance(gyro_observation_covariance)?;
         } else {
             // Static means cannot straddle a classified motion interval.
             self.force_moments.clear();
             self.gyro_moments.clear();
+            self.gyro_covariance_sum = CompactCovariance3::ZERO;
             if matches!(
                 self.phase,
                 InitializationPhase::CoarseAligning | InitializationPhase::FineAligning
@@ -409,6 +446,16 @@ impl Initializer {
                 self.phase = InitializationPhase::Uninitialized;
             }
         }
+        Ok(())
+    }
+
+    fn accumulate_gyro_covariance(
+        &mut self,
+        covariance: Matrix3<f32>,
+    ) -> Result<(), InitializationError> {
+        self.gyro_covariance_sum =
+            CompactCovariance3::from_matrix(self.gyro_covariance_sum.to_matrix() + covariance)
+                .map_err(|_| InitializationError::NonFinite)?;
         Ok(())
     }
 
@@ -453,22 +500,42 @@ impl Initializer {
         Ok(())
     }
 
+    /// Prefer completed static alignment, otherwise use the current prepared
+    /// IMU force after two fresh receiver epochs. Call after `observe_imu` so
+    /// the receiver evidence has been checked at the current IMU epoch.
     pub(crate) fn try_initialize(
         &mut self,
         earth_rate_n: Vector3<f32>,
+        specific_force_b: Vector3<f32>,
     ) -> Result<Option<InitializationResult>, InitializationError> {
-        if self.phase != InitializationPhase::FineAligning {
+        if matches!(
+            self.phase,
+            InitializationPhase::Navigating | InitializationPhase::Invalid
+        ) {
             return Ok(None);
         }
-        let fix = self.latest_fix.ok_or(InitializationError::MissingGnss)?;
-        if self.force_moments.maximum_variance() > self.config.maximum_force_variance
-            || self.gyro_moments.maximum_variance() > self.config.maximum_gyro_variance
+        let stationary_alignment = self.phase == InitializationPhase::FineAligning
+            && self.force_moments.maximum_variance() <= self.config.maximum_force_variance
+            && self.gyro_moments.maximum_variance() <= self.config.maximum_gyro_variance;
+        if !stationary_alignment
+            && (self.previous_fix_evidence_time.is_none() || self.classifier.len == 0)
         {
             return Ok(None);
         }
-        let corrected_force_b = self.force_moments.mean - self.config.accel_bias_prior;
+        let fix = self.latest_fix.ok_or(InitializationError::MissingGnss)?;
+        let force_b = if stationary_alignment {
+            self.force_moments.mean
+        } else {
+            specific_force_b
+        };
+        let corrected_force_b = force_b - self.config.accel_bias_prior;
         let corrected_force_norm = corrected_force_b.norm();
         if !corrected_force_norm.is_finite() || corrected_force_norm <= 1.0e-6 {
+            // A zero/invalid force direction cannot seed even provisional
+            // tilt; a subsequent usable IMU interval can still start motion.
+            if !stationary_alignment {
+                return Ok(None);
+            }
             return Err(InitializationError::DegenerateAlignment);
         }
         let body_up = corrected_force_b
@@ -485,7 +552,8 @@ impl Initializer {
                     InitialHeadingSource::Supplied,
                 )
             } else {
-                let gyrocompass_orientation = if self.config.gyrocompassing_qualified
+                let gyrocompass_orientation = if stationary_alignment
+                    && self.config.gyrocompassing_qualified
                     && self.gyro_moments.count >= self.config.minimum_gyrocompass_samples
                 {
                     let body_earth_rate = self.gyro_moments.mean - self.config.gyro_bias_prior;
@@ -504,11 +572,7 @@ impl Initializer {
                     None
                 };
                 if let Some(orientation) = gyrocompass_orientation {
-                    (
-                        orientation,
-                        self.config.roll_pitch_variance,
-                        InitialHeadingSource::Gyrocompass,
-                    )
+                    (orientation, 0.0, InitialHeadingSource::Gyrocompass)
                 } else if let Some(candidate) = self.dynamic_yaw.filter(|candidate| {
                     candidate.constraint_valid
                         && candidate.information >= self.config.minimum_dynamic_yaw_information
@@ -559,14 +623,40 @@ impl Initializer {
         // bias prior therefore perturbs the inferred right-tangent tilt by
         // skew(body_up) * delta_bias / |f_corrected|. Retain both the induced
         // attitude marginal and its correlation with the bias state.
-        let bias_to_tilt = skew(&body_up) / corrected_force_norm;
-        let attitude_bias_covariance = bias_to_tilt * accel_bias_covariance;
-        let attitude_covariance = tilt_projector_b * self.config.roll_pitch_variance
-            + yaw_projector_b * yaw_variance
-            + attitude_bias_covariance * bias_to_tilt.transpose();
+        let mut bias_to_attitude = skew(&body_up) / corrected_force_norm;
+        let tilt_variance = if stationary_alignment {
+            self.config.roll_pitch_variance
+        } else {
+            self.config.roll_pitch_variance.max(MOVING_TILT_VARIANCE)
+        };
+        let mut attitude_covariance =
+            tilt_projector_b * tilt_variance + yaw_projector_b * yaw_variance;
+        let mut attitude_gyro_bias_covariance = Matrix3::zeros();
+        if heading_source == InitialHeadingSource::Gyrocompass {
+            let body_earth_rate = self.gyro_moments.mean - self.config.gyro_bias_prior;
+            let (tilt_to_attitude, gyro_bias_to_attitude) =
+                gyrocompass_jacobians(body_up, body_earth_rate);
+            bias_to_attitude = tilt_to_attitude * bias_to_attitude;
+            let gyro_bias_covariance = Matrix3::from_diagonal(&self.config.gyro_bias_variance);
+            let count = self.gyro_moments.count as f32;
+            // The initializer uses an arithmetic mean of independent prepared
+            // interval averages. Each input covariance includes the continuous
+            // density divided by that interval's duration, so equal-duration
+            // samples give the familiar density / total averaging time.
+            let gyro_mean_covariance = self.gyro_covariance_sum.to_matrix() / (count * count);
+            attitude_gyro_bias_covariance = gyro_bias_to_attitude * gyro_bias_covariance;
+            attitude_covariance =
+                tilt_to_attitude * attitude_covariance * tilt_to_attitude.transpose()
+                    + gyro_bias_to_attitude
+                        * (gyro_mean_covariance + gyro_bias_covariance)
+                        * gyro_bias_to_attitude.transpose();
+        }
+        let attitude_bias_covariance = bias_to_attitude * accel_bias_covariance;
+        attitude_covariance += attitude_bias_covariance * bias_to_attitude.transpose();
         if !attitude_covariance
             .iter()
             .chain(attitude_bias_covariance.iter())
+            .chain(attitude_gyro_bias_covariance.iter())
             .all(|value| value.is_finite())
         {
             return Err(InitializationError::DegenerateAlignment);
@@ -580,6 +670,12 @@ impl Initializer {
         covariance
             .fixed_view_mut::<3, 3>(ACC_BIAS, ATT)
             .copy_from(&attitude_bias_covariance.transpose());
+        covariance
+            .fixed_view_mut::<3, 3>(ATT, GYRO_BIAS)
+            .copy_from(&attitude_gyro_bias_covariance);
+        covariance
+            .fixed_view_mut::<3, 3>(GYRO_BIAS, ATT)
+            .copy_from(&attitude_gyro_bias_covariance.transpose());
         for axis in 0..3 {
             covariance[(ACC_BIAS + axis, ACC_BIAS + axis)] = self.config.accel_bias_variance[axis];
             covariance[(GYRO_BIAS + axis, GYRO_BIAS + axis)] = self.config.gyro_bias_variance[axis];
@@ -592,6 +688,24 @@ impl Initializer {
             stationary_probability: self.classifier.probability(),
         }))
     }
+}
+
+/// Linearize TRIAD in the right-multiplicative body tangent. A tilt error also
+/// changes heading when Earth rate has a vertical component. The second matrix
+/// maps a true-minus-prior gyro bias into attitude; measurement noise has the
+/// opposite sign and therefore the same marginal covariance contribution.
+fn gyrocompass_jacobians(
+    body_up: Vector3<f32>,
+    body_earth_rate: Vector3<f32>,
+) -> (Matrix3<f32>, Matrix3<f32>) {
+    let vertical_rate = body_up.dot(&body_earth_rate);
+    let horizontal_rate = body_earth_rate - body_up * vertical_rate;
+    let cross_rate = body_up.cross(&body_earth_rate);
+    let horizontal_rate_squared = cross_rate.norm_squared();
+    let tilt_to_attitude = Matrix3::identity()
+        + body_up * horizontal_rate.transpose() * (vertical_rate / horizontal_rate_squared);
+    let gyro_bias_to_attitude = body_up * cross_rate.transpose() / horizontal_rate_squared;
+    (tilt_to_attitude, gyro_bias_to_attitude)
 }
 
 fn evidence_is_fresh(now: SessionTime, evidence_time: SessionTime, maximum_age_ns: u64) -> bool {
@@ -719,9 +833,209 @@ mod tests {
                     1_000,
                     Vector3::new(0.0, 5.0e-5, 5.0e-5),
                     specific_force_b,
+                    Matrix3::zeros(),
                 )
                 .unwrap();
         }
+    }
+
+    fn moving_fix(epoch: i64) -> GnssInitializationFix {
+        GnssInitializationFix {
+            time: SessionTime::from_ns(epoch),
+            evidence_oldest_time: SessionTime::from_ns(epoch),
+            velocity_n: Vector3::new(8.0, 2.0, 0.0),
+            zero_velocity_nis: Some(68.0),
+            ..fix()
+        }
+    }
+
+    fn observe_moving_imu(initializer: &mut Initializer, time: i64, maximum_age: u64) {
+        initializer
+            .observe_imu(
+                SessionTime::from_ns(time),
+                maximum_age,
+                Vector3::new(0.3, -0.2, 0.5),
+                Vector3::new(3.0, 1.0, 9.806_65),
+                Matrix3::identity() * 1.0e-6,
+            )
+            .unwrap();
+    }
+
+    #[test]
+    fn moving_start_uses_second_fresh_fix_with_provisional_tilt_and_bias_priors() {
+        let mut config = config();
+        config.gyrocompassing_qualified = true;
+        config.accel_bias_prior = Vector3::new(0.1, -0.2, 0.3);
+        config.gyro_bias_prior = Vector3::new(0.01, -0.02, 0.03);
+        let mut initializer = Initializer::new(config).unwrap();
+        let force = Vector3::new(3.0, 1.0, 9.806_65);
+        let earth_rate = Vector3::new(0.0, 5.0e-5, 5.0e-5);
+        initializer.observe_gnss(moving_fix(10)).unwrap();
+        observe_moving_imu(&mut initializer, 10, 100);
+        assert!(
+            initializer
+                .try_initialize(earth_rate, force)
+                .unwrap()
+                .is_none()
+        );
+
+        let second = moving_fix(20);
+        initializer.observe_gnss(second).unwrap();
+        observe_moving_imu(&mut initializer, 20, 100);
+        let result = initializer
+            .try_initialize(earth_rate, force)
+            .unwrap()
+            .unwrap();
+
+        assert_eq!(result.state.time, second.time);
+        assert_eq!(result.state.position_n, second.position_n);
+        assert_eq!(result.state.velocity_n, second.velocity_n);
+        assert_eq!(result.state.accel_bias_b, config.accel_bias_prior);
+        assert_eq!(result.state.gyro_bias_b, config.gyro_bias_prior);
+        assert_eq!(result.heading_source, InitialHeadingSource::None);
+        let body_up = (force - config.accel_bias_prior).normalize();
+        let mapped_up = result.state.orientation_n_from_b.transform_vector(&body_up);
+        assert!((mapped_up - Vector3::z()).norm() < 1.0e-6);
+        let attitude = result.covariance.fixed_view::<3, 3>(ATT, ATT);
+        assert!(
+            (body_up.dot(&(attitude * body_up)) - config.unobservable_yaw_variance).abs() < 1.0e-5
+        );
+        let tilt_axis = body_up.cross(&Vector3::x()).normalize();
+        assert!(tilt_axis.dot(&(attitude * tilt_axis)) >= MOVING_TILT_VARIANCE);
+        assert!(result.covariance.cholesky().is_some());
+        assert_eq!(initializer.phase, InitializationPhase::Navigating);
+    }
+
+    #[test]
+    fn two_fix_fallback_does_not_wait_for_a_quiet_alignment_window() {
+        let mut config = config();
+        config.minimum_coarse_samples = 100;
+        config.minimum_gyrocompass_samples = 100;
+        let mut initializer = Initializer::new(config).unwrap();
+        initializer.provide_heading(0.7, 0.02).unwrap();
+        let force = Vector3::z() * config.stationary.gravity_magnitude;
+        for time in [10, 20] {
+            initializer
+                .observe_gnss(GnssInitializationFix {
+                    zero_velocity_nis: Some(0.0),
+                    ..moving_fix(time)
+                })
+                .unwrap();
+            initializer
+                .observe_imu(
+                    SessionTime::from_ns(time),
+                    100,
+                    Vector3::zeros(),
+                    force,
+                    Matrix3::zeros(),
+                )
+                .unwrap();
+        }
+        assert!(initializer.classifier.stationary());
+        assert_eq!(initializer.phase, InitializationPhase::CoarseAligning);
+        let result = initializer
+            .try_initialize(Vector3::zeros(), force)
+            .unwrap()
+            .unwrap();
+        assert_eq!(result.heading_source, InitialHeadingSource::Supplied);
+        let forward = result
+            .state
+            .orientation_n_from_b
+            .transform_vector(&Vector3::x());
+        assert!((forward.y.atan2(forward.x) - 0.7).abs() < 1.0e-5);
+        assert!(result.covariance[(ATT, ATT)] >= MOVING_TILT_VARIANCE);
+    }
+
+    #[test]
+    fn reextrapolated_or_older_fixes_do_not_count_as_new_moving_start_evidence() {
+        let mut initializer = Initializer::new(config()).unwrap();
+        initializer.observe_gnss(moving_fix(10)).unwrap();
+        for time in 10..20 {
+            initializer
+                .observe_gnss(GnssInitializationFix {
+                    time: SessionTime::from_ns(time),
+                    ..moving_fix(10)
+                })
+                .unwrap();
+            observe_moving_imu(&mut initializer, time, 100);
+            assert!(
+                initializer
+                    .try_initialize(Vector3::zeros(), Vector3::z())
+                    .unwrap()
+                    .is_none()
+            );
+        }
+        initializer.observe_gnss(moving_fix(5)).unwrap();
+        observe_moving_imu(&mut initializer, 20, 100);
+        assert!(
+            initializer
+                .try_initialize(Vector3::zeros(), Vector3::z())
+                .unwrap()
+                .is_none()
+        );
+        assert_eq!(
+            initializer.latest_fix.unwrap().evidence_oldest_time,
+            SessionTime::from_ns(10)
+        );
+    }
+
+    #[test]
+    fn moving_start_needs_two_unexpired_fixes_and_invalid_fixes_do_not_count() {
+        let mut initializer = Initializer::new(config()).unwrap();
+        initializer.observe_gnss(moving_fix(10)).unwrap();
+        observe_moving_imu(&mut initializer, 10, 5);
+        let mut invalid = moving_fix(12);
+        invalid.velocity_n.x = f32::NAN;
+        assert_eq!(
+            initializer.observe_gnss(invalid),
+            Err(InitializationError::NonFinite)
+        );
+        observe_moving_imu(&mut initializer, 12, 5);
+        assert!(
+            initializer
+                .try_initialize(Vector3::zeros(), Vector3::z())
+                .unwrap()
+                .is_none()
+        );
+
+        initializer.observe_gnss(moving_fix(20)).unwrap();
+        observe_moving_imu(&mut initializer, 20, 5);
+        assert!(
+            initializer
+                .try_initialize(Vector3::zeros(), Vector3::z())
+                .unwrap()
+                .is_none()
+        );
+        initializer.observe_gnss(moving_fix(25)).unwrap();
+        observe_moving_imu(&mut initializer, 25, 5);
+        assert!(
+            initializer
+                .try_initialize(Vector3::zeros(), Vector3::z())
+                .unwrap()
+                .is_some()
+        );
+    }
+
+    #[test]
+    fn moving_start_waits_for_usable_force_without_losing_fresh_receiver_evidence() {
+        let mut initializer = Initializer::new(config()).unwrap();
+        for time in [10, 20] {
+            initializer.observe_gnss(moving_fix(time)).unwrap();
+            observe_moving_imu(&mut initializer, time, 100);
+        }
+        assert!(
+            initializer
+                .try_initialize(Vector3::zeros(), Vector3::zeros())
+                .unwrap()
+                .is_none()
+        );
+        observe_moving_imu(&mut initializer, 21, 100);
+        assert!(
+            initializer
+                .try_initialize(Vector3::zeros(), Vector3::z())
+                .unwrap()
+                .is_some()
+        );
     }
 
     #[test]
@@ -732,7 +1046,7 @@ mod tests {
         feed_static(&mut initializer, 4);
         assert_eq!(initializer.phase, InitializationPhase::FineAligning);
         let result = initializer
-            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5))
+            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
             .unwrap()
             .unwrap();
 
@@ -760,7 +1074,7 @@ mod tests {
         );
 
         let result = initializer
-            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5))
+            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
             .unwrap()
             .unwrap();
 
@@ -785,7 +1099,7 @@ mod tests {
         );
 
         let result = initializer
-            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5))
+            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
             .unwrap()
             .unwrap();
         let mapped_up = result
@@ -823,7 +1137,7 @@ mod tests {
         feed_static(&mut initializer, 4);
 
         assert_eq!(
-            initializer.try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5)),
+            initializer.try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros()),
             Err(InitializationError::DegenerateAlignment)
         );
         assert_eq!(initializer.phase, InitializationPhase::FineAligning);
@@ -848,12 +1162,13 @@ mod tests {
                     1_000,
                     Vector3::new(0.0, 5.0e-5, 5.0e-5),
                     Vector3::z() * 9.806_65,
+                    Matrix3::zeros(),
                 )
                 .unwrap();
         }
 
         let result = initializer
-            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5))
+            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
             .unwrap()
             .unwrap();
         assert_eq!(
@@ -872,7 +1187,7 @@ mod tests {
         feed_static(&mut initializer, 4);
         initializer.provide_heading(0.7, 0.02).unwrap();
         let result = initializer
-            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5))
+            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
             .unwrap()
             .unwrap();
         assert_eq!(result.heading_source, InitialHeadingSource::Supplied);
@@ -891,11 +1206,175 @@ mod tests {
         let mut initializer = Initializer::new(config).unwrap();
         feed_static(&mut initializer, 8);
         let result = initializer
-            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5))
+            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
             .unwrap()
             .unwrap();
         assert_eq!(result.heading_source, InitialHeadingSource::Gyrocompass);
         assert_eq!(result.state.gyro_bias_b, Vector3::zeros());
+    }
+
+    #[test]
+    fn gyrocompass_yaw_uncertainty_and_bias_cross_follow_the_gyro_prior() {
+        let initialize = |bias_variance| {
+            let mut config = config();
+            config.gyrocompassing_qualified = true;
+            config.accel_bias_variance = Vector3::zeros();
+            config.gyro_bias_variance = Vector3::new(bias_variance, 0.0, 0.0);
+            let mut initializer = Initializer::new(config).unwrap();
+            feed_static(&mut initializer, 8);
+            initializer
+                .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
+                .unwrap()
+                .unwrap()
+        };
+        let smaller = initialize(1.0e-12);
+        let larger = initialize(4.0e-12);
+        let expected_variance_increase = 3.0e-12 / (5.0e-5_f32).powi(2);
+        assert!(
+            (larger.covariance[(ATT + 2, ATT + 2)]
+                - smaller.covariance[(ATT + 2, ATT + 2)]
+                - expected_variance_increase)
+                .abs()
+                < 1.0e-8,
+            "gyrocompass yaw variance must propagate gyro bias uncertainty"
+        );
+        assert!(
+            (larger.covariance[(ATT + 2, GYRO_BIAS)] + 4.0e-12 / 5.0e-5).abs() < 1.0e-12,
+            "gyrocompass heading must retain its correlation with gyro bias"
+        );
+    }
+
+    #[test]
+    fn gyrocompass_mean_noise_averages_and_horizontal_geometry_controls_confidence() {
+        let initialize = |count, horizontal_rate| {
+            let mut config = config();
+            config.gyrocompassing_qualified = true;
+            config.accel_bias_variance.fill(0.0);
+            config.gyro_bias_variance.fill(0.0);
+            let mut initializer = Initializer::new(config).unwrap();
+            initializer.observe_gnss(fix()).unwrap();
+            let earth_rate = Vector3::new(0.0, horizontal_rate, 0.0);
+            for index in 0..count {
+                initializer
+                    .observe_imu(
+                        SessionTime::from_ns(10 + index),
+                        1_000,
+                        earth_rate,
+                        Vector3::z() * config.stationary.gravity_magnitude,
+                        Matrix3::from_diagonal(&Vector3::new(8.0e-12, 0.0, 0.0)),
+                    )
+                    .unwrap();
+            }
+            initializer
+                .try_initialize(earth_rate, Vector3::zeros())
+                .unwrap()
+                .unwrap()
+        };
+        let baseline = initialize(8, 5.0e-5);
+        let longer = initialize(16, 5.0e-5);
+        let weaker_horizontal_rate = initialize(8, 2.5e-5);
+        let yaw_variance = |result: InitializationResult| result.covariance[(ATT + 2, ATT + 2)];
+        let expected = 8.0e-12 / 8.0 / (5.0e-5_f32).powi(2);
+        assert!((yaw_variance(baseline) - expected).abs() < 1.0e-9);
+        assert!((yaw_variance(longer) * 2.0 - expected).abs() < 1.0e-9);
+        assert!((yaw_variance(weaker_horizontal_rate) / 4.0 - expected).abs() < 1.0e-9);
+    }
+
+    #[test]
+    fn gyrocompass_covariance_matches_perturbed_triad_in_the_body_tangent() {
+        let mut config = config();
+        config.gyrocompassing_qualified = true;
+        config.roll_pitch_variance = 2.0e-6;
+        config.accel_bias_variance = Vector3::new(3.0e-6, 5.0e-6, 8.0e-6);
+        config.gyro_bias_variance = Vector3::new(1.0e-13, 2.0e-13, 4.0e-13);
+        config.accel_bias_prior = Vector3::new(0.01, -0.02, 0.03);
+        config.gyro_bias_prior = Vector3::new(1.0e-6, -2.0e-6, 3.0e-6);
+        let orientation = UnitQuaternion::from_euler_angles(0.4, -0.3, 0.8);
+        let earth_rate = Vector3::new(0.0, 4.0e-5, 5.0e-5);
+        let force = orientation
+            .inverse_transform_vector(&(Vector3::z() * config.stationary.gravity_magnitude));
+        let gyro = orientation.inverse_transform_vector(&earth_rate);
+        let gyro_sample_covariance = Matrix3::new(
+            8.0e-13, 2.0e-13, -1.0e-13, 2.0e-13, 6.0e-13, 1.0e-13, -1.0e-13, 1.0e-13, 4.0e-13,
+        );
+        let mut initializer = Initializer::new(config).unwrap();
+        initializer.observe_gnss(fix()).unwrap();
+        for index in 0..8 {
+            initializer
+                .observe_imu(
+                    SessionTime::from_ns(10 + index),
+                    1_000,
+                    gyro + config.gyro_bias_prior,
+                    force + config.accel_bias_prior,
+                    gyro_sample_covariance,
+                )
+                .unwrap();
+        }
+        let result = initializer
+            .try_initialize(earth_rate, Vector3::zeros())
+            .unwrap()
+            .unwrap();
+        assert_eq!(result.heading_source, InitialHeadingSource::Gyrocompass);
+
+        // Perturb the actual TRIAD inputs, independently of the analytic
+        // covariance implementation. Bias errors subtract from measured means.
+        let corrected_force = initializer.force_moments.mean - config.accel_bias_prior;
+        let corrected_gyro = initializer.gyro_moments.mean - config.gyro_bias_prior;
+        let rotation =
+            |force, gyro| triad_rotation(force, gyro, Vector3::z(), earth_rate, 1.0e-6).unwrap();
+        let nominal = rotation(corrected_force, corrected_gyro);
+        let mut accel_jacobian = Matrix3::zeros();
+        let mut gyro_jacobian = Matrix3::zeros();
+        for axis in 0..3 {
+            let mut delta_force = Vector3::zeros();
+            delta_force[axis] = 1.0e-3;
+            let positive = (nominal.inverse()
+                * rotation(corrected_force - delta_force, corrected_gyro))
+            .scaled_axis();
+            let negative = (nominal.inverse()
+                * rotation(corrected_force + delta_force, corrected_gyro))
+            .scaled_axis();
+            accel_jacobian.set_column(axis, &((positive - negative) / 2.0e-3));
+
+            let mut delta_gyro = Vector3::zeros();
+            delta_gyro[axis] = 1.0e-7;
+            let positive = (nominal.inverse()
+                * rotation(corrected_force, corrected_gyro - delta_gyro))
+            .scaled_axis();
+            let negative = (nominal.inverse()
+                * rotation(corrected_force, corrected_gyro + delta_gyro))
+            .scaled_axis();
+            gyro_jacobian.set_column(axis, &((positive - negative) / 2.0e-7));
+        }
+        let accel_bias_covariance = Matrix3::from_diagonal(&config.accel_bias_variance);
+        let gyro_bias_covariance = Matrix3::from_diagonal(&config.gyro_bias_variance);
+        let force_covariance = accel_bias_covariance
+            + Matrix3::identity() * corrected_force.norm_squared() * config.roll_pitch_variance;
+        let expected_attitude = accel_jacobian * force_covariance * accel_jacobian.transpose()
+            + gyro_jacobian
+                * (gyro_bias_covariance + gyro_sample_covariance / 8.0)
+                * gyro_jacobian.transpose();
+        let actual_attitude = result.covariance.fixed_view::<3, 3>(ATT, ATT).into_owned();
+        assert!((actual_attitude - expected_attitude).norm() / expected_attitude.norm() < 1.0e-3);
+        let expected_accel_cross = accel_jacobian * accel_bias_covariance;
+        let actual_accel_cross = result
+            .covariance
+            .fixed_view::<3, 3>(ATT, ACC_BIAS)
+            .into_owned();
+        assert!(
+            (actual_accel_cross - expected_accel_cross).norm() / expected_accel_cross.norm()
+                < 2.0e-3
+        );
+        let expected_gyro_cross = gyro_jacobian * gyro_bias_covariance;
+        let actual_gyro_cross = result
+            .covariance
+            .fixed_view::<3, 3>(ATT, GYRO_BIAS)
+            .into_owned();
+        assert!(
+            (actual_gyro_cross - expected_gyro_cross).norm() / expected_gyro_cross.norm() < 1.0e-3
+        );
+        assert!((result.covariance - result.covariance.transpose()).amax() < 1.0e-10);
+        assert!(result.covariance.cholesky().is_some());
     }
 
     #[test]
@@ -904,7 +1383,7 @@ mod tests {
         feed_static(&mut initializer, 8);
 
         let result = initializer
-            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5))
+            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
             .unwrap()
             .unwrap();
 
@@ -920,7 +1399,7 @@ mod tests {
             .provide_dynamic_yaw(0.0, 0.01, 100.0, false)
             .unwrap();
         let result = initializer
-            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5))
+            .try_initialize(Vector3::new(0.0, 5.0e-5, 5.0e-5), Vector3::zeros())
             .unwrap()
             .unwrap();
         assert_eq!(result.heading_source, InitialHeadingSource::None);
@@ -928,11 +1407,13 @@ mod tests {
 
     #[test]
     fn unobservable_gyrocompass_geometry_falls_back_to_tilt_only_initialization() {
-        let mut initializer = Initializer::new(config()).unwrap();
+        let mut config = config();
+        config.gyrocompassing_qualified = true;
+        let mut initializer = Initializer::new(config).unwrap();
         feed_static(&mut initializer, 8);
 
         let result = initializer
-            .try_initialize(Vector3::z() * 5.0e-5)
+            .try_initialize(Vector3::z() * 5.0e-5, Vector3::zeros())
             .unwrap()
             .unwrap();
 
@@ -1014,6 +1495,7 @@ mod tests {
                 5,
                 Vector3::zeros(),
                 Vector3::z() * 9.806_65,
+                Matrix3::identity() * 1.0e-12,
             )
             .unwrap();
         initializer
@@ -1022,9 +1504,11 @@ mod tests {
                 5,
                 Vector3::zeros(),
                 Vector3::z() * 9.806_65,
+                Matrix3::identity() * 1.0e-12,
             )
             .unwrap();
         assert!(initializer.classifier.stationary());
+        assert!(initializer.gyro_covariance_sum.to_matrix().trace() > 0.0);
 
         initializer
             .observe_imu(
@@ -1032,10 +1516,12 @@ mod tests {
                 5,
                 Vector3::zeros(),
                 Vector3::z() * 9.806_65,
+                Matrix3::zeros(),
             )
             .unwrap();
         assert!(!initializer.classifier.stationary());
         assert!(initializer.latest_fix.is_none());
+        assert_eq!(initializer.gyro_covariance_sum, CompactCovariance3::ZERO);
         assert_eq!(initializer.phase, InitializationPhase::Uninitialized);
     }
 }

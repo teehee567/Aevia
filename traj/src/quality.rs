@@ -17,14 +17,15 @@ pub enum Validity {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[repr(u8)]
 pub enum GnssState {
-    Fixed,
-    Float,
-    Standalone,
-    Dgps,
-    Ppp,
-    Absent,
-    Suspect,
+    /// Accepted GNSS evidence with passing receiver health diagnostics.
+    /// Tag 7 keeps captured-result digests distinct from legacy mode tags 0–4.
+    Healthy = 7,
+    /// No current accepted GNSS evidence.
+    Absent = 5,
+    /// GNSS health is suspect or mixed across the queried support.
+    Suspect = 6,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

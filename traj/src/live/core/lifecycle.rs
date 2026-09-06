@@ -71,7 +71,7 @@ impl<'a> LiveCore<'a> {
         next_clock_from_previous: &[[f32; crate::live::MAX_CONSIDER]; 2],
         innovation_covariance_upper: [f32; 3],
     ) -> Result<(), LiveCoreError> {
-        if self.scheduler.queued_measurements() != 0 {
+        if self.scheduler.queued_measurements() != 0 || self.history.smoothing.has_tail() {
             return Err(LiveCoreError::ClockTransitionRequiresReinitialization);
         }
         let state = &mut *self.state;
@@ -86,6 +86,7 @@ impl<'a> LiveCore<'a> {
             )
             .map_err(LiveCoreError::Eskf)?;
         state.filter = state.transaction_filter;
+        self.history.smoothing.clear();
         Ok(())
     }
 
@@ -156,6 +157,10 @@ impl<'a> LiveCore<'a> {
             .predicted
             .validate_reanchor(&transform)
             .map_err(LiveCoreError::DenseHistory)?;
+        self.history
+            .smoothing
+            .validate_reanchor(&transform)
+            .map_err(LiveCoreError::Reanchor)?;
         self.scheduler.try_for_each_measurement(|scheduled| {
             mapped_gnss(scheduled.value, &transform)
                 .validate()
@@ -186,11 +191,21 @@ impl<'a> LiveCore<'a> {
         if candidate.iter().any(|value| !value.is_finite()) {
             return Err(LiveCoreError::Reanchor(ReanchorError::NonFinite));
         }
+        self.history
+            .smoothing_update
+            .reanchor_into(
+                &mut self.history.smoothing_update_transaction,
+                &transform.covariance_jacobian,
+            )
+            .map_err(|_| LiveCoreError::Reanchor(ReanchorError::NonFinite))?;
 
         // Nothing below this line is fallible: this is the atomic commit.
         self.history
             .propagation_scratch
             .commit_sample_candidate_into(&mut self.history.active_imu_sample_nav_cross);
+        self.history
+            .smoothing_update
+            .copy_from(&self.history.smoothing_update_transaction);
         self.filter = self.transaction_filter;
         self.predictor.apply_reanchor(&transform);
         self.context = staged_context;
@@ -204,6 +219,7 @@ impl<'a> LiveCore<'a> {
         }
         self.history.corrected.apply_reanchor(&transform);
         self.history.predicted.apply_reanchor(&transform);
+        self.history.smoothing.apply_reanchor(&transform);
         self.scheduler.for_each_measurement_mut(|scheduled| {
             scheduled.value = mapped_gnss(scheduled.value, &transform);
         });

@@ -7,6 +7,7 @@
 use crate::{quality::DiagnosticCounts, trajectory::Trajectory};
 
 mod catalog;
+mod distance_uncertainty;
 mod estimation;
 mod evidence;
 mod filter;
@@ -24,6 +25,7 @@ mod smoothing;
 #[cfg(test)]
 mod tests;
 
+pub(crate) use estimation::PsdSolver;
 pub(crate) use evidence::drive_captured_replay;
 pub(crate) use run::run_offline;
 

@@ -411,6 +411,7 @@ pub(super) fn interpolate_nominal(
         ),
         gyroscope_bias_body: interpolate3(start.gyroscope_bias_body, end.gyroscope_bias_body),
         colored_gnss_error: interpolate3(start.colored_gnss_error, end.colored_gnss_error),
+        imu_sample_error_body: start.imu_sample_error_body,
         specific_force_body: interpolate3(start.specific_force_body, end.specific_force_body),
         angular_rate_body: interpolate3(start.angular_rate_body, end.angular_rate_body),
     };

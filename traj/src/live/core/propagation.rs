@@ -34,6 +34,10 @@ impl<'a> LiveCore<'a> {
         quota: &mut WorkQuota,
         report: &mut DrainReport,
     ) -> Result<bool, LiveCoreError> {
+        self.seed_smoothing()?;
+        if self.smoothing_lag_ns != 0 && self.history.smoothing.is_full() {
+            return Err(LiveCoreError::SmoothingHistoryFull);
+        }
         let (plan, batch) = match self.plan_propagation(stop, quota) {
             Ok(planned) => planned,
             Err(LiveCoreError::PlanningQuotaExhausted) => {
@@ -80,6 +84,7 @@ impl<'a> LiveCore<'a> {
             .propagation_scratch
             .commit_sample_candidate_into(&mut self.history.active_imu_sample_nav_cross);
         self.history.active_imu_sample = Some(plan.last_sample);
+        self.capture_smoothing_prediction()?;
         report.imu_slices = report
             .imu_slices
             .saturating_add(u16::try_from(piece_count).unwrap_or(u16::MAX));

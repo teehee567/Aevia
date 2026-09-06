@@ -62,7 +62,7 @@ pub(super) fn with_navigating_live_session_contract(
         session_id: SessionId::from_bytes([2; 16]),
         engine,
         metrics: &live_metrics,
-        resources: LiveResourceLimits::V2_MINI_INITIAL,
+        resources: LiveResourceLimits::V2_MINI_RTS,
         initial_heading: Some(InitialHeading::new(0.0, variance(1.0)).unwrap()),
         initial_clock_prior: initial_clock_prior(),
     })
@@ -140,14 +140,7 @@ pub(super) fn affine_bridge_at(
 }
 
 pub(super) fn fuse_nominal_position_at_25ms(session: &mut LiveSession<'_, '_>) {
-    let observation = position_update(
-        2,
-        25_000_000,
-        0.0,
-        RtkState::Fixed,
-        healthy_at(25_000_000),
-        None,
-    );
+    let observation = position_update(2, 25_000_000, 0.0, healthy_at(25_000_000), None);
     {
         let update = session
             .step(LiveStep {
@@ -182,6 +175,6 @@ pub(super) fn fuse_nominal_position_at_25ms(session: &mut LiveSession<'_, '_>) {
         session
             .last_gnss_evidence
             .map(|value| (value.epoch, value.state)),
-        Some((SessionTime::from_ns(25_000_000), GnssState::Fixed))
+        Some((SessionTime::from_ns(25_000_000), GnssState::Healthy))
     );
 }

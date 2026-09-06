@@ -81,16 +81,25 @@ impl<'a> LiveCore<'a> {
                 }
             }
 
+            let flush_smoothing = (boundary_reachable && self.filter.state.time == target)
+                || (self.scheduler.is_finishing() && self.filter.state.time == scheduler_target);
+            if self.drain_smoothing(flush_smoothing, quota, &mut report)? {
+                return Ok(report);
+            }
+
             if self.scheduler.processed_frontier().is_none() && self.filter.state.time <= target {
                 if !quota.take(FRONTIER_COMMIT_CREDITS) {
                     report.blocked_on = DrainBlock::QuotaExhausted;
                     return Ok(report);
                 }
                 self.corrected_endpoint.state = self.filter.state;
+                self.corrected_endpoint.covariance =
+                    DenseCovariance::from_navigation(&self.filter.covariance);
                 let frontier = self.filter.state.time;
                 self.scheduler
                     .commit_frontier(frontier)
                     .map_err(LiveCoreError::Scheduler)?;
+                self.history.published_frontier.get_or_insert(frontier);
                 report.frontier_commits = report.frontier_commits.saturating_add(1);
                 continue;
             }
@@ -158,6 +167,11 @@ impl<'a> LiveCore<'a> {
             kinematics.sample.gyro_sample_covariance_b,
         );
         self.transaction_filter = self.filter;
+        if self.smoothing_lag_ns != 0 {
+            self.history
+                .smoothing_update_transaction
+                .copy_from(&self.history.smoothing_update);
+        }
         let context = self.context;
         let nis_gate = self.nis_gate;
         let velocity_needs_missing_alpha = observation.receiver_healthy
@@ -179,12 +193,14 @@ impl<'a> LiveCore<'a> {
                 let mut outcome = if observation.position_n.is_some() {
                     self.state
                         .transaction_filter
-                        .update_gnss_with_imu_sample(
+                        .update_gnss_with_imu_sample_and_smoothing(
                             &observation,
                             &context,
                             nis_gate,
                             Some(&sample_covariance),
                             Some(self.history.propagation_scratch.sample_candidate_mut()),
+                            (self.state.smoothing_lag_ns != 0)
+                                .then_some(&mut self.history.smoothing_update_transaction),
                         )
                         .map_err(LiveCoreError::Eskf)?
                 } else {
@@ -199,12 +215,14 @@ impl<'a> LiveCore<'a> {
             } else {
                 self.state
                     .transaction_filter
-                    .update_gnss_with_imu_sample(
+                    .update_gnss_with_imu_sample_and_smoothing(
                         &observation,
                         &context,
                         nis_gate,
                         Some(&sample_covariance),
                         Some(self.history.propagation_scratch.sample_candidate_mut()),
+                        (self.state.smoothing_lag_ns != 0)
+                            .then_some(&mut self.history.smoothing_update_transaction),
                     )
                     .map_err(LiveCoreError::Eskf)?
             };
@@ -223,6 +241,11 @@ impl<'a> LiveCore<'a> {
             return Err(LiveCoreError::InternalInvariant);
         }
         self.filter = self.transaction_filter;
+        if self.smoothing_lag_ns != 0 {
+            self.history
+                .smoothing_update
+                .copy_from(&self.history.smoothing_update_transaction);
+        }
         self.history
             .propagation_scratch
             .commit_sample_candidate_into(&mut self.history.active_imu_sample_nav_cross);
@@ -248,6 +271,11 @@ impl<'a> LiveCore<'a> {
             }
         }
         if let Some(update) = quality_update {
+            self.history.current_quality = Some(update);
+            if self.pending_corrected_segment.is_none() {
+                self.history.endpoint_quality = Some(update);
+            }
+            self.history.smoothing.observation_accepted();
             let index = report.gnss_quality_update_count;
             report.gnss_quality_updates[index] = Some(update);
             report.gnss_quality_update_count += 1;
@@ -294,10 +322,7 @@ impl<'a> LiveCore<'a> {
             .correct_from_frontier(&self.filter.state, &predicted_state)
             .map_err(LiveCoreError::Predictor)?;
 
-        self.history
-            .corrected
-            .push(segment)
-            .map_err(LiveCoreError::DenseHistory)?;
+        self.retain_or_publish_segment(segment)?;
         let frontier = self.filter.state.time;
         self.scheduler
             .commit_frontier(frontier)
@@ -318,7 +343,9 @@ impl<'a> LiveCore<'a> {
             .next_corrected_segment_id
             .checked_add(1)
             .ok_or(LiveCoreError::SegmentIdOverflow)?;
-        report.finalized_segments = report.finalized_segments.saturating_add(1);
+        if self.smoothing_lag_ns == 0 {
+            report.finalized_segments = report.finalized_segments.saturating_add(1);
+        }
         report.frontier_commits = report.frontier_commits.saturating_add(1);
         Ok(())
     }
@@ -328,7 +355,9 @@ impl<'a> LiveCore<'a> {
             return Ok(false);
         }
         let target = self.scheduler.target().map_err(LiveCoreError::Scheduler)?;
-        Ok(self.filter.state.time == target && self.next_measurement_time()?.is_none())
+        Ok(self.filter.state.time == target
+            && self.next_measurement_time()?.is_none()
+            && !self.history.smoothing.has_tail())
     }
 }
 

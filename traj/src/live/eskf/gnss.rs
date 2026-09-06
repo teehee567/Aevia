@@ -2,7 +2,7 @@
 
 use super::{
     ConsiderJacobian3, Eskf, EskfError, GapNavCrossCovariance, MAX_CONSIDER,
-    MeasurementConsiderJacobian, MeasurementMatrix,
+    MeasurementConsiderJacobian, MeasurementMatrix, RtsUpdateCapture,
     covariance::{active_principal_block_is_psd, matrix3_is_psd},
     update::{LinearMeasurement, cholesky_active},
 };
@@ -161,13 +161,33 @@ impl Eskf {
         self.update_gnss_with_imu_sample(observation, context, gate, None, None)
     }
 
+    #[cfg(test)]
     pub(crate) fn update_gnss_with_imu_sample(
         &mut self,
         observation: &GnssObservation,
         context: &MechanizationContext,
         gate: NisGate,
         sample_covariance: Option<&ImuSampleCovariance>,
+        sample_cross: Option<&mut GapNavCrossCovariance>,
+    ) -> Result<GnssUpdateOutcome, EskfError> {
+        self.update_gnss_with_imu_sample_and_smoothing(
+            observation,
+            context,
+            gate,
+            sample_covariance,
+            sample_cross,
+            None,
+        )
+    }
+
+    pub(crate) fn update_gnss_with_imu_sample_and_smoothing(
+        &mut self,
+        observation: &GnssObservation,
+        context: &MechanizationContext,
+        gate: NisGate,
+        sample_covariance: Option<&ImuSampleCovariance>,
         mut sample_cross: Option<&mut GapNavCrossCovariance>,
+        mut capture: Option<&mut RtsUpdateCapture>,
     ) -> Result<GnssUpdateOutcome, EskfError> {
         if sample_covariance.is_some() != sample_cross.is_some() {
             return Err(EskfError::ImuSampleLatentMismatch);
@@ -216,6 +236,7 @@ impl Eskf {
                 gate.maximum_covariance_inflation,
                 sample_covariance,
                 sample_cross.as_deref_mut(),
+                capture.as_deref_mut(),
             )?);
             return Ok(outcome);
         }
@@ -230,6 +251,7 @@ impl Eskf {
                 gate.maximum_covariance_inflation,
                 sample_covariance,
                 sample_cross.as_deref_mut(),
+                capture.as_deref_mut(),
             )?);
         }
         if let Some(velocity) = observation.velocity_n {
@@ -242,6 +264,7 @@ impl Eskf {
                 gate.maximum_covariance_inflation,
                 sample_covariance,
                 sample_cross.as_deref_mut(),
+                capture.as_deref_mut(),
             )?);
         }
         Ok(outcome)

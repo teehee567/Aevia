@@ -179,7 +179,42 @@ impl Trajectory {
             observability.heading_variance_rad2 = None;
             observability.body_axis_quantities_available = false;
         }
-        if lever_body != [0.0; 3] {
+        #[cfg(feature = "offline")]
+        let coupled = conditional_bridge.and_then(|bridge| bridge.coupled.as_deref());
+        #[cfg(feature = "offline")]
+        let (covariance, angular_rate_uncertainty_support) = if let Some(model) = coupled {
+            let projection =
+                model.point_projection(segment.duration_seconds, parameter, &base, reference)?;
+            let joint = model.output_covariance(segment.duration_seconds, parameter)?;
+            let covariance = super::bridge::dense_kinematic_covariance(
+                &(&projection * joint * projection.transpose()),
+            )?;
+            let support = if lever_body != [0.0; 3] {
+                Some(
+                    TimeSpan::new(segment.start.time, segment.end.time)
+                        .map_err(|_| QueryError::TrajectoryInvalid)?,
+                )
+            } else {
+                None
+            };
+            (covariance, support)
+        } else {
+            (segment.covariance_at(parameter, conditional_bridge)?, None)
+        };
+        #[cfg(not(feature = "offline"))]
+        let (covariance, angular_rate_uncertainty_support) =
+            (segment.covariance_at(parameter)?, None);
+        let has_coupled = {
+            #[cfg(feature = "offline")]
+            {
+                coupled.is_some()
+            }
+            #[cfg(not(feature = "offline"))]
+            {
+                false
+            }
+        };
+        if lever_body != [0.0; 3] && !has_coupled {
             // The dense segment currently retains no state/attitude/lever-arm
             // cross block, so a transformed numeric covariance would be
             // incomplete even when the lever itself is surveyed exactly.
@@ -217,15 +252,12 @@ impl Trajectory {
                 base.angular_rate_body,
             )
             .map_err(|_| QueryError::TrajectoryInvalid)?,
+            angular_rate_uncertainty_support,
             angular_acceleration_body_relative_ecef: angular_acceleration,
             kinematic_acceleration,
             specific_force_body: BodyVector::from_components(base.specific_force_body)
                 .map_err(|_| QueryError::TrajectoryInvalid)?,
-            covariance: segment.covariance_at(
-                parameter,
-                #[cfg(feature = "offline")]
-                conditional_bridge,
-            )?,
+            covariance,
             quality,
             observability,
             revision: self.revision,

@@ -18,7 +18,6 @@ compile_error!("GTSAM and raw-tight processing are workstation-only");
 extern crate std;
 
 pub mod config;
-#[cfg(any(feature = "offline", test))]
 mod enclosure;
 pub mod engine;
 pub mod error;

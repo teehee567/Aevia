@@ -41,6 +41,7 @@ mod ingestion;
 mod lifecycle;
 mod output;
 mod propagation;
+mod smoothing;
 
 #[cfg(test)]
 mod tests;
@@ -77,6 +78,14 @@ pub(crate) struct LiveCoreHistory {
     active_imu_sample: Option<CorrectedImuSample>,
     active_imu_sample_nav_cross: GapNavCrossCovariance,
     predictor_staging: [Option<DenseSegment>; MAX_PREDICTOR_SEGMENTS_PER_INGEST],
+    smoothing: super::rts_window::RtsWindow,
+    smoothing_update: crate::live::eskf::RtsUpdateCapture,
+    smoothing_update_transaction: crate::live::eskf::RtsUpdateCapture,
+    corrected_quality:
+        FixedRing<(Option<GnssQualityUpdate>, Option<GnssQualityUpdate>), DENSE_HISTORY_CAPACITY>,
+    current_quality: Option<GnssQualityUpdate>,
+    endpoint_quality: Option<GnssQualityUpdate>,
+    published_frontier: Option<SessionTime>,
 }
 
 impl LiveCoreHistory {
@@ -91,6 +100,13 @@ impl LiveCoreHistory {
                 [[0.0; super::state::NAV_DIM]; super::preintegration::BIAS_DIM],
             )),
             predictor_staging: [None; MAX_PREDICTOR_SEGMENTS_PER_INGEST],
+            smoothing: super::rts_window::RtsWindow::new(),
+            smoothing_update: crate::live::eskf::RtsUpdateCapture::new(),
+            smoothing_update_transaction: crate::live::eskf::RtsUpdateCapture::new(),
+            corrected_quality: FixedRing::new(),
+            current_quality: None,
+            endpoint_quality: None,
+            published_frontier: None,
         }
     }
 
@@ -99,6 +115,7 @@ impl LiveCoreHistory {
             && self.corrected.len() == 0
             && self.predicted.len() == 0
             && self.active_imu_sample.is_none()
+            && self.smoothing.is_empty()
     }
 
     #[cfg(test)]
@@ -115,12 +132,20 @@ impl LiveCoreHistory {
         self.active_imu_sample = None;
         self.active_imu_sample_nav_cross.fill(0.0);
         self.predictor_staging.fill(None);
+        self.smoothing.clear();
+        self.smoothing_update.reset();
+        self.smoothing_update_transaction.reset();
+        while self.corrected_quality.pop_front().is_some() {}
+        self.current_quality = None;
+        self.endpoint_quality = None;
+        self.published_frontier = None;
     }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) struct LiveCoreConfig {
     pub(crate) fusion_delay_ns: i64,
+    pub(crate) smoothing_lag_ns: i64,
     pub(crate) navigation_period_ns: i64,
     pub(crate) bias_correction_validity_norm: f32,
     pub(crate) mechanization: MechanizationContext,
@@ -138,6 +163,7 @@ impl LiveCoreConfig {
             || self.navigation_period_ns > MAX_NAVIGATION_PERIOD_NS
             || self.fusion_delay_ns < self.navigation_period_ns
             || self.fusion_delay_ns > MAX_HISTORY_HORIZON_NS as i64
+            || !(0..=super::rts_window::MAX_SMOOTHING_LAG_NS).contains(&self.smoothing_lag_ns)
             || !self.bias_correction_validity_norm.is_finite()
             || self.bias_correction_validity_norm <= 0.0
             || !self.imu_noise.is_valid()
@@ -209,6 +235,7 @@ pub(crate) struct DrainReport {
     pub(crate) gnss_downweighted: u16,
     pub(crate) finalized_segments: u16,
     pub(crate) frontier_commits: u16,
+    pub(crate) smoothing_steps: u16,
     gnss_quality_updates: [Option<GnssQualityUpdate>; MEASUREMENT_QUEUE_CAPACITY],
     gnss_quality_update_count: usize,
     pub(crate) last_gnss_outcome: Option<GnssUpdateOutcome>,
@@ -227,6 +254,7 @@ impl DrainReport {
             gnss_downweighted: 0,
             finalized_segments: 0,
             frontier_commits: 0,
+            smoothing_steps: 0,
             gnss_quality_updates: [None; MEASUREMENT_QUEUE_CAPACITY],
             gnss_quality_update_count: 0,
             last_gnss_outcome: None,
@@ -282,6 +310,7 @@ impl LiveCoreSizes {
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) struct LiveCoreStatus {
     pub(crate) corrected_frontier: Option<SessionTime>,
+    pub(crate) published_frontier: Option<SessionTime>,
     pub(crate) corrected_state_time: SessionTime,
     pub(crate) present_input_time: Option<SessionTime>,
     pub(crate) queued_measurements: usize,
@@ -365,6 +394,8 @@ pub(crate) struct LiveCoreState {
     gap_model: GapModel,
     navigation_period_ns: i64,
     bias_correction_validity_norm: f32,
+    // Fits the existing alignment slot beside the f32 tuning value.
+    smoothing_lag_ns: i32,
     next_corrected_deadline: SessionTime,
     next_predictor_deadline: SessionTime,
     corrected_pending_interval: Option<ImuInterval>,
@@ -409,6 +440,7 @@ impl LiveCoreState {
             },
             navigation_period_ns: 0,
             bias_correction_validity_norm: 0.0,
+            smoothing_lag_ns: 0,
             next_corrected_deadline: SessionTime::ZERO,
             next_predictor_deadline: SessionTime::ZERO,
             corrected_pending_interval: None,
@@ -452,6 +484,7 @@ impl LiveCoreState {
         self.gap_model.jerk_one_sigma.fill(0.0);
         self.navigation_period_ns = 0;
         self.bias_correction_validity_norm = 0.0;
+        self.smoothing_lag_ns = 0;
         self.next_corrected_deadline = SessionTime::ZERO;
         self.next_predictor_deadline = SessionTime::ZERO;
         self.corrected_pending_interval = None;
@@ -528,6 +561,7 @@ impl LiveCoreState {
         self.gap_model = config.gap;
         self.navigation_period_ns = config.navigation_period_ns;
         self.bias_correction_validity_norm = config.bias_correction_validity_norm;
+        self.smoothing_lag_ns = config.smoothing_lag_ns as i32;
         self.next_corrected_deadline = first_deadline;
         self.next_predictor_deadline = first_deadline;
         let endpoint = DenseEndpoint {
@@ -613,4 +647,6 @@ pub(crate) enum LiveCoreError {
     DenseHistory(DenseHistoryError),
     Queue(QueueError),
     Reanchor(ReanchorError),
+    Smoothing(super::smoothing::SmoothingError),
+    SmoothingHistoryFull,
 }

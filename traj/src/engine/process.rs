@@ -75,7 +75,11 @@ impl<'a> ProcessBuilder<'a> {
         self.spec
             .validate()
             .map_err(PrepareError::InvalidDefinition)?;
-        validate_surveyed_gate_bindings(&self.spec.engine, &self.spec.metrics)?;
+        validate_surveyed_gate_bindings(
+            &self.spec.engine,
+            &self.spec.metrics,
+            Some(manifest.span_capabilities.span),
+        )?;
         if !self.spec.engine.is_qualified() {
             return Err(PrepareError::UnqualifiedProfile);
         }

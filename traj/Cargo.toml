@@ -9,21 +9,21 @@ readme = "README.md"
 
 [features]
 default = []
-offline = ["nalgebra/std", "fpmath/soft-float"]
+offline = ["nalgebra/std"]
 gtsam-system = ["offline"]
 gtsam-vendored = ["offline"]
 raw-tight = ["offline"]
 
 [dependencies]
-fpmath = { version = "=0.1.1", default-features = false, optional = true }
+fpmath = { version = "=0.1.1", default-features = false }
 heapless = { version = "=0.9.3", default-features = false }
 libm = { version = "=0.2.16", default-features = false }
 nalgebra = { version = "=0.34.1", default-features = false, features = ["libm-force"] }
 sha2 = { version = "=0.10.9", default-features = false, features = ["force-soft-compact"] }
 
 [dev-dependencies]
-# The private EnclosureV1 prototype is exercised only by host tests until its
-# software scalar backend is genuinely allocator-free on firmware targets.
+# Software arithmetic remains an independent host-test adapter. Production
+# enclosures use the allocator-free native backend with outward expansion.
 fpmath = { version = "=0.1.1", default-features = false, features = ["soft-float"] }
 
 [lints.rust]

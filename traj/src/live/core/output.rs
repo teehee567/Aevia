@@ -129,13 +129,32 @@ impl<'a> LiveCore<'a> {
             .map_err(LiveCoreError::DenseHistory)
     }
 
+    #[cfg(test)]
     pub(crate) fn pop_corrected_segment(&mut self) -> Option<DenseSegment> {
-        self.history.corrected.pop_oldest()
+        self.pop_corrected_segment_with_quality()
+            .map(|entry| entry.0)
+    }
+
+    pub(crate) fn pop_corrected_segment_with_quality(
+        &mut self,
+    ) -> Option<(
+        DenseSegment,
+        Option<super::GnssQualityUpdate>,
+        Option<super::GnssQualityUpdate>,
+    )> {
+        let segment = self.history.corrected.pop_oldest()?;
+        let (start, end) = self
+            .history
+            .corrected_quality
+            .pop_front()
+            .unwrap_or((None, None));
+        Some((segment, start, end))
     }
 
     pub(crate) fn status(&self) -> Result<LiveCoreStatus, LiveCoreError> {
         Ok(LiveCoreStatus {
             corrected_frontier: self.scheduler.processed_frontier(),
+            published_frontier: self.history.published_frontier,
             corrected_state_time: self.filter.state.time,
             present_input_time: self.scheduler.latest_trusted_imu(),
             queued_measurements: self.scheduler.queued_measurements(),

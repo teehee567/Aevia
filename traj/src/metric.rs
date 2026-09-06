@@ -29,8 +29,8 @@ mod numerical_tests;
 
 pub use definition::{
     ActivityPlan, CrossingDirection, DistancePlan, DistanceQuantity, DragPlan, DragTarget,
-    FiniteGate, LapPlan, LaunchRule, MetricDefinition, Rollout, SkiHmmModel, SkiPlan, SkiState,
-    SpeedQuantity, TargetDirection,
+    FiniteGate, GateSurveyUncertainty, LapPlan, LaunchRule, MetricDefinition, Rollout, SkiHmmModel,
+    SkiPlan, SkiState, SpeedQuantity, TargetDirection,
 };
 pub(crate) use identity::encode_metric_value_identity_v1;
 pub(crate) use live_state::LiveMetricScratch;
@@ -44,10 +44,10 @@ pub use report::{
     MetricError, MetricMutation, MetricResult, MetricResultValue, MetricResults, SkiReport,
     SkiSegmentReport, WithdrawalReason,
 };
-#[cfg(any(test, feature = "offline"))]
-pub(crate) use uncertainty::{EventTimeSensitivity, MetricUncertaintyProvider};
 #[cfg(test)]
-pub(crate) use uncertainty::{StateSensitivity, shared_gate_survey_time_covariance_s2};
+pub(crate) use uncertainty::shared_gate_survey_time_covariance_s2;
+#[cfg(any(test, feature = "offline"))]
+pub(crate) use uncertainty::{EventTimeSensitivity, MetricUncertaintyProvider, StateSensitivity};
 
 /// Maximum definitions in one immutable metric plan.
 pub const MAX_METRIC_DEFINITIONS: usize = 64;

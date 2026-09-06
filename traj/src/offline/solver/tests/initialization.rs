@@ -1,6 +1,74 @@
 use super::*;
 
 #[test]
+fn initialization_pair_requires_valid_fields_and_matching_measurement_identity() {
+    let original = gnss_solution(
+        1,
+        Some(point_time(10)),
+        Some(point_time(11)),
+        Some(ReceiverHealth::Healthy),
+        None,
+        None,
+    );
+    let position_only = GnssSolutionObservation::new(
+        original.id(),
+        original.antenna_reference_point(),
+        original.position(),
+        None,
+        None,
+        original.diagnostics(),
+    )
+    .unwrap();
+    for mismatch in 0..6 {
+        let mut position = position_only.position().unwrap();
+        let mut velocity = original.velocity().unwrap();
+        let mut id = ObservationId::new(original.id().source, 2);
+        let mut antenna = original.antenna_reference_point();
+        match mismatch {
+            0 => position.valid = false,
+            1 => velocity.valid = false,
+            2 => velocity.time.clock_model = ClockModelId::new(99),
+            3 => velocity.frame = FrameId::new(99),
+            4 => id = ObservationId::new(SourceId::new(99), 2),
+            5 => antenna = ReferencePointId::new(99),
+            _ => unreachable!(),
+        }
+        let position = GnssSolutionObservation::new(
+            position_only.id(),
+            position_only.antenna_reference_point(),
+            Some(position),
+            None,
+            None,
+            original.diagnostics(),
+        )
+        .unwrap();
+        let velocity = GnssSolutionObservation::new(
+            id,
+            antenna,
+            None,
+            Some(velocity),
+            None,
+            original.diagnostics(),
+        )
+        .unwrap();
+        assert_eq!(initialization_pair_time(position, velocity).unwrap(), None);
+    }
+    let velocity_only = GnssSolutionObservation::new(
+        ObservationId::new(original.id().source, 2),
+        original.antenna_reference_point(),
+        None,
+        original.velocity(),
+        None,
+        original.diagnostics(),
+    )
+    .unwrap();
+    assert_eq!(
+        initialization_pair_time(position_only, velocity_only).unwrap(),
+        Some(SessionTime::from_ns(11))
+    );
+}
+
+#[test]
 fn initialization_pairs_asynchronous_position_and_velocity_at_the_later_epoch() {
     let mut pending = PendingInitialization::default();
     let position_only = gnss_solution(

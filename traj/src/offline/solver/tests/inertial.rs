@@ -167,7 +167,7 @@ fn held_sample_and_clock_update_matches_augmented_schmidt_oracle() {
     let innovation = &measurement * &prior * measurement.transpose() + &noise;
     let cross = &prior * measurement.transpose();
     let mut gain = &cross * innovation.try_inverse().unwrap();
-    gain.rows_mut(NAVIGATION_DIMENSION, CONSIDER + 6).fill(0.0);
+    gain.rows_mut(NAVIGATION_DIMENSION, CONSIDER).fill(0.0);
     let transform = DMatrix::identity(AUGMENTED, AUGMENTED) - &gain * &measurement;
     let expected = &transform * &prior * transform.transpose() + &gain * &noise * gain.transpose();
     let mut state = nominal(0, 0.0);
@@ -197,7 +197,7 @@ fn held_sample_and_clock_update_matches_augmented_schmidt_oracle() {
                 (NAVIGATION_DIMENSION, 6),
             )
             .into_owned(),
-        stored_interior_cut: false,
+        consider_cross: DMatrix::zeros(6, CONSIDER),
     };
     let h_state = measurement.columns(0, NAVIGATION_DIMENSION).into_owned();
     let h_consider = measurement
@@ -338,42 +338,114 @@ fn initial_velocity_sample_cross_cancels_the_same_sample_in_antenna_measurement(
 }
 
 #[test]
-fn smoother_rejects_a_nonzero_sample_shared_by_multiple_stored_edges() {
-    // x0=a, x1=a+s, x2=a+2s with independent unit-variance a,s.
-    // Observing x2 exactly gives Var(x0|x2)=1-1/5=0.8. Marginal
-    // adjacent RTS would incorrectly return 1+(0.2-2)/4=0.55.
-    let correct = 1.0_f64 - 1.0 / 5.0;
-    let adjacent_only = 1.0_f64 + (0.2 - 2.0) / 4.0;
-    assert!((correct - adjacent_only - 0.25).abs() < 1.0e-15);
-    let sample = |variance| ActiveImuSample {
-        start: SessionTime::from_ns(0),
-        end: SessionTime::from_ns(10),
-        covariance_body: DMatrix::identity(6, 6) * variance,
-        state_cross: DMatrix::zeros(NAVIGATION_DIMENSION, 6),
-        stored_interior_cut: false,
+fn smoother_retains_shared_sample_across_interior_cut_against_batch_oracle() {
+    // x0=a, x1=a+s, x2=a+2s. A terminal unit-variance observation
+    // gives Var(x0|y)=5/6; adjacent navigation marginals alone are insufficient.
+    check_sample_chain_against_batch(
+        [[1.0, 0.0, 0.0], [1.0, 1.0, 0.0], [1.0, 2.0, 0.0]],
+        [[0.0, 1.0, 0.0]; 3],
+    );
+}
+
+#[test]
+fn smoother_preserves_old_sample_information_after_independent_support_replacement() {
+    // x0=a, x1=a+s0, x2=a+s0+s1. At x1 the active sample changes
+    // from s0 to independent s1; a future observation still informs s0.
+    check_sample_chain_against_batch(
+        [[1.0, 0.0, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 1.0]],
+        [[0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [0.0, 0.0, 1.0]],
+    );
+}
+
+fn check_sample_chain_against_batch(states: [[f64; 3]; 3], samples: [[f64; 3]; 3]) {
+    let dot = |a: [f64; 3], b: [f64; 3]| a.into_iter().zip(b).map(|(a, b)| a * b).sum::<f64>();
+    let innovation = 1.0 + dot(states[2], states[2]);
+    let posterior =
+        |a: [f64; 3], b: [f64; 3]| dot(a, b) - dot(a, states[2]) * dot(b, states[2]) / innovation;
+    let catalog = ConsiderCatalog {
+        covariance: DMatrix::zeros(1, 1),
+        clocks: Vec::new(),
+        parameters: Vec::new(),
     };
-    let mut split = sample(1.0);
-    assert_eq!(
-        split.record_stored_propagation(SessionTime::from_ns(5)),
-        Ok(())
+    let limits = OfflineResourceLimits {
+        peak_memory_bytes: 64 * 1024 * 1024,
+        temporary_storage_bytes: 0,
+        output_bytes: 1024 * 1024,
+        worker_count: 1,
+        elapsed_work_limit: None,
+    };
+    let mut planned = plan_store(NAVIGATION_DIMENSION, &catalog.covariance, 3, limits).unwrap();
+    let store = planned.store.as_mut();
+    for i in 0..3 {
+        let mut record = step(i as i64, 0.0, 1.0, 1.0);
+        record.predicted_covariance.state[(POSITION, POSITION)] = dot(states[i], states[i]);
+        record.filtered_covariance = record.predicted_covariance.clone();
+        record.predicted_sample.covariance_body[(0, 0)] = dot(samples[i], samples[i]);
+        record.predicted_sample.state_cross[(POSITION, 0)] = dot(states[i], samples[i]);
+        record.filtered_sample = record.predicted_sample.clone();
+        if i > 0 {
+            record.adjacent_cross_covariance[(POSITION, POSITION)] = dot(states[i - 1], states[i]);
+            record.adjacent_sample_cross[(POSITION, NAVIGATION_DIMENSION)] =
+                dot(states[i - 1], samples[i]);
+            record.adjacent_sample_cross[(NAVIGATION_DIMENSION, POSITION)] =
+                dot(samples[i - 1], states[i]);
+            record.adjacent_sample_cross[(NAVIGATION_DIMENSION, NAVIGATION_DIMENSION)] =
+                dot(samples[i - 1], samples[i]);
+        }
+        if i == 2 {
+            record.filtered_covariance.state[(POSITION, POSITION)] =
+                posterior(states[i], states[i]);
+            record.filtered_sample.state_cross[(POSITION, 0)] = posterior(states[i], samples[i]);
+            record.filtered_sample.covariance_body[(0, 0)] = posterior(samples[i], samples[i]);
+            record.filtered.position_ecef[0] += dot(states[i], states[2]) / innovation;
+            record.filtered.imu_sample_error_body[0] = dot(samples[i], states[2]) / innovation;
+        }
+        store.push(&record).unwrap();
+    }
+    let control = RunControl {
+        continue_running: &continue_running,
+        progress: &report_progress,
+    };
+    let mut work = WorkTracker::new(control, None, 10, 0);
+    smooth_store(store, &catalog, 2, 1.0e-8, &mut work).unwrap();
+    for i in 0..3 {
+        let record = store.get(i as u64).unwrap();
+        let covariance = record.smoothed_covariance.unwrap();
+        let sample = record.smoothed_sample.unwrap();
+        assert!(
+            (covariance.state[(POSITION, POSITION)] - posterior(states[i], states[i])).abs()
+                < 1.0e-12
+        );
+        assert!(
+            (sample.covariance_body[(0, 0)] - posterior(samples[i], samples[i])).abs() < 1.0e-12
+        );
+        assert!(
+            (sample.state_cross[(POSITION, 0)] - posterior(states[i], samples[i])).abs() < 1.0e-12
+        );
+        let nominal = record.smoothed.unwrap();
+        assert!(
+            (nominal.position_ecef[0] - 6_378_137.0 - dot(states[i], states[2]) / innovation).abs()
+                < 1.0e-9
+        );
+        assert!(
+            (nominal.imu_sample_error_body[0] - dot(samples[i], states[2]) / innovation).abs()
+                < 1.0e-9
+        );
+    }
+    let first = store.get(0).unwrap();
+    let middle = store.get(1).unwrap();
+    let terminal = store.get(2).unwrap();
+    let joint = joint_covariance(
+        terminal.smoothed_covariance.as_ref().unwrap(),
+        terminal.smoothed_sample.as_ref().unwrap(),
+        &catalog.covariance,
     );
-    assert_eq!(
-        split.record_stored_propagation(SessionTime::from_ns(10)),
-        Err(ProcessError::CapabilityUnavailable)
-    );
-    let mut aligned = sample(1.0);
-    assert_eq!(
-        aligned.record_stored_propagation(SessionTime::from_ns(10)),
-        Ok(())
-    );
-    let mut deterministic = sample(0.0);
-    assert_eq!(
-        deterministic.record_stored_propagation(SessionTime::from_ns(5)),
-        Ok(())
-    );
-    assert_eq!(
-        deterministic.record_stored_propagation(SessionTime::from_ns(10)),
-        Ok(())
+    let cross =
+        first.smoothed_backward_gain.unwrap() * middle.smoothed_backward_gain.unwrap() * joint;
+    assert!((cross[(POSITION, POSITION)] - posterior(states[0], states[2])).abs() < 1.0e-12);
+    assert!(
+        (cross[(NAVIGATION_DIMENSION + 1, POSITION)] - posterior(samples[0], states[2])).abs()
+            < 1.0e-12
     );
 }
 

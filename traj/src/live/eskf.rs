@@ -6,6 +6,7 @@ mod discretization;
 mod gnss;
 mod matrix;
 mod propagation;
+mod smoothing;
 mod update;
 
 #[cfg(test)]
@@ -32,6 +33,7 @@ pub(crate) use gnss::{
 };
 use nalgebra::{ArrayStorage, Matrix3, SMatrix, SVector};
 pub(crate) use propagation::propagate_nominal;
+pub(crate) use smoothing::RtsUpdateCapture;
 
 pub(crate) const MAX_CONSIDER: usize = MAX_SHARED_PARAMETER_DIMENSION;
 
@@ -68,6 +70,7 @@ type PreintegrationNavJacobian = SMatrix<f32, NAV_DIM, PREINT_DIM>;
 /// stack. No value here survives one propagation transaction.
 #[derive(Debug, PartialEq)]
 pub(crate) struct EskfPropagationScratch {
+    pub(crate) rts_transition: crate::live::smoothing::RtsTransition,
     continuous: NavMatrix,
     transition: NavMatrix,
     nav_a: NavMatrix,
@@ -83,6 +86,7 @@ pub(crate) struct EskfPropagationScratch {
 impl EskfPropagationScratch {
     pub(crate) const fn new() -> Self {
         Self {
+            rts_transition: crate::live::smoothing::RtsTransition::new(),
             continuous: NavMatrix::from_array_storage(ArrayStorage([[0.0; NAV_DIM]; NAV_DIM])),
             transition: NavMatrix::from_array_storage(ArrayStorage([[0.0; NAV_DIM]; NAV_DIM])),
             nav_a: NavMatrix::from_array_storage(ArrayStorage([[0.0; NAV_DIM]; NAV_DIM])),

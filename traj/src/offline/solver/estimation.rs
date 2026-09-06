@@ -102,10 +102,8 @@ pub(super) fn schmidt_update(
     )
 }
 
-/// Applies one Schmidt update while retaining the currently held IMU sample
-/// as a fixed-mean ephemeral nuisance variable. This preserves both the
-/// state/sample cross-covariance created by partial propagation and the same
-/// gyro sample's direct lever-arm velocity sensitivity.
+/// Update navigation and the retained six-dimensional IMU sample jointly,
+/// while keeping the configured static consider parameters fixed.
 #[allow(clippy::too_many_arguments)]
 pub(super) fn schmidt_update_affine_with_sample(
     nominal: &mut StoredNominal,
@@ -126,49 +124,27 @@ pub(super) fn schmidt_update_affine_with_sample(
     linearization_reference: Option<&StoredNominal>,
     damping: f64,
 ) -> Result<MeasurementOutcome, ProcessError> {
-    let state_dimension = covariance.state.nrows();
-    let consider_dimension = consider_covariance.nrows();
-    if covariance.state_consider.shape() != (state_dimension, consider_dimension)
-        || sample.state_cross.shape() != (state_dimension, 6)
+    let n = covariance.state.nrows();
+    let m = consider_covariance.nrows();
+    if sample.state_cross.shape() != (n, 6)
         || sample.covariance_body.shape() != (6, 6)
+        || sample.consider_cross.shape() != (6, m)
         || h_sample.shape() != (h_state.nrows(), 6)
     {
         return Err(ProcessError::InvalidEvidence);
     }
-    let mut combined = StoredCovariance {
-        state: covariance.state.clone(),
-        state_consider: DMatrix::zeros(state_dimension, consider_dimension + 6),
-    };
-    copy_block(
-        &covariance.state_consider,
-        &mut combined.state_consider,
-        0,
-        0,
-    );
-    copy_block(
-        &sample.state_cross,
-        &mut combined.state_consider,
-        0,
-        consider_dimension,
-    );
-    let mut combined_consider = DMatrix::zeros(consider_dimension + 6, consider_dimension + 6);
-    copy_block(consider_covariance, &mut combined_consider, 0, 0);
-    copy_block(
-        &sample.covariance_body,
-        &mut combined_consider,
-        consider_dimension,
-        consider_dimension,
-    );
-    let mut combined_h = DMatrix::zeros(h_state.nrows(), consider_dimension + 6);
-    copy_block(h_consider, &mut combined_h, 0, 0);
-    copy_block(h_sample, &mut combined_h, 0, consider_dimension);
-
-    let outcome = schmidt_update_affine(
+    let mut combined = super::smoothing::sample_estimable_covariance(covariance, &sample.stored());
+    let mut combined_h = DMatrix::zeros(h_state.nrows(), n + 6);
+    copy_block(h_state, &mut combined_h, 0, 0);
+    copy_block(h_sample, &mut combined_h, 0, n);
+    // h(reference) is formed from corrected IMU values. The reference sample
+    // mean therefore belongs to the same affine coordinates as navigation.
+    let mut outcome = schmidt_update_affine(
         nominal,
         &mut combined,
-        h_state,
         &combined_h,
-        &combined_consider,
+        h_consider,
+        consider_covariance,
         residual_at_reference,
         base_noise,
         robust_threshold,
@@ -180,16 +156,12 @@ pub(super) fn schmidt_update_affine_with_sample(
         linearization_reference,
         damping,
     )?;
-    covariance.state = combined.state;
-    for row in 0..state_dimension {
-        for column in 0..consider_dimension {
-            covariance.state_consider[(row, column)] = combined.state_consider[(row, column)];
-        }
-        for column in 0..6 {
-            sample.state_cross[(row, column)] =
-                combined.state_consider[(row, consider_dimension + column)];
-        }
-    }
+    covariance.state = combined.state.view((0, 0), (n, n)).into_owned();
+    covariance.state_consider = combined.state_consider.rows(0, n).into_owned();
+    sample.covariance_body = combined.state.view((n, n), (6, 6)).into_owned();
+    sample.state_cross = combined.state.view((0, n), (n, 6)).into_owned();
+    sample.consider_cross = combined.state_consider.rows(n, 6).into_owned();
+    outcome.reset_basis = outcome.reset_basis.view((0, 0), (n, n)).into_owned();
     Ok(outcome)
 }
 
@@ -374,8 +346,15 @@ pub(super) fn inject_error(
         nominal.velocity_ecef[axis] += correction[VELOCITY + axis];
         nominal.accelerometer_bias_body[axis] += correction[ACCELEROMETER_BIAS + axis];
         nominal.gyroscope_bias_body[axis] += correction[GYROSCOPE_BIAS + axis];
-        if correction.len() >= NAVIGATION_DIMENSION + COLORED_ERROR_DIMENSION {
+        if correction.len() == NAVIGATION_DIMENSION + COLORED_ERROR_DIMENSION
+            || correction.len() == NAVIGATION_DIMENSION + COLORED_ERROR_DIMENSION + 6
+        {
             nominal.colored_gnss_error[axis] += correction[NAVIGATION_DIMENSION + axis];
+        }
+    }
+    if correction.len() >= NAVIGATION_DIMENSION + 6 {
+        for axis in 0..6 {
+            nominal.imu_sample_error_body[axis] += correction[correction.len() - 6 + axis];
         }
     }
     let attitude_error = Vector3::new(
@@ -467,6 +446,95 @@ pub(super) fn solve_spd(
     Err(ProcessError::NumericalNonConvergence)
 }
 
+/// Solve a positive-semidefinite covariance on its supported subspace.
+/// Diagonal equilibration preserves small, physically meaningful variances
+/// when the covariance mixes units (for example metres and clock nanoseconds).
+/// Unsupported right-hand-side components are rejected, never regularized.
+pub(crate) fn solve_psd(
+    matrix: &DMatrix<f64>,
+    right: &DMatrix<f64>,
+) -> Result<DMatrix<f64>, ProcessError> {
+    PsdSolver::new(matrix)?.solve(right)
+}
+
+/// Reusable supported-subspace factorization for conditionals sharing a
+/// covariance, such as every query within a frozen dense process interval.
+#[derive(Clone, Debug)]
+pub(crate) struct PsdSolver {
+    scales: DVector<f64>,
+    eigenvectors: DMatrix<f64>,
+    eigenvalues: DVector<f64>,
+    tolerance: f64,
+}
+
+impl PsdSolver {
+    pub(crate) fn new(matrix: &DMatrix<f64>) -> Result<Self, ProcessError> {
+        let n = matrix.nrows();
+        if matrix.ncols() != n || !matrix.iter().all(|v| v.is_finite()) {
+            return Err(ProcessError::NumericalNonConvergence);
+        }
+        let mut scales = DVector::zeros(n);
+        for row in 0..n {
+            if matrix[(row, row)] < 0.0 {
+                return Err(ProcessError::NumericalNonConvergence);
+            }
+            scales[row] = if matrix[(row, row)] > 0.0 {
+                matrix[(row, row)].sqrt()
+            } else {
+                1.0
+            };
+        }
+        let equilibrated = DMatrix::from_fn(n, n, |r, c| matrix[(r, c)] / scales[r] / scales[c]);
+        let decomposition = symmetric(equilibrated).symmetric_eigen();
+        let dimension =
+            u32::try_from(n.max(1)).map_err(|_| ProcessError::NumericalNonConvergence)?;
+        let tolerance =
+            512.0 * f64::EPSILON * f64::from(dimension) * decomposition.eigenvalues.amax().max(1.0);
+        if decomposition
+            .eigenvalues
+            .iter()
+            .any(|value| *value < -tolerance)
+        {
+            return Err(ProcessError::NumericalNonConvergence);
+        }
+        Ok(Self {
+            scales,
+            eigenvectors: decomposition.eigenvectors,
+            eigenvalues: decomposition.eigenvalues,
+            tolerance,
+        })
+    }
+
+    pub(crate) fn solve(&self, right: &DMatrix<f64>) -> Result<DMatrix<f64>, ProcessError> {
+        let n = self.scales.len();
+        if right.nrows() != n || !right.iter().all(|v| v.is_finite()) {
+            return Err(ProcessError::NumericalNonConvergence);
+        }
+        let rhs = DMatrix::from_fn(n, right.ncols(), |r, c| right[(r, c)] / self.scales[r]);
+        let mut supported = self.eigenvectors.transpose() * &rhs;
+        for column in 0..right.ncols() {
+            let unsupported_tolerance =
+                64.0 * self.tolerance * rhs.column(column).norm().max(f64::MIN_POSITIVE);
+            for row in 0..n {
+                if self.eigenvalues[row] > self.tolerance {
+                    supported[(row, column)] /= self.eigenvalues[row];
+                } else {
+                    if supported[(row, column)].abs() > unsupported_tolerance {
+                        return Err(ProcessError::NumericalNonConvergence);
+                    }
+                    supported[(row, column)] = 0.0;
+                }
+            }
+        }
+        let solution = &self.eigenvectors * supported;
+        let result = DMatrix::from_fn(n, right.ncols(), |r, c| solution[(r, c)] / self.scales[r]);
+        if !result.iter().all(|v| v.is_finite()) {
+            return Err(ProcessError::NumericalNonConvergence);
+        }
+        Ok(result)
+    }
+}
+
 pub(super) fn repair_covariance(
     covariance: &mut DMatrix<f64>,
     maximum_attempts: u8,
@@ -474,7 +542,7 @@ pub(super) fn repair_covariance(
     repair_count: &mut u32,
 ) -> Result<(), ProcessError> {
     *covariance = symmetric(covariance.clone());
-    if covariance.clone().cholesky().is_some() {
+    if covariance.clone().cholesky().is_some() || matrix_is_psd(covariance) {
         return Ok(());
     }
     let scale = (0..covariance.nrows())
