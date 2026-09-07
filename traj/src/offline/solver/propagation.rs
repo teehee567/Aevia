@@ -2,7 +2,6 @@
 
 use crate::{
     error::ProcessError,
-    observation::InputDisposition,
     offline::store::{
         StateStore, StoredCovariance, StoredDynamics, StoredImuSample, StoredIntegrationImu,
         StoredNominal, StoredStep,
@@ -262,7 +261,7 @@ impl<'a> OfflineFilter<'a> {
     pub(super) fn store_current(
         &mut self,
         predicted_override: Option<(StoredNominal, StoredCovariance, StoredImuSample)>,
-        measurement: Option<(InputDisposition, f64, DMatrix<f64>)>,
+        measurement: Option<(f64, DMatrix<f64>)>,
         store: &mut dyn StateStore,
     ) -> Result<(), ProcessError> {
         let filtered = self.nominal.clone().ok_or(ProcessError::InvalidEvidence)?;
@@ -278,10 +277,9 @@ impl<'a> OfflineFilter<'a> {
         if self.last_stored_time == Some(filtered.time) && store.len() > 0 {
             let index = store.len() - 1;
             let mut existing = store.get(index).map_err(ProcessError::from)?;
-            if let Some((disposition, contribution, reset)) = &measurement {
+            if let Some((contribution, reset)) = &measurement {
                 existing.reset_basis = reset * &existing.reset_basis;
                 existing.objective_contribution += *contribution;
-                existing.disposition = Some(*disposition);
             }
             existing.filtered = filtered.clone();
             existing.filtered_covariance = filtered_covariance.clone();
@@ -379,7 +377,7 @@ impl<'a> OfflineFilter<'a> {
         }
         let reset_basis = measurement.as_ref().map_or_else(
             || DMatrix::identity(self.state_dimension, self.state_dimension),
-            |value| value.2.clone(),
+            |value| value.1.clone(),
         );
         let step = StoredStep {
             connected_from_previous: self.connected && self.last_stored_time.is_some(),
@@ -401,11 +399,10 @@ impl<'a> OfflineFilter<'a> {
             reset_basis,
             smoothed_backward_gain: None,
             adjacent_cross_covariance,
-            disposition: measurement.as_ref().map(|value| value.0),
             gnss_state: self.gnss_state,
             timing_quality: self.timing_quality,
             degraded_input: self.held_imu.as_ref().is_some_and(|imu| imu.degraded_input),
-            objective_contribution: measurement.as_ref().map_or(0.0, |value| value.1),
+            objective_contribution: measurement.as_ref().map_or(0.0, |value| value.0),
         };
         if store.dimensions() != (self.state_dimension, consider_dimension)
             || store.len() >= store.maximum_records()

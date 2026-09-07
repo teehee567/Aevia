@@ -538,7 +538,6 @@ pub const fn selection_covers(selection: EvidenceSelection, time: SessionTime) -
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ids::QualificationSpecId;
 
     fn selection(class: EvidenceClass, lineage: EvidenceLineageKind) -> EvidenceSelection {
         EvidenceSelection {
@@ -661,6 +660,5 @@ mod tests {
             capabilities: Capabilities::one(Capability::OfflineSmooth),
         };
         assert_eq!(result.validate(), Ok(()));
-        let _ = QualificationSpecId::new(1);
     }
 }

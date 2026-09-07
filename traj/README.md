@@ -11,8 +11,7 @@ It has two processing paths:
   `ProcessingLevel::CapturedReplay` reproduces the captured live processing.
 
 Offline processing uses `OfflineResourceLimits` and returns an `OfflineRun`
-with an `OfflineRunSummary`. The `offline` feature also enables the host
-dependencies required by optional workstation backends.
+with an `OfflineRunSummary`.
 
 This directory contains only the core engine. Sensor drivers, protocol decoding,
 clock/counter reconstruction, calibration application, channel selection,
@@ -35,8 +34,6 @@ entry points; their private submodules hold the implementations:
   propagation, smoothing, uncertainty projection, and result publication.
 - `live/core/` and `live/eskf/`: live scheduling and ingestion, navigation
   propagation, GNSS updates, bounded extended RTS smoothing, and covariance handling.
-- `raw_tight/`: optional backend qualification and preflight, ambiguity arcs,
-  phase-use accounting, and conditional fix assessment.
 
 Regression tests live beside these responsibilities in separate test modules.
 The host feature suite can be run with
@@ -136,11 +133,11 @@ The existing stationary alignment path remains available.
 
 The release firmware target is the `ESP32-S31-WROOM-3-N16R16V`. It runs the
 bounded, fixed-capacity live ESKF/RTS and incremental metric path. Full-session
-`f64` smoothing runs on a phone or workstation. GTSAM is a planned optional,
-independently qualified workstation backend only; the current feature-gated
-native boundary is deliberately unregistered and fails closed. GTSAM is never
-a dependency of device navigation, recording, display, or live metric
-finalization.
+`f64` smoothing runs on a phone or workstation. `AdvancedGraph` and `RawTight`
+remain reserved processing levels and return `CapabilityUnavailable`.
+The `gtsam-system`, `gtsam-vendored`, and `raw-tight` Cargo features remain for
+compatibility and enable `offline`; they do not provide a backend. The unused
+private backend scaffolding has been removed.
 
 The smoother uses the explicit `LiveResourceLimits::V2_MINI_RTS` development
 contract with a 3 MiB PSRAM ceiling; the historical `V2_MINI_INITIAL` constant

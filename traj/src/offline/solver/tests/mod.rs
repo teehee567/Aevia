@@ -77,8 +77,7 @@ fn nominal(time: i64, position_x: f64) -> StoredNominal {
     }
 }
 
-fn covariance(state_variance: f64, consider_variance: f64) -> StoredCovariance {
-    let _ = consider_variance;
+fn covariance(state_variance: f64) -> StoredCovariance {
     StoredCovariance {
         state: DMatrix::identity(NAVIGATION_DIMENSION, NAVIGATION_DIMENSION) * state_variance,
         state_consider: DMatrix::zeros(NAVIGATION_DIMENSION, 1),
@@ -91,8 +90,8 @@ fn step(time: i64, filtered_x: f64, predicted_variance: f64, filtered_variance: 
         predicted: nominal(time, 0.0),
         filtered: nominal(time, filtered_x),
         smoothed: None,
-        predicted_covariance: covariance(predicted_variance, 1.0),
-        filtered_covariance: covariance(filtered_variance, 1.0),
+        predicted_covariance: covariance(predicted_variance),
+        filtered_covariance: covariance(filtered_variance),
         smoothed_covariance: None,
         predicted_sample: StoredImuSample::zeros(NAVIGATION_DIMENSION, 1),
         filtered_sample: StoredImuSample::zeros(NAVIGATION_DIMENSION, 1),
@@ -111,7 +110,6 @@ fn step(time: i64, filtered_x: f64, predicted_variance: f64, filtered_variance: 
         reset_basis: DMatrix::identity(NAVIGATION_DIMENSION, NAVIGATION_DIMENSION),
         smoothed_backward_gain: None,
         adjacent_cross_covariance: DMatrix::identity(NAVIGATION_DIMENSION, NAVIGATION_DIMENSION),
-        disposition: Some(InputDisposition::Fused),
         gnss_state: GnssState::Healthy,
         timing_quality: TimingQuality::PpsCorrelated,
         degraded_input: false,

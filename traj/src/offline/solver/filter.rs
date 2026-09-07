@@ -540,7 +540,7 @@ impl<'a> OfflineFilter<'a> {
         }
         self.store_current(
             Some((predicted, predicted_covariance, predicted_sample)),
-            Some((outcome.disposition, outcome.objective, outcome.reset_basis)),
+            Some((outcome.objective, outcome.reset_basis)),
             store,
         )?;
         Ok(())

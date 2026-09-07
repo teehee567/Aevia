@@ -10,7 +10,6 @@ use crate::live::{
     NavConsiderCovariance,
 };
 use crate::observation::InputDisposition;
-use crate::quality::{GnssState, Integrity};
 use crate::time::{SessionTime, TimeSpan};
 use nalgebra::{Matrix3, SMatrix, Vector3 as NaVector3};
 
@@ -51,8 +50,6 @@ impl LiveSession<'_, '_> {
         self.internal.initializer = initializer;
         self.last_accepted_imu_end = None;
         self.last_gnss_evidence = None;
-        self.gnss_state = GnssState::Absent;
-        self.integrity = Integrity::Unavailable;
         self.predictor_tracking_degraded = false;
         self.predictor_gap = false;
         self.predictor_degraded_input = false;
@@ -204,7 +201,6 @@ impl LiveSession<'_, '_> {
             return Err(map_core_step_error(error));
         }
         self.heading_source = initialized_heading_source;
-        self.heading_variance_rad2 = Some(initialized_heading_variance_rad2);
         self.internal.initializer = None;
         Ok(InputDisposition::Fused)
     }

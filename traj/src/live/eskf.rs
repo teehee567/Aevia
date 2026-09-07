@@ -160,7 +160,6 @@ pub(crate) struct Eskf {
     process_noise: ProcessNoise,
     covariance_policy: CovariancePolicy,
     pub(crate) covariance_repairs: u32,
-    pub(crate) total_normalized_repair: f32,
 }
 
 impl Eskf {
@@ -198,7 +197,6 @@ impl Eskf {
                 maximum_repair_attempts: 0,
             },
             covariance_repairs: 0,
-            total_normalized_repair: 0.0,
         }
     }
 
@@ -224,7 +222,6 @@ impl Eskf {
         self.covariance_policy.maximum_total_repair = 0.0;
         self.covariance_policy.maximum_repair_attempts = 0;
         self.covariance_repairs = 0;
-        self.total_normalized_repair = 0.0;
     }
 
     /// Initializes the existing covariance storage in place. Any validation

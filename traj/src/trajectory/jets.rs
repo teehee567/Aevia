@@ -2,8 +2,7 @@
 
 use super::dense::{DenseSegment, PointJet};
 use super::math::{
-    add, cross, dot, dot_abs_sum, norm_upper, roundoff_guard, scale, sub, upper_add, upper_mul,
-    vector,
+    add, cross, dot, dot_abs_sum, norm_upper, roundoff_guard, scale, sub, upper_mul, vector,
 };
 use super::roots::ScalarJet;
 use crate::frame::ReferenceEllipsoid;
@@ -45,15 +44,11 @@ pub(super) fn spatial_speed_squared_jet(segment: &DenseSegment, point: PointJet)
     let first = scale(point.second, inverse_duration);
     let second = scale(point.third, inverse_duration);
     let value_scale = dot_abs_sum(velocity, velocity);
-    let derivative_scale = 2.0 * dot_abs_sum(velocity, first);
-    let second_scale = 2.0 * (dot_abs_sum(first, first) + dot_abs_sum(velocity, second));
     ScalarJet {
         value: dot(velocity, velocity),
         derivative: 2.0 * dot(velocity, first),
         second_derivative: 2.0 * (dot(first, first) + dot(velocity, second)),
         value_roundoff: roundoff_guard(value_scale),
-        derivative_roundoff: roundoff_guard(derivative_scale),
-        second_derivative_roundoff: roundoff_guard(second_scale),
     }
 }
 
@@ -97,23 +92,6 @@ pub(super) fn body_longitudinal_jet(
         derivative: first_rotating[0],
         second_derivative: second_rotating[0],
         value_roundoff: roundoff_guard(norm_upper(velocity)),
-        derivative_roundoff: roundoff_guard(upper_add(
-            norm_upper(first),
-            upper_mul(norm_upper(omega), norm_upper(velocity)),
-        )),
-        second_derivative_roundoff: roundoff_guard(upper_add(
-            norm_upper(second),
-            upper_add(
-                upper_add(
-                    upper_mul(2.0, upper_mul(norm_upper(omega), norm_upper(first))),
-                    upper_mul(norm_upper(omega_derivative), norm_upper(velocity)),
-                ),
-                upper_mul(
-                    upper_mul(norm_upper(omega), norm_upper(omega)),
-                    norm_upper(velocity),
-                ),
-            ),
-        )),
     })
 }
 
@@ -149,21 +127,11 @@ pub(super) fn horizontal_speed_squared_jet(
     }
     let horizontal = speed_squared.sub(normal_speed.mul(normal_speed));
     let speed_scale = velocity.iter().map(|entry| entry.value.abs()).sum::<f64>();
-    let first_scale = velocity.iter().map(|entry| entry.first.abs()).sum::<f64>();
-    let second_scale = velocity.iter().map(|entry| entry.second.abs()).sum::<f64>();
     Ok(ScalarJet {
         value: horizontal.value,
         derivative: horizontal.first,
         second_derivative: horizontal.second,
         value_roundoff: roundoff_guard(upper_mul(speed_scale, speed_scale)),
-        derivative_roundoff: roundoff_guard(upper_mul(4.0, upper_mul(speed_scale, first_scale))),
-        second_derivative_roundoff: roundoff_guard(upper_mul(
-            8.0,
-            upper_add(
-                upper_mul(first_scale, first_scale),
-                upper_mul(speed_scale, second_scale),
-            ),
-        )),
     })
 }
 
@@ -180,8 +148,6 @@ pub(super) fn scalar_sqrt_jet(source: ScalarJet) -> Result<ScalarJet, MetricErro
         derivative,
         second_derivative,
         value_roundoff: roundoff_guard(value),
-        derivative_roundoff: roundoff_guard(derivative),
-        second_derivative_roundoff: roundoff_guard(second_derivative),
     })
 }
 

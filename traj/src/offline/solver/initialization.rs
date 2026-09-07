@@ -5,7 +5,7 @@ use crate::{
     error::ProcessError,
     frame::ReferenceEllipsoid,
     math::UnitQuaternion,
-    observation::{GnssSolutionObservation, InputDisposition},
+    observation::GnssSolutionObservation,
     offline::store::{StateStore, StoredCovariance, StoredNominal},
     time::SessionTime,
 };
@@ -325,15 +325,7 @@ impl<'a> OfflineFilter<'a> {
         self.sample_influence_accumulator.fill(0.0);
         self.last_stored_sample_cross.fill(0.0);
         self.integration_imu = None;
-        self.store_current(
-            None,
-            Some((
-                InputDisposition::InitializationOnly,
-                0.0,
-                DMatrix::identity(self.state_dimension, self.state_dimension),
-            )),
-            store,
-        )?;
+        self.store_current(None, None, store)?;
         self.connected = true;
         Ok(())
     }

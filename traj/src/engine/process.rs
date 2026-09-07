@@ -48,7 +48,7 @@ pub struct ProcessBuilder<'a> {
     marker: core::marker::PhantomData<&'a ()>,
 }
 
-/// Preflighted host request. Optional native backends remain private adapters.
+/// Preflighted host request for captured replay or offline smoothing.
 #[derive(Clone, Debug)]
 pub struct PreparedProcess<'a> {
     #[cfg(feature = "offline")]
@@ -137,7 +137,6 @@ impl<'a> ProcessBuilder<'a> {
 impl ProcessBuilder<'_> {
     /// The embedded-only crate intentionally has no host evidence/source types.
     pub fn preflight_unavailable(self) -> Result<(), PrepareError> {
-        let _ = self;
         Err(PrepareError::CapabilityUnavailable)
     }
 }

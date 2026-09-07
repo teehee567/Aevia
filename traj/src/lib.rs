@@ -37,11 +37,6 @@ pub mod trajectory;
 pub mod uncertainty;
 pub mod workspace;
 
-#[cfg(any(feature = "gtsam-system", feature = "gtsam-vendored"))]
-mod advanced;
-#[cfg(feature = "raw-tight")]
-mod raw_tight;
-
 pub use config::{
     CapturedReplayComparison, EngineConfig, LiveSpec, ProcessingLevel, ProcessingPolicy,
     ProcessingResultSpec, ProcessingSpec,

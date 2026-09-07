@@ -106,12 +106,6 @@ impl LiveSession<'_, '_> {
             return;
         };
         self.last_gnss_evidence = Some(evidence);
-        self.gnss_state = evidence.state;
-        self.integrity = if self.clock_uncertainty_valid {
-            Integrity::Monitored
-        } else {
-            Integrity::Unavailable
-        };
     }
 
     pub(super) fn update_diagnostics(&mut self, report: &DrainReport) {

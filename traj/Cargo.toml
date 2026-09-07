@@ -10,6 +10,7 @@ readme = "README.md"
 [features]
 default = []
 offline = ["nalgebra/std"]
+# Compatibility flags; these backends remain unavailable at runtime.
 gtsam-system = ["offline"]
 gtsam-vendored = ["offline"]
 raw-tight = ["offline"]

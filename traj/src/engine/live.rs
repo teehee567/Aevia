@@ -17,7 +17,7 @@ use crate::metric::LiveMetricUpdate;
 use crate::observation::{
     ClockTransitionObservation, InputDisposition, LiveObservation, LiveStep, WorkQuota,
 };
-use crate::quality::{DiagnosticCounts, GnssState, HeadingSource, Integrity, TimingQuality};
+use crate::quality::{DiagnosticCounts, GnssState, HeadingSource, TimingQuality};
 use crate::time::{SessionTime, TimeSpan};
 use crate::trajectory::{MAX_REFERENCE_POINTS as MAX_TRAJECTORY_POINTS, Trajectory};
 use crate::workspace::{LiveWorkspace, WorkspaceRequirements};
@@ -112,11 +112,8 @@ pub struct LiveSession<'config, 'workspace> {
     initial_heading: Option<crate::config::InitialHeading>,
     last_accepted_imu_end: Option<SessionTime>,
     heading_source: HeadingSource,
-    heading_variance_rad2: Option<f64>,
-    gnss_state: GnssState,
     last_gnss_evidence: Option<GnssQualityEvidence>,
     timing_quality: TimingQuality,
-    integrity: Integrity,
     predictor_tracking_degraded: bool,
     predictor_gap: bool,
     predictor_degraded_input: bool,
@@ -393,11 +390,8 @@ impl<'config> LivePlan<'config> {
             initial_heading: self.spec.initial_heading,
             last_accepted_imu_end: None,
             heading_source: HeadingSource::None,
-            heading_variance_rad2: None,
-            gnss_state: GnssState::Absent,
             last_gnss_evidence: None,
             timing_quality: TimingQuality::ArrivalOnly,
-            integrity: Integrity::Unavailable,
             predictor_tracking_degraded: false,
             predictor_gap: false,
             predictor_degraded_input: false,

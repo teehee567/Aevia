@@ -14,7 +14,7 @@ use crate::live::{
     SharedMeasurementJacobians,
 };
 use crate::observation::{GnssSolutionObservation, InputDisposition, ReceiverHealth};
-use crate::quality::{GnssState, Integrity, TimingQuality};
+use crate::quality::{GnssState, TimingQuality};
 use crate::time::{ObservationTime, SessionTime, TimingBasis};
 use crate::uncertainty::{Covariance3, MeasurementUncertainty};
 use nalgebra::{Matrix3, Vector3 as NaVector3};
@@ -91,7 +91,6 @@ impl LiveSession<'_, '_> {
             }
         }
         if !self.clock_uncertainty_valid {
-            self.integrity = Integrity::Unavailable;
             self.timing_quality = TimingQuality::Discontinuous;
             self.diagnostics.gnss_updates_rejected =
                 self.diagnostics.gnss_updates_rejected.saturating_add(1);

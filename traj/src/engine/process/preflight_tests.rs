@@ -27,6 +27,22 @@ fn complete_capabilities() -> Capabilities {
 }
 
 #[test]
+fn unimplemented_backends_remain_unavailable_with_claimed_capabilities() {
+    let capabilities = complete_capabilities()
+        .with(Capability::AdvancedGraph)
+        .with(Capability::RawTight)
+        .with(Capability::RawRoverGnss)
+        .with(Capability::BaseOrCorrection)
+        .with(Capability::Ephemerides);
+    for level in [ProcessingLevel::AdvancedGraph, ProcessingLevel::RawTight] {
+        assert_eq!(
+            offline_level_evidence_preflight(level, capabilities, true, true),
+            Err(PrepareError::CapabilityUnavailable)
+        );
+    }
+}
+
+#[test]
 fn captured_capability_bit_cannot_select_an_inexact_runner() {
     assert_eq!(
         offline_level_evidence_preflight(

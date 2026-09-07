@@ -4,7 +4,7 @@ use super::{GnssQualityEvidence, InitializationFixEvidence, LiveSession, Pending
 use crate::error::{StepError, ValidationError};
 use crate::ids::{ClockModelId, ClockSegmentId, ObservationId};
 use crate::live::EcefAnchor;
-use crate::quality::{DiagnosticCounts, GnssState, HeadingSource, Integrity, TimingQuality};
+use crate::quality::{DiagnosticCounts, HeadingSource, TimingQuality};
 use crate::time::SessionTime;
 use crate::workspace::{MAX_LIVE_SOURCES, SourceSequence};
 
@@ -92,11 +92,8 @@ pub(super) struct LiveIngestCheckpoint {
     clock_uncertainty_valid: bool,
     last_accepted_imu_end: Option<SessionTime>,
     heading_source: HeadingSource,
-    heading_variance_rad2: Option<f64>,
-    gnss_state: GnssState,
     last_gnss_evidence: Option<GnssQualityEvidence>,
     timing_quality: TimingQuality,
-    integrity: Integrity,
     predictor_tracking_degraded: bool,
     predictor_gap: bool,
     predictor_degraded_input: bool,
@@ -118,11 +115,8 @@ impl LiveIngestCheckpoint {
             clock_uncertainty_valid: session.clock_uncertainty_valid,
             last_accepted_imu_end: session.last_accepted_imu_end,
             heading_source: session.heading_source,
-            heading_variance_rad2: session.heading_variance_rad2,
-            gnss_state: session.gnss_state,
             last_gnss_evidence: session.last_gnss_evidence,
             timing_quality: session.timing_quality,
-            integrity: session.integrity,
             predictor_tracking_degraded: session.predictor_tracking_degraded,
             predictor_gap: session.predictor_gap,
             predictor_degraded_input: session.predictor_degraded_input,
@@ -149,11 +143,8 @@ impl LiveIngestCheckpoint {
         session.clock_uncertainty_valid = self.clock_uncertainty_valid;
         session.last_accepted_imu_end = self.last_accepted_imu_end;
         session.heading_source = self.heading_source;
-        session.heading_variance_rad2 = self.heading_variance_rad2;
-        session.gnss_state = self.gnss_state;
         session.last_gnss_evidence = self.last_gnss_evidence;
         session.timing_quality = self.timing_quality;
-        session.integrity = self.integrity;
         session.predictor_tracking_degraded = self.predictor_tracking_degraded;
         session.predictor_gap = self.predictor_gap;
         session.predictor_degraded_input = self.predictor_degraded_input;

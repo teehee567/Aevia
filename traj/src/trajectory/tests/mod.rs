@@ -217,7 +217,7 @@ fn quadratic_oracle(
     move |lower, upper| {
         let x = midpoint(lower, upper);
         taylor_enclosure(
-            ScalarJet {
+            TaylorJet {
                 value: (x - first_root) * (x - second_root),
                 derivative: 2.0 * x - first_root - second_root,
                 second_derivative: 2.0,

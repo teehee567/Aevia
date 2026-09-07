@@ -16,11 +16,11 @@ fn sixty_minute_high_rate_offline_preflight_is_bounded_and_accounts_for_both_fil
         .seekable_temporary_bytes
         .checked_add(trajectory.seekable_temporary_bytes)
         .unwrap();
-    assert_eq!(state.record_bytes, 28_415);
-    assert_eq!(state.seekable_temporary_bytes, 150_883_678_479);
+    assert_eq!(state.record_bytes, 28_414);
+    assert_eq!(state.seekable_temporary_bytes, 150_878_368_478);
     assert_eq!(trajectory.record_bytes, 32_289);
     assert_eq!(trajectory.seekable_temporary_bytes, 171_454_590_064);
-    assert_eq!(temporary_storage_bytes, 322_338_268_543);
+    assert_eq!(temporary_storage_bytes, 322_332_958_542);
     let limits = OfflineResourceLimits {
         peak_memory_bytes: 256 * 1_024 * 1_024,
         temporary_storage_bytes,

@@ -19,14 +19,13 @@ use crate::{
     config::OfflineResourceLimits,
     error::ProcessError,
     math::UnitQuaternion,
-    observation::InputDisposition,
     quality::{GnssState, TimingQuality},
     time::SessionTime,
 };
 
 const FILE_MAGIC: [u8; 8] = *b"AEVST01\0";
 const FILE_HEADER_BYTES: u64 = 64;
-const FILE_FORMAT_VERSION: u32 = 4;
+const FILE_FORMAT_VERSION: u32 = 5;
 const MAX_TEMPFILE_ATTEMPTS: u64 = 32;
 
 #[derive(Clone, Debug)]
@@ -353,7 +352,6 @@ pub(super) struct StoredStep {
     /// a smoothed adjacent covariance; it remains separate from the backward
     /// conditional above so the two semantics cannot be confused.
     pub adjacent_cross_covariance: DMatrix<f64>,
-    pub disposition: Option<InputDisposition>,
     pub gnss_state: GnssState,
     pub timing_quality: TimingQuality,
     pub degraded_input: bool,
@@ -371,7 +369,7 @@ impl StoredStep {
         let augmented_dimension = state_dimension
             .checked_add(consider_dimension)?
             .checked_add(6)?;
-        19_usize
+        18_usize
             .checked_add(StoredIntegrationImu::encoded_len())?
             .checked_add(StoredDynamics::encoded_len(
                 state_dimension,
@@ -487,7 +485,6 @@ impl StoredStep {
         bytes.push(u8::from(self.connected_from_previous));
         bytes.push(u8::from(self.smoothed.is_some()));
         bytes.push(u8::from(self.smoothed_covariance.is_some()));
-        bytes.push(encode_disposition(self.disposition));
         bytes.push(encode_gnss(self.gnss_state));
         bytes.push(encode_timing(self.timing_quality));
         bytes.push(u8::from(self.degraded_input));
@@ -572,7 +569,6 @@ impl StoredStep {
         let connected_from_previous = cursor.boolean()?;
         let has_smoothed = cursor.boolean()?;
         let has_smoothed_covariance = cursor.boolean()?;
-        let disposition = decode_disposition(cursor.u8()?)?;
         let gnss_state = decode_gnss(cursor.u8()?)?;
         let timing_quality = decode_timing(cursor.u8()?)?;
         let degraded_input = cursor.boolean()?;
@@ -635,7 +631,6 @@ impl StoredStep {
             smoothed_backward_gain: has_smoothed_backward_gain
                 .then_some(decoded_smoothed_backward_gain),
             adjacent_cross_covariance,
-            disposition,
             gnss_state,
             timing_quality,
             degraded_input,
@@ -1580,33 +1575,6 @@ impl DecodeCursor<'_> {
     }
 }
 
-fn encode_disposition(value: Option<InputDisposition>) -> u8 {
-    match value {
-        None => 0,
-        Some(InputDisposition::Fused) => 1,
-        Some(InputDisposition::StatisticallyRejected) => 2,
-        Some(InputDisposition::Downweighted) => 3,
-        Some(InputDisposition::TooLateForLive) => 4,
-        Some(InputDisposition::InitializationOnly) => 5,
-        Some(InputDisposition::RetainedForOffline) => 6,
-        Some(InputDisposition::QueuedForFusion) => 7,
-    }
-}
-
-fn decode_disposition(value: u8) -> Result<Option<InputDisposition>, StoreError> {
-    Ok(match value {
-        0 => None,
-        1 => Some(InputDisposition::Fused),
-        2 => Some(InputDisposition::StatisticallyRejected),
-        3 => Some(InputDisposition::Downweighted),
-        4 => Some(InputDisposition::TooLateForLive),
-        5 => Some(InputDisposition::InitializationOnly),
-        6 => Some(InputDisposition::RetainedForOffline),
-        7 => Some(InputDisposition::QueuedForFusion),
-        _ => return Err(StoreError::Corrupt),
-    })
-}
-
 fn encode_gnss(value: GnssState) -> u8 {
     match value {
         // Use a new tag so old readers cannot mistake generic health for RTK fixed.
@@ -1742,7 +1710,6 @@ mod tests {
             reset_basis: DMatrix::identity(n, n),
             smoothed_backward_gain: Some(DMatrix::identity(n + m + 6, n + m + 6) * 0.25),
             adjacent_cross_covariance: DMatrix::identity(n, n) * 0.5,
-            disposition: Some(InputDisposition::Fused),
             gnss_state: GnssState::Healthy,
             timing_quality: TimingQuality::PpsCorrelated,
             degraded_input: false,

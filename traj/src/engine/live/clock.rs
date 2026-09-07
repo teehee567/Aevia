@@ -11,7 +11,7 @@ use crate::live::{
 use crate::observation::{
     ClockTransitionObservation, ClockTransitionUncertainty, InputDisposition,
 };
-use crate::quality::{Integrity, TimingQuality};
+use crate::quality::TimingQuality;
 use crate::time::SessionTime;
 
 impl LiveSession<'_, '_> {
@@ -161,7 +161,6 @@ impl LiveSession<'_, '_> {
         self.last_clock_transition_time = Some(transition.at);
         self.pending_clock_transition = None;
         self.timing_quality = TimingQuality::Discontinuous;
-        self.integrity = Integrity::Unavailable;
         self.diagnostics.clock_discontinuities =
             self.diagnostics.clock_discontinuities.saturating_add(1);
         if preserved {

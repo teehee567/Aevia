@@ -3,7 +3,7 @@ use super::*;
 #[test]
 fn schmidt_update_clamps_consider_mean_and_covariance() {
     let mut nominal = nominal(0, 0.0);
-    let mut covariance = covariance(1.0, 2.0);
+    let mut covariance = covariance(1.0);
     covariance.state_consider[(POSITION, 0)] = 0.2;
     let consider = DMatrix::identity(1, 1) * 2.0;
     let mut h_state = DMatrix::zeros(1, NAVIGATION_DIMENSION);
@@ -42,7 +42,7 @@ fn consider_rts_matches_direct_linear_gaussian_schmidt_update() {
         elapsed_work_limit: None,
     };
     let consider = DMatrix::identity(1, 1);
-    let mut prior = covariance(1.0, 1.0);
+    let mut prior = covariance(1.0);
     prior.state[(POSITION, POSITION)] = 2.0;
     prior.state_consider[(POSITION, 0)] = 0.4;
     let mut transition = DMatrix::identity(NAVIGATION_DIMENSION, NAVIGATION_DIMENSION);
@@ -158,7 +158,7 @@ fn consider_rts_matches_direct_linear_gaussian_schmidt_update() {
 fn affine_schmidt_update_uses_the_complete_reference_residual() {
     let reference = nominal(0, 0.0);
     let mut current = nominal(0, 2.0);
-    let mut covariance = covariance(1.0, 1.0);
+    let mut covariance = covariance(1.0);
     let consider = DMatrix::identity(1, 1);
     let mut h_state = DMatrix::zeros(1, NAVIGATION_DIMENSION);
     h_state[(0, POSITION)] = 1.0;
@@ -229,10 +229,10 @@ fn ieks_guide_interpolates_every_epoch_but_never_crosses_a_gap() {
     let mut planned = plan_store(NAVIGATION_DIMENSION, &consider, 2, limits).unwrap();
     let mut first = step(0, 0.0, 1.0, 1.0);
     first.smoothed = Some(nominal(0, 0.0));
-    first.smoothed_covariance = Some(covariance(1.0, 1.0));
+    first.smoothed_covariance = Some(covariance(1.0));
     let mut second = step(1_000_000_000, 10.0, 1.0, 1.0);
     second.smoothed = Some(nominal(1_000_000_000, 10.0));
-    second.smoothed_covariance = Some(covariance(1.0, 1.0));
+    second.smoothed_covariance = Some(covariance(1.0));
     planned.store.push(&first).unwrap();
     planned.store.push(&second).unwrap();
 

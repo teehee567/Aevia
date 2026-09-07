@@ -85,9 +85,15 @@ pub(super) struct ScalarJet {
     pub(super) derivative: f64,
     pub(super) second_derivative: f64,
     pub(super) value_roundoff: f64,
-    #[cfg_attr(not(test), allow(dead_code))]
+}
+
+#[cfg(test)]
+pub(super) struct TaylorJet {
+    pub(super) value: f64,
+    pub(super) derivative: f64,
+    pub(super) second_derivative: f64,
+    pub(super) value_roundoff: f64,
     pub(super) derivative_roundoff: f64,
-    #[cfg_attr(not(test), allow(dead_code))]
     pub(super) second_derivative_roundoff: f64,
 }
 
@@ -106,7 +112,7 @@ pub(super) struct EndpointOwnership {
 
 #[cfg(test)]
 pub(super) fn taylor_enclosure(
-    jet: ScalarJet,
+    jet: TaylorJet,
     supplied_second_derivative_bound: f64,
     lower: f64,
     upper: f64,

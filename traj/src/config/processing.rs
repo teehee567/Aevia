@@ -20,9 +20,9 @@ pub enum ProcessingLevel {
     CapturedReplay,
     /// Offline `f64` solution-level fixed-interval smoothing.
     OfflineSmooth,
-    /// Optional workstation GTSAM graph smoothing.
+    /// Reserved workstation GTSAM graph smoothing; currently unavailable.
     AdvancedGraph,
-    /// Optional workstation raw tightly coupled RTK/INS.
+    /// Reserved workstation raw tightly coupled RTK/INS; currently unavailable.
     RawTight,
 }
 

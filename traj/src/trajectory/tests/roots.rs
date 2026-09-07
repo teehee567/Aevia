@@ -211,7 +211,7 @@ fn shared_endpoint_is_owned_only_by_right_hand_interval() {
     let oracle = |lower: f64, upper: f64| {
         let x = midpoint(lower, upper);
         taylor_enclosure(
-            ScalarJet {
+            TaylorJet {
                 value: x - 0.5,
                 derivative: 1.0,
                 second_derivative: 0.0,

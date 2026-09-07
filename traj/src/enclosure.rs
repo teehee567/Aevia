@@ -6,8 +6,6 @@
 //! bounds. Target qualification remains separate from this source contract.
 //! Software scalar adapters are retained only as host regression oracles.
 
-#![allow(dead_code)]
-
 use core::ops::{Add, Div, Mul, Neg, Sub};
 
 #[cfg(test)]
@@ -224,6 +222,7 @@ impl EnclosureScalar for SoftF64 {
 /// Converts a binary64 input to adjacent binary32 bounds using integer bit
 /// arithmetic only. This avoids silently reintroducing target-native floating
 /// conversion into the deterministic SoftF32 backend.
+#[cfg(test)]
 fn f32_enclosure_bits_from_f64(value: f64) -> Result<(u32, u32), EnclosureError> {
     const F64_EXPONENT_MASK: u64 = 0x7ff0_0000_0000_0000;
     const F64_FRACTION_MASK: u64 = 0x000f_ffff_ffff_ffff;
@@ -280,6 +279,7 @@ fn f32_enclosure_bits_from_f64(value: f64) -> Result<(u32, u32), EnclosureError>
     }
 }
 
+#[cfg(test)]
 fn shifted_floor(mantissa: u64, binary_shift: i32) -> (u64, bool) {
     if binary_shift >= 0 {
         return (mantissa << binary_shift as u32, false);
@@ -330,10 +330,6 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
         Self::new(lower, upper)
     }
 
-    fn exact(value: S) -> Result<Self, EnclosureError> {
-        Self::new(value, value)
-    }
-
     pub(crate) fn zero() -> Self {
         Self {
             lower: S::zero(),
@@ -356,6 +352,7 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
         self.upper.to_f64()
     }
 
+    #[cfg(test)]
     pub(crate) fn contains_f64(self, value: f64) -> bool {
         value.is_finite() && self.lower_f64() <= value && value <= self.upper_f64()
     }
@@ -545,10 +542,6 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
         ))
     }
 
-    fn overlaps(self, rhs: Self) -> bool {
-        self.lower <= rhs.upper && self.upper >= rhs.lower
-    }
-
     fn symmetric_magnitude(self) -> Result<Self, EnclosureError> {
         let magnitude = self.abs()?;
         Self::new(-magnitude.upper, magnitude.upper)
@@ -569,6 +562,7 @@ impl<S: EnclosureScalar> EnclosureV1<S> {
         ])
     }
 
+    #[cfg(test)]
     pub(crate) fn norm(vector: [Self; 3]) -> Result<Self, EnclosureError> {
         vector[0]
             .square()?
@@ -607,6 +601,7 @@ impl<S: EnclosureScalar> EnclosedJet2<S> {
         }
     }
 
+    #[cfg(test)]
     pub(crate) fn independent(value: EnclosureV1<S>) -> Self {
         Self {
             value,
@@ -642,10 +637,6 @@ impl<S: EnclosureScalar> EnclosedJet2<S> {
                 .add(two.mul(self.first.mul(rhs.first)?)?)?
                 .add(self.value.mul(rhs.second)?)?,
         })
-    }
-
-    pub(crate) fn scale_f64(self, rhs: f64) -> Result<Self, EnclosureError> {
-        self.mul(Self::constant(EnclosureV1::point_f64(rhs)?))
     }
 
     pub(crate) fn square(self) -> Result<Self, EnclosureError> {
@@ -696,6 +687,7 @@ impl<S: EnclosureScalar> EnclosedJet2<S> {
         })
     }
 
+    #[cfg(test)]
     pub(crate) fn sin_cos(self) -> Result<(Self, Self), EnclosureError> {
         let (sin_value, cos_value) = self.value.sin_cos()?;
         let first_squared = self.first.square()?;
@@ -724,6 +716,7 @@ impl<S: EnclosureScalar> EnclosedJet2<S> {
 /// Taylor remainders.  Point derivatives use the same operation with
 /// `[rotation_vector]x^k vector`, so this routine does not differentiate the
 /// interval rotation itself.
+#[cfg(test)]
 pub(crate) fn rodrigues_rotate<S: EnclosureScalar>(
     parameter: EnclosureV1<S>,
     rotation_vector: [f64; 3],
@@ -797,22 +790,6 @@ pub(crate) fn rodrigues_rotate_enclosed<S: EnclosureScalar>(
             .add(phi_cross_twice[axis].mul(one_minus_cosine_over_norm_squared)?)?;
     }
     Ok(rotated)
-}
-
-pub(crate) fn matrix3_mul_vector<S: EnclosureScalar>(
-    matrix: [[f64; 3]; 3],
-    vector: [EnclosureV1<S>; 3],
-) -> Result<[EnclosureV1<S>; 3], EnclosureError> {
-    let rows = [
-        enclose_vector(matrix[0])?,
-        enclose_vector(matrix[1])?,
-        enclose_vector(matrix[2])?,
-    ];
-    Ok([
-        EnclosureV1::dot(rows[0], vector)?,
-        EnclosureV1::dot(rows[1], vector)?,
-        EnclosureV1::dot(rows[2], vector)?,
-    ])
 }
 
 fn enclose_vector<S: EnclosureScalar>(

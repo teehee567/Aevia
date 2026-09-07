@@ -167,7 +167,7 @@ impl Eskf {
         {
             return Err(EskfError::NumericalFailure);
         }
-        let (repairs, normalized_repair) =
+        let repairs =
             condition_navigation_covariance(&mut candidate_covariance, &self.covariance_policy)?;
         if let Some(capture) = capture {
             capture.apply_update(&measurement, &kalman_gain, &attitude_reset)?;
@@ -181,7 +181,6 @@ impl Eskf {
         self.nav_consider_covariance = candidate_cross;
         self.gap_nav_cross_covariance = candidate_gap_cross;
         self.covariance_repairs = self.covariance_repairs.saturating_add(repairs);
-        self.total_normalized_repair += normalized_repair;
         if let (Some(target), Some(candidate)) = (sample_cross, candidate_sample_cross) {
             *target = candidate;
         }

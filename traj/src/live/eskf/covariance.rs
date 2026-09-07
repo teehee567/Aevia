@@ -73,10 +73,9 @@ impl Eskf {
         {
             return Err(EskfError::NumericalFailure);
         }
-        let (repairs, normalized_repair) =
+        let repairs =
             condition_navigation_covariance(&mut self.covariance, &self.covariance_policy)?;
         self.covariance_repairs = self.covariance_repairs.saturating_add(repairs);
-        self.total_normalized_repair += normalized_repair;
         Ok(())
     }
 }
@@ -86,7 +85,7 @@ impl Eskf {
 pub(super) fn condition_navigation_covariance(
     covariance: &mut NavMatrix,
     policy: &CovariancePolicy,
-) -> Result<(u32, f32), EskfError> {
+) -> Result<u32, EskfError> {
     if covariance.iter().any(|value| !value.is_finite()) {
         return Err(EskfError::NumericalFailure);
     }
@@ -99,7 +98,7 @@ pub(super) fn condition_navigation_covariance(
         covariance[(row, row)] = covariance[(row, row)].max(policy.minimum_variance[row]);
     }
     if normalized_cholesky_succeeds(covariance, &policy.state_scales) {
-        return Ok((0, 0.0));
+        return Ok(0);
     }
 
     let mut repair = policy.repair_initial;
@@ -114,7 +113,7 @@ pub(super) fn condition_navigation_covariance(
         }
         accumulated += repair;
         if normalized_cholesky_succeeds(covariance, &policy.state_scales) {
-            return Ok((u32::from(attempt) + 1, accumulated));
+            return Ok(u32::from(attempt) + 1);
         }
         repair *= policy.repair_growth;
     }

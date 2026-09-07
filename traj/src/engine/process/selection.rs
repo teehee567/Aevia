@@ -22,7 +22,6 @@ pub(super) fn select_offline_level(
     ),
     PrepareError,
 > {
-    let _ = limits;
     let mut preferred_failure = None;
     let mut attempts = heapless::Vec::<ProcessingAttempt, MAX_PROCESSING_ATTEMPTS>::new();
     for (ordinal, level) in spec.policy.levels().iter().copied().enumerate() {
