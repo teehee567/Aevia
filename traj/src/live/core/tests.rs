@@ -129,6 +129,110 @@ fn imu(start_ns: i64, end_ns: i64) -> ImuInterval {
     }
 }
 
+#[test]
+fn predictor_frontier_uses_nominal_velocity_across_position_correction() {
+    with_large_stack(predictor_frontier_uses_nominal_velocity_across_position_correction_case);
+}
+
+fn predictor_frontier_uses_nominal_velocity_across_position_correction_case() {
+    // The physical capture had a 2.3 cm complementary position correction
+    // across a 5 ms predictor segment, while both stored vertical velocities
+    // stayed near 0.39 m/s. Differentiating that interpolated position curve
+    // invented a >5 m/s velocity discrepancy and triggered repeated resets.
+    let mut history = LiveCoreHistory::new();
+    let mut tuning = config();
+    tuning.fusion_delay_ns = 100_000_000;
+    tuning.navigation_period_ns = 5_000_000;
+    tuning.predictor.velocity_reset_threshold_mps = 5.0;
+    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &history).unwrap();
+    let mut core = LiveCore::attach(&mut state, &mut history);
+    let start = core.corrected_endpoint;
+    let mut end = start;
+    end.state.time = SessionTime::from_ns(5_000_000);
+    end.state.position_n.z = -0.025;
+    core.history
+        .predicted
+        .push(DenseSegment::new(1, start, end, false, false).unwrap())
+        .unwrap();
+    core.predictor.state = end.state;
+    core.predictor.state.time = SessionTime::from_ns(100_000_000);
+    core.filter.state.time = SessionTime::from_ns(3_750_000);
+    core.filter.state.position_n.z = -0.025;
+    core.scheduler
+        .observe_trusted_imu(SessionTime::from_ns(150_000_000))
+        .unwrap();
+    let pending = PendingCorrectedSegment {
+        start,
+        integrated_attitude_delta: Vector3::zeros(),
+        end_specific_force_b: Vector3::zeros(),
+        degraded: false,
+        degraded_input: false,
+    };
+    let mut report = DrainReport::new();
+    core.finalize_pending_segment(pending, &mut report).unwrap();
+    assert_eq!(core.predictor.tracking_error.hard_resets, 0);
+    assert!(core.predictor.state.velocity_n.norm() < 0.01);
+    assert!(core.predictor.tracking_error.velocity_mps < 0.01);
+}
+
+#[test]
+fn predictor_hard_reset_updates_retained_history_before_the_next_frontier() {
+    with_large_stack(predictor_hard_reset_updates_retained_history_before_the_next_frontier_case);
+}
+
+fn predictor_hard_reset_updates_retained_history_before_the_next_frontier_case() {
+    let mut history = LiveCoreHistory::new();
+    let mut tuning = config();
+    tuning.fusion_delay_ns = 100_000_000;
+    tuning.navigation_period_ns = 5_000_000;
+    tuning.predictor.attitude_reset_threshold_rad = 0.5;
+    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &history).unwrap();
+    let mut core = LiveCore::attach(&mut state, &mut history);
+    let mut endpoint = core.corrected_endpoint;
+    for index in 1..=20 {
+        let start = endpoint;
+        endpoint.state.time = SessionTime::from_ns(index * 5_000_000);
+        core.history
+            .predicted
+            .push(DenseSegment::new(index as u64, start, endpoint, false, false).unwrap())
+            .unwrap();
+    }
+    core.predictor.state = endpoint.state;
+    core.predictor_endpoint = endpoint;
+    core.scheduler
+        .observe_trusted_imu(SessionTime::from_ns(150_000_000))
+        .unwrap();
+    let corrected_orientation = UnitQuaternion::from_axis_angle(&Vector3::z_axis(), 0.7);
+    for index in 1..=2 {
+        core.filter.state.time = SessionTime::from_ns(index * 5_000_000);
+        core.filter.state.orientation_n_from_b = corrected_orientation;
+        let pending = PendingCorrectedSegment {
+            start: core.corrected_endpoint,
+            integrated_attitude_delta: Vector3::zeros(),
+            end_specific_force_b: Vector3::zeros(),
+            degraded: false,
+            degraded_input: false,
+        };
+        core.finalize_pending_segment(pending, &mut DrainReport::new())
+            .unwrap();
+    }
+    assert_eq!(core.predictor.tracking_error.hard_resets, 1);
+    assert!(
+        core.predictor
+            .state
+            .orientation_n_from_b
+            .angle_to(&corrected_orientation)
+            < 1.0e-5
+    );
+    assert!(
+        core.predictor_endpoint
+            .state
+            .orientation_n_from_b
+            .angle_to(&corrected_orientation)
+            < 1.0e-5
+    );
+}
+
 fn gnss(time_ns: i64, sequence: u64, x: f32) -> Scheduled<GnssObservation> {
     let time = SessionTime::from_ns(time_ns);
     Scheduled {

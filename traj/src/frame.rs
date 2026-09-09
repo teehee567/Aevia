@@ -215,7 +215,7 @@ pub struct CoordinateEpoch(f64);
 
 impl CoordinateEpoch {
     /// Validates a positive finite decimal year.
-    pub fn from_decimal_year(value: f64) -> Result<Self, ValidationError> {
+    pub const fn from_decimal_year(value: f64) -> Result<Self, ValidationError> {
         if !value.is_finite() {
             return Err(ValidationError::NonFinite);
         }

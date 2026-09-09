@@ -25,8 +25,10 @@ version = "0.1.0"
 name = "aevia-firmware"
 version = "0.1.0"
 dependencies = [
+ "aevia-trajectory",
  "embassy-executor",
  "embassy-futures",
+ "embassy-sync 0.8.0",
  "embassy-time",
  "embassy-usb",
  "embedded-io-async 0.7.0",
@@ -36,6 +38,8 @@ dependencies = [
  "esp-println",
  "esp-rtos",
  "heapless 0.9.3",
+ "libm",
+ "static_cell",
 ]
 
 [[package]]

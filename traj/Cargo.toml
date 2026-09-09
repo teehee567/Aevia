@@ -9,6 +9,8 @@ readme = "README.md"
 
 [features]
 default = []
+# Explicit bench-only entry point; ordinary preflight still requires qualification.
+development = []
 offline = ["nalgebra/std"]
 # Compatibility flags; these backends remain unavailable at runtime.
 gtsam-system = ["offline"]

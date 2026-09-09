@@ -4,7 +4,9 @@
 //! state, receives bounded complementary corrections from the delayed ESKF,
 //! and never supplies finalized events or covariance-grade claims.
 
-use nalgebra::Vector3;
+use nalgebra::{UnitQuaternion, Vector3};
+
+use crate::time::SessionTime;
 
 use super::{
     eskf::{EskfError, propagate_nominal},
@@ -56,6 +58,61 @@ struct PendingCorrection {
     position_n: Vector3<f32>,
     velocity_n: Vector3<f32>,
     attitude_b: Vector3<f32>,
+}
+
+/// The single nominal correction applied by one predictor hard reset.
+/// Retained predictor history must receive the same change so following
+/// delayed frontiers do not apply that reset repeatedly.
+pub(crate) struct PredictorReset {
+    at: SessionTime,
+    position_n: Vector3<f32>,
+    velocity_n: Vector3<f32>,
+    rotation_n: UnitQuaternion<f32>,
+}
+
+impl PredictorReset {
+    pub(crate) fn between(before: &NavState, after: &NavState) -> Result<Self, PredictorError> {
+        if before.time != after.time {
+            return Err(PredictorError::TimeMismatch);
+        }
+        if !before.is_finite() || !after.is_finite() {
+            return Err(PredictorError::NonFinite);
+        }
+        Ok(Self {
+            at: before.time,
+            position_n: after.position_n - before.position_n,
+            velocity_n: after.velocity_n - before.velocity_n,
+            rotation_n: after.orientation_n_from_b * before.orientation_n_from_b.inverse(),
+        })
+    }
+
+    pub(crate) fn map_state(&self, state: NavState) -> Result<NavState, PredictorError> {
+        let dt_ns = state
+            .time
+            .as_ns()
+            .checked_sub(self.at.as_ns())
+            .ok_or(PredictorError::TimeOverflow)?;
+        let state = self.map_state_with_offset(state, dt_ns);
+        if !state.is_finite() {
+            return Err(PredictorError::NonFinite);
+        }
+        Ok(state)
+    }
+
+    /// Applies the same transform to a state already accepted by `map_state`.
+    pub(crate) fn apply_to_validated_state(&self, state: &mut NavState) {
+        let dt_ns = state.time.as_ns() - self.at.as_ns();
+        *state = self.map_state_with_offset(*state, dt_ns);
+    }
+
+    fn map_state_with_offset(&self, mut state: NavState, dt_ns: i64) -> NavState {
+        let dt_s = dt_ns as f32 * 1.0e-9;
+        state.position_n += self.position_n + self.velocity_n * dt_s;
+        state.velocity_n += self.velocity_n;
+        state.orientation_n_from_b = self.rotation_n * state.orientation_n_from_b;
+        state.orientation_n_from_b.renormalize();
+        state
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -228,9 +285,13 @@ impl OutputPredictor {
             self.pending = PendingCorrection::default();
             self.tracking_error.hard_resets = self.tracking_error.hard_resets.saturating_add(1);
         } else {
-            self.pending.position_n += position_error_now;
-            self.pending.velocity_n += velocity_error;
-            self.pending.attitude_b += attitude_error_now;
+            // A frontier residual is a fresh estimate of the outstanding
+            // discrepancy, not an incremental correction. Neighboring delayed
+            // epochs can all predate corrections already being applied now;
+            // summing those full residuals repeatedly integrates the same error.
+            self.pending.position_n = position_error_now;
+            self.pending.velocity_n = velocity_error;
+            self.pending.attitude_b = attitude_error_now;
         }
         Ok(())
     }
@@ -323,6 +384,38 @@ mod tests {
     }
 
     #[test]
+    fn hard_reset_maps_history_with_left_rotation_and_signed_time_offset() {
+        let mut before = NavState::stationary(SessionTime::from_ns(100_000_000));
+        before.orientation_n_from_b = UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.4);
+        let mut after = before;
+        after.position_n = Vector3::new(1.0, -2.0, 0.0);
+        after.velocity_n = Vector3::new(2.0, 0.0, -1.0);
+        let rotation = UnitQuaternion::from_axis_angle(&Vector3::z_axis(), 0.7);
+        after.orientation_n_from_b = rotation * before.orientation_n_from_b;
+        let reset = PredictorReset::between(&before, &after).unwrap();
+        let mut historical = NavState::stationary(SessionTime::ZERO);
+        historical.orientation_n_from_b = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), 0.2);
+        let mapped = reset.map_state(historical).unwrap();
+        assert!((mapped.position_n - Vector3::new(0.8, -2.0, 0.1)).norm() < 1.0e-6);
+        assert!((mapped.velocity_n - Vector3::new(2.0, 0.0, -1.0)).norm() < 1.0e-6);
+        assert!(
+            mapped
+                .orientation_n_from_b
+                .angle_to(&(rotation * historical.orientation_n_from_b))
+                < 1.0e-6
+        );
+        assert!(
+            mapped
+                .orientation_n_from_b
+                .angle_to(&(historical.orientation_n_from_b * rotation))
+                > 0.1
+        );
+        assert_eq!(mapped.time, historical.time);
+        reset.apply_to_validated_state(&mut historical);
+        assert_eq!(historical, mapped);
+    }
+
+    #[test]
     fn small_frontier_correction_is_smoothed_not_reset() {
         let state = NavState::stationary(SessionTime::from_ns(1_000_000_000));
         let mut predictor = OutputPredictor::new(state, config()).unwrap();
@@ -337,6 +430,31 @@ mod tests {
         assert_eq!(predictor.state.position_n.x, 0.0);
         assert!((predictor.pending_norms().0 - 1.0).abs() < 1.0e-6);
         assert_eq!(predictor.tracking_error.hard_resets, 0);
+    }
+
+    #[test]
+    fn repeated_delayed_residual_does_not_accumulate_the_same_correction() {
+        let state = NavState::stationary(SessionTime::from_ns(1_000_000_000));
+        let mut predictor = OutputPredictor::new(state, config()).unwrap();
+        // For one delay horizon the advancing historical states were all
+        // recorded before the first present correction took effect. Each
+        // residual is the same outstanding metre, not another metre to add.
+        for step in 0..20 {
+            predictor.state.time = SessionTime::from_ns(1_000_000_000 + step * 5_000_000);
+            let predicted =
+                NavState::stationary(SessionTime::from_ns(900_000_000 + step * 5_000_000));
+            let mut corrected = predicted;
+            corrected.position_n.x = 1.0;
+            predictor
+                .correct_from_frontier(&corrected, &predicted)
+                .unwrap();
+            predictor.apply_complementary_correction(0.005).unwrap();
+        }
+        assert!(
+            predictor.state.position_n.x <= 1.0,
+            "repeated residual overshot by accumulating an already pending correction: {}",
+            predictor.state.position_n.x
+        );
     }
 
     #[test]

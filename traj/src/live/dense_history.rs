@@ -5,6 +5,7 @@ use nalgebra::{ArrayStorage, Matrix3, UnitQuaternion, Vector3};
 use crate::time::SessionTime;
 
 use super::{
+    predictor::PredictorReset,
     reanchor::{ReanchorError, ReanchorTransform},
     state::{ATT, NavMatrix, NavState, POS, VEL, so3_exp, so3_log},
 };
@@ -199,6 +200,30 @@ impl DenseSegment {
         self.attitude_delta
     }
 
+    /// Interpolates the stored nominal estimator state for predictor feedback.
+    /// Complementary position corrections change the Hermite path derivative
+    /// without changing the nominal velocity state. Feeding that derivative
+    /// back as a velocity observation turns position smoothing into spurious
+    /// velocity errors, especially across short predictor intervals.
+    fn nominal_state_at(&self, time: SessionTime) -> Result<NavState, DenseHistoryError> {
+        let dense = self.state_at(time)?;
+        let elapsed_ns = time
+            .as_ns()
+            .checked_sub(self.start_time().as_ns())
+            .ok_or(DenseHistoryError::TimeOverflow)?;
+        let u = (elapsed_ns as f32 * 1.0e-9 / self.duration_seconds).clamp(0.0, 1.0);
+        let start = &self.start.state;
+        let end = &self.end.state;
+        Ok(NavState {
+            time,
+            position_n: dense.position_n,
+            velocity_n: start.velocity_n * (1.0 - u) + end.velocity_n * u,
+            orientation_n_from_b: dense.orientation_n_from_b,
+            accel_bias_b: start.accel_bias_b * (1.0 - u) + end.accel_bias_b * u,
+            gyro_bias_b: start.gyro_bias_b * (1.0 - u) + end.gyro_bias_b * u,
+        })
+    }
+
     pub(crate) fn state_at(&self, time: SessionTime) -> Result<DenseState, DenseHistoryError> {
         if time < self.start_time() || time > self.end_time() {
             return Err(DenseHistoryError::OutsideSpan);
@@ -363,7 +388,19 @@ impl<const N: usize> DenseHistory<N> {
 
     /// Half-open ownership: a shared endpoint belongs to the segment on its
     /// right; only the final segment owns its terminal endpoint.
+    #[cfg(test)]
     pub(crate) fn state_at(&self, time: SessionTime) -> Result<DenseState, DenseHistoryError> {
+        self.segment_at(time)?.state_at(time)
+    }
+
+    pub(crate) fn nominal_state_at(
+        &self,
+        time: SessionTime,
+    ) -> Result<NavState, DenseHistoryError> {
+        self.segment_at(time)?.nominal_state_at(time)
+    }
+
+    fn segment_at(&self, time: SessionTime) -> Result<&DenseSegment, DenseHistoryError> {
         for offset in 0..self.len {
             let index = (self.head + offset) % N;
             let segment = self.segments[index]
@@ -373,7 +410,7 @@ impl<const N: usize> DenseHistory<N> {
             if time >= segment.start_time()
                 && (time < segment.end_time() || (final_segment && time == segment.end_time()))
             {
-                return segment.state_at(time);
+                return Ok(segment);
             }
         }
         Err(DenseHistoryError::OutsideSpan)
@@ -385,6 +422,38 @@ impl<const N: usize> DenseHistory<N> {
 
     pub(crate) const fn available(&self) -> usize {
         N - self.len
+    }
+
+    pub(crate) fn validate_predictor_reset(
+        &self,
+        reset: &PredictorReset,
+    ) -> Result<(), DenseHistoryError> {
+        for offset in 0..self.len {
+            let index = (self.head + offset) % N;
+            let segment = self.segments[index]
+                .as_ref()
+                .ok_or(DenseHistoryError::Corrupt)?;
+            reset
+                .map_state(segment.start.state)
+                .map_err(|_| DenseHistoryError::InvalidSegment)?;
+            reset
+                .map_state(segment.end.state)
+                .map_err(|_| DenseHistoryError::InvalidSegment)?;
+        }
+        Ok(())
+    }
+
+    /// Applies a reset accepted for every endpoint by `validate_predictor_reset`.
+    pub(crate) fn apply_predictor_reset(&mut self, reset: &PredictorReset) {
+        for offset in 0..self.len {
+            let index = (self.head + offset) % N;
+            if let Some(segment) = self.segments[index].as_mut() {
+                reset.apply_to_validated_state(&mut segment.start.state);
+                reset.apply_to_validated_state(&mut segment.end.state);
+                // A common left attitude correction preserves the body delta.
+                // Predictor covariance blocks make no present-time claim.
+            }
+        }
     }
 
     pub(super) fn validate_reanchor(
@@ -538,6 +607,47 @@ mod tests {
     }
 
     #[test]
+    fn nominal_lookup_preserves_endpoint_ownership_without_differentiating_corrections() {
+        let left = DenseSegment::new(
+            1,
+            endpoint(0, 0.0, 0.0),
+            endpoint(5_000_000, -0.025, 0.0),
+            false,
+            false,
+        )
+        .unwrap();
+        let right = DenseSegment::new(
+            2,
+            endpoint(5_000_000, -0.025, 2.0),
+            endpoint(10_000_000, -0.015, 2.0),
+            false,
+            false,
+        )
+        .unwrap();
+        let mut history = DenseHistory::<2>::new();
+        history.push(left).unwrap();
+        history.push(right).unwrap();
+        for (time_ns, velocity) in [(0, 0.0), (5_000_000, 2.0), (10_000_000, 2.0)] {
+            let state = history
+                .nominal_state_at(SessionTime::from_ns(time_ns))
+                .unwrap();
+            assert_eq!(state.velocity_n.x, velocity);
+        }
+        for time_ns in [-1, 10_000_001] {
+            assert_eq!(
+                history.nominal_state_at(SessionTime::from_ns(time_ns)),
+                Err(DenseHistoryError::OutsideSpan)
+            );
+        }
+        let interior = SessionTime::from_ns(2_500_000);
+        assert_eq!(
+            history.nominal_state_at(interior).unwrap().velocity_n.x,
+            0.0
+        );
+        assert!(history.state_at(interior).unwrap().velocity_n.x < -5.0);
+    }
+
+    #[test]
     fn full_history_never_silently_overwrites() {
         let one = DenseSegment::new(
             1,
@@ -559,6 +669,45 @@ mod tests {
         history.push(one).unwrap();
         assert_eq!(history.push(two), Err(DenseHistoryError::Capacity));
         assert_eq!(history.latest().unwrap().id, 1);
+    }
+
+    #[test]
+    fn predictor_reset_validates_later_endpoints_without_partial_mutation() {
+        let mut history = DenseHistory::<2>::new();
+        history
+            .push(
+                DenseSegment::new(
+                    1,
+                    endpoint(0, 0.0, 0.0),
+                    endpoint(1_000_000_000, 0.0, 0.0),
+                    false,
+                    false,
+                )
+                .unwrap(),
+            )
+            .unwrap();
+        history
+            .push(
+                DenseSegment::new(
+                    2,
+                    endpoint(1_000_000_000, 0.0, 0.0),
+                    endpoint(2_000_000_000, 3.0e38, 0.0),
+                    false,
+                    false,
+                )
+                .unwrap(),
+            )
+            .unwrap();
+        let original = history;
+        let before = NavState::stationary(SessionTime::ZERO);
+        let mut after = before;
+        after.velocity_n.x = 1.0e38;
+        let reset = PredictorReset::between(&before, &after).unwrap();
+        assert_eq!(
+            history.validate_predictor_reset(&reset),
+            Err(DenseHistoryError::InvalidSegment)
+        );
+        assert_eq!(history, original);
     }
 
     #[test]

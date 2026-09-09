@@ -82,8 +82,13 @@ fn kinematic_covariance(
     anchor: &EcefAnchor,
 ) -> Result<KinematicCovariance, StepError> {
     let rotation = anchor.ecef_to_n.transpose().cast::<f32>();
-    let position = covariance3_from_na(rotation * covariance.position * rotation.transpose())?;
-    let velocity = covariance3_from_na(rotation * covariance.velocity * rotation.transpose())?;
+    let position = rotation * covariance.position * rotation.transpose();
+    let velocity = rotation * covariance.velocity * rotation.transpose();
+    // These are covariance congruences, so restore arithmetic symmetry before
+    // crossing the exact-symmetric public representation boundary. Raw input
+    // covariance validation remains strict.
+    let position = covariance3_from_na((position + position.transpose()) * 0.5)?;
+    let velocity = covariance3_from_na((velocity + velocity.transpose()) * 0.5)?;
     // The live ESKF uses a right-multiplicative attitude error. Its three
     // coordinates are in the body tangent basis, so changing the local ENU
     // anchor rotates position/velocity errors but not this block.
@@ -128,7 +133,12 @@ pub(super) fn rotate_covariance_to_n(
     covariance: [[f64; 3]; 3],
 ) -> Result<Matrix3<f32>, StepError> {
     let covariance = matrix_f64(covariance);
-    matrix_f32_from_na(anchor.ecef_to_n * covariance * anchor.ecef_to_n.transpose())
+    let rotated = anchor.ecef_to_n * covariance * anchor.ecef_to_n.transpose();
+    // The input is a validated symmetric covariance. Independent rounded dot
+    // products can leave the congruence a few ulps asymmetric, especially in
+    // nearly cancelled off-diagonals. Restore its mathematical symmetry before
+    // casting to the strict symmetric measurement representation.
+    matrix_f32_from_na((rotated + rotated.transpose()) * 0.5)
 }
 
 pub(super) fn rotate_cross_to_n(

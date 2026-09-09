@@ -5,9 +5,9 @@ use crate::{
         MEASUREMENT_QUEUE_CAPACITY,
         dense_history::{DenseCovariance, DenseEndpoint, DenseSegment},
         eskf::{GnssObservation, GnssUpdateOutcome, UpdateDecision},
+        predictor::PredictorReset,
         preintegration::imu_sample_covariance,
         scheduler::{SchedulerError, WorkQuota},
-        state::NavState,
     },
     time::SessionTime,
 };
@@ -307,20 +307,32 @@ impl<'a> LiveCore<'a> {
         let predicted = self
             .history
             .predicted
-            .state_at(self.filter.state.time)
+            .nominal_state_at(self.filter.state.time)
             .map_err(|_| LiveCoreError::PredictorHistoryUnavailable)?;
-        let predicted_state = NavState {
-            time: predicted.time,
-            position_n: predicted.position_n,
-            velocity_n: predicted.velocity_n,
-            orientation_n_from_b: predicted.orientation_n_from_b,
-            accel_bias_b: self.predictor.state.accel_bias_b,
-            gyro_bias_b: self.predictor.state.gyro_bias_b,
-        };
         let mut staged_predictor = self.predictor;
         staged_predictor
-            .correct_from_frontier(&self.filter.state, &predicted_state)
+            .correct_from_frontier(&self.filter.state, &predicted)
             .map_err(LiveCoreError::Predictor)?;
+        let reset = if staged_predictor.tracking_error.hard_resets
+            != self.predictor.tracking_error.hard_resets
+        {
+            Some(
+                PredictorReset::between(&self.predictor.state, &staged_predictor.state)
+                    .map_err(LiveCoreError::Predictor)?,
+            )
+        } else {
+            None
+        };
+        let mut predictor_endpoint = self.predictor_endpoint;
+        if let Some(reset) = &reset {
+            predictor_endpoint.state = reset
+                .map_state(predictor_endpoint.state)
+                .map_err(LiveCoreError::Predictor)?;
+            self.history
+                .predicted
+                .validate_predictor_reset(reset)
+                .map_err(LiveCoreError::DenseHistory)?;
+        }
 
         self.retain_or_publish_segment(segment)?;
         let frontier = self.filter.state.time;
@@ -336,6 +348,10 @@ impl<'a> LiveCore<'a> {
         self.history
             .predicted
             .discard_ending_at_or_before(self.filter.state.time);
+        if let Some(reset) = &reset {
+            self.history.predicted.apply_predictor_reset(reset);
+        }
+        self.predictor_endpoint = predictor_endpoint;
         self.predictor = staged_predictor;
         self.corrected_endpoint = end;
         self.pending_corrected_segment = None;

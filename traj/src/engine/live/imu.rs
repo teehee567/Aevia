@@ -171,9 +171,13 @@ impl LiveSession<'_, '_> {
         }
         let angular = observation.angular_rate();
         let force = observation.specific_force();
-        if angular.time.independent_one_sigma.as_ns() != 0
-            || force.time.independent_one_sigma.as_ns() != 0
-        {
+        let uncertain_support = angular.time.independent_one_sigma.as_ns() != 0
+            || force.time.independent_one_sigma.as_ns() != 0;
+        #[cfg(feature = "development")]
+        let approximate_support = self.approximate_uncertain_imu_timing;
+        #[cfg(not(feature = "development"))]
+        let approximate_support = false;
+        if uncertain_support && !approximate_support {
             // Applying interval averages at an uncertain support epoch needs
             // neighboring temporal derivatives/resampling. This implementation
             // cannot turn timestamp jitter into independent value noise. Keep
@@ -259,7 +263,7 @@ impl LiveSession<'_, '_> {
                 end,
                 omega_ib_b: omega,
                 specific_force_b: specific_force,
-                degraded_input: observation.is_degraded(),
+                degraded_input: observation.is_degraded() || uncertain_support,
                 gap_elapsed_ns_plus_one: 0,
                 body_from_sensor: body_from_sensor_quaternion,
                 accel_sample_covariance,

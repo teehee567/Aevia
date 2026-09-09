@@ -1,34 +1,41 @@
 #![no_std]
 #![no_main]
 
-use core::fmt::Write as _;
+mod gnss_profile;
+#[allow(dead_code)] // Shared with the host runner and parser tests.
+mod gps;
+mod imu;
+mod led;
+mod power_diagnostic;
+#[cfg(not(feature = "host-poc"))]
+mod trajectory_poc;
 
-use aevia_firmware::peripheral_probe::{
-    SCH16T_READ_COMPONENT_ID, SCH16T_SOFT_RESET, is_um980_connection_response,
-    is_um980_version_reply, parse_um980_gga, sch16t_component_id, sch16t_frame,
-    sch16t_frame_has_valid_crc, sch16t_request_bytes,
+use core::{
+    cell::RefCell,
+    fmt::Write as _,
+    sync::atomic::{AtomicU32, Ordering},
 };
-use aevia_firmware::power_bus::{
-    read_bq2562x, read_lp5813a_reset_state, read_max17048, read_tca9536a,
-};
-use aligned::{A4, Aligned};
-use block_device_driver::BlockDevice as BlockDeviceDriver;
 use embassy_executor::Spawner;
-use embassy_futures::join::join3;
-use embassy_time::{Delay, Duration, Timer, with_timeout};
+use embassy_futures::join::{join, join3};
+use embassy_sync::{
+    blocking_mutex::{Mutex, raw::CriticalSectionRawMutex},
+    channel::Channel,
+};
+use embassy_time::{Duration, Instant, Timer, with_timeout};
 use embassy_usb::{
     Builder,
     class::cdc_acm::{CdcAcmClass, State},
 };
 use esp_backtrace as _;
 use esp_hal::{
-    gpio::{Input, InputConfig, Level, Output, OutputConfig, Pull},
+    clock::CpuClock,
+    gpio::{DriveMode, Input, InputConfig, Level, Output, OutputConfig, Pull},
     i2c::master::{Config as I2cConfig, I2c},
-    sdmmc::{Config as SdConfig, SdHostController, SlotConfig},
     spi::{
         Mode,
         master::{Config as SpiConfig, Spi},
     },
+    system::Stack,
     time::Rate,
     timer::timg::TimerGroup,
     uart::{Config as UartConfig, RxConfig, Uart},
@@ -37,130 +44,322 @@ use esp_hal::{
         embassy_usb_device::{Config as UsbDriverConfig, Driver},
     },
 };
-use sdio::{BlockDevice as SdBlockDevice, sd::Card};
+#[cfg(not(feature = "host-poc"))]
+use gps::OwnedBestNav;
+use gps::{LineDecoder, ParseError, parse_bestnava, parse_bestnava_status};
 
 esp_bootloader_esp_idf::esp_app_desc!();
 
-macro_rules! usb_line {
-    ($sender:expr, $($arg:tt)*) => {{
-        let mut line = heapless::String::<512>::new();
-        let _ = core::write!(&mut line, $($arg)*);
-        let _ = line.push_str("\r\n");
-        $sender.write_packet(line.as_bytes()).await
-    }};
+// Host POC: IMU acquisition runs on core 1, isolated from core 0 GNSS parsing
+// and USB formatting. The embedded mode uses core 1 for its estimator.
+// A full queue drops explicitly instead of stalling the sensor capture.
+enum Measurement {
+    Imu(imu::ImuSample),
+    #[cfg(not(feature = "host-poc"))]
+    Gnss {
+        received_us: u64,
+        fix: OwnedBestNav,
+    },
+    #[cfg(feature = "host-poc")]
+    GnssRaw {
+        received_us: u64,
+        line: heapless::String<512>,
+    },
+}
+static MEASUREMENTS: Channel<CriticalSectionRawMutex, Measurement, 128> = Channel::new();
+#[cfg(feature = "host-poc")]
+static IMU_STACK: static_cell::ConstStaticCell<Stack<16384>> =
+    static_cell::ConstStaticCell::new(Stack::new());
+#[cfg(not(feature = "host-poc"))]
+static ESTIMATOR_STACK: static_cell::ConstStaticCell<Stack<65536>> =
+    static_cell::ConstStaticCell::new(Stack::new());
+#[cfg(not(feature = "host-poc"))]
+static SPEED: Mutex<CriticalSectionRawMutex, RefCell<heapless::String<192>>> =
+    Mutex::new(RefCell::new(heapless::String::new()));
+static FIX_MODE: Mutex<CriticalSectionRawMutex, RefCell<heapless::String<48>>> =
+    Mutex::new(RefCell::new(heapless::String::new()));
+static IMU_STATE: Mutex<CriticalSectionRawMutex, RefCell<heapless::String<192>>> =
+    Mutex::new(RefCell::new(heapless::String::new()));
+static IMU_ERROR: Mutex<CriticalSectionRawMutex, RefCell<heapless::String<192>>> =
+    Mutex::new(RefCell::new(heapless::String::new()));
+static GNSS_STATE: Mutex<CriticalSectionRawMutex, RefCell<heapless::String<80>>> =
+    Mutex::new(RefCell::new(heapless::String::new()));
+static GNSS_RECORDS: AtomicU32 = AtomicU32::new(0);
+static GNSS_VALID: AtomicU32 = AtomicU32::new(0);
+static GNSS_REGULAR_EPOCHS: AtomicU32 = AtomicU32::new(0);
+static IMU_RECORDS: AtomicU32 = AtomicU32::new(0);
+static CAPTURE_ERRORS: AtomicU32 = AtomicU32::new(0);
+static QUEUE_DROPS: AtomicU32 = AtomicU32::new(0);
+#[cfg(feature = "host-poc")]
+static STREAM_NONCE: AtomicU32 = AtomicU32::new(0);
+#[cfg(feature = "host-poc")]
+static STREAM_PENDING: core::sync::atomic::AtomicBool = core::sync::atomic::AtomicBool::new(false);
+#[cfg(not(feature = "host-poc"))]
+static ENGINE_ERRORS: AtomicU32 = AtomicU32::new(0);
+#[cfg(not(feature = "host-poc"))]
+static LAST_ESTIMATOR_MS: AtomicU32 = AtomicU32::new(0);
+#[cfg(not(feature = "host-poc"))]
+static ENGINE_MAX_US: AtomicU32 = AtomicU32::new(0);
+#[cfg(not(feature = "host-poc"))]
+static PSRAM_MIB: AtomicU32 = AtomicU32::new(0);
+
+macro_rules! state_text {
+    ($state:expr, $($arg:tt)*) => {
+        $state.lock(|cell| {
+            let mut text = cell.borrow_mut();
+            text.clear();
+            let _ = write!(text, $($arg)*);
+        })
+    };
+}
+
+fn enqueue(measurement: Measurement) {
+    if MEASUREMENTS.try_send(measurement).is_err() {
+        QUEUE_DROPS.fetch_add(1, Ordering::Relaxed);
+    }
+}
+
+#[cfg_attr(feature = "host-poc", embassy_executor::task)]
+async fn imu_task(mut sensor: imu::Imu<'static>) {
+    loop {
+        state_text!(IMU_STATE, "initializing");
+        if let Err(error) = sensor.initialize().await {
+            state_text!(IMU_STATE, "init-failed:{error:?}");
+            Timer::after_secs(2).await;
+            continue;
+        }
+        state_text!(IMU_STATE, "ready-id:{:04x}", sensor.component_id);
+        let mut consecutive_errors = 0;
+        loop {
+            match sensor.next_sample().await {
+                Ok(sample) => {
+                    if consecutive_errors != 0 {
+                        state_text!(IMU_STATE, "ready-id:{:04x}", sensor.component_id);
+                    }
+                    consecutive_errors = 0;
+                    IMU_RECORDS.fetch_add(1, Ordering::Relaxed);
+                    enqueue(Measurement::Imu(sample));
+                }
+                Err(error) => {
+                    CAPTURE_ERRORS.fetch_add(1, Ordering::Relaxed);
+                    state_text!(IMU_STATE, "sample-failed:{error:?}");
+                    state_text!(IMU_ERROR, "{error:?}");
+                    consecutive_errors += 1;
+                    if consecutive_errors >= 10 {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[cfg(not(feature = "host-poc"))]
+fn estimator_thread(psram_address: usize, psram_len: usize) {
+    state_text!(SPEED, "speed=unavailable phase=starting");
+    // PSRAM has been initialized on core 0; this is the sole workspace owner.
+    let mut engine = match unsafe { trajectory_poc::start(psram_address as *mut u8, psram_len) } {
+        Ok(engine) => engine,
+        Err(error) => {
+            state_text!(SPEED, "speed=unavailable engine-start={error:?}");
+            loop {
+                core::hint::spin_loop();
+            }
+        }
+    };
+    state_text!(SPEED, "speed=unavailable phase=waiting-for-sensors");
+    let mut last_report_us = 0;
+    loop {
+        let measurement = match MEASUREMENTS.try_receive() {
+            Ok(measurement) => measurement,
+            Err(_) => {
+                // Do not busy-poll a cross-core critical-section lock: that
+                // starves capture interrupts while both sensors are starting.
+                esp_hal::delay::Delay::new().delay_micros(100);
+                continue;
+            }
+        };
+        let step_start = Instant::now().as_micros();
+        let result = match measurement {
+            Measurement::Imu(sample) => engine.push_imu(
+                sample.monotonic_us,
+                sample.interval_us,
+                sample.acceleration_mps2,
+                sample.angular_rate_rps,
+                false, // The driver rejects saturated/status-invalid frames.
+            ),
+            Measurement::Gnss { received_us, fix } => engine.push_gnss(received_us, &fix.as_nav()),
+        };
+        ENGINE_MAX_US.fetch_max(
+            (Instant::now().as_micros() - step_start) as u32,
+            Ordering::Relaxed,
+        );
+        if result.is_err() {
+            ENGINE_ERRORS.fetch_add(1, Ordering::Relaxed);
+        }
+        let now = Instant::now();
+        if now.as_micros().saturating_sub(last_report_us) >= 100_000 {
+            let snapshot = engine.snapshot();
+            if let Some(speed) = snapshot.speed_mps {
+                state_text!(
+                    SPEED,
+                    "speed={:.2}km/h phase={:?} fused={} imu-accepted={} rejected={}/{}",
+                    speed * 3.6,
+                    snapshot.phase,
+                    snapshot.diagnostics.gnss_updates_fused,
+                    snapshot.diagnostics.imu_epochs_accepted,
+                    snapshot.diagnostics.imu_epochs_rejected,
+                    snapshot.diagnostics.gnss_updates_rejected
+                );
+            } else {
+                state_text!(
+                    SPEED,
+                    "speed=unavailable phase={:?} fused={} imu-accepted={} input={:?}",
+                    snapshot.phase,
+                    snapshot.diagnostics.gnss_updates_fused,
+                    snapshot.diagnostics.imu_epochs_accepted,
+                    snapshot.last_input
+                );
+            }
+            LAST_ESTIMATOR_MS.store(now.as_millis() as u32, Ordering::Relaxed);
+            last_report_us = now.as_micros();
+        }
+    }
+}
+
+#[embassy_executor::task]
+async fn power_button_task(mut interrupt_n: Input<'static>, mut kill_n: Output<'static>) {
+    // MAX16169AALT debounces SW7 itself (50 ms) and sends a 32 ms INT pulse
+    // on each press, including power-on. Let that startup pulse and the CLR
+    // blanking interval (2 * tINT, at most 76.8 ms) expire before arming.
+    // https://www.analog.com/media/en/technical-documentation/data-sheets/max16169.pdf
+    Timer::after_millis(100).await;
+    interrupt_n.wait_for_high().await;
+    interrupt_n.wait_for_low().await;
+
+    // The current POC has no on-board storage writes to flush. Do not wait
+    // for USB: shutdown must also work without a connected host/reader.
+    // Keep CLR asserted until the MAX16169 disables the main 3.3 V rail.
+    kill_n.set_low();
+    core::future::pending::<()>().await;
 }
 
 #[esp_hal::main]
-async fn main(_spawner: Spawner) {
-    let peripherals = esp_hal::init(esp_hal::Config::default());
-
-    // MAX16169 CLR is active-low. Keep GPIO8 released as an input and let the
-    // board's 10k pull-up hold the power latch without an output-low glitch.
-    let power_kill_n = Input::new(
+async fn main(spawner: Spawner) {
+    let peripherals = esp_hal::init(esp_hal::Config::default().with_cpu_clock(CpuClock::max()));
+    let power_kill_n = Output::new(
         peripherals.GPIO8,
+        Level::High,
+        OutputConfig::default()
+            .with_drive_mode(DriveMode::OpenDrain)
+            .with_pull(Pull::Up),
+    );
+    let power_interrupt_n = Input::new(
+        peripherals.GPIO38,
         InputConfig::default().with_pull(Pull::Up),
     );
-
-    // Establish safe peripheral states before starting either USB or I2C.
-    let mut led_enable = Output::new(peripherals.GPIO39, Level::Low, OutputConfig::default());
+    let led_enable = Output::new(peripherals.GPIO39, Level::Low, OutputConfig::default());
     let _lcd_backlight = Output::new(peripherals.GPIO4, Level::Low, OutputConfig::default());
-
-    let charger_interrupt = Input::new(peripherals.GPIO0, InputConfig::default());
-    let charger_status = Input::new(peripherals.GPIO1, InputConfig::default());
-    let battery_alert = Input::new(peripherals.GPIO2, InputConfig::default());
-    let power_interrupt = Input::new(peripherals.GPIO38, InputConfig::default());
-    let charger_power_good = Input::new(peripherals.GPIO40, InputConfig::default());
-    let usb_vbus_sense = Input::new(peripherals.GPIO35, InputConfig::default());
-    let boot_button = Input::new(
-        peripherals.GPIO61,
-        InputConfig::default().with_pull(Pull::Up),
-    );
-
-    // Start both reset nets high. The IMU gets one documented hardware reset
-    // pulse before its read-only connection probe; GNSS remains untouched.
-    let mut imu_reset_n = Output::new(peripherals.GPIO9, Level::High, OutputConfig::default());
-    let gnss_reset_n = Input::new(
+    let _gnss_reset_n = Input::new(
         peripherals.GPIO44,
         InputConfig::default().with_pull(Pull::Up),
     );
-    let imu_data_ready = Input::new(peripherals.GPIO14, InputConfig::default());
+    let mut power_i2c = I2c::new(peripherals.I2C0, I2cConfig::default())
+        .expect("power I2C")
+        .with_scl(peripherals.GPIO6)
+        .with_sda(peripherals.GPIO7);
+    let power_report = power_diagnostic::capture(&mut power_i2c);
 
-    let mut imu_chip_select = Output::new(peripherals.GPIO10, Level::High, OutputConfig::default());
-    let mut imu_spi = Spi::new(
-        peripherals.SPI2,
-        SpiConfig::default()
-            .with_frequency(Rate::from_mhz(1))
-            .with_mode(Mode::_0),
-    )
-    .expect("SPI2 initialization failed")
-    .with_sck(peripherals.GPIO12)
-    .with_miso(peripherals.GPIO13)
-    .with_mosi(peripherals.GPIO11);
-
-    let mut gnss_uart = Uart::new(
+    let mut gnss_command_uart = Uart::new(
         peripherals.UART1,
         UartConfig::default()
             .with_baudrate(115_200)
             .with_rx(RxConfig::default().with_fifo_full_threshold(1)),
     )
-    .expect("UART1 initialization failed")
+    .expect("GNSS COM1 UART")
     .with_tx(peripherals.GPIO47)
     .with_rx(peripherals.GPIO46)
     .into_async();
-    let mut gnss_uart_2 = Uart::new(
+    let mut gnss_data_uart = Uart::new(
         peripherals.UART2,
         UartConfig::default()
             .with_baudrate(115_200)
-            .with_rx(RxConfig::default().with_fifo_full_threshold(1)),
+            .with_rx(RxConfig::default().with_fifo_full_threshold(64)),
     )
-    .expect("UART2 initialization failed")
+    .expect("GNSS COM2 UART")
     .with_tx(peripherals.GPIO49)
     .with_rx(peripherals.GPIO48)
     .into_async();
 
-    let mut power_i2c = I2c::new(
-        peripherals.I2C0,
-        I2cConfig::default().with_frequency(Rate::from_khz(100)),
+    let spi = Spi::new(
+        peripherals.SPI2,
+        SpiConfig::default()
+            .with_frequency(Rate::from_mhz(1))
+            .with_mode(Mode::_0),
     )
-    .expect("I2C0 initialization failed")
-    .with_sda(peripherals.GPIO7)
-    .with_scl(peripherals.GPIO6);
+    .expect("IMU SPI")
+    .with_sck(peripherals.GPIO12)
+    .with_miso(peripherals.GPIO13)
+    .with_mosi(peripherals.GPIO11);
+    let sensor = imu::Imu::new(
+        spi,
+        Output::new(peripherals.GPIO10, Level::High, OutputConfig::default()),
+        Output::new(peripherals.GPIO9, Level::High, OutputConfig::default()),
+        Input::new(peripherals.GPIO14, InputConfig::default()),
+    );
+    let timer = TimerGroup::new(peripherals.TIMG0);
+    esp_rtos::start(timer.timer0, peripherals.FROM_CPU_INTR0);
+    spawner.spawn(led::task(power_i2c, led_enable).expect("LED task allocation failed"));
+    spawner.spawn(
+        power_button_task(power_interrupt_n, power_kill_n)
+            .expect("power button task allocation failed"),
+    );
+    #[cfg(feature = "host-poc")]
+    esp_rtos::start_second_core(
+        peripherals.CPU_CTRL,
+        peripherals.FROM_CPU_INTR1,
+        IMU_STACK.take(),
+        move || {
+            static EXECUTOR: static_cell::StaticCell<esp_rtos::embassy::Executor> =
+                static_cell::StaticCell::new();
+            let executor = EXECUTOR.init(esp_rtos::embassy::Executor::new());
+            executor.run(|spawner| {
+                spawner.spawn(imu_task(sensor).expect("IMU task allocation failed"));
+            });
+        },
+    );
+    #[cfg(not(feature = "host-poc"))]
+    {
+        let psram = esp_hal::psram::Psram::new(
+            peripherals.PSRAM,
+            esp_hal::psram::PsramConfig {
+                timing: esp_hal::psram::PsramTimingParams::MHZ_125,
+                ..Default::default()
+            },
+        );
+        let (psram_ptr, psram_len) = psram.raw_parts();
+        PSRAM_MIB.store((psram_len / (1024 * 1024)) as u32, Ordering::Relaxed);
+        let psram_address = psram_ptr as usize;
+        esp_rtos::start_second_core(
+            peripherals.CPU_CTRL,
+            peripherals.FROM_CPU_INTR1,
+            ESTIMATOR_STACK.take(),
+            move || estimator_thread(psram_address, psram_len),
+        );
+    }
 
-    // J2 is wired to the ESP32-S31's native 4-bit SDHOST pin set. The slot
-    // has no connected mechanical card-detect switch, so presence is proved
-    // by protocol initialization and a read of logical block zero.
-    let sd_controller =
-        SdHostController::new(peripherals.SDHOST, SdConfig::default()).expect("SDHOST init failed");
-    let sd_slot = sd_controller
-        .slot::<0>(SlotConfig::default())
-        .expect("SDHOST slot 0 unavailable")
-        .with_clk(peripherals.GPIO24)
-        .with_cmd(peripherals.GPIO25)
-        .with_data0(peripherals.GPIO20)
-        .with_data1(peripherals.GPIO21)
-        .with_data2(peripherals.GPIO22)
-        .with_data3(peripherals.GPIO23)
-        .into_async();
-
-    let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
-
-    // J6 is wired to the ESP32-S31 dedicated high-speed USB controller.
     let usb = Usb::new_hs(peripherals.USB_HS);
     let mut endpoint_buffer = [0_u8; 1024];
     let driver = Driver::new(usb, &mut endpoint_buffer, UsbDriverConfig::default());
-
     let mut usb_config = embassy_usb::Config::new(0x303A, 0x4001);
     usb_config.max_packet_size_0 = 64;
     usb_config.manufacturer = Some("AEVIA");
-    usb_config.product = Some("V2 Mini Bring-up Console");
+    usb_config.product = Some("V2 Mini Trajectory POC");
     usb_config.serial_number = Some("V2MINI0001");
-
     let mut config_descriptor = [0_u8; 256];
     let mut bos_descriptor = [0_u8; 256];
     let mut control_buffer = [0_u8; 64];
     let mut cdc_state = State::new();
-
     let mut builder = Builder::new(
         driver,
         usb_config,
@@ -173,463 +372,351 @@ async fn main(_spawner: Spawner) {
     let (mut sender, mut receiver) = serial.split();
     let mut usb_device = builder.build();
 
-    let usb_task = usb_device.run();
-
-    let report_task = async {
-        let mut sd_init_error = None;
-        let mut sd_read_error = None;
-        let mut sd_capacity_bytes = 0_u64;
-        let mut sd_lba0_prefix = [0_u8; 16];
-        let mut sd_lba0_signature = [0_u8; 2];
-
-        match SdBlockDevice::<Card, _, _, 512>::new_sd_card(sd_slot, 10_000_000, Delay).await {
-            Ok(mut card) => {
-                sd_capacity_bytes = BlockDeviceDriver::<512>::size(&mut card).await.unwrap_or(0);
-                let mut lba0 = [Aligned::<A4, _>([0_u8; 512])];
-                match BlockDeviceDriver::<512>::read(&mut card, 0, &mut lba0).await {
-                    Ok(()) => {
-                        sd_lba0_prefix.copy_from_slice(&lba0[0][..16]);
-                        sd_lba0_signature.copy_from_slice(&lba0[0][510..512]);
+    let gnss_task = async {
+        loop {
+            led::gnss_reconfiguring();
+            let mut decoder = LineDecoder::<1024>::new();
+            state_text!(
+                GNSS_STATE,
+                "configuring-{}Hz",
+                if cfg!(feature = "rtk-50hz") { 50 } else { 20 }
+            );
+            let profile = if cfg!(feature = "rtk-50hz") {
+                gnss_profile::configure_50hz(&mut gnss_command_uart, &mut gnss_data_uart).await
+            } else {
+                gnss_profile::configure_20hz_standalone(&mut gnss_command_uart, &mut gnss_data_uart)
+                    .await
+            };
+            match profile {
+                Ok(profile) => state_text!(
+                    GNSS_STATE,
+                    "{}Hz-sg{}-cmdCOM{}:{}-verify:{}",
+                    profile.target_rate_hz,
+                    profile.signalgroup,
+                    profile.command_port,
+                    profile.command_baud,
+                    if profile.readback_verified {
+                        "config"
+                    } else {
+                        "stream"
                     }
-                    Err(error) => sd_read_error = Some(error),
+                ),
+                Err(error) => {
+                    state_text!(GNSS_STATE, "setup-failed:{error:?}");
+                    Timer::after_secs(3).await;
+                    continue;
                 }
             }
-            Err(error) => sd_init_error = Some(error),
+            let mut previous_epoch = None;
+            let mut chunk = [0_u8; 512];
+            loop {
+                match with_timeout(
+                    Duration::from_secs(3),
+                    embedded_io_async::Read::read(&mut gnss_data_uart, &mut chunk),
+                )
+                .await
+                {
+                    Ok(Ok(length)) => {
+                        for byte in &chunk[..length] {
+                            let Some(line) = decoder.push(*byte) else {
+                                continue;
+                            };
+                            if !line.starts_with(b"#BESTNAVA,") {
+                                continue;
+                            }
+                            let received_us = Instant::now().as_micros();
+                            if let Ok(status) = parse_bestnava_status(line) {
+                                led::gnss_received();
+                                GNSS_RECORDS.fetch_add(1, Ordering::Relaxed);
+                                let epoch = u64::from(status.gps_week) * 604_800_000
+                                    + u64::from(status.gps_tow_ms);
+                                if previous_epoch.is_some_and(|previous| {
+                                    epoch
+                                        == previous
+                                            + if cfg!(feature = "rtk-50hz") { 20 } else { 50 }
+                                }) {
+                                    GNSS_REGULAR_EPOCHS.fetch_add(1, Ordering::Relaxed);
+                                }
+                                previous_epoch = Some(epoch);
+                                state_text!(
+                                    FIX_MODE,
+                                    "{}",
+                                    core::str::from_utf8(status.position_type).unwrap_or("unknown")
+                                );
+                            }
+                            #[cfg(feature = "host-poc")]
+                            if let Ok(text) = core::str::from_utf8(line) {
+                                if let Ok(raw) = heapless::String::try_from(text.trim_end()) {
+                                    enqueue(Measurement::GnssRaw {
+                                        received_us,
+                                        line: raw,
+                                    });
+                                }
+                            }
+                            match parse_bestnava(line) {
+                                Ok(fix) => {
+                                    GNSS_VALID.fetch_add(1, Ordering::Relaxed);
+                                    #[cfg(not(feature = "host-poc"))]
+                                    enqueue(Measurement::Gnss {
+                                        received_us,
+                                        fix: fix.to_owned(),
+                                    });
+                                    #[cfg(feature = "host-poc")]
+                                    let _ = fix;
+                                }
+                                Err(ParseError::NoSolution) => {}
+                                Err(_) => {
+                                    CAPTURE_ERRORS.fetch_add(1, Ordering::Relaxed);
+                                }
+                            }
+                        }
+                    }
+                    Ok(Err(_)) => {
+                        CAPTURE_ERRORS.fetch_add(1, Ordering::Relaxed);
+                    }
+                    Err(_) => {
+                        state_text!(GNSS_STATE, "no-data-retrying");
+                        break;
+                    }
+                }
+            }
         }
+    };
 
-        let mut pass = 0_u32;
-        let mut imu_reset_performed = false;
-        let mut gnss_uart_1_seen = false;
-        let mut gnss_uart_2_seen = false;
-        let mut gnss_gga_requested = false;
+    #[cfg(not(feature = "host-poc"))]
+    let imu_acquisition = imu_task(sensor);
+    #[cfg(feature = "host-poc")]
+    let imu_acquisition = core::future::pending::<()>();
 
+    #[cfg(not(feature = "host-poc"))]
+    let console_task = async {
         loop {
             sender.wait_connection().await;
+            let mut previous = [
+                GNSS_RECORDS.load(Ordering::Relaxed),
+                GNSS_VALID.load(Ordering::Relaxed),
+                IMU_RECORDS.load(Ordering::Relaxed),
+                GNSS_REGULAR_EPOCHS.load(Ordering::Relaxed),
+            ];
+            let mut last_ms = Instant::now().as_millis();
+            'reports: loop {
+                // A USB reader may attach long after enumeration. Never burst
+                // old timer ticks when a previously blocked write completes.
+                Timer::after_secs(1).await;
+                let now_ms = Instant::now().as_millis();
+                let elapsed = (now_ms - last_ms).max(1) as f64 / 1000.0;
+                let counts = [
+                    GNSS_RECORDS.load(Ordering::Relaxed),
+                    GNSS_VALID.load(Ordering::Relaxed),
+                    IMU_RECORDS.load(Ordering::Relaxed),
+                    GNSS_REGULAR_EPOCHS.load(Ordering::Relaxed),
+                ];
+                let mut line = heapless::String::<1024>::new();
+                let _ = write!(line, "TRAJ t={:.3}s ", now_ms as f64 / 1000.0);
+                let last_engine = LAST_ESTIMATOR_MS.load(Ordering::Relaxed);
+                if last_engine != 0 && (now_ms as u32).wrapping_sub(last_engine) > 2000 {
+                    let _ = line.push_str("speed=unavailable phase=stale");
+                } else {
+                    SPEED.lock(|cell| {
+                        let _ = line.push_str(&cell.borrow());
+                    });
+                }
+                let _ = write!(
+                    line,
+                    " gnss={:.1}Hz valid={:.1}Hz imu={:.1}Hz regular-epochs={} fix=",
+                    counts[0].wrapping_sub(previous[0]) as f64 / elapsed,
+                    counts[1].wrapping_sub(previous[1]) as f64 / elapsed,
+                    counts[2].wrapping_sub(previous[2]) as f64 / elapsed,
+                    counts[3].wrapping_sub(previous[3])
+                );
+                FIX_MODE.lock(|cell| {
+                    let _ = line.push_str(&cell.borrow());
+                });
+                let _ = line.push_str(" imu-state=");
+                IMU_STATE.lock(|cell| {
+                    let _ = line.push_str(&cell.borrow());
+                });
+                let _ = line.push_str(" gnss-state=");
+                GNSS_STATE.lock(|cell| {
+                    let _ = line.push_str(&cell.borrow());
+                });
+                let _ = write!(line, " led={}", led::status());
+                let _ = write!(
+                    line,
+                    " capture-errors={} queue-drops={} engine-errors={} step-max={}us start-stage={} psram={}MiB development=unqualified\r\n",
+                    CAPTURE_ERRORS.load(Ordering::Relaxed),
+                    QUEUE_DROPS.load(Ordering::Relaxed),
+                    ENGINE_ERRORS.load(Ordering::Relaxed),
+                    ENGINE_MAX_US.swap(0, Ordering::Relaxed),
+                    trajectory_poc::START_STAGE.load(Ordering::Relaxed),
+                    PSRAM_MIB.load(Ordering::Relaxed)
+                );
+                previous = counts;
+                last_ms = now_ms;
+                for packet in line.as_bytes().chunks(512) {
+                    if sender.write_packet(packet).await.is_err() {
+                        break 'reports;
+                    }
+                }
+            }
+        }
+    };
 
-            'connected: loop {
-                macro_rules! report_line {
-                    ($($arg:tt)*) => {
-                        if usb_line!(sender, $($arg)*).is_err() {
-                            break 'connected;
+    // The host option exercises the identical traj adapter on the connected
+    // computer while this image captures the physical sensors continuously.
+    #[cfg(feature = "host-poc")]
+    let console_task = async {
+        loop {
+            sender.wait_connection().await;
+            let mut power_line = power_report.clone();
+            let _ = power_line.push_str("\r\n");
+            let _ = sender.write_packet(power_line.as_bytes()).await;
+            let mut last_status_us = 0;
+            let mut last_power_us = 0;
+            'raw: loop {
+                if STREAM_PENDING.swap(false, Ordering::AcqRel) {
+                    // The marker is sent by the same writer as RAW records.
+                    // Everything before it belongs to the preceding session.
+                    MEASUREMENTS.clear();
+                    let mut marker = heapless::String::<64>::new();
+                    let _ = write!(
+                        marker,
+                        "STREAM READY {:08x} {}\r\n",
+                        STREAM_NONCE.load(Ordering::Acquire),
+                        Instant::now().as_micros()
+                    );
+                    if sender.write_packet(marker.as_bytes()).await.is_err() {
+                        break 'raw;
+                    }
+                }
+                match with_timeout(Duration::from_millis(100), MEASUREMENTS.receive()).await {
+                    Ok(measurement) => {
+                        let mut line = heapless::String::<640>::new();
+                        match measurement {
+                            Measurement::Imu(sample) => {
+                                let a = sample.acceleration_mps2;
+                                let g = sample.angular_rate_rps;
+                                let _ = write!(
+                                    line,
+                                    "RAW IMU {} {} {:.7} {:.7} {:.7} {:.9} {:.9} {:.9}\r\n",
+                                    sample.monotonic_us,
+                                    sample.interval_us,
+                                    a[0],
+                                    a[1],
+                                    a[2],
+                                    g[0],
+                                    g[1],
+                                    g[2]
+                                );
+                            }
+                            Measurement::GnssRaw {
+                                received_us,
+                                line: frame,
+                            } => {
+                                let _ = write!(line, "RAW GNSS {} {}\r\n", received_us, frame);
+                            }
                         }
-                    };
-                }
-
-                pass = pass.wrapping_add(1);
-                if !imu_reset_performed {
-                    imu_reset_n.set_low();
-                    Timer::after_millis(2).await;
-                    imu_reset_n.set_high();
-                    Timer::after_millis(10).await;
-                    imu_reset_performed = true;
-                }
-                report_line!("Hello, world!");
-                report_line!(
-                    "AEVIA V2 Mini peripheral bring-up v{}",
-                    env!("CARGO_PKG_VERSION")
-                );
-                report_line!("--- bring-up pass {} ---", pass);
-                report_line!(
-                    "GPIO PWR_KILL_N={} PWR_INT_N={} CHG_PG={} CHG_INT={} CHG_STAT={} BAT_ALRT={} VBUS={} BOOT={}",
-                    level(power_kill_n.is_high()),
-                    level(power_interrupt.is_high()),
-                    level(charger_power_good.is_high()),
-                    level(charger_interrupt.is_high()),
-                    level(charger_status.is_high()),
-                    level(battery_alert.is_high()),
-                    level(usb_vbus_sense.is_high()),
-                    level(boot_button.is_high()),
-                );
-
-                if let Some(error) = sd_init_error {
-                    report_line!(
-                        "[MISS] microSD J2 native 4-bit init error={:?} (no card-detect pin)",
-                        error,
-                    );
-                } else if let Some(error) = sd_read_error {
-                    report_line!(
-                        "[FAIL] microSD J2 initialized capacity={} bytes, LBA0 read error={:?}",
-                        sd_capacity_bytes,
-                        error,
-                    );
-                } else {
-                    report_line!(
-                        "[PASS] microSD J2 native 4-bit read-only: capacity={} bytes LBA0[0..16]={:02X?} signature={:02X?}",
-                        sd_capacity_bytes,
-                        sd_lba0_prefix,
-                        sd_lba0_signature,
-                    );
-                }
-
-                let bq_ok = match read_bq2562x(&mut power_i2c) {
-                    Ok(snapshot) => {
-                        let expected = snapshot.is_supported_charger();
-                        report_line!(
-                            "[{}] {} @ 0x6B part=0x{:02X} pn={} rev={} status={:02X}/{:02X} fault={:02X}",
-                            if expected { "PASS" } else { "FAIL" },
-                            snapshot.part_name(),
-                            snapshot.part_information,
-                            snapshot.part_number(),
-                            snapshot.device_revision(),
-                            snapshot.charger_status_0,
-                            snapshot.charger_status_1,
-                            snapshot.fault_status_0,
-                        );
-                        report_line!(
-                            "       cfg (read-only): ICHG={:04X} VREG={:04X} VSYSMIN={:04X} CTRL0={:02X} CTRL3={:02X}; charge={} vbus={}",
-                            snapshot.charge_current_limit,
-                            snapshot.charge_voltage_limit,
-                            snapshot.minimum_system_voltage,
-                            snapshot.charger_control_0,
-                            snapshot.charger_control_3,
-                            charge_state(snapshot.charge_state()),
-                            vbus_state(snapshot.vbus_state()),
-                        );
-                        expected
+                        for packet in line.as_bytes().chunks(512) {
+                            if sender.write_packet(packet).await.is_err() {
+                                break 'raw;
+                            }
+                        }
                     }
-                    Err(error) => {
-                        report_line!("[MISS] BQ25622 @ 0x6B error={:?}", error);
-                        false
-                    }
-                };
-
-                // Retry at three in-spec clocks. Each pass performs Murata's
-                // documented software reset, then accounts for the pipelined
-                // response by issuing the component-ID request twice.
-                let imu_clock_khz = match pass % 3 {
-                    1 => 100,
-                    2 => 1_000,
-                    _ => 10_000,
-                };
-                let imu_config_ok = imu_spi
-                    .apply_config(
-                        &SpiConfig::default()
-                            .with_frequency(Rate::from_khz(imu_clock_khz))
-                            .with_mode(Mode::_0),
-                    )
-                    .is_ok();
-                let mut imu_response = sch16t_request_bytes(SCH16T_SOFT_RESET);
-                imu_chip_select.set_low();
-                let soft_reset_ok =
-                    embedded_hal::spi::SpiBus::transfer_in_place(&mut imu_spi, &mut imu_response)
-                        .is_ok();
-                imu_chip_select.set_high();
-                Timer::after_millis(32).await;
-
-                let mut imu_response = sch16t_request_bytes(SCH16T_READ_COMPONENT_ID);
-                imu_chip_select.set_low();
-                let first_spi_ok =
-                    embedded_hal::spi::SpiBus::transfer_in_place(&mut imu_spi, &mut imu_response)
-                        .is_ok();
-                imu_chip_select.set_high();
-                Timer::after_micros(1).await;
-
-                imu_response = sch16t_request_bytes(SCH16T_READ_COMPONENT_ID);
-                imu_chip_select.set_low();
-                let second_spi_ok =
-                    embedded_hal::spi::SpiBus::transfer_in_place(&mut imu_spi, &mut imu_response)
-                        .is_ok();
-                imu_chip_select.set_high();
-
-                let imu_frame = sch16t_frame(imu_response);
-                let imu_ok = imu_config_ok
-                    && soft_reset_ok
-                    && first_spi_ok
-                    && second_spi_ok
-                    && sch16t_frame_has_valid_crc(imu_frame);
-                if imu_ok {
-                    report_line!(
-                        "[PASS] SCH16T SafeSPI component_id=0x{:04X} frame=0x{:012X} crc=ok clock={}kHz RESET_N={} DRDY={}",
-                        sch16t_component_id(imu_frame),
-                        imu_frame,
-                        imu_clock_khz,
-                        level(imu_reset_n.is_set_high()),
-                        level(imu_data_ready.is_high()),
-                    );
-                } else {
-                    report_line!(
-                        "[MISS] SCH16T SafeSPI frame=0x{:012X} config={} soft_reset={} reads={}/{} crc=bad clock={}kHz RESET_N={} DRDY={}",
-                        imu_frame,
-                        verified(imu_config_ok),
-                        verified(soft_reset_ok),
-                        verified(first_spi_ok),
-                        verified(second_spi_ok),
-                        imu_clock_khz,
-                        level(imu_reset_n.is_set_high()),
-                        level(imu_data_ready.is_high()),
-                    );
+                    Err(_) => {}
                 }
-
-                // VERSIONA is read-only and returns receiver identity/version
-                // without requiring satellite reception or an antenna.
-                let gnss_write_ok =
-                    embedded_io_async::Write::write_all(&mut gnss_uart, b"VERSIONA\r\n")
-                        .await
-                        .is_ok()
-                        && embedded_io_async::Write::flush(&mut gnss_uart)
-                            .await
-                            .is_ok();
-                let mut gnss_response = [0_u8; 512];
-                let mut gnss_length = 0_usize;
-                for _ in 0..10 {
-                    if gnss_length == gnss_response.len()
-                        || is_um980_connection_response(&gnss_response[..gnss_length])
-                    {
-                        break;
+                let now = Instant::now().as_micros();
+                if now - last_status_us >= 1_000_000 {
+                    last_status_us = now;
+                    let mut line = heapless::String::<512>::new();
+                    let _ = line.push_str("STATUS imu=");
+                    IMU_STATE.lock(|state| {
+                        let _ = line.push_str(&state.borrow());
+                    });
+                    let _ = line.push_str(" gnss=");
+                    GNSS_STATE.lock(|state| {
+                        let _ = line.push_str(&state.borrow());
+                    });
+                    let _ = write!(line, " led={}", led::status());
+                    let _ = line.push_str(" last-imu-error=");
+                    IMU_ERROR.lock(|state| {
+                        let _ = line.push_str(&state.borrow());
+                    });
+                    let _ = write!(
+                        line,
+                        " capture-errors={} queue-drops={}\r\n",
+                        CAPTURE_ERRORS.load(Ordering::Relaxed),
+                        QUEUE_DROPS.load(Ordering::Relaxed)
+                    );
+                    if sender.write_packet(line.as_bytes()).await.is_err() {
+                        break 'raw;
                     }
-
-                    match with_timeout(
-                        Duration::from_millis(100),
-                        embedded_io_async::Read::read(
-                            &mut gnss_uart,
-                            &mut gnss_response[gnss_length..],
-                        ),
-                    )
-                    .await
-                    {
-                        Ok(Ok(length)) => gnss_length += length,
-                        Ok(Err(_)) | Err(_) => {}
+                    // Repeat the startup snapshot because USB may enumerate
+                    // before a terminal starts reading its first packet.
+                    if now - last_power_us >= 10_000_000 {
+                        last_power_us = now;
+                        if sender.write_packet(power_line.as_bytes()).await.is_err() {
+                            break 'raw;
+                        }
                     }
                 }
-                gnss_uart_1_seen |=
-                    gnss_write_ok && is_um980_connection_response(&gnss_response[..gnss_length]);
-                let gnss_uart_1_ok = gnss_uart_1_seen;
-                if gnss_uart_1_ok {
-                    report_line!(
-                        "[PASS] UM980 UART1 115200 response ({} bytes; type={} RESET_N={})",
-                        gnss_length,
-                        if is_um980_version_reply(&gnss_response[..gnss_length]) {
-                            "identity"
-                        } else {
-                            "NMEA/command"
-                        },
-                        level(gnss_reset_n.is_high()),
-                    );
-                } else {
-                    report_line!(
-                        "[MISS] UM980 UART1 115200 VERSIONA response (tx={} rx_bytes={} RESET_N={} raw={:02X?})",
-                        verified(gnss_write_ok),
-                        gnss_length,
-                        level(gnss_reset_n.is_high()),
-                        &gnss_response[..gnss_length],
-                    );
-                }
-
-                // Enable a volatile 1 Hz GGA stream on the port that already
-                // proved electrically connected. No SAVECONFIG is issued, so
-                // this diagnostic does not alter the receiver's saved setup.
-                let gnss_write_2_ok = if gnss_gga_requested {
-                    true
-                } else {
-                    let requested =
-                        embedded_io_async::Write::write_all(&mut gnss_uart_2, b"GPGGA 1\r\n")
-                            .await
-                            .is_ok()
-                            && embedded_io_async::Write::flush(&mut gnss_uart_2)
-                                .await
-                                .is_ok();
-                    gnss_gga_requested = requested;
-                    requested
-                };
-                let mut gnss_response_2 = [0_u8; 512];
-                let mut gnss_length_2 = 0_usize;
-                // The ESP UART can yield only a byte or two per read. Give a
-                // full 1 Hz NMEA interval enough reads to assemble one line.
-                for _ in 0..160 {
-                    if gnss_length_2 == gnss_response_2.len()
-                        || parse_um980_gga(&gnss_response_2[..gnss_length_2]).is_some()
-                    {
-                        break;
-                    }
-
-                    match with_timeout(
-                        Duration::from_millis(20),
-                        embedded_io_async::Read::read(
-                            &mut gnss_uart_2,
-                            &mut gnss_response_2[gnss_length_2..],
-                        ),
-                    )
-                    .await
-                    {
-                        Ok(Ok(length)) => gnss_length_2 += length,
-                        Ok(Err(_)) | Err(_) => {}
-                    }
-                }
-                gnss_uart_2_seen |= gnss_write_2_ok
-                    && is_um980_connection_response(&gnss_response_2[..gnss_length_2]);
-                let gnss_uart_2_ok = gnss_uart_2_seen;
-                let gga = parse_um980_gga(&gnss_response_2[..gnss_length_2]);
-                let gnss_fix_ok = gga
-                    .map(|gga| gga.fix_quality != 0 && gga.coordinates_present)
-                    .unwrap_or(false);
-                if let Some(gga) = gga {
-                    report_line!(
-                        "[{}] UM980 UART2 GGA fix_quality={} satellites={} coordinates={} RESET_N={}",
-                        if gnss_fix_ok { "FIX" } else { "NO FIX" },
-                        gga.fix_quality,
-                        gga.satellites,
-                        verified(gga.coordinates_present),
-                        level(gnss_reset_n.is_high()),
-                    );
-                } else if gnss_uart_2_ok {
-                    report_line!(
-                        "[LINK] UM980 UART2 115200 response, but no complete GGA yet ({} bytes; type={} RESET_N={} raw={:02X?})",
-                        gnss_length_2,
-                        if is_um980_version_reply(&gnss_response_2[..gnss_length_2]) {
-                            "identity"
-                        } else {
-                            "NMEA/command"
-                        },
-                        level(gnss_reset_n.is_high()),
-                        &gnss_response_2[..gnss_length_2.min(96)],
-                    );
-                } else {
-                    report_line!(
-                        "[MISS] UM980 UART2 115200 GPGGA response (tx={} rx_bytes={} RESET_N={} raw_prefix={:02X?})",
-                        verified(gnss_write_2_ok),
-                        gnss_length_2,
-                        level(gnss_reset_n.is_high()),
-                        &gnss_response_2[..gnss_length_2.min(96)],
-                    );
-                }
-                let gnss_ok = gnss_uart_1_ok || gnss_uart_2_ok;
-
-                let gauge_ok = match read_max17048(&mut power_i2c) {
-                    Ok(snapshot) => {
-                        let soc = snapshot.state_of_charge_hundredths();
-                        let expected = snapshot.has_expected_version();
-                        report_line!(
-                            "[{}] MAX17048 @ 0x36 version={:04X} cell={}mV soc={}.{:02}% status={:04X}",
-                            if expected { "PASS" } else { "WARN" },
-                            snapshot.version,
-                            snapshot.cell_millivolts(),
-                            soc / 100,
-                            soc % 100,
-                            snapshot.status,
-                        );
-                        expected
-                    }
-                    Err(_) => {
-                        report_line!(
-                            "[NACK] MAX17048 @ 0x36 (acceptable with no cell; measure BAT)"
-                        );
-                        false
-                    }
-                };
-
-                let buttons_ok = match read_tca9536a(&mut power_i2c) {
-                    Ok(snapshot) => {
-                        let expected = snapshot.is_reset_and_idle();
-                        report_line!(
-                            "[{}] TCA9536A @ 0x40 inputs={:02X} config={:02X} (buttons=P3..P0, active-low)",
-                            if expected { "PASS" } else { "WARN" },
-                            snapshot.inputs,
-                            snapshot.configuration,
-                        );
-                        expected
-                    }
-                    Err(_) => {
-                        report_line!("[MISS] TCA9536A @ 0x40 did not answer");
-                        false
-                    }
-                };
-
-                // The active LED test reproducibly reset the whole board as
-                // soon as LP5813 chip_en was asserted, before any current/PWM
-                // write. Leave the boost disabled and keep the console alive.
-                led_enable.set_high();
-                Timer::after_millis(2).await;
-                let led_snapshot = read_lp5813a_reset_state(&mut power_i2c);
-                led_enable.set_low();
-                let led_ok = match led_snapshot {
-                    Ok(snapshot) => {
-                        report_line!(
-                            "[FAIL] LP5813A responds @ 0x50, but chip_en caused board reset; active LED test disabled (safe regs={:02X}/{:02X}/{:02X}/{:02X})",
-                            snapshot.chip_enable,
-                            snapshot.device_config_0,
-                            snapshot.device_config_1,
-                            snapshot.device_config_2,
-                        );
-                        false
-                    }
-                    Err(_) => {
-                        report_line!("[MISS] LP5813A @ 0x50 did not answer while LED_EN was high");
-                        false
-                    }
-                };
-
-                report_line!(
-                    "SUMMARY charger={} imu={} gnss_link={} gnss_fix={} gauge={} buttons={} led_driver={} microsd={} (next pass in 5s)",
-                    verified(bq_ok),
-                    verified(imu_ok),
-                    verified(gnss_ok),
-                    verified(gnss_fix_ok),
-                    verified(gauge_ok),
-                    verified(buttons_ok),
-                    verified(led_ok),
-                    verified(sd_init_error.is_none() && sd_read_error.is_none()),
-                );
-                report_line!("Send BOOTLOADER to reflash without pressing board buttons.");
-                report_line!("");
-                Timer::after_secs(5).await;
             }
         }
     };
 
     let command_task = async {
         let mut packet = [0_u8; 512];
-
+        let mut matched = 0;
+        #[cfg(feature = "host-poc")]
+        let mut command_line = heapless::Vec::<u8, 24>::new();
         loop {
             receiver.wait_connection().await;
             loop {
                 match receiver.read_packet(&mut packet).await {
-                    Ok(length) if contains_bootloader_command(&packet[..length]) => {
-                        // LP_SYS.FORCE_DOWNLOAD_BOOT is sampled by ROM after the
-                        // software reset. ROM then exposes J6 as its flash port.
-                        esp_hal::peripherals::LP_SYS::regs()
-                            .sys_ctrl()
-                            .modify(|_, writer| writer.force_download_boot().set_bit());
-                        esp_hal::system::software_reset();
+                    Ok(length) => {
+                        for &byte in &packet[..length] {
+                            #[cfg(feature = "host-poc")]
+                            if byte == b'\n' {
+                                if let Some(token) = command_line.strip_prefix(b"STREAM ") {
+                                    if token.len() == 8 {
+                                        if let Ok(text) = core::str::from_utf8(token) {
+                                            if let Ok(nonce) = u32::from_str_radix(text, 16) {
+                                                STREAM_NONCE.store(nonce, Ordering::Release);
+                                                STREAM_PENDING.store(true, Ordering::Release);
+                                            }
+                                        }
+                                    }
+                                }
+                                command_line.clear();
+                            } else if byte != b'\r' && command_line.push(byte).is_err() {
+                                command_line.clear();
+                            }
+                            if byte == b"BOOTLOADER"[matched] {
+                                matched += 1;
+                                if matched == b"BOOTLOADER".len() {
+                                    esp_hal::peripherals::LP_SYS::regs()
+                                        .sys_ctrl()
+                                        .modify(|_, writer| writer.force_download_boot().set_bit());
+                                    esp_hal::system::software_reset();
+                                }
+                            } else {
+                                matched = usize::from(byte == b'B');
+                            }
+                        }
                     }
-                    Ok(_) => {}
-                    Err(_) => break,
+                    Err(_) => {
+                        matched = 0;
+                        #[cfg(feature = "host-poc")]
+                        command_line.clear();
+                        break;
+                    }
                 }
             }
         }
     };
-
-    join3(usb_task, report_task, command_task).await;
-}
-
-fn contains_bootloader_command(packet: &[u8]) -> bool {
-    const COMMAND: &[u8] = b"BOOTLOADER";
-    packet
-        .windows(COMMAND.len())
-        .any(|window| window == COMMAND)
-}
-
-const fn level(high: bool) -> &'static str {
-    if high { "H" } else { "L" }
-}
-
-const fn verified(value: bool) -> &'static str {
-    if value { "yes" } else { "no" }
-}
-
-const fn charge_state(value: u8) -> &'static str {
-    match value {
-        0 => "idle/done",
-        1 => "CC",
-        2 => "CV",
-        3 => "top-off",
-        _ => "?",
-    }
-}
-
-const fn vbus_state(value: u8) -> &'static str {
-    match value {
-        0 => "absent",
-        4 => "present",
-        _ => "reserved",
-    }
+    join3(
+        usb_device.run(),
+        join(gnss_task, imu_acquisition),
+        join(console_task, command_task),
+    )
+    .await;
 }

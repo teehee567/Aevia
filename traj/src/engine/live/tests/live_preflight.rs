@@ -2,6 +2,44 @@
 
 use super::*;
 
+#[cfg(feature = "development")]
+#[test]
+fn development_entry_point_preserves_production_qualification_and_profile_checks() {
+    let spec = processing_spec();
+    let metrics = spec
+        .metrics
+        .compile_live(LiveMetricLimits::default())
+        .unwrap();
+    let mut engine = spec.engine;
+    engine.qualification = QualificationStatus::Unqualified;
+    let live_spec = LiveSpec {
+        session_id: SessionId::from_bytes([3; 16]),
+        engine,
+        metrics: &metrics,
+        resources: LiveResourceLimits::V2_MINI_RTS,
+        initial_heading: None,
+        initial_clock_prior: initial_clock_prior(),
+    };
+    assert!(matches!(
+        TrajectoryEngine::live(live_spec.clone()).preflight(),
+        Err(PrepareError::UnqualifiedProfile)
+    ));
+    assert!(
+        TrajectoryEngine::live(live_spec.clone())
+            .preflight_development()
+            .is_ok()
+    );
+    let mut invalid = live_spec;
+    invalid
+        .engine
+        .dynamics_profile
+        .permits_non_holonomic_constraint = true;
+    assert!(matches!(
+        TrajectoryEngine::live(invalid).preflight_development(),
+        Err(PrepareError::IncompatibleProfile)
+    ));
+}
+
 #[test]
 fn navigation_profile_bounds_the_live_smoothing_lag() {
     let mut profile = processing_spec().engine.navigation_profile;

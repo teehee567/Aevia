@@ -63,7 +63,7 @@ Of the modules considered, the UM980 is the best fit I found for raw GNSS qualit
 
 It also supports multiple frequency bands. A single-band receiver has a harder time separating a direct signal from one reflected by the car or nearby barriers. Comparing L1 with L2 or L5 gives the receiver more information for rejecting poor measurements.
 
-The planned BT-T076 antenna is helical. It has lower peak gain than a ceramic patch, but it keeps better coverage when tilted and at low elevation. That is useful near the horizon, where a patch antenna mounted inside a car can struggle. Many common patch antennas are also L1-only.
+The planned BT-T076 is a wide multi-band active helical antenna, although its sheet does not explicitly document every UM980 signal. Helical designs generally tolerate tilt and an uncertain ground plane better than conventional patches, but the BT-T076 datasheet does not publish the angular, per-band patterns needed to rank it against a particular patch. A correctly integrated patch that covers every required band may provide cleaner measurements in a fixed installation; many common patches are only L1 or depend on a specific ground plane. See [the GNSS antenna decision note](./gnss_antenna_design.md) for the mounting scenarios, electrical constraints, expected data effects, and A/B test plan.
 
 The expected gain over a decent off-the-shelf logger is not enormous, and software quality will matter just as much as the receiver. For absolute lap-time proof, a track transponder still wins.
 
@@ -89,6 +89,7 @@ And raw GNSS modules specs are in [data/GNSS_research.xlsx](./data/GNSS_research
 ## Repository map
 
 - [V2 Mini design notes](./v2_mini_design.md)
+- [GNSS helix-versus-patch and dashboard placement analysis](./gnss_antenna_design.md)
 - [V2 Mini KiCad project](./hardware/v2_mini_pcb/v2_mini.kicad_pro)
 - [V2 Mini root schematic](./hardware/v2_mini_pcb/v2_mini.kicad_sch)
 - [V2 Mini PCB layout](./hardware/v2_mini_pcb/v2_mini.kicad_pcb)

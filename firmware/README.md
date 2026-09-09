@@ -1,114 +1,76 @@
-# V2 Mini minimal bring-up
+# Trajectory speed proof of concept
 
-This is deliberately a first-board firmware, not the product firmware. It proves
-that the ESP32-S31 executes code, preserves the power latch, samples the board
-status pins, and can communicate with the power-I2C, SCH16T SPI, and UM980 UART
-devices.
+See the [system and component reference](docs/v2-mini-system-reference.md) for
+current firmware behavior, wiring, register settings, and operating policies.
 
-The charger probe is read-only. The fitted BQ25622E starts autonomously in hardware
-because `CE` is grounded, so this firmware does not make charging safe for an
-unknown cell. Do not fit a battery until the cell chemistry, 4.2 V termination,
-allowable charge current, connector polarity, and the board's NTC curve have
-been checked.
+The default `host-poc` image captures UM980 GNSS and SCH16T-K01 IMU data on
+the connected Mini board and streams them over USB. Core 1 captures the
+IMU; core 0 handles GNSS and USB. This is a development experiment, with
+approximate timing and no board calibration. The host capture, live speed
+display, and build/flash helper tools have been removed after bring-up.
 
-## What it touches
+The selected receiver profile requests **20 Hz standalone GNSS**, restoring
+signal group 1. The 50 Hz experiment produced 50 messages/s but only one
+valid standalone solution/s on this receiver; both position and velocity
+were invalid between those fixes. There is no RTK correction source in this
+test. `SINGLE` therefore means standalone positioning, not an RTK fix.
 
-- GPIO8 `PWR_KILL_N`: input with pull-up, never driven low.
-- GPIO39 `LED_EN`: held low, raised for 2 ms only while reading the LP5813 reset
-  registers, then returned low. `chip_en` is never written.
-- GPIO4 `LCD_BACK`: held low for the entire bring-up.
-- GPIO6/GPIO7: 100 kHz I2C, probing only the documented addresses. There is no
-  address scan.
-- BQ25622/BQ25622E at `0x6B`: identity, selected configuration, status, and
-  fault reads.
-- GPIO9..GPIO14: a reset pulse followed by a read-only SCH16T component-ID
-  request over 1 MHz, mode-0 SafeSPI. A nonblank response must have a valid CRC.
-- GPIO44/GPIO46..GPIO49: UM980 reset level and both UARTs at 115200 baud. The
-  probe sends `VERSIONA` and accepts an identity reply or unsolicited NMEA as
-  proof of connection; an antenna is not required.
-- MAX17048 at `0x36`: version, cell voltage, SOC, and status reads. It is powered
-  from `BAT`; the charger's no-battery behavior can make it ACK or NACK as BAT
-  cycles, and its SOC is meaningless without a cell.
-- TCA9536A at `0x40`: input and configuration reads. The fitted
-  `TCA9536ADTMR` is the A-address variant.
-- LP5813A page 0 at `0x50`: read-only reset-state check. This part encodes
-  register bits 9:8 in I2C addresses `0x50..0x53`.
+The IMU uses 1 MHz mode-0 SPI and factory-corrected 20-bit output. DEC5
+provides a nominal 737.5 Hz native rate; averaging four consecutive samples
+produces nominally 184.4 estimator intervals/s. The live test measured about
+182 accepted intervals/s with 20 valid GNSS fixes/s. Profile details and source
+documents are in [trajectory-poc.md](docs/trajectory-poc.md).
 
-MAX16169 and TPS63802 have no register buses. Their first-pass coverage is the
-released/high `PWR_KILL_N` input and sampled `PWR_INT_N` line.
+## Build
 
-## Build and flash
+SW7 now powers off the board with a single click while the application is
+running. The MAX16169 debounces the press and signals GPIO38; a separate
+firmware task pulls GPIO8 (`PWR_KILL_N`) low to switch off the main 3.3 V rail,
+including when powered over USB. The startup press is ignored for 100 ms so
+turning the board on does not immediately turn it off. Holding SW7 for eight
+seconds remains the hardware fallback if firmware is stalled or in ROM mode.
+The current POC does not write onboard storage; add a storage flush before
+asserting `PWR_KILL_N` when recording is introduced.
 
-The firmware pins the first official esp-hal revision that marks ESP32-S31 GPIO,
-UART, and I2C master support as available:
-`esp-hal-v1.2.0-rc.0` / `160b10794227eb84805b8676fe188c1110801e9d`.
+Run firmware builds from this directory so its target configuration applies:
 
-Run Cargo from this directory so the embedded target configuration does not
-affect the host crates elsewhere in the workspace:
-
-```powershell
+```sh
 cd firmware
-rustup show
 cargo build --release
-cargo run --release
 ```
 
-The pinned toolchain installs the `riscv32imafc-unknown-none-elf` target. The
-runner expects `espflash 4.5.0` or newer; 4.5.0 is the first espflash release
-with ESP32-S31 support. `cargo run --release` builds, requests ROM download mode
-over J6, flashes, waits for the application J6 CDC port, and prints the repeating
-peripheral report. Stop the monitor with Ctrl+C.
+The ELF is written to
+`../target/riscv32imafc-unknown-none-elf/release/aevia-firmware`.
 
-The first installation of this image needs one manual download-mode entry: hold
-SW2 (`GPIO61`), tap SW1, press SW7 to restore the latched rail, wait two seconds,
-then release SW2. GPIO60 must remain high; the frozen board leaves it at its
-internal pull-up. After that installation, the runner sends `BOOTLOADER` to the
-application, which sets the S31 one-shot force-download bit and software-resets.
-No buttons are needed for subsequent reflashes.
+`cargo build --release --features rtk-50hz` selects the optional group-8
+50 Hz profile for tests with an RTK correction feed. The default build
+restores the group-1 standalone profile on startup.
 
-## Where the log appears
+## Validation
 
-The application implements CDC-ACM on the dedicated high-speed USB controller
-wired to USB-C J6. It enumerates as `AEVIA V2 Mini Bring-up Console` with USB
-VID/PID `303A:4001`; ROM download mode enumerates separately as `303A:0020`.
+D32 is a steady power/communication status LED while the firmware runs.
+It starts blue and turns green when CRC-checked GNSS navigation messages
+arrive, including messages without a position fix. It returns to blue after
+two seconds without a valid message or while GNSS is being reconfigured.
+The other three LEDs stay off. The indicator runs independently of USB and
+uses the proven low-brightness LP5813 configuration, including TI's
+recommended short-detection threshold. There is no LED test mode.
 
-J5 pins 3/4/5 remain available as USB Serial/JTAG D-/D+/GND on GPIO33/GPIO34,
-and UART0 TX remains available at TP2 through 499 ohms, but neither is required
-for the normal J6 workflow.
+The following results were recorded before the host tools were removed.
 
-The full report repeats every five seconds so a monitor can be attached after
-reset.
+The completed 45-second live capture after 10 seconds of warmup passed all
+45 windows, with 20 valid GNSS fixes/s and about 182 accepted IMU intervals/s.
+Fusion advanced with zero estimator resets, rejected IMU/GNSS observations
+or wire parsing errors. All 440 trajectory tests and seven host tests also
+passed, including predictor feedback and hard-reset regressions. This
+validates the live data path; speed accuracy has not been checked against
+an independent reference. Replay should use a fresh, continuous capture;
+accuracy after long gaps or concatenated old sessions is unqualified.
 
-## First power, without a battery
+## Onboard estimator experiment
 
-1. Inspect polarity and shorts, and use a current-limited 5 V source. Treat J4
-   BAT as live even when empty: the charger can raise it to roughly 4.2 V while
-   testing for a battery. Press SW7 for at least 50 ms to latch the TPS63802 on.
-2. Verify the 3V3 rail and module EN rise before flashing. The frozen board uses
-   10 kΩ/100 nF on EN; Espressif's module guidance shows 10 kΩ/1 µF, so confirm
-   reset behavior on the scope rather than assuming it.
-3. Run `cargo run --release`; after the one-time initial manual download entry,
-   subsequent runs reflash and reconnect without board-button input.
-4. Expect the BQ25622E, released-button TCA9536A, and LP5813A to report `PASS`.
-   MAX17048 may ACK if BAT is energized or NACK while BAT droops; measure BAT
-   and accept either result during the no-cell test.
-
-Typical identity/default values on a fresh board are:
-
-```text
-Hello, world!
-AEVIA V2 Mini peripheral bring-up v0.1.0
-[PASS] BQ25622E @ 0x6B part=0x1A pn=3 rev=2 ...
-       cfg (read-only): ICHG=0340 VREG=0D20 VSYSMIN=0B00 CTRL0=06 CTRL3=04 ...
-[PASS] TCA9536A @ 0x40 inputs=FF config=FF ...
-[PASS] LP5813A @ 0x50 reset regs=00/00/00/E4
-```
-
-The MAX17048 line may be either `PASS` with a `0x001x` version or `NACK` without
-a cell. Status values vary with VBUS, BAT, thermistor, and button state. A
-responding charger is not authorization to attach a battery. Validate the
-fitted charger's autonomous limits and thermistor network against the actual
-cell first.
-
-The design/register research behind these choices is in
-[`docs/v2-mini-bringup-research.md`](docs/v2-mini-bringup-research.md).
+`cargo build --release --no-default-features` retains the attempt to run the
+estimator on core 1 using PSRAM. The board reports 16 MiB PSRAM, but this
+variant stalled while copying its workspace into PSRAM at both tested
+125 MHz and 250 MHz settings. It has not demonstrated onboard speed output;
+the default `host-poc` image avoids that initialization path.

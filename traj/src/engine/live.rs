@@ -94,6 +94,8 @@ struct GnssQualityEvidence {
 
 /// Small borrowed handle over caller-owned live workspaces.
 pub struct LiveSession<'config, 'workspace> {
+    #[cfg(feature = "development")]
+    approximate_uncertain_imu_timing: bool,
     engine: EngineConfig<'config>,
     internal: &'workspace mut crate::workspace::LiveInternalWorkspace,
     psram: &'workspace mut crate::workspace::LivePsramWorkspace,
@@ -138,6 +140,21 @@ struct DrainedWork {
 
 impl<'a> LiveBuilder<'a> {
     pub fn preflight(self) -> Result<LivePlan<'a>, PrepareError> {
+        self.preflight_impl(true)
+    }
+
+    /// Starts bench experiments with an explicitly unqualified profile.
+    ///
+    /// This entry point deliberately omits only the production qualification
+    /// gate. All semantic, numerical capability, workspace and resource checks
+    /// still apply. It does not create qualification evidence or attest the
+    /// accuracy, timing, calibration or suitability of the resulting estimates.
+    #[cfg(feature = "development")]
+    pub fn preflight_development(self) -> Result<LivePlan<'a>, PrepareError> {
+        self.preflight_impl(false)
+    }
+
+    fn preflight_impl(self, require_qualification: bool) -> Result<LivePlan<'a>, PrepareError> {
         self.spec
             .validate()
             .map_err(PrepareError::InvalidDefinition)?;
@@ -149,7 +166,7 @@ impl<'a> LiveBuilder<'a> {
                 self.spec.engine.installation.reference_points,
             )
             .map_err(PrepareError::InvalidDefinition)?;
-        if !self.spec.engine.is_qualified() {
+        if require_qualification && !self.spec.engine.is_qualified() {
             return Err(PrepareError::UnqualifiedProfile);
         }
         if self.spec.engine.numeric_profile.scalar_policy != ScalarPolicy::EmbeddedMixedF32F64 {
@@ -358,6 +375,8 @@ impl<'config> LivePlan<'config> {
             .map_err(PrepareError::InvalidDefinition)?;
 
         Ok(LiveSession {
+            #[cfg(feature = "development")]
+            approximate_uncertain_imu_timing: false,
             engine: self.spec.engine,
             internal,
             psram,
@@ -426,6 +445,24 @@ impl DrainedWork {
 }
 
 impl LiveSession<'_, '_> {
+    /// Opts an unqualified bench session into nominal-epoch IMU integration.
+    ///
+    /// Independent IMU timing uncertainty remains in the supplied observation,
+    /// but this approximation does not propagate it or resample the interval.
+    /// Every such input is marked degraded. Qualified sessions reject this
+    /// option, and ordinary sessions continue retaining uncertain IMU support
+    /// for offline processing instead of integrating it.
+    #[cfg(feature = "development")]
+    pub fn use_development_imu_timing_approximation(&mut self) -> Result<(), StepError> {
+        if self.engine.is_qualified() {
+            return Err(StepError::InvalidObservation(
+                ValidationError::IncompatibleDefinition,
+            ));
+        }
+        self.approximate_uncertain_imu_timing = true;
+        Ok(())
+    }
+
     #[must_use]
     pub fn trajectory(&self) -> &Trajectory {
         &self.psram.trajectory
