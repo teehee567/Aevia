@@ -1,8 +1,14 @@
-pcb-backups/
+# KiCad automatic backups and local editor state
+*-backups/
+_restore_backup_*/
+/hardware/**/*.bak
 .history/
 *.lck
 *.kicad_prl
 
+# Local scratch files and Python package cache
+/tmp/
+/.tmp-uv-cache/
 
 debug
 target
@@ -29,25 +35,6 @@ __pycache__
 .history
 
 
-
-# Flutter repo-specific
-/bin/cache/
-/bin/internal/bootstrap.bat
-/bin/internal/bootstrap.sh
-/bin/mingit/
-/dev/benchmarks/mega_gallery/
-/dev/bots/.recipe_deps
-/dev/bots/android_tools/
-/dev/devicelab/ABresults*.json
-/dev/docs/doc/
-/dev/docs/flutter.docs.zip
-/dev/docs/lib/
-/dev/docs/pubspec.yaml
-/dev/integration_tests/**/xcuserdata
-/dev/integration_tests/**/Pods
-/packages/flutter/coverage/
-version
-analysis_benchmark.json
 
 # packages file containing multi-root paths
 .packages.generated
@@ -136,8 +123,6 @@ app.*.symbols
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-!/dev/ci/**/Gemfile.lock
 
 # Firmware is a deployable binary; pin its workspace dependency graph.
 !/Cargo.lock

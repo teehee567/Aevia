@@ -94,7 +94,7 @@ And raw GNSS modules specs are in [data/GNSS_research.xlsx](./data/GNSS_research
 - [V2 Mini root schematic](./hardware/v2_mini_pcb/v2_mini.kicad_sch)
 - [V2 Mini PCB layout](./hardware/v2_mini_pcb/v2_mini.kicad_pcb)
 - [V2 Mini production BOM](./hardware/v2_mini_pcb/production/digikey_bom.csv)
-- [GNSS module research](./hardware/gps_module_research.md)
+- [GNSS module research](./data/gps_module_research.md)
 - [V1 PCB files](./hardware/v1_pcb/)
 - [Earlier full-size V2 design notes](./v2_design.md)
 
