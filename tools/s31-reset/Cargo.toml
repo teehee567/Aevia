@@ -4,9 +4,12 @@ version = "0.1.0"
 edition = "2024"
 publish = false
 
+[[bin]]
+name = "aevia-flash"
+path = "src/flash.rs"
+
 [dependencies]
-espflash = { version = "4.5.0", default-features = false, features = ["serialport"] }
-serialport = { version = "4.7.3", default-features = false }
+espflash = { version = "=4.5.0", default-features = false, features = ["serialport"] }
+serialport = { version = "4.7.3", default-features = false, features = ["usbportinfo-interface"] }
 
 [workspace]
-

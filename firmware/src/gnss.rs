@@ -1,5 +1,28 @@
 //! CRC-checked parsing for the UM980's combined position/velocity output.
 
+/// Confirms ten consecutive 50 ms receiver epochs, independently of fix status.
+#[derive(Default)]
+pub struct StandaloneRateCheck {
+    previous: Option<u64>,
+    steps: u8,
+}
+
+impl StandaloneRateCheck {
+    pub fn observe(&mut self, line: &[u8]) -> bool {
+        let Ok(status) = parse_bestnava_status(line) else {
+            return false;
+        };
+        let epoch = u64::from(status.gps_week) * 604_800_000 + u64::from(status.gps_tow_ms);
+        self.steps = if self.previous.is_some_and(|previous| epoch == previous + 50) {
+            self.steps.saturating_add(1)
+        } else {
+            0
+        };
+        self.previous = Some(epoch);
+        self.steps >= 10
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ParseError {
     Format,
@@ -96,6 +119,12 @@ pub struct LineDecoder<const N: usize> {
     length: usize,
     collecting: bool,
     overflowed: bool,
+}
+
+impl<const N: usize> Default for LineDecoder<N> {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl<const N: usize> LineDecoder<N> {
@@ -552,5 +581,28 @@ mod tests {
         let crc = unicore_crc32(&body[1..]);
         result.extend_from_slice(format!("{crc:08x}\r\n").as_bytes());
         result
+    }
+
+    #[test]
+    fn bring_up_accepts_no_fix_epochs_but_not_bad_crc_or_wrong_rate() {
+        fn frame(epoch: u32) -> Vec<u8> {
+            bestnav_with_crc(format!("#BESTNAVA,120,GPS,FINE,2434,{epoch},0,0,18,16;INSUFFICIENT_OBS,NONE,0,0,0,0,WGS84,0,0,0,\"0\",0,0,0,0,0,0,0,0,0,0,INSUFFICIENT_OBS,NONE,0,0,0,0,0,0,0").as_bytes())
+        }
+        let mut rate = StandaloneRateCheck::default();
+        for i in 0..=10 {
+            let line = frame(345_678_000 + i * 50);
+            assert_eq!(parse_bestnava(&line), Err(ParseError::NoSolution));
+            assert_eq!(rate.observe(&line), i == 10);
+        }
+        assert!(!rate.observe(&frame(345_679_000))); // gap resets confirmation
+        for i in 0..20 {
+            assert!(!rate.observe(&frame(345_680_000 + i * 1000)));
+        }
+        let mut rate = StandaloneRateCheck::default();
+        for i in 0..20 {
+            let mut corrupt = frame(345_678_000 + i * 50);
+            corrupt[10] ^= 1;
+            assert!(!rate.observe(&corrupt));
+        }
     }
 }

@@ -1,3 +1,8 @@
+> Historical experiment. The base rebuild removed the `host-poc`, `rtk-50hz`
+> and implicit onboard-estimator build modes. The source adapter is preserved
+> in [experiments](../experiments/README.md); use [the firmware README](../README.md)
+> for current commands. Statements below describe the earlier images.
+
 # Live trajectory experiment
 
 The default `host-poc` firmware streams timestamped UM980 records and
@@ -90,9 +95,62 @@ the host and MCU clocks are not absolutely synchronized. Replay should
 start from a fresh, continuous capture. Accuracy after long gaps or across
 concatenated older recording sessions remains unqualified.
 
-The onboard estimator variant (`--no-default-features`) detects 16 MiB PSRAM
-but stalled during its workspace copy at both 125 MHz and 250 MHz. It is
-retained for investigation; speed output was demonstrated only with the
-now-removed host runner. Reflashes used the USB software bootloader command when the
-application enumerated. One loss of both application and ROM USB required
-a full power reset through SW7 before software flashing could resume.
+## Onboard PSRAM fix (2026-09-10)
+
+The original onboard variant (`--no-default-features`) detected 16 MiB PSRAM
+but stayed at startup stage 2 during the workspace copy at both 125 MHz and
+250 MHz. The hardware checker reproduced that failure. A single-word probe
+then showed that reads worked and the first write stopped the estimator.
+Temporary panic telemetry identified `mcause=0x38000007` (store access fault),
+`mtval=0x50000000`, with no PSRAM-controller address or permission error.
+
+Core 1's ROM PMA15 was `cfg=0xc0000015`, `addr=0x13ffffff`: the entire
+`0x40000000..0x60000000` external-memory region was read/execute-only.
+Its PMP entries were disabled. The pinned HAL initializes the PSRAM
+controller and MMU but leaves those per-core ROM attributes unchanged.
+
+[psram.rs](../src/memory.rs) checks that ROM configuration and splits the
+region into read-only flash, a non-executable read/write window for the fitted
+16 MiB PSRAM, and the remaining read-only address range. PMA8..11 are reserved
+for the split; other ROM entries remain intact. Configuration readback must
+match before any stores. Attribute definitions follow Espressif's
+[RISC-V CSR definitions](https://github.com/espressif/esp-idf/blob/master/components/riscv/include/riscv/csr.h)
+and [S31 region setup](https://github.com/espressif/esp-idf/blob/master/components/esp_hw_support/port/esp32s31/cpu_region_protect.c).
+
+The board passed two complementary address-dependent patterns across all
+16 MiB at 125 MHz, with cache writeback and invalidation before verification.
+The real trajectory workspace then initialized to stage 8 and IMU ingestion
+advanced. Three host tests cover the region boundaries, permission split and
+rejection of unexpected configurations. Sensor capture waits until startup
+completes to avoid filling its queue during the memory test. Run
+`powershell -NoProfile -ExecutionPolicy Bypass -File tools/check-psram.ps1`
+from the repository root to repeat the memory/startup/IMU-progress check.
+
+The final image passed a 30-second check and a second eight-second check
+after a software restart, with zero queue drops and estimator errors.
+IMU ingestion advanced at approximately 175 intervals/s. Sensor capture
+errors remained present (about nine/s), as in the baseline; they are not
+PSRAM-test failures and still need separate acquisition investigation.
+
+GNSS had no valid fix during this test; it does not establish onboard fusion,
+speed accuracy or loaded-estimator timing. Speed output has previously been
+demonstrated only with the now-removed host runner. The default firmware still
+selects `host-poc`, which does not run the estimator or initialize PSRAM.
+
+Application USB initially failed enumeration. Holding SW2 while resetting
+with SW1 recovered ROM USB on COM4. Subsequent flashes used the USB software
+bootloader command and the documented RAM-stub/reset-helper sequence. The
+large onboard ELF repeatedly timed out on its first FlashDeflData transfer;
+a subsequent flash/check completed successfully. This flashing-tool issue
+is separate from the CPU protection fault.
+
+Later the same day, Windows recorded 37 application USB surprise removals
+between 13:53:14 and 13:54:28 local time, after the earlier validation had
+finished. The board then disappeared from enumeration. Manual ROM recovery
+restored COM4, which stayed connected for a 40-second observation. Starting
+the existing image without reflashing passed a 40-second serial capture,
+a 50-second observation with the reader closed, and a 15-second reattachment
+capture. Uptime advanced to 166.768 seconds without restarting; PSRAM remained
+tested at 16 MiB, startup reached stage 8, and estimator errors stayed zero.
+The reset recovered USB, but the cause of the intermittent disconnect burst
+is unresolved. These short tests do not establish long-term USB stability.

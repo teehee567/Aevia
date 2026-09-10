@@ -2,6 +2,7 @@
 target = "riscv32imafc-unknown-none-elf"
 
 [target.riscv32imafc-unknown-none-elf]
+runner = "powershell -NoProfile -ExecutionPolicy Bypass -File ../tools/flash-firmware.ps1 -Elf"
 rustflags = [
     "-C",
     "link-arg=-Tlinkall.x",

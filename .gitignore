@@ -126,3 +126,4 @@ app.*.symbols
 
 # Firmware is a deployable binary; pin its workspace dependency graph.
 !/Cargo.lock
+!/tools/s31-reset/Cargo.lock
