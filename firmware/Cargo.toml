@@ -1,5 +1,32 @@
 [package]
-name = "aevia-firmware"
-version = "0.1.0"
-edition = "2024"
-publish = false
+edition      = "2024"
+name         = "firmware"
+version      = "0.1.0"
+
+[[bin]]
+name = "firmware"
+path = "src/bin/main.rs"
+test = false
+bench = false
+
+[dependencies]
+sha2 = { version = "0.11", default-features = false }
+
+[target.'cfg(target_arch = "riscv32")'.dependencies]
+esp-hal = { version = "~1.2.2", features = ["esp32s31", "unstable"] }
+
+esp-rtos = { version = "0.4.0", features = [
+  "embassy",
+  "esp-alloc",
+  "esp32s31",
+] }
+
+esp-bootloader-esp-idf = { version = "0.6.0", features = ["esp32s31",] }
+
+embassy-executor = "0.10.0"
+embassy-futures = "0.1.2"
+embassy-time = "0.5.1"
+embassy-usb = { version = "0.6.0", default-features = false }
+esp-alloc = { version = "0.11.0", features = ["esp32s31"] }
+esp-storage = { version = "0.10.0", features = ["esp32s31"] }
+static_cell = "2.1.1"

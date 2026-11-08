@@ -1,0 +1,5 @@
+# Name, Type, SubType, Offset, Size, Flags
+otadata, data, ota,  0x9000,  0x2000,
+mode,    data, undefined,0xb000, 0x1000,
+slot0,   app,  ota_0,0x10000, 0x400000,
+slot1,   app,  ota_1,0x410000,0x400000,

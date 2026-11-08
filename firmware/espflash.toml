@@ -1,0 +1,6 @@
+[flash]
+size = "16MB"
+
+[idf]
+partition_table = "partitions.csv"
+target_app_partition = "slot0"

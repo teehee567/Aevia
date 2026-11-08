@@ -2,7 +2,14 @@
 resolver = "3"
 members = [
     "app/rust",
-    "firmware", "loader",
-    "runtime",
+    "firmware",
     "traj",
 ]
+
+[profile.dev.package.firmware]
+opt-level = "s"
+
+[profile.release.package.firmware]
+codegen-units = 1
+debug = 2
+opt-level = "s"

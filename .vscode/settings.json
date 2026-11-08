@@ -1,3 +1,9 @@
 {
-    "cmake.sourceDirectory": "C:/Users/me/Documents/Github/open-race/app/linux"
+    "cmake.sourceDirectory": "C:/Users/me/Documents/Github/open-race/app/linux",
+    "rust-analyzer.cargo.target": "x86_64-pc-windows-msvc",
+    "rust-analyzer.cargo.allTargets": false,
+    "rust-analyzer.cargo.buildScripts.overrideCommand": [
+        "cargo", "check", "--workspace", "--lib", "--message-format=json"
+    ],
+    "rust-analyzer.check.extraArgs": ["--lib"]
 }

@@ -1,9 +1,3 @@
-# Keep compilation settings in this file and user/runtime settings in `esp-config.toml`.
-include = ["esp-config.toml"]
-
-[target.riscv32imafc-unknown-none-elf]
-runner = "espflash flash --monitor --chip esp32s31"
-
 [build]
 rustflags = [
   # Required to obtain backtraces (e.g. when using the "esp-backtrace" crate.)
