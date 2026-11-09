@@ -8,7 +8,7 @@ pub const APP_SIZE: u32 = 0x400000;
 pub const SECTOR: u32 = 4096;
 pub const CHUNK: usize = 256;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum Error {
     Command,
     Size,
@@ -17,20 +17,6 @@ pub enum Error {
     Hash,
     Flash,
     Layout,
-}
-
-impl Error {
-    pub fn response(self) -> &'static [u8] {
-        match self {
-            Self::Command => b"ERR command\n",
-            Self::Size => b"ERR size\n",
-            Self::Sequence => b"ERR sequence\n",
-            Self::Image => b"ERR image\n",
-            Self::Hash => b"ERR hash\n",
-            Self::Flash => b"ERR flash\n",
-            Self::Layout => b"ERR layout\n",
-        }
-    }
 }
 
 /// NOR semantics: writes only clear bits; erase ranges are sector-aligned.
@@ -72,6 +58,11 @@ impl<F: Flash> Updater<F> {
     pub fn request_app(&mut self) -> Result<(), Error> {
         self.abort();
         state::request_app(&mut self.flash)
+    }
+
+    pub fn request_recovery(&mut self) -> Result<(), Error> {
+        self.abort();
+        state::recover(&mut self.flash)
     }
 
     pub fn abort(&mut self) {

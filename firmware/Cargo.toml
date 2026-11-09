@@ -12,9 +12,15 @@ bench = false
 [dependencies]
 postcard = { version = "1.1.3", default-features = false }
 serde = { version = "1.0.229", features = ["derive"], default-features = false }
-sha2 = { version = "0.11", default-features = false }
+sha2 = { version = "0.10.9", default-features = false }
+cobs = { version = "0.3", default-features = false }
+aevia-trajectory = { path = "../traj", features = ["development"] }
+libm = "0.2.16"
+embassy-sync = "0.8.0"
 
 [target.'cfg(target_arch = "riscv32")'.dependencies]
+# esp-hal does not expose S31 MCPWM capture yet; confined to timing/capture.rs.
+esp32s31 = "0.3.0"
 esp-hal = { version = "~1.2.2", features = ["esp32s31", "unstable"] }
 
 esp-rtos = { version = "0.4.0", features = [
@@ -28,6 +34,8 @@ esp-bootloader-esp-idf = { version = "0.6.0", features = ["esp32s31",] }
 embassy-executor = "0.10.0"
 embassy-futures = "0.1.2"
 embassy-time = "0.5.1"
+embedded-io-async = "0.7.0"
+embedded-graphics = "0.8"
 embassy-usb = { version = "0.6.0", default-features = false }
 esp-alloc = { version = "0.11.0", features = ["esp32s31"] }
 esp-storage = { version = "0.10.0", features = ["esp32s31"] }

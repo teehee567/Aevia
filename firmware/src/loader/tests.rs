@@ -1,11 +1,11 @@
 use super::{
-    recovery::{self, Line, Reply},
+    recovery,
     state::{self, MODE_DATA, Mode},
     update::*,
 };
-use crate::device;
+use crate::{commands::Command, protocol::Frame};
 use sha2::{Digest, Sha256};
-use std::{cell::RefCell, format, rc::Rc, string::String, vec, vec::Vec};
+use std::{cell::RefCell, rc::Rc, vec, vec::Vec};
 
 #[derive(Clone)]
 struct Memory(Rc<RefCell<Nor>>);
@@ -190,8 +190,10 @@ fn modes_recover_on_fault_and_persist_until_explicit_run() {
     assert_eq!(updater.startup(false).unwrap(), Mode::App);
     assert_eq!(updater.startup(true).unwrap(), Mode::Recovery);
     assert_eq!(updater.startup(false).unwrap(), Mode::Recovery);
-    assert!(matches!(device::command(b"RECOVER"), Ok(Reply::Reboot)));
-    assert!(device::command(b"COMMIT").is_err());
+    assert_eq!(
+        recovery::command(&mut updater, Command::Recover),
+        Err(Error::Command)
+    );
 }
 
 #[test]
@@ -249,45 +251,62 @@ fn incomplete_invalid_or_corrupted_uploads_do_not_change_boot_selection() {
 }
 
 #[test]
-fn text_protocol_handles_fragmentation_and_discards_overflow() {
+fn binary_protocol_handles_fragmentation_and_discards_overflow() {
     let flash = Memory::new(0);
     let mut updater = Updater::new(flash.clone(), 0).unwrap();
     let bytes = image(256);
-    let hex: String = bytes.iter().map(|byte| format!("{byte:02x}")).collect();
-    let digest: String = Sha256::digest(&bytes)
-        .iter()
-        .map(|byte| format!("{byte:02x}"))
-        .collect();
-    let commands = format!("INFO\r\nBEGIN 256 {digest}\nDATA 0 {hex}\nCOMMIT\n");
-    let mut line = Line::new();
+    let mut encoded = Vec::new();
+    let mut buffer = [0; 272];
+    for command in [
+        Command::Info,
+        Command::Begin {
+            size: 256,
+            hash: Sha256::digest(&bytes).into(),
+        },
+        Command::Data {
+            offset: 0,
+            bytes: &bytes,
+        },
+        Command::Commit,
+    ] {
+        encoded.extend_from_slice(postcard::to_slice_cobs(&command, &mut buffer).unwrap());
+    }
+    let mut frame = Frame::<272>::new();
     let mut replies = 0;
-    for packet in commands.as_bytes().chunks(13) {
-        for byte in packet {
-            if let Some(input) = line.push(*byte) {
-                recovery::command(&mut updater, input.unwrap()).unwrap();
+    for packet in encoded.chunks(13) {
+        let mut input = packet;
+        while !input.is_empty() {
+            if let Some(command) = frame.feed::<Command<'_>>(&mut input) {
+                recovery::command(&mut updater, command.unwrap()).unwrap();
                 replies += 1;
             }
         }
     }
     assert_eq!(replies, 4);
     assert_eq!(flash.selected(), 1);
-    for _ in 0..600 {
-        assert!(line.push(b'x').is_none());
-    }
-    for byte in b"COMMIT" {
-        assert!(line.push(*byte).is_none());
-    }
-    assert!(matches!(line.push(b'\n'), Some(Err(Error::Command))));
-    for command in [
-        b"DATA -1 00".as_slice(),
-        b"DATA 0 xz",
-        b"COMMIT extra",
-        b"\xff",
-    ] {
-        updater.begin(256, [0; 32]).unwrap();
-        assert!(recovery::command(&mut updater, command).is_err());
-        assert!(!updater.active());
-    }
+
+    // The tail of an oversized frame must never become a second command.
+    let oversized_bytes = [1; 300];
+    let mut oversized = oversized_bytes.as_slice();
+    assert!(frame.feed::<Command<'_>>(&mut oversized).is_none());
+    let mut terminator = [1, 0].as_slice();
+    assert!(matches!(
+        frame.feed::<Command<'_>>(&mut terminator),
+        Some(Err(Error::Command))
+    ));
+    let valid_bytes = postcard::to_slice_cobs(&Command::Info, &mut buffer).unwrap();
+    let mut valid: &[u8] = valid_bytes;
+    assert!(matches!(
+        frame.feed::<Command<'_>>(&mut valid),
+        Some(Ok(Command::Info))
+    ));
+
+    updater.begin(256, [0; 32]).unwrap();
+    assert_eq!(
+        recovery::command(&mut updater, Command::Recover),
+        Err(Error::Command)
+    );
+    assert!(!updater.active());
 }
 
 #[test]

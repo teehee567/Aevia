@@ -7,7 +7,7 @@ use esp_hal::{
     usb::otg::{Usb, embassy_usb_device::Driver},
 };
 
-use crate::globals::{DEVICE_PID, SERIALID, USBVID};
+use crate::globals::{DEVICE_PID, LOADER_PID, SERIALID, USBVID};
 
 pub type Device<'d> = UsbDevice<'d, Driver<'d>>;
 pub type Serial<'d> = CdcAcmClass<'d, Driver<'d>>;
@@ -17,7 +17,7 @@ pub struct Buffers<'d> {
     descriptors: [u8; 256],
     bos: [u8; 256],
     control: [u8; 64],
-    serial_number: [u8; 12],
+    msos: [u8; 0],
     state: State<'d>,
 }
 
@@ -28,7 +28,7 @@ impl Buffers<'_> {
             descriptors: [0; 256],
             bos: [0; 256],
             control: [0; 64],
-            serial_number: [0; 12],
+            msos: [],
             state: State::new(),
         }
     }
@@ -40,17 +40,21 @@ impl Default for Buffers<'_> {
     }
 }
 
-pub fn init<'d>(peripheral: USB_HS<'d>, buffers: &'d mut Buffers<'d>) -> (Device<'d>, Serial<'d>) {
+pub fn init<'d>(
+    peripheral: USB_HS<'d>,
+    buffers: &'d mut Buffers<'d>,
+    recovery: bool,
+) -> (Device<'d>, Serial<'d>) {
     let driver = Driver::new(
         Usb::new_hs(peripheral),
         &mut buffers.out,
         Default::default(),
     );
 
-    let mut config = Config::new(USBVID, DEVICE_PID);
+    let mut config = Config::new(USBVID, if recovery { LOADER_PID } else { DEVICE_PID });
     config.manufacturer = Some("teehee567");
-    config.product = Some("Aevia Loader");
-    config.serial_number = SOME(SERIALID);
+    config.product = Some(if recovery { "Aevia Loader" } else { "Aevia" });
+    config.serial_number = Some(SERIALID);
 
     let mut builder = Builder::new(
         driver,

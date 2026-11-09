@@ -2,10 +2,7 @@ use esp_bootloader_esp_idf::partitions::{self, AppPartitionSubType as App, Parti
 use esp_hal::peripherals::FLASH;
 use esp_storage::FlashStorage;
 
-use crate::loader::{
-    state::MODE_DATA,
-    update::{APP_SIZE, APP_START, Error, Flash, OTA_DATA, SECTOR},
-};
+use crate::loader::update::{Error, Flash};
 
 pub struct Storage<'d>(FlashStorage<'d>);
 
@@ -16,7 +13,7 @@ impl<'d> Storage<'d> {
         let table =
             partitions::read_partition_table(&mut flash, &mut buffer).map_err(|_| Error::Layout)?;
 
-        // just check 
+        // This loader uses the four-entry layout in partitions.csv.
         if table.len() != 4 || esp_storage::flash_encryption() {
             return Err(Error::Layout);
         }
@@ -44,4 +41,3 @@ impl Flash for Storage<'_> {
         self.0.erase(from, to).map_err(|_| Error::Flash)
     }
 }
-
