@@ -2,53 +2,6 @@ use super::update::{CHUNK, Error, Flash, Updater};
 
 pub const LINE_SIZE: usize = 544;
 
-pub struct Line {
-    bytes: [u8; LINE_SIZE],
-    len: usize,
-    overflow: bool,
-}
-
-impl Default for Line {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl Line {
-    pub const fn new() -> Self {
-        Self {
-            bytes: [0; LINE_SIZE],
-            len: 0,
-            overflow: false,
-        }
-    }
-
-    pub fn push(&mut self, byte: u8) -> Option<Result<&[u8], Error>> {
-        if byte == b'\n' {
-            let len = self.len;
-            let overflow = self.overflow;
-            self.len = 0;
-            self.overflow = false;
-            return Some(if overflow {
-                Err(Error::Command)
-            } else {
-                Ok(&self.bytes[..len])
-            });
-        }
-        if self.len == LINE_SIZE {
-            self.overflow = true;
-        } else {
-            self.bytes[self.len] = byte;
-            self.len += 1;
-        }
-        None
-    }
-
-    pub fn clear(&mut self) {
-        self.len = 0;
-        self.overflow = false;
-    }
-}
 
 pub enum Reply {
     Text(&'static [u8]),

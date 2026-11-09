@@ -7,6 +7,8 @@ use esp_hal::{
     usb::otg::{Usb, embassy_usb_device::Driver},
 };
 
+use crate::globals::{DEVICE_PID, SERIALID, USBVID};
+
 pub type Device<'d> = UsbDevice<'d, Driver<'d>>;
 pub type Serial<'d> = CdcAcmClass<'d, Driver<'d>>;
 
@@ -45,17 +47,10 @@ pub fn init<'d>(peripheral: USB_HS<'d>, buffers: &'d mut Buffers<'d>) -> (Device
         Default::default(),
     );
 
-    // Development identity, separate from the ROM downloader's 303a:0020.
-    let mut config = Config::new(0x303a, 0x4001);
-    config.manufacturer = Some("Aevia");
+    let mut config = Config::new(USBVID, DEVICE_PID);
+    config.manufacturer = Some("teehee567");
     config.product = Some("Aevia Loader");
-    let mac = esp_hal::efuse::base_mac_address();
-    for (index, byte) in mac.as_bytes().iter().copied().enumerate() {
-        const HEX: &[u8; 16] = b"0123456789ABCDEF";
-        buffers.serial_number[index * 2] = HEX[(byte >> 4) as usize];
-        buffers.serial_number[index * 2 + 1] = HEX[(byte & 15) as usize];
-    }
-    config.serial_number = core::str::from_utf8(&buffers.serial_number).ok();
+    config.serial_number = SOME(SERIALID);
 
     let mut builder = Builder::new(
         driver,

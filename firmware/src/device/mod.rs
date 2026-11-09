@@ -3,13 +3,14 @@ pub(crate) mod storage;
 #[cfg(target_arch = "riscv32")]
 pub(crate) mod usb;
 
+pub mod command_buffer;
+
 use core::str::from_utf8;
 
 use crate::loader::{recovery::Reply, update::Error};
 
 
 // standard firmware
-
 
 pub fn command(line: &[u8]) -> Result<Reply, Error> {
     match from_utf8(line)
