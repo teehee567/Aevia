@@ -43,6 +43,32 @@ is the frame `02 01 01 00`; its response uses the typed schema below.
 the loader. Fault resets also enter recovery. Recovery keeps sensor acquisition
 and the estimator stopped while programming the inactive firmware slot.
 
+USB enumerates before application hardware initialization, with a two-second
+startup grace period. `Request::System(Command::BootStatus)` (`01 02 07 00`)
+reports the last reached stage: 0 before startup/in recovery, 1 before PSRAM,
+2 before second-core startup, 3 before sensor setup, 4 after sensor setup,
+5 during the full PSRAM check, 6 while copying the estimator workspace,
+7 during metric compilation, 8 during preflight, 9 during session creation,
+10 when the session is ready, and 11 if the memory check fails. This command and its response are
+appended to the existing enums; existing wire indices are unchanged.
+
+PSRAM uses the fitted board's tested 125 MHz setup. Before the estimator's first
+store, core 1 restores the ROM PMA split from the previous base firmware:
+flash remains read-only, and only the fitted 16 MiB PSRAM window becomes writable
+and non-executable. Two complementary address-dependent patterns are flushed
+and verified across all 16 MiB before handing the range to the estimator. An
+unexpected protection map or memory mismatch reports a resource failure while
+keeping USB available.
+The estimator reserves a 64 KiB internal-SRAM stack for its nested preflight
+validation as well as steady-state processing. Flash mode changes use the
+storage driver's automatic core parking so Recover works with the worker live.
+
+GNSS acquisition continues when the full PPS configuration cannot be read back
+on the fitted board's incomplete UART return paths. This reports a GNSS error
+and keeps PPS association/fusion disabled; raw receiver epoch counts and rates
+can still be inspected. No navigation timestamp is substituted for a missing
+timing lock.
+
 ## Wire interface
 
 Every request and response is **Postcard, then COBS, terminated by `0x00`**.
@@ -53,7 +79,7 @@ terminator. Malformed commands abort any firmware update in progress.
 `src/protocol.rs` defines the v1 envelopes:
 
 - `Request::System(commands::Command)`: Info, Abort, Run, Begin, Data, Commit,
-  Recover. Firmware upload chunks are at most 256 bytes and carry raw bytes,
+  Recover, BootStatus. Firmware upload chunks are at most 256 bytes and carry raw bytes,
   with a raw 32-byte SHA-256 digest in Begin. Upload commands work in recovery.
 - `Request::Device(device::interface::DeviceCommand)`: Status, Latest,
   SetIndicators. These commands work in application mode and are independent
@@ -87,6 +113,10 @@ unavailable rather than retaining a speed indefinitely.
 
 Flash-safety and protocol regression checks remain in `src/loader/tests.rs`;
 focused timing regressions are in `src/device/timing/tests.rs`.
+Run these on Windows with `cargo test -p firmware --lib --target
+x86_64-pc-windows-msvc --config 'unstable.build-std=[]'`. Host tests use the
+standard-library critical-section implementation; device builds retain the HAL
+implementation.
 No additional sensor test harness is required to build the firmware. The
 implementation needs board validation for sustained acquisition rate, queue
 drops, processing time, PSRAM initialization and the fitted display.

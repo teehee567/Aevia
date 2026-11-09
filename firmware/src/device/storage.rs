@@ -8,7 +8,9 @@ pub struct Storage<'d>(FlashStorage<'d>);
 
 impl<'d> Storage<'d> {
     pub fn new(flash: FLASH<'d>) -> Result<(Self, u8), Error> {
-        let mut flash = FlashStorage::new(flash);
+        // Recover persists its mode while the estimator is still running.
+        // The storage driver's default policy rejects writes with core 1 live.
+        let mut flash = FlashStorage::new(flash).multicore_auto_park();
         let mut buffer = [0; 5 * 32];
         let table =
             partitions::read_partition_table(&mut flash, &mut buffer).map_err(|_| Error::Layout)?;

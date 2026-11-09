@@ -150,7 +150,7 @@ pub fn indicators() -> Indicators {
 }
 
 #[cfg(target_arch = "riscv32")]
-pub(super) fn publish(snapshot: Snapshot) {
+pub(crate) fn publish(snapshot: Snapshot) {
     SNAPSHOT.lock(|latest| latest.set(Some(snapshot)));
 }
 

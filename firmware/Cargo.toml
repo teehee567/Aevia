@@ -18,6 +18,9 @@ aevia-trajectory = { path = "../traj", features = ["development"] }
 libm = "0.2.16"
 embassy-sync = "0.8.0"
 
+[target.'cfg(not(target_arch = "riscv32"))'.dev-dependencies]
+critical-section = { version = "1.2.0", features = ["std"] }
+
 [target.'cfg(target_arch = "riscv32")'.dependencies]
 # esp-hal does not expose S31 MCPWM capture yet; confined to timing/capture.rs.
 esp32s31 = "0.3.0"

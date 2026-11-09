@@ -79,16 +79,22 @@ impl Processor {
         }
         let cold = cold_address as *mut LivePsramWorkspace;
         let metrics = metric_address as *mut LiveMetricPlan;
+        crate::runtime::set_startup_stage(6);
+        CurrentThreadHandle::get().delay(Duration::from_millis(50));
         // SAFETY: checked non-overlapping aligned ranges, exclusively owned by
         // this worker. Both templates are valid and contain no owned allocation.
         unsafe {
             core::ptr::copy_nonoverlapping(&PSRAM_TEMPLATE, cold, 1);
             core::ptr::copy_nonoverlapping(&METRIC_TEMPLATE, metrics, 1);
         }
+        crate::runtime::set_startup_stage(7);
+        CurrentThreadHandle::get().delay(Duration::from_millis(50));
         let metrics = unsafe { &mut *metrics };
         METRICS
             .compile_live_into(LiveMetricLimits::default(), metrics)
             .map_err(PrepareError::InvalidDefinition)?;
+        crate::runtime::set_startup_stage(8);
+        CurrentThreadHandle::get().delay(Duration::from_millis(50));
         let plan = TrajectoryEngine::live(LiveSpec {
             session_id: SessionId::from_bytes(*b"AEVIA-DEVICE-001"),
             engine: unsafe { profile::engine() },
@@ -116,6 +122,8 @@ impl Processor {
                 MemoryRegion::Psram,
             )
         };
+        crate::runtime::set_startup_stage(9);
+        CurrentThreadHandle::get().delay(Duration::from_millis(50));
         let mut session = plan.start(workspace)?;
         // Hardware capture removes wakeup jitter. LPF group-delay calibration
         // and fractional-delay resampling remain unqualified; preserve their
@@ -123,6 +131,7 @@ impl Processor {
         session
             .use_development_imu_timing_approximation()
             .map_err(|_| PrepareError::IncompatibleProfile)?;
+        crate::runtime::set_startup_stage(10);
         Ok(Self {
             session,
             imu_sequence: 0,

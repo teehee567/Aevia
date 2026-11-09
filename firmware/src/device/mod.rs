@@ -1,4 +1,5 @@
 pub mod interface;
+pub(crate) mod memory;
 pub mod timing;
 
 #[cfg(target_arch = "riscv32")]
@@ -37,6 +38,10 @@ pub fn command<F: Flash>(
             updater.request_recovery()?;
             Ok(Response::Reboot)
         }
+        #[cfg(target_arch = "riscv32")]
+        Command::BootStatus => Ok(Response::BootStatus {
+            stage: crate::runtime::startup_stage(),
+        }),
         _ => Err(Error::Command),
     }
 }

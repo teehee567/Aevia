@@ -213,7 +213,7 @@ async fn probe(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Res
     Err(())
 }
 
-async fn configure(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Result<(), ()> {
+async fn configure(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Result<bool, ()> {
     probe(command, data).await?;
     write(command, b"CONFIG SIGNALGROUP 8\r\n").await?;
     Timer::after_secs(3).await; // Group changes restart the UM980.
@@ -224,14 +224,16 @@ async fn configure(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) ->
     // Rising edge at each GPST integer second, 100ms pulse, zero user/RF
     // compensation. Read PPSSTATUS back on the data port to verify the profile.
     write(command, timing::PPS_COMMAND).await?;
-    // CONFIG replies on the querying port. Query both wired ports to tolerate
-    // the assembled board's unreliable COM1 return path.
+    // CONFIG replies on the querying port. The fitted board's COM2 TX and
+    // COM1 RX paths were not usable in the original bring-up. Never write to
+    // COM2: continue receiving navigation if CONFIG cannot be read back, but
+    // keep PPS association/fusion disabled until the full profile is verified.
     write(command, b"CONFIG\r\n").await?;
-    write(data, b"CONFIG\r\n").await?;
-    with_timeout(Duration::from_secs(2), verify_pps_config(command, data))
+    let pps_verified = with_timeout(Duration::from_secs(2), verify_pps_config(command, data))
         .await
-        .map_err(|_| ())??;
-    write(command, b"PPSSTATUSB COM2 1\r\nBESTNAVXYZB COM2 0.02\r\n").await
+        .is_ok_and(|result| result.is_ok());
+    write(command, b"PPSSTATUSB COM2 1\r\nBESTNAVXYZB COM2 0.02\r\n").await?;
+    Ok(pps_verified)
 }
 
 async fn verify_pps_config(
@@ -283,11 +285,17 @@ pub async fn task(
 ) {
     loop {
         timing::CLOCK.lock(|clock| clock.borrow_mut().invalidate());
-        if configure(&mut command, &mut data).await.is_err() {
-            sensors::GNSS_UART_ERRORS.fetch_add(1, Ordering::Relaxed);
+        let pps_verified = match configure(&mut command, &mut data).await {
+            Ok(verified) => verified,
+            Err(()) => {
+                sensors::GNSS_UART_ERRORS.fetch_add(1, Ordering::Relaxed);
+                sensors::GNSS_ERRORS.fetch_add(1, Ordering::Relaxed);
+                Timer::after_secs(3).await;
+                continue;
+            }
+        };
+        if !pps_verified {
             sensors::GNSS_ERRORS.fetch_add(1, Ordering::Relaxed);
-            Timer::after_secs(3).await;
-            continue;
         }
         let mut decoder = Decoder::new();
         let mut bytes = [0; 256];
@@ -318,7 +326,9 @@ pub async fn task(
                     continue;
                 };
                 if u16_at(frame, 4) == 9000 {
-                    pps_status(frame, received_ns);
+                    if pps_verified {
+                        pps_status(frame, received_ns);
+                    }
                     continue;
                 }
                 if u16_at(frame, 4) != 240 || frame.len() != 24 + 112 {

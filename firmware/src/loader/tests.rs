@@ -315,3 +315,34 @@ fn ota_crc_matches_esp_idf_golden_records() {
     assert_eq!(state::sequence_crc(2), 0x55f6_3774);
     assert_eq!(state::sequence_crc(3), 0xed4a_5011);
 }
+
+#[test]
+fn startup_diagnostics_preserve_existing_wire_indices() {
+    use crate::{
+        commands::Response as SystemResponse,
+        protocol::{Request, Response},
+    };
+    let mut buffer = [0; 32];
+    assert_eq!(
+        postcard::to_slice_cobs(&Request::System(Command::Run), &mut buffer).unwrap(),
+        &[1, 2, 2, 0],
+    );
+    assert_eq!(
+        postcard::to_slice_cobs(&Request::System(Command::BootStatus), &mut buffer).unwrap(),
+        &[1, 2, 7, 0],
+    );
+    assert_eq!(
+        postcard::to_slice_cobs(
+            &Response::System(SystemResponse::BootStatus { stage: 4 }),
+            &mut buffer
+        )
+        .unwrap(),
+        &[1, 3, 4, 4, 0],
+    );
+    let flash = Memory::new(0);
+    let mut updater = Updater::new(flash, 0).unwrap();
+    assert_eq!(
+        recovery::command(&mut updater, Command::BootStatus),
+        Ok(SystemResponse::BootStatus { stage: 0 })
+    );
+}

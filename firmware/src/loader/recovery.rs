@@ -33,6 +33,7 @@ fn execute<F: Flash>(updater: &mut Updater<F>, command: Command<'_>) -> Result<R
             return Ok(Response::Reboot);
         }
         Command::Recover => return Err(Error::Command),
+        Command::BootStatus => return Ok(Response::BootStatus { stage: 0 }),
     }
     Ok(Response::Ok)
 }
