@@ -236,6 +236,7 @@ async fn serve(
                         || matches!(
                             command,
                             device::interface::DeviceCommand::PowerStatus
+                                | device::interface::DeviceCommand::PowerDiagnostics
                                 | device::interface::DeviceCommand::ResetStatus
                         ) =>
                 {

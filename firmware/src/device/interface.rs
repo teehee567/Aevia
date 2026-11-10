@@ -116,6 +116,10 @@ pub enum DeviceCommand {
     ImuDiagnostics,
     /// Reset reason and checksum-verified panic from the preceding boot.
     ResetStatus,
+    /// Per-UART receiver byte counts and categorized hardware RX errors.
+    GnssTransportStatus,
+    /// Retained charger-policy failure stage and portable bus error evidence.
+    PowerDiagnostics,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -128,6 +132,80 @@ pub enum DeviceResponse {
     GnssStatus(GnssStatus),
     ImuDiagnostics(ImuDiagnostics),
     ResetStatus(ResetStatus),
+    GnssTransportStatus(GnssTransportStatus),
+    PowerDiagnostics(PowerDiagnostics),
+}
+
+#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
+pub struct PowerDiagnostics {
+    pub attempts: u32,
+    pub successes: u32,
+    pub last_success_us: Option<u64>,
+    /// Identity, pre-control, policy helper, post-control, status, mismatch.
+    pub stage_failures: [u32; 6],
+    /// Bit (stage - 1) for every failure in the last unsuccessful attempt.
+    pub last_failure_stages: u8,
+    /// Initiating failure of the last unsuccessful attempt. Later failures in
+    /// that attempt remain represented by the mask and stage counters.
+    pub last_failure: Option<PowerFailure>,
+    /// Readbacks from the last unsuccessful attempt; success never erases them.
+    pub failed_part_info: Option<u8>,
+    pub failed_pre_control: Option<u8>,
+    pub failed_post_control: Option<u8>,
+    pub failed_charger_status: Option<u8>,
+}
+
+#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
+pub struct PowerFailure {
+    /// Identity=1, pre-control=2, policy helper=3, post-control=4,
+    /// charger status=5, final control mismatch=6.
+    pub stage: u8,
+    /// Bus=1, identity=2, invalid value=3, read-only=4, unsupported=5,
+    /// conversion aborted=6, HAL verification=7, final control mismatch=8.
+    pub error_kind: u8,
+    /// Bus=1, arbitration=2, NACK address=3/data=4/unknown=5,
+    /// overrun=6, other=7. Missing for a non-bus failure.
+    pub i2c_kind: Option<u8>,
+    /// Concrete source: unavailable=0, FIFO limit=1, NACK address=2/data=3/
+    /// unknown=4, timeout=5, arbitration=6, incomplete=7, command limit=8,
+    /// zero length=9, invalid address=10, other SDK error=11, shared bus busy=12.
+    pub i2c_source: Option<u8>,
+    pub register: Option<u8>,
+    /// Read=1, write=2, other=0. Refers to the last HAL transaction.
+    pub operation: u8,
+    /// For a bus write, expected is its requested register byte. Identity
+    /// errors use expected/actual part-number fields; mismatch uses control.
+    pub expected: Option<u8>,
+    pub actual: Option<u8>,
+    pub at_us: u64,
+}
+
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GnssTransportStatus {
+    /// Receiver COM1 then COM2. Counters saturate and include configuration.
+    pub ports: [GnssUartPortStatus; 2],
+    /// Retained across later successful reads and unrelated error categories.
+    pub last_rx_error: Option<GnssUartError>,
+}
+
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GnssUartPortStatus {
+    pub rx_bytes: u64,
+    pub rx_errors: u32,
+    pub fifo_overflows: u32,
+    pub glitches: u32,
+    pub framing_errors: u32,
+    pub parity_errors: u32,
+    pub other_errors: u32,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GnssUartError {
+    /// Receiver COM1=1, COM2=2.
+    pub port: u8,
+    /// FIFO overflow=1, glitch=2, framing=3, parity=4, other=5.
+    pub code: u8,
+    pub received_us: u64,
 }
 
 #[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
@@ -242,6 +320,17 @@ fn imu_diagnostics() -> ImuDiagnostics {
     #[cfg(not(target_arch = "riscv32"))]
     {
         ImuDiagnostics::default()
+    }
+}
+
+fn gnss_transport_status() -> GnssTransportStatus {
+    #[cfg(target_arch = "riscv32")]
+    {
+        super::gnss::transport::status()
+    }
+    #[cfg(not(target_arch = "riscv32"))]
+    {
+        GnssTransportStatus::default()
     }
 }
 
@@ -470,9 +559,15 @@ pub fn command(command: DeviceCommand) -> DeviceResponse {
     match command {
         DeviceCommand::ResetStatus => DeviceResponse::ResetStatus(crate::bootdiagnostics::status()),
         DeviceCommand::PowerStatus => DeviceResponse::PowerStatus(power_status()),
+        DeviceCommand::PowerDiagnostics => {
+            DeviceResponse::PowerDiagnostics(super::power::diagnostics())
+        }
         DeviceCommand::PeripheralStatus => DeviceResponse::PeripheralStatus(peripheral_status()),
         DeviceCommand::AcquisitionStatus => DeviceResponse::AcquisitionStatus(acquisition_status()),
         DeviceCommand::GnssStatus => DeviceResponse::GnssStatus(gnss_status()),
+        DeviceCommand::GnssTransportStatus => {
+            DeviceResponse::GnssTransportStatus(gnss_transport_status())
+        }
         DeviceCommand::ImuDiagnostics => DeviceResponse::ImuDiagnostics(imu_diagnostics()),
         DeviceCommand::Status | DeviceCommand::Latest => DeviceResponse::Snapshot(snapshot()),
         DeviceCommand::SetIndicators(value) => {

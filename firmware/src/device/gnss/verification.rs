@@ -122,6 +122,20 @@ mod tests {
         reply(&mut state, CONFIRM, 6_700_000);
         assert!(state.verified());
     }
+
+    #[test]
+    fn command_acknowledgements_never_substitute_for_full_pps_readback() {
+        let mut state = PpsVerification::default();
+        assert_eq!(state.poll(0), Action::Query);
+        reply(&mut state, b"command,CONFIG,response: OK", 100_000);
+        assert!(!state.verified());
+        assert_eq!(state.poll(RESPONSE_US), Action::TimedOut);
+        assert_eq!(state.poll(RESPONSE_US + RETRY_US), Action::Query);
+        reply(&mut state, CONFIRM, 5_100_000);
+        assert!(state.verified());
+        reply(&mut state, b"command,CONFIG,response: OK", 5_200_000);
+        assert!(state.verified());
+    }
 }
 
 #[cfg(test)]

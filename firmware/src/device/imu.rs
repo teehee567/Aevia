@@ -481,6 +481,7 @@ mod hardware {
         loop {
             let mut imu = INITIALIZE.receive().await;
             loop {
+                super::super::supervision::imu_heartbeat();
                 match imu.initialize().await {
                     Ok(()) => break,
                     Err(_) => {
@@ -499,6 +500,7 @@ mod hardware {
             let mut imu = READY.receive().await;
             let mut recovery = Recovery::default();
             loop {
+                super::super::supervision::imu_heartbeat();
                 match imu.next_sample().await {
                     Ok(sample) => {
                         recovery.success();

@@ -24,9 +24,12 @@ See [v2_mini_design.md](./v2_mini_design.md) for the block diagrams, power tree,
 
 ## Firmware and software plan
 
-The [base firmware](./firmware/README.md) now provides structured hardware
-bring-up and a button-free J6 USB flash runner. From `firmware/`, run
-`cargo run --release --locked` to build, flash and verify the restart.
+The [base firmware](./firmware/README.md) provides structured hardware bring-up
+and a button-free J6 USB inactive-slot updater. Build from `firmware/` with
+`cargo build --release --locked`; use the host decoder and `board_check.py` to
+upload an application image and retain its diagnostics. The
+[evaluation procedure](./firmware/docs/evaluation.md) gives the repeatable
+stationary bench, USB fault and recovery checks.
 
 The immediate work is hardware bring-up and the basic firmware needed to read the GNSS and IMU, store sessions on the microSD card, and exercise the display and controls. The application backlog currently looks like this.
 

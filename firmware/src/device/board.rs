@@ -15,10 +15,11 @@ use esp_hal::{
 };
 
 pub(crate) type PowerBus = I2c<'static, Blocking>;
-// Connected evaluation board: no panel and no battery. Enable these only for
+// Connected evaluation board: no panel, buttons or battery. Enable these only for
 // the corresponding fitted setup; absent accessories need no periodic I/O.
 pub(crate) const DISPLAY_FITTED: bool = false;
 pub(crate) const BATTERY_FITTED: bool = false;
+pub(crate) const BUTTONS_FITTED: bool = false;
 pub(crate) const ACQUISITION_PRIORITY: Priority = Priority::Priority5;
 pub(crate) const GNSS_PRIORITY: Priority = Priority::Priority3;
 const SENSOR_INTERRUPT_PRIORITY: Priority = Priority::Priority6;

@@ -7,6 +7,7 @@ use super::super::{
 use super::{
     diagnostics::ParserContext,
     navigation::{EpochProgress, EpochState, Navigation},
+    transport,
     verification::{Action, PpsVerification},
 };
 use aevia_device_hal::um980::{
@@ -130,6 +131,7 @@ async fn probe(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Res
                 loop {
                     match data.read_async(&mut bytes).await {
                         Ok(n) if n > 0 => {
+                            transport::record_bytes(2, n);
                             for &byte in &bytes[..n] {
                                 if matches!(decoder.push(byte), Ok(Some(f)) if f.message_id() == 37)
                                 {
@@ -139,6 +141,10 @@ async fn probe(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Res
                             Timer::after_micros(100).await;
                         }
                         // A faulted UART must yield so timeout/watchdog tasks run.
+                        Err(error) => {
+                            transport::record_rx(2, error, Instant::now().as_micros());
+                            Timer::after_millis(1).await;
+                        }
                         _ => Timer::after_millis(1).await,
                     }
                 }
@@ -257,6 +263,7 @@ pub async fn task(
         let mut advancing = 0;
         let mut uart_failures = 0;
         let mut command_retry_at = Instant::now();
+        let mut prefer_data = false;
         loop {
             super::super::supervision::gnss_heartbeat();
             // An idle deadline also discards plausible but truncated frames.
@@ -285,33 +292,55 @@ pub async fn task(
             }
             status.config_verified = verification.verified();
             super::publish(status);
-            let (port, bytes) = match with_timeout(
-                Duration::from_millis(IDLE_TIMEOUT_MS),
-                select(
-                    async {
-                        Timer::at(command_retry_at).await;
-                        command.read_async(&mut command_bytes).await
-                    },
-                    data.read_async(&mut data_bytes),
-                ),
-            )
-            .await
-            {
-                Ok(Either::First(Ok(n))) if n > 0 => (0, &command_bytes[..n]),
+            let command_read = async {
+                Timer::at(command_retry_at).await;
+                command.read_async(&mut command_bytes).await
+            };
+            let data_read = data.read_async(&mut data_bytes);
+            // select polls its first future first. read_async is cancellation
+            // safe, but resolves immediately for even one buffered byte: the
+            // FIFO threshold only controls waking an otherwise empty read.
+            // A long CONFIG reply must not keep COM1 continuously preferred
+            // while COM2's hardware-only FIFO fills with binary navigation.
+            let received = with_timeout(Duration::from_millis(IDLE_TIMEOUT_MS), async {
+                if prefer_data {
+                    match select(data_read, command_read).await {
+                        Either::First(result) => Either::Second(result),
+                        Either::Second(result) => Either::First(result),
+                    }
+                } else {
+                    select(command_read, data_read).await
+                }
+            })
+            .await;
+            let (port, bytes) = match received {
+                Ok(Either::First(Ok(n))) if n > 0 => {
+                    prefer_data = true;
+                    (0, &command_bytes[..n])
+                }
                 Ok(Either::Second(Ok(n))) if n > 0 => {
+                    prefer_data = false;
                     uart_failures = 0;
                     (1, &data_bytes[..n])
                 }
-                Ok(Either::First(_)) => {
+                Ok(Either::First(result)) => {
+                    prefer_data = true;
                     // An absent/noisy command return path cannot continually
                     // win select, starve COM2 or restart healthy navigation.
+                    if let Err(error) = result {
+                        transport::record_rx(1, error, Instant::now().as_micros());
+                    }
                     uart_error();
                     decoders[0].reset();
                     command_retry_at = Instant::now() + Duration::from_millis(IDLE_TIMEOUT_MS);
                     Timer::after_micros(100).await;
                     continue;
                 }
-                Ok(Either::Second(_)) => {
+                Ok(Either::Second(result)) => {
+                    prefer_data = false;
+                    if let Err(error) = result {
+                        transport::record_rx(2, error, Instant::now().as_micros());
+                    }
                     uart_error();
                     decoders[1].reset();
                     uart_failures += 1;
@@ -328,6 +357,7 @@ pub async fn task(
                     continue;
                 }
             };
+            transport::record_bytes(port as u8 + 1, bytes.len());
             let received = Instant::now().as_micros();
             let received_ns = timing::capture::now_ns();
             for &byte in bytes {

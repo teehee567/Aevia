@@ -186,6 +186,47 @@ fn mixed_decoder_does_not_interpret_ascii_inside_binary_payload() {
     assert_eq!(frames, vec![(1, 123), (2, 0)]);
 }
 
+#[test]
+fn observed_command_acknowledgement_has_a_distinct_checked_unicore_checksum() {
+    // Retained COM1 wire evidence: one such ACK follows every CONFIG query.
+    // Its checksum includes '$', unlike a standard NMEA sentence.
+    let wire = b"$command,CONFIG,response: OK*54\r\n";
+    let sentence = AsciiSentence::parse(wire).unwrap();
+    assert_eq!(sentence.kind(), SentenceKind::UnicoreCommand);
+    assert_eq!(sentence.body(), b"command,CONFIG,response: OK");
+    assert!(!sentence.confirms_gps_rising_one_hz());
+    assert_eq!(
+        AsciiSentence::parse(b"$command,CONFIG,response: OK*70\r\n"),
+        Err(DecodeError::Checksum)
+    );
+    assert_eq!(
+        AsciiSentence::parse(b"$command,CONFIG,response: ON*54\r\n"),
+        Err(DecodeError::Checksum)
+    );
+
+    // ACKs remain correctly framed beside normal CONFIG and binary replies.
+    let mut decoder = Decoder::<128>::new();
+    let config = b"$CONFIG,COM3,CONFIG COM3 115200*23\r\n";
+    let mut kinds = Vec::new();
+    for byte in config.iter().chain(wire) {
+        if let Some(Frame::Ascii(sentence)) = decoder.push(*byte).unwrap() {
+            kinds.push(sentence.kind());
+        }
+    }
+    assert_eq!(
+        kinds,
+        vec![SentenceKind::UnicoreConfig, SentenceKind::UnicoreCommand]
+    );
+    let mut binary_frames = 0;
+    for byte in binary(123, wire) {
+        if let Some(frame) = decoder.push(byte).unwrap() {
+            assert!(matches!(frame, Frame::Binary(_)));
+            binary_frames += 1;
+        }
+    }
+    assert_eq!(binary_frames, 1);
+}
+
 #[derive(Default)]
 struct Uart {
     output: Vec<u8>,

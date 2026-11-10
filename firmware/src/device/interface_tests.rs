@@ -13,12 +13,93 @@ fn evaluation_commands_append_without_changing_existing_indices() {
         (DeviceCommand::GnssStatus, &[3, 1, 6, 0][..]),
         (DeviceCommand::ImuDiagnostics, &[3, 1, 7, 0][..]),
         (DeviceCommand::ResetStatus, &[3, 1, 8, 0][..]),
+        (DeviceCommand::GnssTransportStatus, &[3, 1, 9, 0][..]),
+        (DeviceCommand::PowerDiagnostics, &[3, 1, 10, 0][..]),
     ] {
         assert_eq!(
             postcard::to_slice_cobs(&Request::Device(command), &mut buffer).unwrap(),
             frame
         );
     }
+}
+
+#[test]
+fn power_diagnostics_response_appends_and_preserves_worst_case_evidence() {
+    let value = PowerDiagnostics {
+        attempts: u32::MAX,
+        successes: u32::MAX,
+        last_success_us: Some(u64::MAX),
+        stage_failures: [u32::MAX; 6],
+        last_failure_stages: u8::MAX,
+        last_failure: Some(PowerFailure {
+            stage: 6,
+            error_kind: 8,
+            i2c_kind: Some(7),
+            i2c_source: Some(12),
+            register: Some(0x16),
+            operation: 2,
+            expected: Some(u8::MAX),
+            actual: Some(u8::MAX),
+            at_us: u64::MAX,
+        }),
+        failed_part_info: Some(u8::MAX),
+        failed_pre_control: Some(u8::MAX),
+        failed_post_control: Some(u8::MAX),
+        failed_charger_status: Some(u8::MAX),
+    };
+    let mut output = [0; 512];
+    let bytes = postcard::to_slice_cobs(
+        &Response::Device(DeviceResponse::PowerDiagnostics(value)),
+        &mut output,
+    )
+    .unwrap();
+    assert_eq!(&bytes[1..3], &[1, 9]);
+    let Response::Device(DeviceResponse::PowerDiagnostics(actual)) =
+        postcard::from_bytes_cobs(bytes).unwrap()
+    else {
+        panic!()
+    };
+    assert_eq!(actual.stage_failures, [u32::MAX; 6]);
+    assert_eq!(actual.last_failure.unwrap().at_us, u64::MAX);
+    assert_eq!(actual.last_failure.unwrap().i2c_source, Some(12));
+}
+
+#[test]
+fn uart_transport_response_is_appended_and_fits_the_runtime_buffer() {
+    let port = GnssUartPortStatus {
+        rx_bytes: u64::MAX,
+        rx_errors: u32::MAX,
+        fifo_overflows: u32::MAX,
+        glitches: u32::MAX,
+        framing_errors: u32::MAX,
+        parity_errors: u32::MAX,
+        other_errors: u32::MAX,
+    };
+    let status = GnssTransportStatus {
+        ports: [port; 2],
+        last_rx_error: Some(GnssUartError {
+            port: 2,
+            code: 5,
+            received_us: u64::MAX,
+        }),
+    };
+    let mut output = [0; 512];
+    let response = Response::Device(DeviceResponse::GnssTransportStatus(status));
+    let bytes = postcard::to_slice_cobs(&response, &mut output).unwrap();
+    // Both envelope tags are nonzero: Device=1, appended response=8.
+    assert_eq!(&bytes[1..3], &[1, 8]);
+    let decoded: Response = postcard::from_bytes_cobs(bytes).unwrap();
+    let Response::Device(DeviceResponse::GnssTransportStatus(actual)) = decoded else {
+        panic!()
+    };
+    assert_eq!(actual, status);
+    // The preceding response keeps its old tag and layout.
+    let bytes = postcard::to_slice_cobs(
+        &Response::Device(DeviceResponse::ResetStatus(ResetStatus::default())),
+        &mut output,
+    )
+    .unwrap();
+    assert_eq!(&bytes[1..3], &[1, 7]);
 }
 
 #[test]

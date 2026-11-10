@@ -4,6 +4,7 @@ mod navigation;
 pub(super) mod observation;
 #[cfg(target_arch = "riscv32")]
 mod receiver;
+pub(super) mod transport;
 mod verification;
 #[cfg(target_arch = "riscv32")]
 pub(super) use receiver::task;

@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """Load an inactive firmware slot and capture typed USB diagnostics (pyserial)."""
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
+import math
 from pathlib import Path
 import subprocess
 import time
 
 import serial
 from serial.tools import list_ports
+
+from bench_acceptance import ALL_RESPONSES, evaluate, validate_limits
 
 
 def encode(data):
@@ -59,27 +63,77 @@ def connect(serial_number, pid=None):
 class Probe:
     def __init__(self, args):
         self.args = args
-        self.device = connect(args.serial)
-        self.decoder = subprocess.Popen([str(args.decoder)], stdin=subprocess.PIPE,
-                                        stdout=subprocess.PIPE, text=True, bufsize=1)
         self.started = time.monotonic()
         self.records = []
+        self.journal_path = None
+        self._journal_file = None
+        self.session = datetime.now(timezone.utc).isoformat()
+        if getattr(args, "output", None) is not None:
+            self.journal_path = Path(args.output).with_suffix(".frames.jsonl")
+            self.journal_path.parent.mkdir(parents=True, exist_ok=True)
+            self._journal_file = self.journal_path.open("a", encoding="utf-8")
+        try:
+            self.decoder = subprocess.Popen([str(args.decoder)], stdin=subprocess.PIPE,
+                                            stdout=subprocess.PIPE, text=True, bufsize=1)
+            self.device = connect(args.serial)
+        except BaseException:
+            self.close()
+            raise
+
+    def close(self):
+        """Close all owned handles; safe for fault-tool finally blocks and repeats."""
+        try:
+            if getattr(self, "device", None) is not None:
+                self.device.close()
+            if getattr(self, "decoder", None) is not None:
+                try:
+                    self.decoder.stdin.close()
+                except OSError:
+                    pass
+                try:
+                    self.decoder.wait(timeout=3)
+                except subprocess.TimeoutExpired:
+                    self.decoder.kill()
+                    self.decoder.wait(timeout=3)
+        finally:
+            if getattr(self, "_journal_file", None) is not None:
+                self._journal_file.close()
+
+    def journal(self, event, record):
+        journal = getattr(self, "_journal_file", None)
+        if journal is not None:
+            journal.write(json.dumps({"session": self.session, "event": event,
+                                      "record": len(self.records) - 1, **record}) + "\n")
+            journal.flush()
 
     def query(self, name, payload):
         self.device.write(encode(payload))
         self.device.flush()
         wire = self.device.read_until(b"\0", size=1024)
-        if not wire.endswith(b"\0"):
-            raise RuntimeError(f"{name}: incomplete response {wire.hex()}")
-        self.decoder.stdin.write(wire.hex() + "\n")
-        self.decoder.stdin.flush()
-        decoded = self.decoder.stdout.readline()
-        if not decoded:
-            raise RuntimeError(f"{name}: wire decoder exited")
-        response = json.loads(decoded)
-        self.records.append({"seconds": round(time.monotonic() - self.started, 3),
-                             "query": name, "wire": wire.hex(), "response": response})
-        return response
+        record = {"seconds": round(time.monotonic() - self.started, 3),
+                  "query": name, "wire": wire.hex(), "response": None}
+        self.records.append(record)
+        self.journal("received", record)
+        try:
+            if not wire.endswith(b"\0"):
+                raise RuntimeError(f"{name}: incomplete response {wire.hex()}")
+            self.decoder.stdin.write(wire.hex() + "\n")
+            self.decoder.stdin.flush()
+            decoded = self.decoder.stdout.readline()
+            if not decoded:
+                raise RuntimeError(f"{name}: wire decoder exited")
+            response = json.loads(decoded)
+            record["response"] = response
+            if name in ALL_RESPONSES:
+                outer, inner = ALL_RESPONSES[name]
+                if not isinstance(response.get(outer), dict) or inner not in response[outer]:
+                    raise RuntimeError(f"{name}: unexpected response {response}")
+            self.journal("decoded", record)
+            return response
+        except BaseException as failure:
+            record["error"] = f"{type(failure).__name__}: {failure}"
+            self.journal("error", record)
+            raise
 
     def system(self, command, body=b"", expected=None):
         response = self.query("system", bytes([0, command]) + body)
@@ -120,12 +174,17 @@ class Probe:
         deadline = time.monotonic() + self.args.seconds
         acquisitions = []
         imu_health = []
-        while time.monotonic() < deadline:
+        queries = [("boot", b"\0\7"), ("status", b"\1\0"),
+                   ("power", b"\1\3"), ("peripherals", b"\1\4"),
+                   ("acquisition", b"\1\5"), ("gnss", b"\1\6"),
+                   ("imu", b"\1\7"), ("reset", bytes([1, 8]))]
+        if self.args.transport:
+            queries.append(("transport", bytes([1, 9])))
+        if getattr(self.args, "power_diagnostics", False):
+            queries.append(("power_diagnostics", bytes([1, 10])))
+        while True:
             summary = {}
-            for name, payload in [("boot", b"\0\7"), ("status", b"\1\0"),
-                                  ("power", b"\1\3"), ("peripherals", b"\1\4"),
-                                  ("acquisition", b"\1\5"), ("gnss", b"\1\6"),
-                                  ("imu", b"\1\7"), ("reset", bytes([1, 8]))]:
+            for name, payload in queries:
                 response = self.query(name, payload)
                 summary[name] = response
                 if name == "acquisition":
@@ -133,7 +192,15 @@ class Probe:
                 if name == "imu":
                     imu_health.append(response["Device"]["ImuDiagnostics"])
             print(json.dumps(summary), flush=True)
-            time.sleep(self.args.interval)
+            if getattr(self.args, "fail_fast", False) and len(acquisitions) >= 2:
+                report = evaluate(self.records, 0, self.args.minimum_imu_hz,
+                                  self.args.maximum_imu_hz, self.args.stationary)
+                if not report["passed"]:
+                    raise RuntimeError("bench fail-fast: " + "; ".join(report["failures"]))
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                break
+            time.sleep(min(self.args.interval, remaining))
         if self.args.expect_imu:
             if len(acquisitions) < 2 or any(
                     current["imu_samples"] <= previous["imu_samples"]
@@ -157,23 +224,73 @@ def main():
     parser.add_argument("--seconds", type=float, default=60)
     parser.add_argument("--interval", type=float, default=5)
     parser.add_argument("--expect-imu", action="store_true")
+    parser.add_argument("--transport", action="store_true",
+                        help="query appended GNSS UART diagnostics; requires matching new firmware/decoder")
+    parser.add_argument("--power-diagnostics", action="store_true",
+                        help="also retain charger failure-stage and I2C diagnostics")
+    parser.add_argument("--bench", action="store_true",
+                        help="apply full functional bench gates and save a .summary.json verdict")
+    parser.add_argument("--fail-fast", action="store_true",
+                        help="stop after the first failed complete bench comparison (requires --bench)")
+    parser.add_argument("--stationary", action="store_true",
+                        help="also require gravity magnitude and near-zero angular rate; implies --bench")
+    parser.add_argument("--minimum-imu-hz", type=float, default=1350)
+    parser.add_argument("--maximum-imu-hz", type=float, default=1600)
     parser.add_argument("--brightness", type=int, default=96)
     parser.add_argument("--settle", type=float, default=0,
                         help="seconds before sampling, to exclude startup/OTA confirmation")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if not all(math.isfinite(value) for value in (args.seconds, args.interval, args.settle)):
+        parser.error("seconds, interval and settle must be finite")
     if args.seconds <= 0 or args.interval <= 0 or args.settle < 0:
         parser.error("seconds/interval must be positive; settle must be nonnegative")
     if not 0 <= args.brightness <= 255:
         parser.error("brightness must be between 0 and 255")
-    probe = Probe(args)
     try:
+        validate_limits(0, args.minimum_imu_hz, args.maximum_imu_hz)
+    except ValueError as error:
+        parser.error(str(error))
+    args.bench = args.bench or args.stationary
+    if args.fail_fast and not args.bench:
+        parser.error("--fail-fast requires --bench or --stationary")
+    probe = None
+    error = None
+    started = datetime.now(timezone.utc).isoformat()
+    try:
+        probe = Probe(args)
         probe.capture()
+    except BaseException as failure:
+        error = f"{type(failure).__name__}: {failure}"
+        raise
     finally:
-        probe.device.close()
-        probe.decoder.stdin.close()
-        probe.decoder.wait(timeout=3)
-        args.output.write_text(json.dumps(probe.records, indent=2) + "\n")
+        records = probe.records if probe is not None else []
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(records, indent=2) + "\n")
+        if probe is not None:
+            probe.close()
+        if args.bench:
+            report = evaluate(records, args.seconds * 0.98, args.minimum_imu_hz,
+                              args.maximum_imu_hz, args.stationary)
+            if error is not None:
+                report["passed"] = False
+                report["failures"].append(error)
+            report.update({"started_utc": started, "serial": args.serial,
+                           "requested_seconds": args.seconds, "settle_seconds": args.settle,
+                           "transport_requested": args.transport,
+                           "power_diagnostics_requested": args.power_diagnostics,
+                           "journal": str(probe.journal_path) if probe is not None else None,
+                           "journal_session": probe.session if probe is not None else None,
+                           "capture_sha256": hashlib.sha256(args.output.read_bytes()).hexdigest(),
+                           "decoder_sha256": hashlib.sha256(args.decoder.read_bytes()).hexdigest(),
+                           "uploaded_image_sha256": hashlib.sha256(args.image.read_bytes()).hexdigest()
+                           if args.image else None})
+            summary_path = args.output.with_suffix(".summary.json")
+            summary_path.write_text(json.dumps(report, indent=2) + "\n")
+            print(json.dumps({"bench_passed": report["passed"], "summary": str(summary_path),
+                              "failures": report["failures"]}), flush=True)
+            if error is None and not report["passed"]:
+                raise SystemExit(1)
 
 
 if __name__ == "__main__":

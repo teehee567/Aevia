@@ -146,7 +146,7 @@ pub(crate) async fn task(bus: PowerBus, resources: MaintenanceResources) {
                 health.led_errors = health.led_errors.saturating_add(1);
             }
         }
-        if !buttons_ready && due(last_button_attempt, 3000) {
+        if super::board::BUTTONS_FITTED && !buttons_ready && due(last_button_attempt, 3000) {
             last_button_attempt = Some(Instant::now());
             buttons_ready = buttons.configure_buttons().is_ok();
             if !buttons_ready {

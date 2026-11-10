@@ -1,0 +1,542 @@
+{
+  "recorded_utc": "2026-11-10T11:23:16.999811+00:00",
+  "firmware": {
+    "image": "firmware-diagnostic.bin",
+    "image_bytes": 3334752,
+    "image_sha256": "cb0f7a555710c85d9daa9d4ad387d4e5546044f5af01c5426f241be6088bd1e8",
+    "base_commit": "75b279125ee30651641b70dea7712d0cd55c045f",
+    "source_sha256": {
+      "firmware/.cargo/config.toml": "a09915b5fcec243f884a9e06e4e8cc20c9412c2c947088a420f9a86ce49e1c14",
+      "firmware/build.rs": "425dd2d3bcd13bbcb7a0a7e15f535e74ebca2c971fdfa8eed05a12125e7d1cc8",
+      "firmware/Cargo.toml": "6bc4d54189f71fbbea5da50116c6641eb08dffb42ff9acb1333aa4ecb7870cc2",
+      "firmware/espflash.toml": "778224295ccb3319a453a8358912865a34782fcdeb9ccb718476f1d59f984373",
+      "firmware/partitions.csv": "c37ed4aa7854e21cb3a66208b13623ee4c81d9de575fad502212681aa04d21b2",
+      "firmware/rust-toolchain.toml": "6cdf46f60eb53d328fe425cdc681c20a117b18b13e4c017310075a59c1447a11",
+      "firmware/src/bin/main.rs": "76c574dd4a8763b9a058ea4b05c9893842ffa21ea6fa43ccf9f3543413dddd4c",
+      "firmware/src/bootdiagnostics.rs": "b476d6bf58ded054627987348d0cea654d51c7ccfa1a341745b242822d442c31",
+      "firmware/src/commands.rs": "4999e4fd9ae11b0cd3f25eca0203320f073711878ba485b677e81e2067d75d93",
+      "firmware/src/device/board.rs": "babe07e00a6984cbd8190d1bd442b82faaae1bc6abba7cc6f093fdec8628c0c9",
+      "firmware/src/device/display.rs": "22d6a80d3c44279ce55312d2a04ed0ad1ed59a44b780fca0e60b5ac70c2a5aea",
+      "firmware/src/device/gnss/diagnostics.rs": "2d2b3a982443d8e8716f1c3e70dc24e2faa83a21bfa59a46f671ae15f47047b5",
+      "firmware/src/device/gnss/mod.rs": "aa97e5afefc7e0c9a5f14d4ff7fede1eb8129fd36083897b41b9e648feb8ebe6",
+      "firmware/src/device/gnss/navigation.rs": "fc775352516d121e82ce29a07d8d680a8ef5968bc0d6ba97fe42c7d7d015abbf",
+      "firmware/src/device/gnss/observation/tests.rs": "4320c3d3764608d16f01e9aac5efcd1d151afae0746bfcd22e2f7c2113bac037",
+      "firmware/src/device/gnss/observation.rs": "d44c39ce3c2585dae1edd54298d208eb9420ae1e6777afc80d6c3c35e2b66ffc",
+      "firmware/src/device/gnss/receiver.rs": "d8fba24f308da3b4f6bb971cb82b6ca8b687a007cc9fa82ca8db88e896384444",
+      "firmware/src/device/gnss/transport.rs": "25cf3586095f659f8321a34b95bcd69e0b3629e25a3778a7a700d19521525243",
+      "firmware/src/device/gnss/verification.rs": "2426996ff41b0d043dac6c253c01a6af481eeb914d6ac28f4948611d0b6e52a0",
+      "firmware/src/device/hal/ap33772s/mod.rs": "acf3e9d24f6f85550067823d407d6a06a16e51260ddf91549a748c04722a9371",
+      "firmware/src/device/hal/ap33772s/pdo.rs": "0f746a953371e5635b96bc6ef034cf8cc74788eb9dd4974b1dfdc21e7a87ea1e",
+      "firmware/src/device/hal/ap33772s/tests.rs": "cb450a7523f6ca93bfab0602e8981de6b1e50baaf5aa123117f0bcd66bc54a07",
+      "firmware/src/device/hal/board.rs": "e97a7b085332b577aafbc7a80b0e8361d85dd7429f009454029fdf52cd110c09",
+      "firmware/src/device/hal/bq25622/mod.rs": "0833024a9a286ce7bbaced07726dd79ad197b7d2707e66f139a42140259a2113",
+      "firmware/src/device/hal/bq25622/tests.rs": "a3a53211b2691b8c261cf90fb6df64ccc42fa7d6ed3a06a5413edbc67eee8fd7",
+      "firmware/src/device/hal/bq25798/mod.rs": "45b3b7e6585b9ed8511c7bfb1634636c735bce4304c6a62ef8f2d11b0f2eebc6",
+      "firmware/src/device/hal/bq25798/registers.rs": "925f41c0de5e7fd36ed093e920807ed94a7a52d10422beeaa696c5ef56b77f3b",
+      "firmware/src/device/hal/bq25798/tests.rs": "d4c4295f9746030e5bfb25f328c394084fd30585a12847135d8af621cc9a9ada",
+      "firmware/src/device/hal/bus.rs": "cd12698049a9e163254b15060c5f8fea104226d8b860769e0cdfabee1408a340",
+      "firmware/src/device/hal/Cargo.toml": "fbcd9a4314f89207b399484015b72d038d8a28a8230cb2a859e0eb686635d1d9",
+      "firmware/src/device/hal/display/mod.rs": "190cb720c73a3778b70e3b3112621073c13fae2b395d3d0fc292b80771773ee8",
+      "firmware/src/device/hal/display/tests.rs": "febf7a1228d3a55eee8f438e73e5bab1337f196f4ba5e2ca09a2622bd7c61db6",
+      "firmware/src/device/hal/esp32s31/mod.rs": "d1c5afa1a6d3699a2fe2803f1186ffc1785b409b8c18dcc5924127f8d41d2e6e",
+      "firmware/src/device/hal/esp32s31/native.rs": "d095117cfb4252b25a1fbefeeea97b09ad2c5998c7c022cb005c53506071cd33",
+      "firmware/src/device/hal/esp32s31/tests.rs": "de0681aecaff3f8d3b98d83eb72aa222c196fe3eb5b801bb0109848b5532f24b",
+      "firmware/src/device/hal/interfaces.rs": "cbe73818b7ade54a0333c0078d4ca4ed3ec63443319a349da016c833cd960a03",
+      "firmware/src/device/hal/leds/mod.rs": "bace1935060c71f0872b2ee30cf69042f231947e490df820bca558f5e97d41dd",
+      "firmware/src/device/hal/leds/tests.rs": "86df98c911e403ccc45fb2b6c63bf8fcd62585ead42bc1f591b4cb04bbc6b635",
+      "firmware/src/device/hal/lp5813/config.rs": "8baaba90c602814f4b61677a0e2cee5cdfc39394bf244005936476e9ca8905d2",
+      "firmware/src/device/hal/lp5813/mod.rs": "982c870af6029cfa555f0e947174a75211aced2a15350d836a75fd1755f128c6",
+      "firmware/src/device/hal/lp5813/tests.rs": "5305b885d75d9b9ff635564a40a660c5f166cff015f84617e4972c220af6f028",
+      "firmware/src/device/hal/max16169/mod.rs": "71817be9cd0df234b238f389a701fcf8a5864fc2b71541bcd506c17a6e6a872d",
+      "firmware/src/device/hal/max16169/tests.rs": "2668ec837a944f094cb1a4a07913e4642289fae6cfcfa737c3fbc5c517c58e6b",
+      "firmware/src/device/hal/max17048/mod.rs": "079bd07f95bc8d5252be73d6f7a1ef42341b699a86ae9d15585c1a3ced8b4ffe",
+      "firmware/src/device/hal/max17048/tests.rs": "1b123d96dd20aa22d029f17f5e9620e6d0e98ed9dd96a9f993af3f853ae2093d",
+      "firmware/src/device/hal/max17320/mod.rs": "27ab10e49e7e64bd050e94ea13b5ba28f9d58f14a14da0bf07e6eae073802cf9",
+      "firmware/src/device/hal/max17320/registers.rs": "7396bf8d9e6576bda263f22e2dc57e9bbc3796d2c2a2a354ac948a1db7c4eaa7",
+      "firmware/src/device/hal/max17320/tests.rs": "b36201071927d9ba1b741a5b7700af5c4bf5713606a1a6b676ff7de124ec1c95",
+      "firmware/src/device/hal/memory/esp32.rs": "9f364e6ae57c09388045a07413ce67b8f46b3a0b313da3fffdd5bf2bd15882a4",
+      "firmware/src/device/hal/memory/mod.rs": "6bba428930e73b1a43ebd91b2e3bc1d069e6699627dce625f12dcc19ce4632de",
+      "firmware/src/device/hal/memory/tests.rs": "54064aa76631f571f47b497ab613cfbf10f9c63428be2e35a9b4c42561cfe800",
+      "firmware/src/device/hal/mod.rs": "d5a781c00436bfaa0302f663aeb0b91c4cb7aef7af31712ab2cc8187ec1cf326",
+      "firmware/src/device/hal/regulators/mod.rs": "879864f344a65c6d9755579e5e60a9085f90da00060dea0181b994926f370d04",
+      "firmware/src/device/hal/regulators/tests.rs": "322db5557b4820191ab21186413f28d03ddbd892781fe1f0ae13f3301bbd80d5",
+      "firmware/src/device/hal/sch16t/config.rs": "04a7119c0d82f9af801096d6c027797fef8317ce69a32a4e1935c9530c199c5d",
+      "firmware/src/device/hal/sch16t/mod.rs": "47cb1ea8bfed3c5c33608d4f864d5db287aebfe45c5ae989a2cb0ebc668e9e31",
+      "firmware/src/device/hal/sch16t/protocol.rs": "7ad72bb447dfaec409f2bd380b1f826eaec6594915e0f879f69b0337773f6c03",
+      "firmware/src/device/hal/sch16t/registers.rs": "f1233acb59aef72054038f0c08bc39d3d86e1cad249a6c438e6a37e9f9cf624e",
+      "firmware/src/device/hal/sch16t/tests.rs": "200f1bfc87771ac1292e8973e120c21eb02103ae75f718975dc5e1c0c3d68996",
+      "firmware/src/device/hal/sdcard/esp32.rs": "02570f3fc7c19eb20b0f30f2b30f0a2b8a2187f33949a0d4178d4dfed2716675",
+      "firmware/src/device/hal/sdcard/mod.rs": "adaeb32d2a555d482a820b19836d7e397dd26309792e172f9d27621b01e66672",
+      "firmware/src/device/hal/sdcard/tests.rs": "aa0adb5cab518df422c8f5817ca811fbe12cf7f28c16cd4781cf40d318158a93",
+      "firmware/src/device/hal/tca9536/mod.rs": "eb09b4652834a21d140c10ec1e4b5fb8d5e71743901a91989a5443639a954b6a",
+      "firmware/src/device/hal/tca9536/tests.rs": "864dfe59c75540ce27714b3680d390010f60f1d9d3c43cdfa035335913768ccc",
+      "firmware/src/device/hal/temperature/mod.rs": "515be826693a26c753c796aea1b2b750f950560cc95b144820210eaeddc350c6",
+      "firmware/src/device/hal/temperature/tests.rs": "d83d1806619939f698d6bd1cedae12fa0ee11f959810f5cecc835dd5d8825830",
+      "firmware/src/device/hal/tools/verify_sources.py": "d4c0daa2a083eba336b5802616f2050f939359f866b9181087020b377b4f13e7",
+      "firmware/src/device/hal/um980/commands.rs": "61f9a8f0b38ffedfbde0db3c2e30f51fa64e26ec7af14ae47c4566f65e443a28",
+      "firmware/src/device/hal/um980/framing.rs": "f3100bdbc9ffac7af3399511f4ec2871cc1c1165c2584c7f6fffd398e3350f27",
+      "firmware/src/device/hal/um980/messages.rs": "d521d7295c6ba3ddef7657e6ac093a6f1bff3af6da654726feb4fd19acd4f768",
+      "firmware/src/device/hal/um980/mod.rs": "1d8b1a8312e1b4e6c7d53a43cd449b337324a417f456df1dbef60de5aefec485",
+      "firmware/src/device/hal/um980/tests.rs": "653ba7a73f39a1aa166c46451b54c92b3cedee45c08bfbed5e89ee27930ae904",
+      "firmware/src/device/imu.rs": "847cfc6b25500e37bf254d5f78e31a637f97d0bfe335fc5654ce4651ce2047e8",
+      "firmware/src/device/interface.rs": "dd12da1d1f19e7f56f65d04c83f85f04b622319e33e83a370046260fd1ea76f0",
+      "firmware/src/device/interface_tests.rs": "aa819f356077172ff5ca2d48300bbbaa11bfbbed56ac9b3db9f44a07f7ac58c9",
+      "firmware/src/device/maintenance.rs": "224155a3265d97b98eb9a38830d0bcc50b79ace66a5e375720d7a313b4d0b5ed",
+      "firmware/src/device/mod.rs": "ba31683eccaf0e6daa21a685a9a7217d2bae753137f06a55a2b6fc69bf1a7a12",
+      "firmware/src/device/platform/capture.rs": "8dec85c820d390747551d159e95bfcc67b44506ce0b43b834998f4aa64f4cefb",
+      "firmware/src/device/platform/counter.rs": "f7541b2427590a9a2ef63b76f4013eab52f0dde5c754154497efcd9fdad9e88d",
+      "firmware/src/device/platform/cycles.rs": "9e3284dd4c4eb4ecdefcd313f89a8aadb6016e04772e642193ae5040f5667ab3",
+      "firmware/src/device/platform/display.rs": "f13b40ff890800713eafd9cb7d1f6daaba9c94afa64d6e748017304cf82e5c9b",
+      "firmware/src/device/platform/imu_spi.rs": "5ff69302aa2094936ed2aa429b0e8428e2a8a4b4c66504fed9afd8ac06f29929",
+      "firmware/src/device/platform/memory.rs": "71fbdbe30a2c9d129c9c6c36b09b64587227d10798d353ce29e92f20d90bc9dc",
+      "firmware/src/device/platform/mod.rs": "f1457ee25e4f73859b644225d5a058994e5fa27f7a57b9163f3549a1e8f6d0b3",
+      "firmware/src/device/power.rs": "8408c82e22b307bd6579401a0f2b53806f0bf99bd60b9f644a8a0cd00acd02b6",
+      "firmware/src/device/processing.rs": "34f467b49b2769fb087c8249692abcb6a1b82ccef9961aaf2811641d11c3de29",
+      "firmware/src/device/profile/configuration.rs": "f2e0f617d41bd2e94dbf5467165bc8f913a0c83af8de9a239028b8ca1c8f7614",
+      "firmware/src/device/profile/mod.rs": "f5605e0546324ab5d978a9b939f6a18e93bf2eb4b37104d909414b0f0426bf7e",
+      "firmware/src/device/sensors.rs": "005fbb1d8b5de61b1d88b7d1c3691331b2d5d22704f5b2b2ca17371454797f4f",
+      "firmware/src/device/storage.rs": "3480fdc5db1c11c2e222dfad79adf71553fb2453d2ffac4ca4e05c9f180e9e91",
+      "firmware/src/device/supervision.rs": "7a2c9e74771ac080a76336cc11c91095c914fbad99d01c35df19dd063bad4b5f",
+      "firmware/src/device/timing/clock.rs": "68818abcc2681623732b0f308e98df0aa1870813b799131c5f0661252ea01fca",
+      "firmware/src/device/timing/tests.rs": "7539a49822f98de285afe2c10afa86d8780597ef33b9fbba300e320a7ff587e6",
+      "firmware/src/device/timing.rs": "8b2d27634acb3e02053168f199686be8479b50676c1cfc928da5f7a91e84ba3f",
+      "firmware/src/device/usb.rs": "44325cf1799c097d910aa277902fa969dbefa7c03016f339cca18f016ea85192",
+      "firmware/src/globals.rs": "4a02f1783cf66637bff62d31dc68bdb9fed8e6890868e5b85f94492262e4d35c",
+      "firmware/src/lib.rs": "13183fb393f375915ffa79b0e038b35a0d67fff0b830bdd9508e3fe0f15c91a5",
+      "firmware/src/loader/boot.rs": "fdeb8f14f0e5b4a0a36680d5e3cf30504afe531c69c2cc6ff1f7f73dbd8a86f2",
+      "firmware/src/loader/layout.rs": "d4f64bbb3e935ebacfdbf598ff9c08b1d51f9dc81ab498f793721a668ffeacc9",
+      "firmware/src/loader/mod.rs": "562d734363234b00f40006e05df8376aa62068c0223dcc142014d4af05377d2a",
+      "firmware/src/loader/recovery.rs": "4c3c2cb6ebfc689847a407824e1041a2021046eb5236dda60fe6d375e624a777",
+      "firmware/src/loader/state.rs": "5808ea55a61a24143f6bdf6c8673283c5c13964f69b07f0d07f0e9f93ee8a050",
+      "firmware/src/loader/tests.rs": "2c140b95e0e2c3d24624f2f667b14d923e7819904a8ddfaf4259f1349cbc401d",
+      "firmware/src/loader/update.rs": "a70562cf8af2778cdeb50852c956ce048852ab0d400f2fc0b2b23ee30538e7cd",
+      "firmware/src/protocol.rs": "30a756e2f28c19569b71821e26cde2abfab4f3bdcad3035ced663c6b52317f13",
+      "firmware/src/runtime.rs": "28cad7b62afafd1eb103eb2a445884e28c9c3d0fbee718553cc7eb8711c02827",
+      "firmware/tools/bench_acceptance.py": "8d004e169cc6c419cd19b2b061173933b924252e555b115a9e6506fae5182ba1",
+      "firmware/tools/board-probe/Cargo.toml": "bee880a2cfd6c4310458269e9c0e9486e52fdcd1125a8bd01c24f094cf189af0",
+      "firmware/tools/board-probe/src/main.rs": "d02f677a8b911eb2769aaf32d98ba82ef168ec9a4f0df170964b260692405de5",
+      "firmware/tools/board_check.py": "b37ef819bf2eda0084da55e912cbb80eb3f0fb174ce41d9413f120f2bbf76715",
+      "firmware/tools/board_fault_check.py": "9810691854d6b86963ea498c3f9997483e4c1c4caf709e1c4ca0add52c91310c",
+      "firmware/tools/board_rollback_check.py": "9cae13caa492647aec37924886965b5ecaa3ba17f616fb65a374f05989f48c39",
+      "firmware/tools/requirements.txt": "0b81718d1cbe8a7696e45a9388c9205272b5e345cd79d0cf1ccfb7a9fd1925e9",
+      "firmware/tools/test_bench_acceptance.py": "169ca5cfe0ca3ec033664dff17254a1bc595678c3c5922285f7e55d9def1b301",
+      "firmware/tools/test_board_check.py": "dfa566f0f50c3d8407748225283cc455fd1449b2a7c42b5a6cb1cd10fb7c256f",
+      "firmware/tools/test_board_rollback_check.py": "f721373a4a2003a07d126a936d995b937a12b7e3a67af32662ab2ff974bb9985"
+    },
+    "validation": {
+      "firmware_host_tests_passed": 97,
+      "hal_host_tests_passed": 179,
+      "python_tests_passed": 25,
+      "release_build": "passed",
+      "release_clippy_no_deps_D_warnings": "passed"
+    },
+    "fixture": {
+      "usb_serial": "AEVIADEVBOARD",
+      "stationary": true,
+      "gnss_antenna": false,
+      "display": false,
+      "buttons": false,
+      "battery": false
+    },
+    "cargo_lock_sha256": "f0cc4a9778755b57d52677e9ba2bdda5178b0e595f97769904a6fc9a0805d741"
+  },
+  "stationary_soak": {
+    "passed": true,
+    "profile": "battery-free acquisition bench",
+    "qualified": false,
+    "stationary": true,
+    "polls": 360,
+    "failures": [],
+    "limitations": [
+      "No GNSS/PPS lock or navigation workload requirement",
+      "No display, button, battery, SD or radio qualification",
+      "No electrical timing, calibration or accuracy qualification"
+    ],
+    "power_diagnostics": {
+      "polls": 360,
+      "baseline": {
+        "attempts": 29,
+        "successes": 29,
+        "last_success_us": 30084909,
+        "stage_failures": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "last_failure_stages": 0,
+        "last_failure": null,
+        "failed_part_info": null,
+        "failed_pre_control": null,
+        "failed_post_control": null,
+        "failed_charger_status": null
+      },
+      "final": {
+        "attempts": 1778,
+        "successes": 1778,
+        "last_success_us": 1840115335,
+        "stage_failures": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "last_failure_stages": 0,
+        "last_failure": null,
+        "failed_part_info": null,
+        "failed_pre_control": null,
+        "failed_post_control": null,
+        "failed_charger_status": null
+      }
+    },
+    "gnss_transport": {
+      "polls": 360,
+      "port_counter_deltas": {
+        "COM1": {
+          "rx_bytes": 55260,
+          "rx_errors": 0,
+          "fifo_overflows": 0,
+          "glitches": 0,
+          "framing_errors": 0,
+          "parity_errors": 0,
+          "other_errors": 0
+        },
+        "COM2": {
+          "rx_bytes": 12829420,
+          "rx_errors": 0,
+          "fifo_overflows": 0,
+          "glitches": 0,
+          "framing_errors": 0,
+          "parity_errors": 0,
+          "other_errors": 0
+        }
+      },
+      "baseline": {
+        "ports": [
+          {
+            "rx_bytes": 921,
+            "rx_errors": 2,
+            "fifo_overflows": 2,
+            "glitches": 0,
+            "framing_errors": 0,
+            "parity_errors": 0,
+            "other_errors": 0
+          },
+          {
+            "rx_bytes": 144738,
+            "rx_errors": 28,
+            "fifo_overflows": 2,
+            "glitches": 18,
+            "framing_errors": 8,
+            "parity_errors": 0,
+            "other_errors": 0
+          }
+        ],
+        "last_rx_error": {
+          "port": 2,
+          "code": 1,
+          "received_us": 12823937
+        }
+      },
+      "final": {
+        "ports": [
+          {
+            "rx_bytes": 56181,
+            "rx_errors": 2,
+            "fifo_overflows": 2,
+            "glitches": 0,
+            "framing_errors": 0,
+            "parity_errors": 0,
+            "other_errors": 0
+          },
+          {
+            "rx_bytes": 12974158,
+            "rx_errors": 28,
+            "fifo_overflows": 2,
+            "glitches": 18,
+            "framing_errors": 8,
+            "parity_errors": 0,
+            "other_errors": 0
+          }
+        ],
+        "last_rx_error": {
+          "port": 2,
+          "code": 1,
+          "received_us": 12823937
+        }
+      }
+    },
+    "duration_seconds": 1810.00517,
+    "device_uptime_seconds": 1840.573621,
+    "imu_samples_observed": 2631521,
+    "imu_rate_hz": {
+      "minimum": 1453.3391929222084,
+      "maximum": 1454.469856449459
+    },
+    "acceleration_norm_mps2": {
+      "minimum": 9.667388721560247,
+      "maximum": 10.104891773008704
+    },
+    "angular_rate_norm_rps": {
+      "minimum": 0.00045203059266857716,
+      "maximum": 0.13732232813379258
+    },
+    "counter_deltas": {
+      "imu_errors": 0,
+      "imu_drops": 0,
+      "gnss_errors": 0,
+      "gnss_drops": 0,
+      "gnss_uart_errors": 0,
+      "gnss_parse_errors": 0
+    },
+    "lifetime_max_read_latency_us": 18296,
+    "lifetime_queue_high_water": {
+      "imu": 5,
+      "gnss": 0
+    },
+    "baseline_reset": {
+      "reset_reason": 3,
+      "panic": null
+    },
+    "final_phase": "Degraded",
+    "final_engine_error": null,
+    "lifetime_maximum_step_us": 361,
+    "final_gnss": {
+      "config_verified": true,
+      "config_queries": 62,
+      "config_timeouts": 1,
+      "navigation_time_ready": false,
+      "last_pps_quality": 0,
+      "last_parser_error": null
+    },
+    "started_utc": "2026-11-10T10:47:24.339455+00:00",
+    "serial": "AEVIADEVBOARD",
+    "requested_seconds": 1810.0,
+    "settle_seconds": 30.0,
+    "transport_requested": true,
+    "power_diagnostics_requested": true,
+    "journal": "build\\bench\\diagnostic-soak.frames.jsonl",
+    "journal_session": "2026-11-10T10:47:24.339476+00:00",
+    "capture_sha256": "d0155620f87f059d68700d532874aa6af326cdeb59e068cc96f81b2071a18bd5",
+    "decoder_sha256": "d5aafab8151c04feb895fe45c638d8d62296a58ead50490768ac03a5f98d9267",
+    "uploaded_image_sha256": "cb0f7a555710c85d9daa9d4ad387d4e5546044f5af01c5426f241be6088bd1e8"
+  },
+  "usb_faults": {
+    "passed": true,
+    "replies": 36
+  },
+  "rollback": {
+    "passed": true,
+    "rollback_passed": true,
+    "restore_passed": true,
+    "candidate_sha256": "ba962563ed7d0999a47b7417e4ecb21f6f29786163c7ade4ed6a0f1688ea67db",
+    "restore_sha256": "cb0f7a555710c85d9daa9d4ad387d4e5546044f5af01c5426f241be6088bd1e8",
+    "expected_panic": {
+      "file_hash": 907562743,
+      "line": 98,
+      "startup_stage": 1,
+      "core": 0
+    },
+    "errors": []
+  },
+  "rollback_observed_panic": {
+    "file_hash": 907562743,
+    "line": 98,
+    "column": 9,
+    "core": 0,
+    "startup_stage": 1
+  },
+  "post_restore": {
+    "passed": true,
+    "profile": "battery-free acquisition bench",
+    "qualified": false,
+    "stationary": true,
+    "polls": 59,
+    "failures": [],
+    "limitations": [
+      "No GNSS/PPS lock or navigation workload requirement",
+      "No display, button, battery, SD or radio qualification",
+      "No electrical timing, calibration or accuracy qualification"
+    ],
+    "power_diagnostics": {
+      "polls": 59,
+      "baseline": {
+        "attempts": 45,
+        "successes": 45,
+        "last_success_us": 46692593,
+        "stage_failures": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "last_failure_stages": 0,
+        "last_failure": null,
+        "failed_part_info": null,
+        "failed_pre_control": null,
+        "failed_post_control": null,
+        "failed_charger_status": null
+      },
+      "final": {
+        "attempts": 103,
+        "successes": 103,
+        "last_success_us": 106731717,
+        "stage_failures": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "last_failure_stages": 0,
+        "last_failure": null,
+        "failed_part_info": null,
+        "failed_pre_control": null,
+        "failed_post_control": null,
+        "failed_charger_status": null
+      }
+    },
+    "gnss_transport": {
+      "polls": 59,
+      "port_counter_deltas": {
+        "COM1": {
+          "rx_bytes": 1842,
+          "rx_errors": 0,
+          "fifo_overflows": 0,
+          "glitches": 0,
+          "framing_errors": 0,
+          "parity_errors": 0,
+          "other_errors": 0
+        },
+        "COM2": {
+          "rx_bytes": 425280,
+          "rx_errors": 0,
+          "fifo_overflows": 0,
+          "glitches": 0,
+          "framing_errors": 0,
+          "parity_errors": 0,
+          "other_errors": 0
+        }
+      },
+      "baseline": {
+        "ports": [
+          {
+            "rx_bytes": 1842,
+            "rx_errors": 2,
+            "fifo_overflows": 2,
+            "glitches": 0,
+            "framing_errors": 0,
+            "parity_errors": 0,
+            "other_errors": 0
+          },
+          {
+            "rx_bytes": 260097,
+            "rx_errors": 17,
+            "fifo_overflows": 2,
+            "glitches": 11,
+            "framing_errors": 4,
+            "parity_errors": 0,
+            "other_errors": 0
+          }
+        ],
+        "last_rx_error": {
+          "port": 2,
+          "code": 1,
+          "received_us": 12798551
+        }
+      },
+      "final": {
+        "ports": [
+          {
+            "rx_bytes": 3684,
+            "rx_errors": 2,
+            "fifo_overflows": 2,
+            "glitches": 0,
+            "framing_errors": 0,
+            "parity_errors": 0,
+            "other_errors": 0
+          },
+          {
+            "rx_bytes": 685377,
+            "rx_errors": 17,
+            "fifo_overflows": 2,
+            "glitches": 11,
+            "framing_errors": 4,
+            "parity_errors": 0,
+            "other_errors": 0
+          }
+        ],
+        "last_rx_error": {
+          "port": 2,
+          "code": 1,
+          "received_us": 12798551
+        }
+      }
+    },
+    "duration_seconds": 59.999187,
+    "device_uptime_seconds": 106.791016,
+    "imu_samples_observed": 87230,
+    "imu_rate_hz": {
+      "minimum": 1452.910907963756,
+      "maximum": 1454.7999722344339
+    },
+    "acceleration_norm_mps2": {
+      "minimum": 9.746201402782214,
+      "maximum": 9.881776500995418
+    },
+    "angular_rate_norm_rps": {
+      "minimum": 0.0004736590454634445,
+      "maximum": 0.03108994759850703
+    },
+    "counter_deltas": {
+      "imu_errors": 0,
+      "imu_drops": 0,
+      "gnss_errors": 0,
+      "gnss_drops": 0,
+      "gnss_uart_errors": 0,
+      "gnss_parse_errors": 0
+    },
+    "lifetime_max_read_latency_us": 17855,
+    "lifetime_queue_high_water": {
+      "imu": 4,
+      "gnss": 0
+    },
+    "baseline_reset": {
+      "reset_reason": 3,
+      "panic": null
+    },
+    "final_phase": "Degraded",
+    "final_engine_error": null,
+    "lifetime_maximum_step_us": 361,
+    "final_gnss": {
+      "config_verified": true,
+      "config_queries": 5,
+      "config_timeouts": 1,
+      "navigation_time_ready": false,
+      "last_pps_quality": 0,
+      "last_parser_error": null
+    },
+    "started_utc": "2026-11-10T11:20:41.545253+00:00",
+    "serial": "AEVIADEVBOARD",
+    "requested_seconds": 60.0,
+    "settle_seconds": 0,
+    "transport_requested": true,
+    "power_diagnostics_requested": true,
+    "journal": "build\\bench\\post-restore.frames.jsonl",
+    "journal_session": "2026-11-10T11:20:41.545271+00:00",
+    "capture_sha256": "24da05b2570a82c974bda36884a41be40b1e84b731941b5dcf04cb4b252c89cc",
+    "decoder_sha256": "d5aafab8151c04feb895fe45c638d8d62296a58ead50490768ac03a5f98d9267",
+    "uploaded_image_sha256": null
+  },
+  "open_observations": [
+    "One earlier charger-policy verification failure recovered before the next poll; its original cause was not retained. It has not been established as resolved."
+  ],
+  "scope": "USB-powered stationary acquisition bench; measurements remain unqualified"
+}

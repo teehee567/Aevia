@@ -72,6 +72,12 @@ espflash flash --partition-table partitions.csv \
   ../target/riscv32imafc-unknown-none-elf/release/firmware
 ```
 
+The `espflash flash` command uses the MCU's ROM download connection. An already
+installed application on J6 uses the inactive-slot USB updater: generate an
+application `.bin` with `espflash save-image`, then pass it to `board_check.py
+--image` with the matching host decoder. The Windows build/upload commands are
+in the [evaluation procedure](docs/evaluation.md#reproducible-stationary-bench-gate).
+
 Use J6 (USB-HS) for the binary command connection. A new installation starts
 in recovery. Send `Request::System(Command::Run)` to enter the application.
 For initial bring-up, that complete encoded frame is `01 02 02 00` in hex;
@@ -195,9 +201,11 @@ implementation. See [evaluation procedure](docs/evaluation.md) and the
 
 ## Connected board configuration and diagnostics
 
-The current connected setup has no panel, no battery and no GNSS antenna.
-`device/board.rs` sets `DISPLAY_FITTED=false` and `BATTERY_FITTED=false`:
-no panel task or battery-gauge polling runs. Charging remains disabled in both
+The current connected setup has no panel, buttons, battery or GNSS antenna.
+`device/board.rs` sets `DISPLAY_FITTED=false`, `BUTTONS_FITTED=false` and
+`BATTERY_FITTED=false`: no panel task, button polling or battery-gauge polling
+runs. Missing buttons report unavailable rather than an unpressed control.
+Charging remains disabled in both
 application and recovery. Enable the corresponding fitted-accessory flag before
 using that accessory. Missing navigation/PPS lock without an antenna is expected;
 it must not cause receiver reset loops or manufactured navigation output.
@@ -210,9 +218,19 @@ Additional device commands append to the existing schema:
   identity and raw startup status. Persistent faults never become healthy data.
 - `ResetStatus` (index 8): raw S31 reset reason and checksum-validated retained
   panic source hash/line/core/stage. Also available in recovery.
+- `GnssTransportStatus` (index 9): independent COM1/COM2 received-byte counts,
+  UART error categories and the last error's port/time. The response is appended
+  at index 8. Overflow, glitch, framing and parity faults remain distinguishable
+  from parser failures; successful traffic never erases the retained evidence.
+- `PowerDiagnostics` (index 10, response index 9): retained charger failure
+  stages, register/operation and concrete I2C cause, with failed control/status
+  readbacks and subsequent successful-attempt counts. Also available in recovery.
+  Timeout, NACK and a policy mismatch remain observable after verification
+  recovers. Existing `PowerStatus` is unchanged.
 
 Recovery mode intentionally leaves application LEDs off. Send Run to start the
-application. Watchdog eligibility follows worker and acquisition progress with
+application. Watchdog eligibility follows worker, capture-maintenance, GNSS-owner
+and IMU-owner progress with
 bounded startup grace; it does not require satellites or a valid navigation fix.
 OTA candidates start NEW and require sustained worker/capture health, advancing
 raw IMU samples and a live GNSS owner before confirmation. A fix is not required.

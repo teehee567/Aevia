@@ -173,6 +173,9 @@ pub enum SentenceKind {
     Nmea,
     /// Existing UM980 CONFIG response evidence XORs the leading '$' as well.
     UnicoreConfig,
+    /// UM980 command acknowledgements also XOR the leading '$'. They do not
+    /// establish any configuration readback or PPS timing property.
+    UnicoreCommand,
 }
 
 /// Checked ASCII sentence without its optional trailing CR/LF.
@@ -203,6 +206,8 @@ impl<'a> AsciiSentence<'a> {
         }
         let kind = if bytes.starts_with(b"$CONFIG,") {
             SentenceKind::UnicoreConfig
+        } else if bytes.starts_with(b"$command,") {
+            SentenceKind::UnicoreCommand
         } else {
             SentenceKind::Nmea
         };

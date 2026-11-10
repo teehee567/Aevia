@@ -86,10 +86,11 @@ need their own application behavior and throughput evaluation.
 
 ## Connected setup
 
-The current board has no display, battery or GNSS antenna. Panel rendering and
-battery-gauge polling are disabled by explicit fitted-accessory flags in board.rs.
-Panel readiness and battery values remain unavailable. LED/button/charger health
-are still observed. No antenna means trusted GNSS time, PPS lock and navigation
+The current board has no display, battery, buttons or GNSS antenna. Panel rendering,
+battery-gauge polling and button-expander polling are disabled by explicit
+`DISPLAY_FITTED`, `BATTERY_FITTED` and `BUTTONS_FITTED` flags in board.rs.
+Panel readiness, button state and battery values remain unavailable. LED/charger
+health are still observed. No antenna means trusted GNSS time, PPS lock and navigation
 output are expected to remain unavailable; verified CONFIG readback can still be
 tested independently with GnssStatus. Do not count those missing signals as a
 failed cold-start recovery test, or claim an antenna-free run validates fusion.
@@ -104,6 +105,124 @@ unqualified measurements until installation/calibration evidence is available.
 An antenna-free run exercises raw acquisition and queue draining, but does not
 exercise normal estimator stepping. Navigating throughput, PPS timing and accuracy
 remain separate acceptance gates.
+
+### Reproducible stationary bench gate
+
+Build the decoder with the Windows host target (the decoder enables the host's
+standard-library critical-section implementation):
+
+The host scripts require Python and the pinned serial dependency in
+`tools/requirements.txt`. Install it into a local environment, for example with
+`python -m pip install -r firmware/tools/requirements.txt` from the repository
+root. The commands below use `python` for that environment's interpreter.
+
+```powershell
+# From firmware/
+cargo build --release --locked
+New-Item -ItemType Directory -Force ../build/bench | Out-Null
+espflash save-image --chip esp32s31 --flash-size 16mb `
+  --partition-table partitions.csv --target-app-partition slot0 `
+  ../target/riscv32imafc-unknown-none-elf/release/firmware ../build/bench/firmware.bin
+cargo build --manifest-path tools/board-probe/Cargo.toml --offline `
+  --target x86_64-pc-windows-msvc --target-dir ../target/board-tools `
+  --config 'unstable.build-std=[]'
+# From the repository root, using a Python environment with pyserial installed
+python firmware/tools/board_check.py `
+  --decoder target/board-tools/x86_64-pc-windows-msvc/debug/aevia-board-decode.exe `
+  --image build/bench/firmware.bin `
+  --run --settle 30 --seconds 1810 --interval 5 --bench --stationary `
+  --transport --power-diagnostics --fail-fast `
+  --output build/bench/stationary.json
+```
+
+The device stays on a stationary desk, powered from USB. `--bench` writes a
+companion `stationary.summary.json` verdict and exits unsuccessfully if a gate
+fails. Raw frames and typed responses remain in the original JSON, including
+partial captures on failure or interruption. A failed query retains its received
+bytes and error even if framing, decoding or response validation fails. The final
+poll occurs at the end of the requested duration. The verdict records actual observed device uptime and
+duration, decoder and uploaded-image digests, rates, queue high-water marks and
+initial reset provenance. An already installed image has no inferred image hash.
+`--transport` requires the new matching firmware and decoder and adds raw UART
+COM1/COM2 byte/error counters. The verdict reports per-port counter deltas, rejects
+new UART errors and requires COM2 received bytes to advance on every poll even
+without an antenna. COM1 may remain idle between CONFIG queries. The flag is
+optional so older captures and firmware remain usable; captured transport data
+automatically participates in offline acceptance when present.
+
+An append-only `stationary.frames.jsonl` journal is flushed after each received
+frame, before decoding, and after each decoded/error result. Session IDs and
+record indices relate those events. This preserves received data if the host
+process is terminated before its final JSON write. Reusing the same output path
+appends another session to its journal. `--fail-fast` compares health after each
+complete poll once two polls exist and ends on the first failed gate; the ongoing
+checks do not require the unfinished requested soak duration. `--power-diagnostics`
+retains charger failure-stage and bus-error detail and includes its baseline/final
+values in the verdict; PowerStatus continues to govern acceptance.
+
+For scripts importing `Probe`, supply `args.output` to enable its journal and call
+`probe.close()` in a `finally` block to close USB, decoder and journal handles.
+`probe.query("power_diagnostics", bytes([1, 10]))` also works in recovery. Omitting
+`args.output` keeps journaling optional for read-only or mocked callers.
+
+The gate requires advancing IMU counts at 1350..1600 Hz on every poll interval,
+continuous IMU readiness without reinitialization or cycle-clock fallback, no new
+acquisition/transfer/parser/processing errors, CONFIG timeouts or queue drops, no
+retained worker failure or panic, stable reset provenance, fresh worker and
+peripheral maintenance, verified charger policy and verified GNSS PPS CONFIG
+readback. It accepts unavailable satellites, PPS lock and navigation. Existing
+startup error totals and lifetime latency/high-water maxima are recorded; only
+changes to error counters during observation fail the gate. Hardware timing must
+still be measured independently. `--stationary` additionally checks gravity
+magnitude at 8.8..10.8 m/s2 and angular-rate magnitude below 0.15 rad/s. These broad
+orientation-independent bounds detect gross faults; they do not calibrate sensors.
+Missing display, buttons and battery require no actions or measurements.
+Five-second USB snapshots do not characterize sensor noise. The observed gyro
+spread on this desk exceeds what intrinsic noise density alone would explain;
+use rigid, vibration-isolated full-rate stationary captures and temperature
+tracking before making noise, bias or timing-accuracy claims. The configured
+LPF3 bandwidths are 280 Hz for gyro and 240 Hz for acceleration, with the
+datasheet's Dyn1 scaling; this functional gate does not narrow those filters.
+
+Re-evaluate the retained evidence without a board, requiring the full 30 minutes:
+
+```powershell
+python firmware/tools/bench_acceptance.py build/bench/stationary.json `
+  --minimum-seconds 1800 --stationary --output build/bench/review.json
+python -m unittest discover -s firmware/tools -p 'test_*.py' -v
+```
+
+A short capture uses the same checks but establishes only its recorded duration.
+Record a separate antenna-backed navigation soak and the physical fault/recovery
+runs above before expanding acceptance to those operating conditions.
+
+The USB/loader rejection check is also reproducible. Run it only after the
+installed application has passed startup and its trial confirmation window.
+It writes the inactive slot's first sector, rejects malformed or incomplete
+uploads, and returns to the original application without selecting a candidate:
+
+```powershell
+python firmware/tools/board_fault_check.py `
+  --decoder target/board-tools/x86_64-pc-windows-msvc/debug/aevia-board-decode.exe `
+  --image build/bench/firmware.bin --output build/bench/faults.json
+```
+
+This checks recovery with the acquisition worker live, charging-disabled
+readback in recovery, empty/unknown/trailing/malformed/oversized commands,
+coalesced and fragmented frames, invalid upload sizes/headers/order/hashes,
+Abort, malformed requests during an upload, and disconnect cancellation.
+Reprogram the inactive slot with a valid image afterwards if both slots must
+remain bootable. It does not exercise electrical power cuts or pre-Rust rollback.
+
+`tools/board_rollback_check.py` tests a deliberately staged application panic and
+then restores a supplied healthy image. Its candidate must reach USB startup and
+panic on core 0 at stage 1, before application initialization or trial
+confirmation. Supply the exact source hash and panic line for that build. The
+fixture verifies the retained panic after automatic fallback, advancing IMU
+samples and power policy, and a clean normal-image restoration. It retains both
+image digests and the complete wire journal. The
+[connected-board record](bench-readiness-2026-11-10.md) documents the tested
+candidate, restored image and observed results.
 
 ## Release decision
 
