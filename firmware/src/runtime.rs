@@ -2,7 +2,10 @@
 
 use crate::{
     commands::Response as SystemResponse,
-    device::{self, memory, processing, sensors, storage::Storage, usb},
+    device::{
+        self, board, display, maintenance, power, processing, sensors, storage::Storage,
+        supervision, usb,
+    },
     loader::{
         boot, recovery,
         state::Mode,
@@ -20,7 +23,11 @@ use esp_hal::{
     system::Stack,
     timer::timg::{TimerGroup, Wdt},
 };
+use esp_rtos::embassy::InterruptExecutor;
 use static_cell::{ConstStaticCell, StaticCell};
+
+static ACQUISITION: StaticCell<InterruptExecutor<2>> = StaticCell::new();
+static GNSS_ACQUISITION: StaticCell<InterruptExecutor<3>> = StaticCell::new();
 
 static USB_BUFFERS: StaticCell<usb::Buffers<'static>> = StaticCell::new();
 static UPDATER: StaticCell<Updates> = StaticCell::new();
@@ -41,47 +48,66 @@ pub(crate) fn set_startup_stage(stage: u8) {
 }
 
 pub async fn run(spawner: Spawner) -> ! {
-    let peripherals = esp_hal::init(esp_hal::Config::default().with_cpu_clock(CpuClock::max()));
+    let board = board::Board::new(esp_hal::init(
+        esp_hal::Config::default().with_cpu_clock(CpuClock::max()),
+    ));
     esp_alloc::heap_allocator!(#[esp_hal::ram(reclaimed)] size: 8176);
-    let timers = TimerGroup::new(peripherals.TIMG0);
+    let timers = TimerGroup::new(board.timers);
     let watchdog = boot::watchdog(timers.wdt);
-    esp_rtos::start(timers.timer0, peripherals.FROM_CPU_INTR0);
+    esp_rtos::start(timers.timer0, board.scheduler_interrupt);
+    // SWI0/1 belong to the scheduler. Keep blocking power I/O on the main
+    // executor, below the SDK's priority-1 timer that wakes acquisition waits.
+    let acquisition = ACQUISITION
+        .init(InterruptExecutor::new(board.acquisition_interrupt))
+        .start(board::ACQUISITION_PRIORITY);
+    let gnss_acquisition = GNSS_ACQUISITION
+        .init(InterruptExecutor::new(board.gnss_interrupt))
+        .start(board::GNSS_PRIORITY);
 
     let updater = UPDATER.init_with(|| {
-        Storage::new(peripherals.FLASH)
-            .and_then(|(storage, running)| Updater::new(storage, running))
+        Storage::new(board.flash).and_then(|(storage, running)| Updater::new(storage, running))
     });
     let mode = match updater.as_mut() {
         Ok(updater) => updater.startup(boot::fault_reset()),
         Err(error) => Err(*error),
     };
+    if updater
+        .as_ref()
+        .is_ok_and(|updater| updater.rollback_requested())
+    {
+        esp_hal::system::software_reset();
+    }
+    // A rollback handoff must leave the retained panic for the image that
+    // actually serves USB. Consume it only after the immediate reboot check.
+    crate::bootdiagnostics::initialize();
     let buffers = USB_BUFFERS.init_with(usb::Buffers::new);
-    let (usb_device, serial) =
-        usb::init(peripherals.USB_HS, buffers, !matches!(mode, Ok(Mode::App)));
+    let (usb_device, serial) = usb::init(board.usb, buffers, !matches!(mode, Ok(Mode::App)));
     spawner.spawn(serve(serial, updater, mode, watchdog).unwrap());
     spawner.spawn(usb_task(usb_device).unwrap());
+    let mut power_bus = board.power_bus;
+    // Apply the battery-free bench policy in recovery as well as application
+    // mode. The subsequent bus owner retries and checks readback every second.
+    power::maintain(&mut power_bus);
     if matches!(mode, Ok(Mode::App)) {
         STARTUP_STAGE.store(0, Ordering::Release);
         // Enumerate USB and service commands before touching application hardware.
         Timer::after_secs(2).await;
         STARTUP_STAGE.store(1, Ordering::Release);
         Timer::after_millis(50).await;
-        let psram = esp_hal::psram::Psram::new(
-            peripherals.PSRAM,
-            esp_hal::psram::PsramConfig {
-                timing: esp_hal::psram::PsramTimingParams::MHZ_125,
-                ..Default::default()
-            },
+        let application = board.application.initialize();
+        let memory = application.memory;
+        spawner.spawn(
+            maintenance::task(power_bus, application.maintenance).expect("maintenance task"),
         );
-        let (address, len) = psram.raw_parts();
-        let address = address as usize;
+        if board::DISPLAY_FITTED {
+            spawner.spawn(display::task(application.display).expect("display task"));
+        }
         STARTUP_STAGE.store(2, Ordering::Release);
         Timer::after_millis(50).await;
-        enable_second_core_cache();
         // This range belongs exclusively to the estimator, never the heap/DMA.
         esp_rtos::start_second_core(
-            peripherals.CPU_CTRL,
-            peripherals.FROM_CPU_INTR1,
+            application.cpu,
+            application.worker_interrupt,
             ESTIMATOR_STACK.take(),
             move || {
                 // Let core 0 finish peripheral setup before the worker touches
@@ -93,71 +119,48 @@ pub async fn run(spawner: Spawner) -> ! {
                 STARTUP_STAGE.store(5, Ordering::Release);
                 // Core 1's ROM PMA is RX over flash AND PSRAM. Restore the
                 // tested board-specific RW split before the first PSRAM store.
-                if memory::bring_up(psram).is_err() {
-                    device::interface::publish(device::interface::Snapshot {
-                        updated_us: Instant::now().as_micros(),
-                        phase: device::interface::Phase::Failed,
-                        processing_errors: 1,
-                        error_kind: Some(device::interface::EngineError::Resources),
-                        ..Default::default()
-                    });
-                    STARTUP_STAGE.store(11, Ordering::Release);
-                    return;
-                }
+                let (address, len) = match memory.prepare() {
+                    Ok(region) => region,
+                    Err(_) => {
+                        device::interface::publish(device::interface::Snapshot {
+                            updated_us: Instant::now().as_micros(),
+                            phase: device::interface::Phase::Failed,
+                            processing_errors: 1,
+                            error_kind: Some(device::interface::EngineError::Resources),
+                            ..Default::default()
+                        });
+                        STARTUP_STAGE.store(11, Ordering::Release);
+                        return;
+                    }
+                };
                 unsafe { processing::run(address, len) }
             },
         );
         STARTUP_STAGE.store(3, Ordering::Release);
         Timer::after_millis(50).await;
-        sensors::start(
-            spawner,
-            sensors::Board {
-                uart1: peripherals.UART1,
-                uart2: peripherals.UART2,
-                spi2: peripherals.SPI2,
-                spi3: peripherals.SPI3,
-                i2c0: peripherals.I2C0,
-                gpio4: peripherals.GPIO4,
-                gpio6: peripherals.GPIO6,
-                gpio7: peripherals.GPIO7,
-                gpio8: peripherals.GPIO8,
-                gpio9: peripherals.GPIO9,
-                gpio10: peripherals.GPIO10,
-                gpio11: peripherals.GPIO11,
-                gpio12: peripherals.GPIO12,
-                gpio13: peripherals.GPIO13,
-                gpio14: peripherals.GPIO14,
-                gpio15: peripherals.GPIO15,
-                gpio16: peripherals.GPIO16,
-                gpio17: peripherals.GPIO17,
-                gpio18: peripherals.GPIO18,
-                gpio19: peripherals.GPIO19,
-                gpio39: peripherals.GPIO39,
-                gpio42: peripherals.GPIO42,
-                gpio44: peripherals.GPIO44,
-                gpio46: peripherals.GPIO46,
-                gpio47: peripherals.GPIO47,
-                gpio48: peripherals.GPIO48,
-                gpio49: peripherals.GPIO49,
-            },
-        );
+        // Release the worker before acquisition: its destructive PSRAM check
+        // and workspace copy must not compete with DRDY deadlines or fill the
+        // bounded measurement queues before their consumer can run.
         STARTUP_STAGE.store(4, Ordering::Release);
+        let _ = with_timeout(Duration::from_secs(20), async {
+            loop {
+                if matches!(startup_stage(), 10 | 11)
+                    || matches!(
+                        device::interface::snapshot().phase,
+                        device::interface::Phase::Failed
+                    )
+                {
+                    break;
+                }
+                Timer::after_millis(10).await;
+            }
+        })
+        .await;
+        sensors::start(spawner, acquisition, gnss_acquisition, application.sensors);
+    } else {
+        spawner.spawn(power::recovery_task(power_bus).unwrap());
     }
     core::future::pending().await
-}
-
-/// The single-core bootloader can leave CPU1's instruction bus shut. The S31
-/// HAL starts CPU1 at a flash address, so open its cache bus before releasing it.
-/// Mirrors ESP-IDF cache_ll_l1_enable_bus(1, CACHE_BUS_IBUS0).
-#[esp_hal::ram]
-fn enable_second_core_cache() {
-    // SAFETY: CPU1 is still held in reset. Only its instruction-cache bus gate
-    // is changed; CPU0's live cache and the shared data-cache settings remain.
-    let cache = unsafe { &*esp32s31::CACHE::ptr() };
-    cache
-        .l1_icache_ctrl()
-        .modify(|_, w| w.l1_icache_shut_ibus1().clear_bit());
-    core::sync::atomic::fence(Ordering::SeqCst);
 }
 
 #[embassy_executor::task]
@@ -177,8 +180,24 @@ async fn serve(
     let mut packet = [0; 512];
     let mut output = [0; 512];
     let mut last_data = Instant::now();
+    let mut monitor = supervision::Monitor::new(last_data.as_micros());
+    let application = matches!(mode, Ok(Mode::App));
+    let mut confirmed = false;
+    let mut confirm_after_us = 0;
     loop {
-        watchdog.feed();
+        let now = Instant::now().as_micros();
+        let readings = supervision::readings();
+        if monitor.healthy(now, application, startup_stage(), readings) {
+            watchdog.feed();
+        }
+        if application && !confirmed && now >= confirm_after_us && monitor.confirmable(now) {
+            // Confirmation performs no sensor work and is idempotent. Leave
+            // an unconfirmed trial recoverable if flash confirmation fails.
+            if let Ok(updater) = updater.as_mut() {
+                confirmed = updater.confirm_app().is_ok();
+                confirm_after_us = now.saturating_add(3_000_000);
+            }
+        }
         let received = select3(
             control.control_changed(),
             receiver.read_packet(&mut packet),
@@ -212,7 +231,14 @@ async fn serve(
                     Err(error) => Err(error),
                 }
                 .map(Response::System),
-                (Ok(_), Ok(Request::Device(command))) if matches!(mode, Ok(Mode::App)) => {
+                (Ok(_), Ok(Request::Device(command)))
+                    if matches!(mode, Ok(Mode::App))
+                        || matches!(
+                            command,
+                            device::interface::DeviceCommand::PowerStatus
+                                | device::interface::DeviceCommand::ResetStatus
+                        ) =>
+                {
                     Ok(Response::Device(device::interface::command(command)))
                 }
                 (Err(error), _) => Err(*error),

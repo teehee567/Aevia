@@ -8,7 +8,8 @@ use firmware::{loader, runtime};
 esp_bootloader_esp_idf::esp_app_desc!();
 
 #[panic_handler]
-fn panic(_: &core::panic::PanicInfo) -> ! {
+fn panic(info: &core::panic::PanicInfo) -> ! {
+    firmware::bootdiagnostics::record_panic(info);
     loader::boot::enter_recovery()
 }
 

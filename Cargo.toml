@@ -1,8 +1,10 @@
 [workspace]
 resolver = "3"
+exclude = ["firmware/src/device/hal"]
 members = [
     "app/rust",
-    "firmware",
+    # Exact glob prevents Cargo treating nested HAL as an explicit member.
+    "firmwar[e]",
     "traj",
 ]
 

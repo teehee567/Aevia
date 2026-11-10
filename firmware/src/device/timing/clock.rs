@@ -1,26 +1,6 @@
 use super::TimingStatus;
 
-pub(crate) const PPS_COMMAND: &[u8] = b"CONFIG PPS ENABLE GPS POSITIVE 100000 1000 0 0\r\n";
-
-/// N4 CONFIG replies use an XOR over the complete body, including '$'.
-/// Verify all timing parameters, including RF/user delays absent in PPSSTATUS.
-pub(crate) fn valid_pps_config(line: &[u8]) -> bool {
-    let line = line.strip_suffix(b"\r").unwrap_or(line);
-    let Some(star) = line.iter().rposition(|byte| *byte == b'*') else {
-        return false;
-    };
-    if line.len() != star + 3 {
-        return false;
-    }
-    let checksum = core::str::from_utf8(&line[star + 1..])
-        .ok()
-        .and_then(|hex| u8::from_str_radix(hex, 16).ok());
-    checksum == Some(line[..star].iter().fold(0, |xor, byte| xor ^ byte))
-        && line[..star].strip_prefix(b"$CONFIG,PPS,") == Some(&PPS_COMMAND[..PPS_COMMAND.len() - 2])
-}
-
 const SECOND: u64 = 1_000_000_000;
-const WEEK_MS: u64 = 604_800_000;
 const HISTORY: usize = 8;
 const ASSOCIATION_WINDOW_NS: u64 = 100_000_000;
 const MAX_RESIDUAL_NS: u64 = 50_000;
@@ -107,7 +87,7 @@ impl ClockSync {
         if !(2..=3).contains(&label.quality)
             || label.config & 0xff != 0x20
             || label.config >> 16 != 1000
-            || label.epoch_ms % 1000 != 0
+            || !label.epoch_ms.is_multiple_of(1000)
             || label.pulse_error_ns.unsigned_abs() > 10_000
         {
             self.reject();
@@ -246,13 +226,4 @@ impl ClockSync {
         }
         self.status
     }
-}
-
-pub(crate) fn gps_ms(week: u32, tow_ms: u32) -> Option<u64> {
-    if u64::from(tow_ms) >= WEEK_MS {
-        return None;
-    }
-    u64::from(week)
-        .checked_mul(WEEK_MS)?
-        .checked_add(u64::from(tow_ms))
 }

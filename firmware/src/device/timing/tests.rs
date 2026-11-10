@@ -1,19 +1,6 @@
-use super::clock::{ClockSync, PpsLabel, gps_ms};
-use super::counter;
+use super::clock::{ClockSync, PpsLabel};
+use crate::device::platform::counter;
 const SECOND: u64 = 1_000_000_000;
-
-#[test]
-fn pps_configuration_readback_checks_checksum_and_zero_delay() {
-    // N4 CONFIG example with pulse width changed from 500000 to 100000us.
-    let reply = b"$CONFIG,PPS,CONFIG PPS ENABLE GPS POSITIVE 100000 1000 0 0*6A\r";
-    assert!(super::clock::valid_pps_config(reply));
-    assert!(!super::clock::valid_pps_config(
-        b"$CONFIG,PPS,CONFIG PPS ENABLE GPS POSITIVE 100000 1000 0 0*00"
-    ));
-    assert!(!super::clock::valid_pps_config(
-        b"$CONFIG,PPS,CONFIG PPS ENABLE GPS POSITIVE 100000 1000 0 1*6B"
-    ));
-}
 
 #[test]
 fn hardware_counter_wrap_and_ambiguous_outage() {
@@ -26,6 +13,40 @@ fn hardware_counter_wrap_and_ambiguous_outage() {
     assert!(counter.advance(200, 300_000_000).is_none());
     let mut stopped = counter::Counter::new(0, 0);
     assert!(stopped.advance(0, 100_000).is_none());
+}
+
+#[test]
+fn fast_reads_extend_wraps_without_resetting_the_validation_reference() {
+    let start = u32::MAX - 999;
+    let mut counter = counter::Counter::new(start, 1000);
+    assert_eq!(counter.advance_fast(500), Some(u64::from(start) + 1500));
+    assert_eq!(
+        counter.captured(u32::MAX - 499),
+        Some(u64::from(start) + 500)
+    );
+    assert_eq!(counter.advance_fast(1000), Some(u64::from(start) + 2000));
+    assert_eq!(counter.advance(2000, 1300), Some(u64::from(start) + 3000));
+    // A backwards or ambiguous raw advance never guesses a new counter epoch.
+    assert!(counter.advance_fast(1999).is_none());
+}
+
+#[test]
+fn periodic_validation_detects_wrong_rate_even_with_continuous_fast_reads() {
+    for ticks_per_ms in [0, 9000, 11000] {
+        let mut counter = counter::Counter::new(0, 0);
+        for ms in 1..=100 {
+            assert!(counter.advance_fast(ms * ticks_per_ms).is_some());
+        }
+        assert!(counter.advance(100 * ticks_per_ms, 100_000).is_none());
+    }
+    let mut counter = counter::Counter::new(0, 0);
+    for ms in 1..=100 {
+        assert!(counter.advance_fast(ms * 10_000).is_some());
+    }
+    assert_eq!(counter.advance(1_000_000, 100_000), Some(1_000_000));
+    // Fast hardware reads cannot conceal an ambiguous wall-clock outage.
+    assert!(counter.advance_fast(1_100_000).is_some());
+    assert!(counter.advance(1_100_000, 300_000_000).is_none());
 }
 
 fn label(second: u64) -> PpsLabel {
@@ -87,6 +108,17 @@ fn pps_loss_invalid_quality_and_wrong_configuration_never_use_arrival_fallback()
 
 #[test]
 fn gps_week_rollover_and_crystal_drift_preserve_the_local_timeline() {
+    let gps_ms = |week, milliseconds_of_week| {
+        aevia_device_hal::um980::Header {
+            message_id: 240,
+            time_reference: 0,
+            time_status: 160,
+            week,
+            milliseconds_of_week,
+            output_delay_ms: 0,
+        }
+        .gps_epoch_ms()
+    };
     let week_end = gps_ms(2400, 604_799_000).unwrap();
     let next_week = gps_ms(2401, 0).unwrap();
     assert_eq!(next_week - week_end, 1000);

@@ -1,6 +1,3 @@
-//! Explicitly unqualified V2 Mini bench profile. Factory scale factors are
-//! usable for bring-up; installation, noise and timing priors still need capture.
-
 use aevia_trajectory::{
     config::*,
     frame::*,
@@ -11,7 +8,7 @@ use aevia_trajectory::{
 };
 use core::mem::MaybeUninit;
 
-pub(super) const FRAME: TerrestrialFrame = TerrestrialFrame::new(
+pub(crate) const FRAME: TerrestrialFrame = TerrestrialFrame::new(
     FrameId::new(10),
     // BESTNAV names WGS84, without identifying a particular realization.
     TerrestrialRealization::Wgs84Ensemble,
@@ -49,7 +46,7 @@ fn digest(component: u8) -> ContentDigestV1 {
     ContentDigestV1::from_bytes(bytes)
 }
 
-pub(super) unsafe fn engine() -> EngineConfig<'static> {
+pub(crate) unsafe fn engine() -> EngineConfig<'static> {
     let validity = TimeSpan::new(
         SessionTime::from_ns(i64::MIN),
         SessionTime::from_ns(i64::MAX),
@@ -175,7 +172,7 @@ pub(super) unsafe fn engine() -> EngineConfig<'static> {
                 nis_rejection_threshold: nonnegative(30.0),
                 robust_weight_threshold: nonnegative(12.0),
                 maximum_covariance_inflation: nonnegative(10.0),
-                maximum_correction_age: DurationNs::from_ns(2_000_000_000),
+                maximum_correction_age: DurationNs::from_ns(super::MAX_GNSS_AGE_NS),
                 // All 50Hz updates enter the estimator; inflate their covariance
                 // provisionally because inter-epoch correlation is unmeasured.
                 correlation: GnssCorrelationPolicy::SequenceInflation {
@@ -188,9 +185,9 @@ pub(super) unsafe fn engine() -> EngineConfig<'static> {
         navigation_profile: NavigationProfileSpec {
             revision: 1,
             navigation_cadence_hz: 200,
-            fusion_delay: DurationNs::from_ns(100_000_000),
+            fusion_delay: super::FUSION_DELAY,
             // Keep the high-rate acquisition path independent of display cadence.
-            smoothing_lag: DurationNs::from_ns(20_000_000),
+            smoothing_lag: super::SMOOTHING_LAG,
             history_guard: DurationNs::from_ns(50_000_000),
             maximum_bridgeable_imu_gap: DurationNs::from_ns(10_000_000),
             reanchor_distance_m: nonnegative(1_000.0),

@@ -11,7 +11,7 @@ use aevia_trajectory::{
     LiveSession, PrepareError, StepError, TrajectoryEngine,
     config::{ClockSharedCrossCovariance, InitialClockConsiderPrior, LiveResourceLimits, LiveSpec},
     engine::LivePhase,
-    frame::{EcefPosition, EcefVelocity, SensorAngularRate, SensorSpecificForce},
+    frame::{SensorAngularRate, SensorSpecificForce},
     ids::{
         ClockModelId, ClockSegmentId, FrameId, InputProfileId, ObservationId, ReferencePointId,
         SessionId, SourceId,
@@ -48,6 +48,9 @@ struct Processor {
     session: LiveSession<'static, 'static>,
     imu_sequence: u64,
     gnss_sequence: u64,
+    have_initialization_seed: bool,
+    imu_rate_covariance: Covariance3,
+    imu_acceleration_covariance: Covariance3,
     last_gnss_epoch_ms: Option<(u32, u64)>,
     snapshot: Snapshot,
     rate_epoch_us: u64,
@@ -136,6 +139,14 @@ impl Processor {
             session,
             imu_sequence: 0,
             gnss_sequence: 0,
+            have_initialization_seed: false,
+            // These immutable interval-average uncertainties belong to the
+            // profile. Validate once, rather than repeating software-f64
+            // covariance construction for every high-rate IMU sample.
+            imu_rate_covariance: diagonal([profile::IMU_RATE_ONE_SIGMA_RPS; 3])
+                .map_err(PrepareError::InvalidDefinition)?,
+            imu_acceleration_covariance: diagonal([profile::IMU_ACCELERATION_ONE_SIGMA_MPS2; 3])
+                .map_err(PrepareError::InvalidDefinition)?,
             last_gnss_epoch_ms: None,
             snapshot: Snapshot::default(),
             rate_epoch_us: 0,
@@ -150,6 +161,13 @@ impl Processor {
         self.snapshot.last_imu_us = sample.captured_ns / 1000;
         self.snapshot.acceleration_mps2 = sample.acceleration_mps2.map(|x| x as f32);
         self.snapshot.angular_rate_rps = sample.angular_rate_rps.map(|x| x as f32);
+        // Inertial data alone cannot initialize terrestrial navigation. Drain
+        // and report every raw sample while waiting for an accepted position/
+        // velocity seed; only subsequent real intervals enter the initializer.
+        // This does not synthesize samples or claim estimator acceptance.
+        if !self.have_initialization_seed {
+            return Ok(());
+        }
         let time = ObservationTime {
             support: SampleSupport::IntervalAverage {
                 duration: DurationNs::from_ns(u64::from(sample.duration_ns)),
@@ -176,14 +194,14 @@ impl Processor {
                 value: SensorAngularRate::from_components(sample.angular_rate_rps)
                     .map_err(StepError::InvalidObservation)?,
                 time,
-                uncertainty: MeasurementUncertainty::Provided(diagonal([0.001; 3])?),
+                uncertainty: MeasurementUncertainty::Provided(self.imu_rate_covariance),
                 axes,
             },
             TimedSpecificForce {
                 value: SensorSpecificForce::from_components(sample.acceleration_mps2)
                     .map_err(StepError::InvalidObservation)?,
                 time,
-                uncertainty: MeasurementUncertainty::Provided(diagonal([0.03; 3])?),
+                uncertainty: MeasurementUncertainty::Provided(self.imu_acceleration_covariance),
                 axes,
             },
             ImuStatus::Degraded,
@@ -203,65 +221,27 @@ impl Processor {
         }
         self.last_gnss_epoch_ms = Some((sample.clock_generation, sample.epoch_ms));
         self.gnss_sequence += 1;
-        // These are independently mapped receiver measurement epochs, not UART
-        // timestamps. Output delay must not be subtracted a second time.
-        let time = observation_time(
-            sample.position_time_ns,
-            sample.timing_uncertainty_ns,
-            TimingBasis::PpsCorrelated,
-        )?;
-        let velocity_time = observation_time(
-            sample.velocity_time_ns,
-            sample.timing_uncertainty_ns,
-            TimingBasis::PpsCorrelated,
-        )?;
-        let observation = GnssSolutionObservation::new(
-            ObservationId::new(SourceId::new(2), self.gnss_sequence),
-            ReferencePointId::new(2),
-            Some(GnssPosition {
-                value: EcefPosition::from_components(sample.position_m)
-                    .map_err(StepError::InvalidObservation)?,
-                time,
-                frame: profile::FRAME.id(),
-                valid: sample.position_valid,
-                uncertainty: MeasurementUncertainty::Provided(diagonal(
-                    sample.position_sigma_m.map(|v| v.max(0.02)),
-                )?),
-            }),
-            Some(GnssVelocity {
-                value: EcefVelocity::from_components(sample.velocity_mps)
-                    .map_err(StepError::InvalidObservation)?,
-                time: velocity_time,
-                frame: profile::FRAME.id(),
-                valid: sample.velocity_valid,
-                uncertainty: MeasurementUncertainty::Provided(diagonal(
-                    sample.velocity_sigma_mps.map(|v| v.max(0.03)),
-                )?),
-            }),
-            None,
-            GnssDiagnostics {
-                correction_age: None,
-                solution_age: None,
-                health: Some(TimedDiagnostic {
-                    value: if sample.position_valid && sample.velocity_valid {
-                        ReceiverHealth::Healthy
-                    } else {
-                        ReceiverHealth::Suspect
-                    },
-                    time,
-                    age: DurationNs::ZERO,
-                }),
-            },
-        )
-        .map_err(StepError::InvalidObservation)?;
+        let observation =
+            super::gnss::observation::observation(sample, self.gnss_sequence, profile::FRAME.id())?;
         self.step(Some(&LiveObservation::GnssSolution(observation)))
     }
 
     fn step(&mut self, observation: Option<&LiveObservation>) -> Result<(), StepError> {
-        self.session.step(LiveStep {
+        // Before an initialization seed there is no live frontier/metric work.
+        // Raw acquisition may remain active for a long antenna-free cold start.
+        if observation.is_none() && !self.have_initialization_seed {
+            return Ok(());
+        }
+        let update = self.session.step(LiveStep {
             observation,
             work: WorkQuota::new(128).unwrap(),
         })?;
+        if let (Some(LiveObservation::GnssSolution(solution)), Some((_, disposition))) =
+            (observation, update.input)
+            && super::gnss::observation::initialization_seed_accepted(*solution, disposition)
+        {
+            self.have_initialization_seed = true;
+        }
         Ok(())
     }
 
@@ -340,7 +320,9 @@ impl Processor {
             self.snapshot.position_ecef_m = None;
             self.snapshot.velocity_ecef_mps = None;
         }
-        interface::publish(self.snapshot);
+        // Apply the same epoch check at publication and at transport reads.
+        // A live worker can retain an old trajectory after rejected inputs.
+        interface::publish(self.snapshot.at(now));
     }
 }
 
@@ -365,6 +347,7 @@ pub unsafe fn run(psram_address: usize, psram_len: usize) -> ! {
             }
         }
     };
+    super::supervision::worker_heartbeat();
     let mut published_us = 0;
     loop {
         // Separate queues and one member from each per turn prevent either
@@ -384,24 +367,24 @@ pub unsafe fn run(psram_address: usize, psram_len: usize) -> ! {
             }
         }
         let now = Instant::now().as_micros();
-        if now.saturating_sub(published_us) >= 100_000 {
+        if now.saturating_sub(published_us) >= profile::SNAPSHOT_INTERVAL_US {
             processor.publish(now);
             published_us = now;
         }
-        if !active {
-            if let Err(error) = processor.step(None) {
-                processor.record_error(error);
-            }
+        if !active && let Err(error) = processor.step(None) {
+            processor.record_error(error);
         }
         // Include pending estimator work and telemetry queries, excluding sleep.
         processor.snapshot.maximum_step_us = processor
             .snapshot
             .maximum_step_us
             .max((Instant::now().as_micros() - started).min(u64::from(u32::MAX)) as u32);
+        super::supervision::worker_heartbeat();
         if !active {
-            // Blocking the worker yields the core and avoids spinning on a
-            // cross-core critical section while sensors are starting.
-            CurrentThreadHandle::get().delay(Duration::from_micros(100));
+            // At most 2 kHz idle wakeups bound shared RTOS timer/critical-section
+            // traffic. 500 us remains below the earliest DEC4 sample period;
+            // hardware capture, rather than this consumer poll, timestamps it.
+            CurrentThreadHandle::get().delay(Duration::from_micros(500));
         }
     }
 }
@@ -426,13 +409,12 @@ fn observation_time(
     })
 }
 
-fn diagonal(sigma: [f64; 3]) -> Result<Covariance3, StepError> {
+fn diagonal(sigma: [f64; 3]) -> Result<Covariance3, aevia_trajectory::ValidationError> {
     Covariance3::diagonal(
         sigma[0] * sigma[0],
         sigma[1] * sigma[1],
         sigma[2] * sigma[2],
     )
-    .map_err(StepError::InvalidObservation)
 }
 
 fn prepare_error(error: PrepareError) -> EngineError {

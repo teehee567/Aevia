@@ -18,6 +18,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "320119579fcad9c21884f5c4861d16174d0e06250625266f50fe6898340abefa"
 
 [[package]]
+name = "aevia-device-hal"
+version = "0.1.0"
+dependencies = [
+ "embedded-hal 1.0.0",
+ "embedded-io 0.7.1",
+ "embedded-storage",
+ "esp-hal",
+ "esp-storage",
+ "libm",
+ "nb 1.1.0",
+]
+
+[[package]]
 name = "aevia-trajectory"
 version = "0.1.0"
 dependencies = [
@@ -1048,6 +1061,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ef0e785f54e316f64a1e14a7a2f061a2ea0b038b284902ca71e1e1f5574cf47"
 dependencies = [
  "document-features",
+ "embedded-storage",
  "esp-hal",
  "esp-hal-procmacros",
  "esp-metadata-generated",
@@ -1192,6 +1206,7 @@ checksum = "aedcfb3409746eddb02b9e19ebda1c3394f759a152e48ee875a0844d1b955484"
 name = "firmware"
 version = "0.1.0"
 dependencies = [
+ "aevia-device-hal",
  "aevia-trajectory",
  "cobs",
  "critical-section",

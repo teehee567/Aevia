@@ -53,7 +53,13 @@ impl Memory {
             let entry = &flash.bytes[offset as usize..offset as usize + 32];
             let seq = u32::from_le_bytes(entry[..4].try_into().unwrap());
             let crc = u32::from_le_bytes(entry[28..32].try_into().unwrap());
-            if seq != u32::MAX && crc == state::sequence_crc(seq) {
+            let state = u32::from_le_bytes(entry[24..28].try_into().unwrap());
+            if seq != 0
+                && seq != u32::MAX
+                && state != 3
+                && state != 4
+                && crc == state::sequence_crc(seq)
+            {
                 latest = latest.max(seq);
             }
         }
@@ -205,6 +211,7 @@ fn consecutive_updates_alternate_slots_and_preserve_the_current_selector() {
     flash.0.borrow_mut().running = 1;
     let mut next = Updater::new(flash.clone(), 1).unwrap();
     assert_eq!(next.startup(true).unwrap(), Mode::App);
+    next.confirm_app().unwrap();
     send(&mut next, &bytes).unwrap();
     assert_eq!(flash.selected(), 0);
     assert_eq!(flash.app_bytes(1, bytes.len()), bytes);
@@ -314,6 +321,144 @@ fn ota_crc_matches_esp_idf_golden_records() {
     assert_eq!(state::sequence_crc(1), 0x4743_989a);
     assert_eq!(state::sequence_crc(2), 0x55f6_3774);
     assert_eq!(state::sequence_crc(3), 0xed4a_5011);
+}
+
+#[test]
+fn unconfirmed_trial_rolls_back_and_confirmed_trial_survives_reboot() {
+    for running in [0, 1] {
+        for confirm in [false, true] {
+            let flash = Memory::new(running);
+            send(
+                &mut Updater::new(flash.clone(), running).unwrap(),
+                &image(256),
+            )
+            .unwrap();
+            let candidate = 1 - running;
+            assert_eq!(flash.selected(), candidate);
+            flash.0.borrow_mut().running = candidate;
+            let mut trial = Updater::new(flash.clone(), candidate).unwrap();
+            assert_eq!(trial.startup(true).unwrap(), Mode::App);
+            // An unconfirmed app must not erase its known-good fallback.
+            assert_eq!(trial.begin(256, [0; 32]), Err(Error::Sequence));
+            if confirm {
+                trial.confirm_app().unwrap();
+                let before = flash.0.borrow().mutations;
+                trial.confirm_app().unwrap();
+                assert_eq!(flash.0.borrow().mutations, before);
+            }
+            let mut reboot = Updater::new(flash.clone(), candidate).unwrap();
+            assert_eq!(
+                reboot.startup(false).unwrap(),
+                if confirm { Mode::App } else { Mode::Recovery }
+            );
+            assert_eq!(reboot.rollback_requested(), !confirm);
+            assert_eq!(flash.selected(), if confirm { candidate } else { running });
+            if !confirm {
+                flash.0.borrow_mut().running = running;
+                assert_eq!(
+                    Updater::new(flash.clone(), running)
+                        .unwrap()
+                        .startup(true)
+                        .unwrap(),
+                    Mode::App
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn first_ota_seeds_an_erased_selector_for_the_known_running_slot() {
+    for running in [0, 1] {
+        let flash = Memory::new(running);
+        flash.0.borrow_mut().bytes[OTA_DATA as usize..(OTA_DATA + 2 * SECTOR) as usize].fill(0xff);
+        send(
+            &mut Updater::new(flash.clone(), running).unwrap(),
+            &image(256),
+        )
+        .unwrap();
+        let candidate = 1 - running;
+        flash.0.borrow_mut().running = candidate;
+        let mut trial = Updater::new(flash.clone(), candidate).unwrap();
+        assert_eq!(trial.startup(true).unwrap(), Mode::App);
+        let mut reboot = Updater::new(flash.clone(), candidate).unwrap();
+        assert_eq!(reboot.startup(true).unwrap(), Mode::Recovery);
+        assert!(reboot.rollback_requested());
+        assert_eq!(flash.selected(), running);
+    }
+}
+
+#[test]
+fn bootloader_pending_verify_state_still_requires_health_confirmation() {
+    let flash = Memory::new(0);
+    send(&mut Updater::new(flash.clone(), 0).unwrap(), &image(256)).unwrap();
+    let address = (OTA_DATA + SECTOR + 24) as usize;
+    assert_eq!(
+        &flash.0.borrow().bytes[address..address + 4],
+        &0_u32.to_le_bytes()
+    );
+    // A rollback-enabled second-stage loader rewrites NEW to PENDING_VERIFY.
+    flash.0.borrow_mut().bytes[address..address + 4].copy_from_slice(&1_u32.to_le_bytes());
+    flash.0.borrow_mut().running = 1;
+    let mut candidate = Updater::new(flash.clone(), 1).unwrap();
+    assert_eq!(candidate.startup(false).unwrap(), Mode::App);
+    candidate.confirm_app().unwrap();
+    assert_eq!(
+        &flash.0.borrow().bytes[address..address + 4],
+        &2_u32.to_le_bytes()
+    );
+}
+
+#[test]
+fn first_ota_power_cuts_never_select_an_incomplete_image() {
+    let make_flash = || {
+        let flash = Memory::new(0);
+        flash.0.borrow_mut().bytes[OTA_DATA as usize..(OTA_DATA + 2 * SECTOR) as usize].fill(0xff);
+        flash
+    };
+    let bytes = image(256);
+    let reference = make_flash();
+    send(&mut Updater::new(reference.clone(), 0).unwrap(), &bytes).unwrap();
+    for cut in 0..=reference.0.borrow().mutations {
+        let flash = make_flash();
+        flash.0.borrow_mut().cut_at = cut;
+        let _ = send(&mut Updater::new(flash.clone(), 0).unwrap(), &bytes);
+        assert_eq!(flash.app_bytes(0, 256), vec![0x5a; 256]);
+        if flash.selected() == 1 {
+            assert_eq!(flash.app_bytes(1, bytes.len()), bytes);
+        }
+    }
+}
+
+#[test]
+fn confirmation_power_cuts_preserve_the_previous_selector_and_both_images() {
+    let source = Memory::new(0);
+    send(&mut Updater::new(source.clone(), 0).unwrap(), &image(256)).unwrap();
+    source.0.borrow_mut().running = 1;
+    let mut trial = Updater::new(source.clone(), 1).unwrap();
+    trial.startup(false).unwrap();
+    let before = source.0.borrow().mutations;
+    trial.confirm_app().unwrap();
+    let mutations = source.0.borrow().mutations - before;
+    for cut in 0..=mutations {
+        let flash = Memory::new(0);
+        send(&mut Updater::new(flash.clone(), 0).unwrap(), &image(256)).unwrap();
+        flash.0.borrow_mut().running = 1;
+        let mut trial = Updater::new(flash.clone(), 1).unwrap();
+        trial.startup(false).unwrap();
+        let old_selector =
+            flash.0.borrow().bytes[OTA_DATA as usize..(OTA_DATA + 32) as usize].to_vec();
+        let baseline = flash.0.borrow().mutations;
+        flash.0.borrow_mut().cut_at = baseline + cut;
+        let _ = trial.confirm_app();
+        assert_eq!(
+            &flash.0.borrow().bytes[OTA_DATA as usize..(OTA_DATA + 32) as usize],
+            old_selector.as_slice()
+        );
+        assert_eq!(flash.app_bytes(0, 256), vec![0x5a; 256]);
+        assert_eq!(flash.app_bytes(1, 256), image(256));
+        assert!(flash.selected() <= 1);
+    }
 }
 
 #[test]

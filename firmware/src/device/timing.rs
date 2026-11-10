@@ -5,14 +5,12 @@
 //! counter. The session timeline never steps when the fit changes.
 
 #[cfg(target_arch = "riscv32")]
-pub(super) mod capture;
-#[cfg(any(target_arch = "riscv32", test))]
-mod counter;
+pub(super) use super::platform::capture;
 
 #[cfg(any(target_arch = "riscv32", test))]
 mod clock;
 #[cfg(target_arch = "riscv32")]
-pub(super) use clock::{ClockSync, PPS_COMMAND, PpsLabel, gps_ms, valid_pps_config};
+pub(super) use clock::{ClockSync, PpsLabel};
 
 /// Timing diagnostics are estimates, not a hardware accuracy qualification.
 #[derive(Clone, Copy, Debug, Default, serde::Serialize, serde::Deserialize)]

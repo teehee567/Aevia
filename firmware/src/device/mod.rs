@@ -1,19 +1,29 @@
+#[cfg(target_arch = "riscv32")]
+pub(crate) mod board;
 pub mod interface;
-pub(crate) mod memory;
+#[cfg(test)]
+mod interface_tests;
+#[cfg(any(target_arch = "riscv32", test))]
+pub(crate) mod platform;
+pub(crate) mod power;
+#[cfg(any(target_arch = "riscv32", test))]
+pub(crate) mod supervision;
 pub mod timing;
 
 #[cfg(target_arch = "riscv32")]
+pub(crate) mod display;
+#[cfg(any(target_arch = "riscv32", test))]
 mod gnss;
-#[cfg(target_arch = "riscv32")]
+#[cfg(any(target_arch = "riscv32", test))]
 mod imu;
 #[cfg(target_arch = "riscv32")]
-pub mod processing;
+pub(crate) mod maintenance;
 #[cfg(target_arch = "riscv32")]
+pub mod processing;
+#[cfg(any(target_arch = "riscv32", test))]
 mod profile;
 #[cfg(target_arch = "riscv32")]
 pub(crate) mod sensors;
-#[cfg(target_arch = "riscv32")]
-mod status;
 #[cfg(target_arch = "riscv32")]
 pub(crate) mod storage;
 #[cfg(target_arch = "riscv32")]

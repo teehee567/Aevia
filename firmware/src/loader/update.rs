@@ -38,6 +38,7 @@ pub struct Updater<F> {
     transfer: Option<Transfer>,
     running: u8,
     plan: Plan,
+    rollback_requested: bool,
 }
 
 impl<F: Flash> Updater<F> {
@@ -48,11 +49,49 @@ impl<F: Flash> Updater<F> {
             transfer: None,
             running,
             plan,
+            rollback_requested: false,
         })
     }
 
     pub fn startup(&mut self, fault: bool) -> Result<Mode, Error> {
-        state::startup(&mut self.flash, fault, self.plan.fell_back)
+        if self.plan.is_trial() {
+            if state::trial_started(&mut self.flash)? {
+                self.rollback_requested = self.plan.rollback(&mut self.flash)?;
+                if self.rollback_requested {
+                    state::request_app(&mut self.flash)?;
+                } else {
+                    state::recover(&mut self.flash)?;
+                }
+                return Ok(Mode::Recovery);
+            }
+            let mode = state::startup_trial(&mut self.flash, fault, self.plan.fell_back)?;
+            // A cut between publishing the candidate and RUN1 can boot it into
+            // recovery. Serve recovery from the known-good image instead, so
+            // replacing a bad candidate never requires running it first.
+            if mode == Mode::Recovery {
+                self.rollback_requested = self.plan.rollback(&mut self.flash)?;
+            }
+            Ok(mode)
+        } else {
+            state::startup(&mut self.flash, fault, self.plan.fell_back)
+        }
+    }
+
+    pub fn rollback_requested(&self) -> bool {
+        self.rollback_requested
+    }
+
+    /// Called only after the application startup and liveness checks pass.
+    /// Idempotent after success; never bless an unbooted candidate slot.
+    pub fn confirm_app(&mut self) -> Result<(), Error> {
+        let was_trial = self.plan.is_trial();
+        if was_trial {
+            self.plan.confirm(&mut self.flash)?;
+        }
+        if was_trial || state::trial_started(&mut self.flash)? {
+            state::confirm_app(&mut self.flash)?;
+        }
+        Ok(())
     }
 
     pub fn request_app(&mut self) -> Result<(), Error> {
@@ -62,6 +101,7 @@ impl<F: Flash> Updater<F> {
 
     pub fn request_recovery(&mut self) -> Result<(), Error> {
         self.abort();
+        self.rollback_requested = self.plan.rollback(&mut self.flash)?;
         state::recover(&mut self.flash)
     }
 
@@ -75,6 +115,9 @@ impl<F: Flash> Updater<F> {
 
     pub fn begin(&mut self, size: u32, expected: [u8; 32]) -> Result<(), Error> {
         self.abort();
+        if self.plan.protects_fallback() {
+            return Err(Error::Sequence);
+        }
         if !(80..=APP_SIZE).contains(&size) || !size.is_multiple_of(4) {
             return Err(Error::Size);
         }

@@ -1,5 +1,6 @@
 #![no_std]
 
+pub mod bootdiagnostics;
 pub mod commands;
 pub mod device;
 pub mod globals;

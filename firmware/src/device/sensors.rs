@@ -1,20 +1,16 @@
 //! Capture runs independently of estimation, display, and transport consumers.
-use super::{gnss, imu::Imu, status, timing};
-use core::sync::atomic::{AtomicU32, Ordering};
-use embassy_executor::Spawner;
-use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, channel::Channel};
-use embassy_time::Timer;
-use esp_hal::{
-    gpio::{DriveMode, Input, InputConfig, Level, Output, OutputConfig, Pull},
-    i2c::master::{Config as I2cConfig, I2c},
-    peripherals::*,
-    spi::{
-        Mode,
-        master::{Config as SpiConfig, Spi},
-    },
-    time::Rate,
-    uart::{Config as UartConfig, RxConfig, Uart},
+use super::{board::SensorResources, gnss, imu, timing};
+use core::{
+    cell::Cell,
+    sync::atomic::{AtomicU32, Ordering},
 };
+use embassy_executor::{SendSpawner, Spawner};
+use embassy_sync::{
+    blocking_mutex::{Mutex, raw::CriticalSectionRawMutex},
+    channel::Channel,
+};
+use embassy_time::Timer;
+use esp_hal::gpio::Input;
 
 #[derive(Clone, Copy, Debug)]
 pub struct ImuSample {
@@ -27,24 +23,9 @@ pub struct ImuSample {
     pub angular_rate_rps: [f64; 3],
     pub saturated: bool,
 }
-#[derive(Clone, Copy, Debug)]
-pub struct GnssSample {
-    pub position_m: [f64; 3],
-    pub velocity_mps: [f64; 3],
-    pub position_sigma_m: [f64; 3],
-    pub velocity_sigma_mps: [f64; 3],
-    pub epoch_ms: u64,
-    pub received_us: u64,
-    pub position_time_ns: u64,
-    pub velocity_time_ns: u64,
-    pub timing_uncertainty_ns: u64,
-    pub clock_generation: u32,
-    pub position_valid: bool,
-    pub velocity_valid: bool,
-    pub satellites: u8,
-}
+pub use super::gnss::observation::GnssSample;
 
-// ~73 ms of maximum-rate IMU and 320 ms of GNSS. Producers never wait for
+// ~87 ms of nominal 1.475 kHz IMU and 320 ms of GNSS. Producers never wait for
 // these queues: overload is counted and remains an observable time gap.
 pub static IMU: Channel<CriticalSectionRawMutex, ImuSample, 128> = Channel::new();
 pub static GNSS: Channel<CriticalSectionRawMutex, GnssSample, 16> = Channel::new();
@@ -58,149 +39,73 @@ pub static GNSS_ERRORS: AtomicU32 = AtomicU32::new(0);
 pub static GNSS_UART_ERRORS: AtomicU32 = AtomicU32::new(0);
 pub static GNSS_PARSE_ERRORS: AtomicU32 = AtomicU32::new(0);
 pub static GNSS_RATE_HZ: AtomicU32 = AtomicU32::new(0);
+pub static IMU_MAX_READ_LATENCY_US: AtomicU32 = AtomicU32::new(0);
+static IMU_HIGH_WATER: AtomicU32 = AtomicU32::new(0);
+static GNSS_HIGH_WATER: AtomicU32 = AtomicU32::new(0);
+static LAST_IMU: Mutex<CriticalSectionRawMutex, Cell<Option<u64>>> = Mutex::new(Cell::new(None));
+static LAST_GNSS: Mutex<CriticalSectionRawMutex, Cell<Option<u64>>> = Mutex::new(Cell::new(None));
 
-/// The fitted V2 Mini wiring. Unused GPIOs remain with the runtime.
-pub struct Board {
-    pub uart1: UART1<'static>,
-    pub uart2: UART2<'static>,
-    pub spi2: SPI2<'static>,
-    pub spi3: SPI3<'static>,
-    pub i2c0: I2C0<'static>,
-    pub gpio4: GPIO4<'static>,
-    pub gpio6: GPIO6<'static>,
-    pub gpio7: GPIO7<'static>,
-    pub gpio8: GPIO8<'static>,
-    pub gpio9: GPIO9<'static>,
-    pub gpio10: GPIO10<'static>,
-    pub gpio11: GPIO11<'static>,
-    pub gpio12: GPIO12<'static>,
-    pub gpio13: GPIO13<'static>,
-    pub gpio14: GPIO14<'static>,
-    pub gpio15: GPIO15<'static>,
-    pub gpio16: GPIO16<'static>,
-    pub gpio17: GPIO17<'static>,
-    pub gpio18: GPIO18<'static>,
-    pub gpio19: GPIO19<'static>,
-    pub gpio39: GPIO39<'static>,
-    pub gpio42: GPIO42<'static>,
-    pub gpio44: GPIO44<'static>,
-    pub gpio46: GPIO46<'static>,
-    pub gpio47: GPIO47<'static>,
-    pub gpio48: GPIO48<'static>,
-    pub gpio49: GPIO49<'static>,
+pub fn record_imu(at_us: u64) {
+    IMU_SAMPLES.fetch_add(1, Ordering::Relaxed);
+    LAST_IMU.lock(|last| last.set(Some(at_us)));
 }
 
-pub fn start(spawner: Spawner, b: Board) {
-    let pps = Input::new(b.gpio42, InputConfig::default().with_pull(Pull::Down));
-    let ready = Input::new(b.gpio14, InputConfig::default());
-    timing::capture::init();
-    let uart_config = UartConfig::default()
-        .with_baudrate(115_200)
-        .with_rx(RxConfig::default().with_fifo_full_threshold(32));
-    let command = Uart::new(b.uart1, uart_config.clone())
-        .expect("GNSS COM1")
-        .with_tx(b.gpio47)
-        .with_rx(b.gpio46)
-        .into_async();
-    let data = Uart::new(b.uart2, uart_config)
-        .expect("GNSS COM2")
-        .with_tx(b.gpio49)
-        .with_rx(b.gpio48)
-        .into_async();
-    let reset = Input::new(b.gpio44, InputConfig::default().with_pull(Pull::Up));
-    let spi = Spi::new(
-        b.spi2,
-        SpiConfig::default()
-            .with_frequency(Rate::from_mhz(8))
-            .with_mode(Mode::_0),
-    )
-    .expect("IMU SPI")
-    .with_sck(b.gpio12)
-    .with_mosi(b.gpio11)
-    .with_miso(b.gpio13);
-    let imu = Imu::new(
-        spi,
-        Output::new(b.gpio10, Level::High, OutputConfig::default()),
-        Output::new(b.gpio9, Level::High, OutputConfig::default()),
-        ready,
+pub fn record_gnss(at_us: u64) {
+    GNSS_SAMPLES.fetch_add(1, Ordering::Relaxed);
+    LAST_GNSS.lock(|last| last.set(Some(at_us)));
+}
+
+pub fn observe_queue_depths() {
+    IMU_HIGH_WATER.fetch_max(IMU.len() as u32, Ordering::Relaxed);
+    GNSS_HIGH_WATER.fetch_max(GNSS.len() as u32, Ordering::Relaxed);
+}
+
+pub fn acquisition_status() -> super::interface::AcquisitionStatus {
+    super::interface::AcquisitionStatus {
+        updated_us: embassy_time::Instant::now().as_micros(),
+        last_imu_us: LAST_IMU.lock(Cell::get),
+        last_gnss_us: LAST_GNSS.lock(Cell::get),
+        imu_samples: IMU_SAMPLES.load(Ordering::Relaxed),
+        gnss_samples: GNSS_SAMPLES.load(Ordering::Relaxed),
+        imu_errors: IMU_ERRORS.load(Ordering::Relaxed),
+        gnss_errors: GNSS_ERRORS.load(Ordering::Relaxed),
+        gnss_uart_errors: GNSS_UART_ERRORS.load(Ordering::Relaxed),
+        gnss_parse_errors: GNSS_PARSE_ERRORS.load(Ordering::Relaxed),
+        gnss_rate_hz: GNSS_RATE_HZ.load(Ordering::Relaxed),
+        imu_drops: IMU_DROPS.load(Ordering::Relaxed),
+        gnss_drops: GNSS_DROPS.load(Ordering::Relaxed),
+        imu_queue_depth: IMU.len() as u16,
+        gnss_queue_depth: GNSS.len() as u16,
+        imu_queue_high_water: IMU_HIGH_WATER.load(Ordering::Relaxed) as u16,
+        gnss_queue_high_water: GNSS_HIGH_WATER.load(Ordering::Relaxed) as u16,
+        imu_max_read_latency_us: IMU_MAX_READ_LATENCY_US.load(Ordering::Relaxed),
+        timing: timing::status(),
+    }
+}
+
+/// All high-rate tasks use bounded polls on the acquisition executor. Slow
+/// power-bus operations run on a separate executor and cannot block these.
+pub fn start(
+    spawner: Spawner,
+    acquisition: SendSpawner,
+    gnss_acquisition: SendSpawner,
+    resources: SensorResources,
+) {
+    gnss_acquisition.spawn(
+        gnss::task(resources.command, resources.data, resources.gnss_reset).expect("GNSS task"),
     );
-    let display_spi = Spi::new(
-        b.spi3,
-        SpiConfig::default()
-            .with_frequency(Rate::from_mhz(24))
-            .with_mode(Mode::_0),
-    )
-    .expect("display SPI")
-    .with_sck(b.gpio16)
-    .with_mosi(b.gpio17);
-    let display = status::Display::new(
-        display_spi,
-        Output::new(b.gpio18, Level::High, OutputConfig::default()),
-        Output::new(b.gpio19, Level::Low, OutputConfig::default()),
-        Output::new(b.gpio15, Level::High, OutputConfig::default()),
-        Output::new(b.gpio4, Level::Low, OutputConfig::default()),
-    );
-    let i2c = I2c::new(
-        b.i2c0,
-        I2cConfig::default().with_frequency(Rate::from_khz(400)),
-    )
-    .expect("status I2C")
-    .with_scl(b.gpio6)
-    .with_sda(b.gpio7)
-    .into_async();
-    let enable = Output::new(b.gpio39, Level::Low, OutputConfig::default());
-    // MAX16169 active-low power kill is released. There are no button tasks.
-    let power = Output::new(
-        b.gpio8,
-        Level::High,
-        OutputConfig::default().with_drive_mode(DriveMode::OpenDrain),
-    );
-    spawner.spawn(gnss::task(command, data, reset).expect("GNSS task"));
-    spawner.spawn(imu_task(imu).expect("IMU task"));
-    spawner.spawn(pps_task(pps).expect("PPS task"));
-    spawner.spawn(status::task(i2c, enable, display, power).expect("status task"));
+    imu::start(spawner, acquisition, resources.imu);
+    gnss_acquisition.spawn(pps_task(resources.pps).expect("PPS task"));
 }
 
 #[embassy_executor::task]
 async fn pps_task(_pin: Input<'static>) {
     // The edge is latched in hardware; polling only transfers its value into
-    // history. It also extends the counter during sensor outages.
+    // history. Maintenance validates/extends the counter during sensor outages.
     loop {
+        timing::capture::maintain();
         timing::observe_pulse();
-        let _ = timing::capture::now_ns();
+        super::supervision::acquisition_heartbeat();
         Timer::after_millis(100).await;
-    }
-}
-
-#[embassy_executor::task]
-async fn imu_task(mut imu: Imu<'static>) {
-    loop {
-        if imu.initialize().await.is_err() {
-            IMU_ERRORS.fetch_add(1, Ordering::Relaxed);
-            Timer::after_secs(1).await;
-            continue;
-        }
-        let mut failures = 0;
-        loop {
-            match imu.next_sample().await {
-                Ok(sample) => {
-                    failures = 0;
-                    IMU_SAMPLES.fetch_add(1, Ordering::Relaxed);
-                    if IMU.try_send(sample).is_err() {
-                        IMU_DROPS.fetch_add(1, Ordering::Relaxed);
-                    }
-                }
-                Err(error) => {
-                    IMU_ERRORS.fetch_add(1, Ordering::Relaxed);
-                    if matches!(error, super::imu::Error::Timing) {
-                        IMU_TIMING_ERRORS.fetch_add(1, Ordering::Relaxed);
-                    }
-                    failures += 1;
-                    if failures >= 4 {
-                        break;
-                    }
-                }
-            }
-        }
     }
 }

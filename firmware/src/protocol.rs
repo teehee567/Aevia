@@ -74,6 +74,8 @@ pub enum Request<'a> {
 }
 
 #[derive(Debug, serde::Serialize, Deserialize)]
+// A fixed-capacity wire envelope avoids heap allocation in the USB path.
+#[allow(clippy::large_enum_variant)]
 pub enum Response {
     System(crate::commands::Response),
     Device(crate::device::interface::DeviceResponse),

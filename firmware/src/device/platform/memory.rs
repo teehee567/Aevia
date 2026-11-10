@@ -10,7 +10,7 @@
 //! components/esp_hw_support/port/esp32s31/cpu_region_protect.c.
 
 pub const BASE: usize = 0x5000_0000;
-pub const BYTES: usize = 16 * 1024 * 1024;
+pub const BYTES: usize = aevia_device_hal::memory::V2_MINI_PSRAM_BYTES;
 
 /// Consume the HAL memory handle on core 1 before any allocation is placed in it.
 /// Base firmware reserves this entire range; no allocator uses it yet.

@@ -1,0 +1,90 @@
+[
+  {
+    "path": "data/datasheets/tca9536.pdf",
+    "sha256": "96e8633ff5d8b9a43dcbf5062e0f9db3058027a4ce8bf8aa8442e304792afe87"
+  },
+  {
+    "path": "data/datasheets/max17320.pdf",
+    "sha256": "6477d1dea98912172a0dfb313d65ab148711c39806eb130ad8ab6dc9a6b41e85"
+  },
+  {
+    "path": "data/datasheets/sch16t-k01-datasheet-full.pdf",
+    "sha256": "2d676066b468c15fbf9417a16c5d04468057f0d398f2d1d731500197cad8ced0"
+  },
+  {
+    "path": "data/datasheets/tps63802.pdf",
+    "sha256": "be07deca1231c5493957bc64c2dc1cad5543bff330e49ae41caf3286fd80dca6"
+  },
+  {
+    "path": "data/datasheets/MAX17048-MAX17049.pdf",
+    "sha256": "70dc8eef0e012276dcdc58b6dce64af08258304bcf865ceace64e856b8029330"
+  },
+  {
+    "path": "data/datasheets/4520_C13462__________.pdf",
+    "sha256": "0710b87230c4aa91455760e64463bac5f7185531bd7f578e1f92cacda7fe7e4b"
+  },
+  {
+    "path": "data/datasheets/esp32-s31-wroom-3_datasheet_en.pdf",
+    "sha256": "b45f9fccb894c06ac614a53e29499a985b73867f55bd01b45850585aade36290"
+  },
+  {
+    "path": "data/datasheets/5962_XL-2020RGBC-WS2812B.pdf",
+    "sha256": "7ee0123d4f32fe1c718523aaefb897f0f5f422cfad606cfbe6264839194dfde1"
+  },
+  {
+    "path": "data/datasheets/UM980_User Manual_EN_R1.9.pdf",
+    "sha256": "5292a78823e44aed356422b39961446533ca6b9609268eb907e1824c638e80ea"
+  },
+  {
+    "path": "data/datasheets/tpd4eusb30.pdf",
+    "sha256": "a2c0dd845043a5bbfe610f673879c29e38649544385dea51dbe0a4c49df39136"
+  },
+  {
+    "path": "data/datasheets/bq25798.pdf",
+    "sha256": "631d541679512116b5cf7ade0516000e78bc95f060b8b958e726c1b6eb74c27f"
+  },
+  {
+    "path": "data/datasheets/RPL-3_0.pdf",
+    "sha256": "d4b1e71ec82db951442d3746919d0a4dbfbbd24da5e43b65abc017f995f7ee68"
+  },
+  {
+    "path": "data/datasheets/bq25622.pdf",
+    "sha256": "c22135ccb7e3845220e978c071a7f611eb1ae0dbebccface58961ce8077c9e22"
+  },
+  {
+    "path": "data/datasheets/msl0402rgbu1-e.pdf",
+    "sha256": "435f8e8879f71319dbb84feb2eb8b3d5f08cde410fb43a19fe631caaae9e5a64"
+  },
+  {
+    "path": "data/datasheets/lp5813.pdf",
+    "sha256": "3ca6c348b7e2613a95d1bd30157545bcca37317a34f05ee884816d9f5bde601e"
+  },
+  {
+    "path": "data/datasheets/tpsm863253.pdf",
+    "sha256": "bfb7433b5e82d76af89b99e0fbb0cc2e907781a762ccfc4a2449da1ebacf6ec4"
+  },
+  {
+    "path": "data/datasheets/max16169.pdf",
+    "sha256": "e04e9c7d649782db94491619b1d99d2dd8161cc0d62b7b7452e48f13f70ca469"
+  },
+  {
+    "path": "hardware/v2_mini_pcb/production/digikey_bom.csv",
+    "sha256": "b2cac998808fef9f001686bd05d0f14e9c40e4e383e0bf72e4c67ab1fddcf51d"
+  },
+  {
+    "path": "hardware/v2_mini_pcb/v2_mini.kicad_pcb",
+    "sha256": "f61f66755f0cb7836d5e4db1b27d2ca62ad4b045b16618169fd4e7da0a1d7018"
+  },
+  {
+    "path": "hardware/v2_pcb/BOM.md",
+    "sha256": "42a7f209ced6e1de835c73e911bb2b81fe33d13c83954a6797993a80a7d4df72"
+  },
+  {
+    "path": "hardware/v2_pcb/open-race_v2.net",
+    "sha256": "fa42242f20ffd0ac5a23d72af8f52c6289531e0cbd571f249e31043058fa8787"
+  },
+  {
+    "path": "hardware/v1_pcb/jlcpcb/production_files/BOM-pcb.csv",
+    "sha256": "6692500083b79551234deef37afdea3ed708827353ddf8ae07b46ff7c0f8574c"
+  }
+]

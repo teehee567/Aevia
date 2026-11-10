@@ -1,10 +1,14 @@
+use aevia_device_hal::memory::{EspFlash, V2_MINI_FLASH_BYTES};
 use esp_bootloader_esp_idf::partitions::{self, AppPartitionSubType as App, PartitionType as Kind};
 use esp_hal::peripherals::FLASH;
 use esp_storage::FlashStorage;
 
-use crate::loader::update::{Error, Flash};
+use crate::loader::{
+    layout::{self, Partition},
+    update::{Error, Flash},
+};
 
-pub struct Storage<'d>(FlashStorage<'d>);
+pub struct Storage<'d>(EspFlash<'d>);
 
 impl<'d> Storage<'d> {
     pub fn new(flash: FLASH<'d>) -> Result<(Self, u8), Error> {
@@ -19,6 +23,13 @@ impl<'d> Storage<'d> {
         if table.len() != 4 || esp_storage::flash_encryption() {
             return Err(Error::Layout);
         }
+        layout::validate(table.iter().map(|entry| Partition {
+            kind: entry.raw_type(),
+            subtype: entry.raw_subtype(),
+            offset: entry.offset(),
+            size: entry.len(),
+            flags: entry.flags(),
+        }))?;
         let running = match table
             .booted_partition()
             .map_err(|_| Error::Layout)?
@@ -28,18 +39,28 @@ impl<'d> Storage<'d> {
             Some(Kind::App(App::Ota1)) => 1,
             _ => return Err(Error::Layout),
         };
+        let mut flash =
+            EspFlash::v2_mini(flash, 0, V2_MINI_FLASH_BYTES).map_err(|_| Error::Layout)?;
+        flash.initialize().map_err(|_| Error::Layout)?;
         Ok((Self(flash), running))
     }
 }
 
 impl Flash for Storage<'_> {
     fn read(&mut self, address: u32, bytes: &mut [u8]) -> Result<(), Error> {
-        self.0.read_nor(address, bytes).map_err(|_| Error::Flash)
+        self.0
+            .read(u64::from(address), bytes)
+            .map_err(|_| Error::Flash)
     }
     fn write(&mut self, address: u32, bytes: &[u8]) -> Result<(), Error> {
-        self.0.write_nor(address, bytes).map_err(|_| Error::Flash)
+        self.0
+            .program(u64::from(address), bytes)
+            .map_err(|_| Error::Flash)
     }
     fn erase(&mut self, from: u32, to: u32) -> Result<(), Error> {
-        self.0.erase(from, to).map_err(|_| Error::Flash)
+        let length = to.checked_sub(from).ok_or(Error::Flash)?;
+        self.0
+            .erase(u64::from(from), u64::from(length))
+            .map_err(|_| Error::Flash)
     }
 }
