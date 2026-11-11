@@ -25,7 +25,7 @@ pub struct ImuSample {
 }
 pub use super::gnss::observation::GnssSample;
 
-// ~87 ms of nominal 1.475 kHz IMU and 320 ms of GNSS. Producers never wait for
+// ~174 ms of nominal 737.5 Hz IMU and 320 ms of GNSS. Producers never wait for
 // these queues: overload is counted and remains an observable time gap.
 pub static IMU: Channel<CriticalSectionRawMutex, ImuSample, 128> = Channel::new();
 pub static GNSS: Channel<CriticalSectionRawMutex, GnssSample, 16> = Channel::new();

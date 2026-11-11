@@ -151,3 +151,168 @@ fn missing_capture_or_nonconsecutive_pulse_label_requires_reacquisition() {
     assert!(!clock.status(16_022_000_000).pps_locked);
     assert_eq!(clock.status(16_022_000_000).pps_rejected, 1);
 }
+
+#[test]
+fn integer_header_correlates_physical_pulse_despite_boot_varying_payload_lag() {
+    let mut clock = ClockSync::new();
+    // Antenna-backed Build17548 boots have shown 20 and 160ms payload lag.
+    // Header epoch/output delay independently agree with physical PPS receipt.
+    // Include other lags to prove no payload rounding or fixed correction.
+    for second in 100..104 {
+        let pulse = (second - 90) * SECOND;
+        clock.pulse(pulse);
+        clock.label(
+            PpsLabel {
+                epoch_ms: second * 1000 - [20, 160, 321, 999][(second - 100) as usize],
+                header_epoch_ms: second * 1000,
+                output_delay_ns: 23_000_000,
+                ..label(second)
+            },
+            pulse + 30_000_000,
+        );
+    }
+    assert!(clock.status(13_100_000_000).pps_locked);
+    assert_eq!(clock.status(13_100_000_000).pps_pairs, 4);
+    assert_eq!(clock.status(13_100_000_000).pps_rejected, 0);
+    assert_eq!(
+        clock
+            .epoch(103_020_000_000, 13_100_000_000)
+            .unwrap()
+            .time_ns,
+        13_020_000_000
+    );
+    // Once locked, delayed delivery still associates against physical history.
+    clock.pulse(14 * SECOND);
+    clock.label(
+        PpsLabel {
+            epoch_ms: 103_980,
+            header_epoch_ms: 104_000,
+            output_delay_ns: 23_000_000,
+            ..label(104)
+        },
+        14_400_000_000,
+    );
+    assert!(clock.status(14_400_000_000).pps_locked);
+    assert_eq!(
+        clock
+            .epoch(104_020_000_000, 14_400_000_000)
+            .unwrap()
+            .time_ns,
+        14_020_000_000
+    );
+}
+
+#[test]
+fn fractional_pps_tags_require_integer_header_and_preceding_second_sanity() {
+    for (epoch_ms, header_epoch_ms) in [
+        (100_980, 102_000),
+        (100_980, 100_980),
+        (101_020, 101_000),
+        (100_840, 100_999),
+        (100_840, 101_001),
+    ] {
+        let mut clock = locked_clock();
+        clock.label(
+            PpsLabel {
+                epoch_ms,
+                header_epoch_ms,
+                ..label(103)
+            },
+            13_030_000_000,
+        );
+        let status = clock.status(13_030_000_000);
+        assert!(
+            !status.pps_locked,
+            "epoch={epoch_ms} header={header_epoch_ms}"
+        );
+        assert_eq!(status.pps_rejected, 1);
+    }
+}
+
+#[test]
+fn header_correlated_pulses_cross_gps_week_without_changing_continuity() {
+    let rollover_ms = 2401 * 604_800_000;
+    let mut clock = ClockSync::new();
+    for step in 0..4 {
+        let pulse_ms = rollover_ms - 1000 + step * 1000;
+        let local = 10 * SECOND + step * SECOND;
+        clock.pulse(local);
+        clock.label(
+            PpsLabel {
+                epoch_ms: pulse_ms - 160,
+                header_epoch_ms: pulse_ms,
+                output_delay_ns: 23_000_000,
+                ..label(0)
+            },
+            local + 30_000_000,
+        );
+    }
+    assert!(clock.status(13_100_000_000).pps_locked);
+    assert_eq!(
+        clock
+            .epoch((rollover_ms + 2020) * 1_000_000, 13_100_000_000)
+            .unwrap()
+            .time_ns,
+        13_020_000_000
+    );
+}
+
+#[test]
+fn header_correlation_needs_one_recent_past_physical_edge_at_startup() {
+    let header_label = PpsLabel {
+        epoch_ms: 99_840,
+        header_epoch_ms: 100_000,
+        ..label(100)
+    };
+    // Missing, stale, future, or ambiguous captures must not manufacture lock.
+    for (pulses, received) in [
+        ([0, 0], 10_030_000_000),
+        ([9 * SECOND, 0], 10_030_000_000),
+        ([10 * SECOND, 0], 10_120_000_000),
+        ([10_040_000_000, 0], 10_030_000_000),
+        ([10 * SECOND, 10_010_000_000], 10_030_000_000),
+    ] {
+        let mut clock = ClockSync::new();
+        for pulse in pulses.into_iter().filter(|pulse| *pulse != 0) {
+            clock.pulse(pulse);
+        }
+        clock.label(header_label, received);
+        let status = clock.status(received);
+        assert_eq!(status.pps_pairs, 0);
+        assert_eq!(status.pps_rejected, 1);
+    }
+    let mut clock = ClockSync::new();
+    clock.pulse(10 * SECOND);
+    clock.label(header_label, 10_030_000_000);
+    assert_eq!(clock.status(10_030_000_000).pps_pairs, 1);
+    assert!(!clock.status(10_030_000_000).pps_locked);
+}
+
+#[test]
+fn header_correlation_cannot_switch_integer_seconds_after_acquisition() {
+    let mut clock = ClockSync::new();
+    for second in 100..103 {
+        let pulse = (second - 90) * SECOND;
+        clock.pulse(pulse);
+        clock.label(
+            PpsLabel {
+                epoch_ms: second * 1000 - 160,
+                header_epoch_ms: second * 1000,
+                ..label(second)
+            },
+            pulse + 30_000_000,
+        );
+    }
+    assert!(clock.status(12_030_000_000).pps_locked);
+    clock.pulse(13 * SECOND);
+    clock.label(
+        PpsLabel {
+            epoch_ms: 103_840,
+            header_epoch_ms: 104_000, // Wrong by one second despite plausible payload.
+            ..label(104)
+        },
+        13_030_000_000,
+    );
+    assert!(!clock.status(13_030_000_000).pps_locked);
+    assert_eq!(clock.status(13_030_000_000).pps_rejected, 1);
+}

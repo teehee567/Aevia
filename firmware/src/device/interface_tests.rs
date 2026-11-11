@@ -15,12 +15,62 @@ fn evaluation_commands_append_without_changing_existing_indices() {
         (DeviceCommand::ResetStatus, &[3, 1, 8, 0][..]),
         (DeviceCommand::GnssTransportStatus, &[3, 1, 9, 0][..]),
         (DeviceCommand::PowerDiagnostics, &[3, 1, 10, 0][..]),
+        (DeviceCommand::GnssFixStatus, &[3, 1, 11, 0][..]),
+        (DeviceCommand::PowerChargeStatus, &[3, 1, 12, 0][..]),
     ] {
         assert_eq!(
             postcard::to_slice_cobs(&Request::Device(command), &mut buffer).unwrap(),
             frame
         );
     }
+}
+
+#[test]
+fn charge_status_appends_and_round_trips_without_changing_legacy_power_status() {
+    let value = PowerChargeStatus {
+        updated_us: Some(u64::MAX),
+        verified: true,
+        charging_enabled: Some(true),
+        charge_current_ma: Some(u16::MAX),
+        charge_voltage_mv: Some(u16::MAX),
+        input_current_limit_ma: Some(u16::MAX),
+        charger_status0: Some(u8::MAX),
+        charger_status1: Some(u8::MAX),
+        fault_status: Some(u8::MAX),
+        precharge_current_ma: Some(u16::MAX),
+        termination_current_ma: Some(u16::MAX),
+        charger_control0: Some(u8::MAX),
+        charger_control1: Some(u8::MAX),
+        ntc_control0: Some(u8::MAX),
+    };
+    let mut output = [0; 512];
+    let bytes = postcard::to_slice_cobs(
+        &Response::Device(DeviceResponse::PowerChargeStatus(value)),
+        &mut output,
+    )
+    .unwrap();
+    assert_eq!(&bytes[1..3], &[1, 11]);
+    let Response::Device(DeviceResponse::PowerChargeStatus(actual)) =
+        postcard::from_bytes_cobs(bytes).unwrap()
+    else {
+        panic!()
+    };
+    assert_eq!(actual, value);
+    assert!(DeviceCommand::PowerChargeStatus.available_in_recovery());
+
+    let legacy = PowerStatus {
+        part_info: Some(0x18),
+        control: Some(0x20),
+        charger_status: Some(0x28),
+        verified: true,
+        errors: 5,
+    };
+    let bytes = postcard::to_slice(
+        &Response::Device(DeviceResponse::PowerStatus(legacy)),
+        &mut output,
+    )
+    .unwrap();
+    assert_eq!(bytes, &[1, 2, 1, 0x18, 1, 0x20, 1, 0x28, 1, 5]);
 }
 
 #[test]

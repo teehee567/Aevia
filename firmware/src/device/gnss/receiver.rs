@@ -7,7 +7,7 @@ use super::super::{
 use super::{
     diagnostics::ParserContext,
     navigation::{EpochProgress, EpochState, Navigation},
-    transport,
+    recording, transport,
     verification::{Action, PpsVerification},
 };
 use aevia_device_hal::um980::{
@@ -25,6 +25,27 @@ use esp_hal::{
 const BAUD: Baud = Baud::B460800;
 const IDLE_TIMEOUT_MS: u64 = 200;
 const NAVIGATION_TIMEOUT_MS: u64 = 3000;
+// The UART has only a 128-byte hardware FIFO. At 460800 baud, the 32-byte
+// wake threshold leaves about 2 ms to service it. Drain consecutive available
+// reads before suspending, rather than adding a timer after every small read.
+// Both limits are checked between reads, keeping this interrupt executor's
+// work bounded even under continuous input. Higher-priority IMU work remains
+// preemptible throughout; a real 100 us suspension admits lower-priority work.
+const RECEIVE_BURST_BYTES: usize = 512;
+const RECEIVE_BURST_US: u64 = 500;
+// N4 R1.2 §§7.3.2/7.3.16–21. Keep raw observations at 1Hz on the proven
+// 460800-baud port. PVT remains 50Hz. BD3EPH is explicitly unsupported in
+// that manual and is not silently claimed. Actual CRC-valid log IDs are counted.
+const OPTIONAL_LOGS: [&str; 8] = [
+    "OBSVMB COM2 1",
+    "GPSEPHB COM2 ONCHANGED",
+    "GLOEPHB COM2 ONCHANGED",
+    "BDSEPHB COM2 ONCHANGED",
+    "GALEPHB COM2 ONCHANGED",
+    "QZSSEPHB COM2 ONCHANGED",
+    "VERSIONB COM2",
+    "CONFIG",
+];
 
 fn pps_status(message: PpsStatus, received_ns: u64) {
     let Some(header_epoch_ms) = message.header.gps_epoch_ms() else {
@@ -34,8 +55,8 @@ fn pps_status(message: PpsStatus, received_ns: u64) {
         return;
     };
     timing::observe_pulse();
-    timing::CLOCK.lock(|clock| {
-        clock.borrow_mut().label(
+    let _ = timing::CLOCK.update(|clock| {
+        clock.label(
             PpsLabel {
                 epoch_ms,
                 header_epoch_ms,
@@ -50,14 +71,19 @@ fn pps_status(message: PpsStatus, received_ns: u64) {
 }
 
 fn sample(nav: Navigation, received_us: u64, received_ns: u64) -> Option<GnssSample> {
-    let epochs = timing::CLOCK.lock(|clock| {
-        let mut clock = clock.borrow_mut();
-        Some((
-            clock.epoch(nav.position_gps_ns, received_ns)?,
-            clock.epoch(nav.velocity_gps_ns, received_ns)?,
-        ))
+    let epochs = timing::CLOCK.update(|clock| {
+        let position_epoch = clock.epoch(nav.position_gps_ns, received_ns)?;
+        // The fitted receiver normally reports zero velocity latency. Avoid
+        // repeating the software-wide projection
+        // when both independently validated fields share the same GPS epoch.
+        let velocity_epoch = if nav.velocity_gps_ns == nav.position_gps_ns {
+            position_epoch
+        } else {
+            clock.epoch(nav.velocity_gps_ns, received_ns)?
+        };
+        Some((position_epoch, velocity_epoch))
     });
-    let Some((position_epoch, velocity_epoch)) = epochs else {
+    let Ok(Some((position_epoch, velocity_epoch))) = epochs else {
         timing::UNSYNCHRONIZED.fetch_add(1, Ordering::Relaxed);
         return None;
     };
@@ -91,25 +117,57 @@ fn baud(uart: &mut Uart<'_, Async>, rate: Baud) -> Result<(), ()> {
     )
     .map_err(|_| ())
 }
-async fn write(uart: &mut Uart<'_, Async>, bytes: &[u8]) -> Result<(), ()> {
-    with_timeout(Duration::from_millis(500), async {
+async fn write(uart: &mut Uart<'_, Async>, bytes: &[u8], flush: bool) -> Result<(), ()> {
+    recording::uart(
+        8,
+        bytes,
+        Instant::now().as_micros(),
+        timing::capture::now_ns(),
+    );
+    let result = with_timeout(Duration::from_millis(500), async {
         uart.write_all(bytes).await.map_err(|_| ())?;
-        embedded_io_async::Write::flush(uart).await.map_err(|_| ())
+        if flush {
+            embedded_io_async::Write::flush(uart)
+                .await
+                .map_err(|_| ())?;
+        }
+        Ok(())
     })
     .await
-    .map_err(|_| ())?
+    .map_err(|_| ())
+    .and_then(|result| result);
+    if result.is_err() {
+        recording::fault(1, 3, 0);
+    }
+    result
 }
 async fn send(uart: &mut Uart<'_, Async>, command: Command<'_>) -> Result<(), ()> {
+    transmit(uart, command, true).await
+}
+async fn send_queued(uart: &mut Uart<'_, Async>, command: Command<'_>) -> Result<(), ()> {
+    // COM1 is commonly 115200 baud: a 26-byte command takes 2.26 ms on the wire,
+    // longer than COM2's FIFO service margin. Queue the complete command and
+    // resume RX immediately; hardware preserves FIFO ordering. This records
+    // an attempted write, never a receiver ACK. Setup still uses flushed sends.
+    transmit(uart, command, false).await
+}
+async fn transmit(uart: &mut Uart<'_, Async>, command: Command<'_>, flush: bool) -> Result<(), ()> {
     super::super::supervision::gnss_heartbeat();
     let mut bytes = [0; 128];
     let len = command.encode(&mut bytes).map_err(|_| ())?;
-    write(uart, &bytes[..len]).await
+    write(uart, &bytes[..len], flush).await
 }
 fn drain(uart: &mut Uart<'_, Async>) {
     let mut bytes = [0; 128];
     for _ in 0..16 {
-        if !matches!(uart.read_buffered(&mut bytes), Ok(n) if n > 0) {
-            break;
+        match uart.read_buffered(&mut bytes) {
+            Ok(n) if n > 0 => recording::uart(
+                3,
+                &bytes[..n],
+                Instant::now().as_micros(),
+                timing::capture::now_ns(),
+            ),
+            _ => break,
         }
     }
 }
@@ -122,7 +180,7 @@ async fn probe(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Res
         for data_baud in [Baud::B115200, BAUD, Baud::B921600] {
             baud(data, data_baud)?;
             drain(data);
-            write(command, b"\r\n").await?;
+            write(command, b"\r\n", true).await?;
             send(command, Command::Unlog { port: Port::Com2 }).await?;
             send(command, Command::Version { port: Port::Com2 }).await?;
             let found = with_timeout(Duration::from_millis(600), async {
@@ -131,6 +189,12 @@ async fn probe(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Res
                 loop {
                     match data.read_async(&mut bytes).await {
                         Ok(n) if n > 0 => {
+                            recording::uart(
+                                3,
+                                &bytes[..n],
+                                Instant::now().as_micros(),
+                                timing::capture::now_ns(),
+                            );
                             transport::record_bytes(2, n);
                             for &byte in &bytes[..n] {
                                 if matches!(decoder.push(byte), Ok(Some(f)) if f.message_id() == 37)
@@ -160,6 +224,15 @@ async fn probe(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Res
 }
 
 async fn configure(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) -> Result<(), ()> {
+    // A live-loop command may still be in the TX FIFO when recovery begins.
+    // Complete it before probe changes COM1 baud; do not truncate queued data.
+    with_timeout(
+        Duration::from_millis(500),
+        embedded_io_async::Write::flush(command),
+    )
+    .await
+    .map_err(|_| ())?
+    .map_err(|_| ())?;
     probe(command, data).await?;
     send(command, Command::Raw("CONFIG SIGNALGROUP 8")).await?;
     Timer::after_secs(3).await; // Group changes restart the UM980.
@@ -199,6 +272,7 @@ async fn configure(command: &mut Uart<'_, Async>, data: &mut Uart<'_, Async>) ->
 }
 
 fn uart_error() {
+    recording::fault(0, 1, 0);
     sensors::GNSS_UART_ERRORS.fetch_add(1, Ordering::Relaxed);
     sensors::GNSS_ERRORS.fetch_add(1, Ordering::Relaxed);
 }
@@ -210,6 +284,19 @@ fn parse_error(
     message_id: Option<u16>,
     received_us: u64,
 ) {
+    recording::fault(
+        port as u8 + 1,
+        2,
+        match error {
+            DecodeError::BufferTooSmall => 1,
+            DecodeError::Oversized => 2,
+            DecodeError::Length => 3,
+            DecodeError::Sync => 4,
+            DecodeError::Checksum => 5,
+            DecodeError::InvalidAscii => 6,
+            DecodeError::MessageType => 7,
+        },
+    );
     sensors::GNSS_PARSE_ERRORS.fetch_add(1, Ordering::Relaxed);
     sensors::GNSS_ERRORS.fetch_add(1, Ordering::Relaxed);
     status.last_parser_error =
@@ -227,6 +314,10 @@ pub async fn task(
     let (mut command, mut data) = super::super::board::activate_gnss(command, data);
     let mut status = super::GnssStatus::default();
     let mut failures = 0_u8;
+    // Coverage belongs to the current file generation, not a receiver
+    // configuration attempt. Retain it across UART/parser recovery.
+    let mut raw_status = recording::RawStatus::default();
+    recording::publish(raw_status, timing::capture::now_ns().unwrap_or(0));
     loop {
         super::super::supervision::gnss_heartbeat();
         if failures >= 3 {
@@ -239,11 +330,12 @@ pub async fn task(
             failures = 0;
         }
         status.config_verified = false;
+        super::fix::invalidate();
         status.navigation_time_ready = false;
         status.last_pps_quality = None;
         super::publish(status);
         sensors::GNSS_RATE_HZ.store(0, Ordering::Relaxed);
-        timing::CLOCK.lock(|clock| clock.borrow_mut().invalidate());
+        let _ = timing::CLOCK.update(timing::ClockSync::invalidate);
         if configure(&mut command, &mut data).await.is_err() {
             failures = failures.saturating_add(1);
             uart_error();
@@ -254,6 +346,9 @@ pub async fn task(
         // Mixed decoders exclude binary payloads from CONFIG recognition on
         // both return paths, and preserve normal navigation during retries.
         let mut decoders = [Decoder::<512>::new(), Decoder::<512>::new()];
+        for port in 0..2 {
+            raw_status.complete_frame(port); // Earlier partial framing was discarded by setup.
+        }
         let mut contexts = [ParserContext::new(), ParserContext::new()];
         let mut command_bytes = [0; 128];
         let mut data_bytes = [0; 128];
@@ -264,19 +359,36 @@ pub async fn task(
         let mut uart_failures = 0;
         let mut command_retry_at = Instant::now();
         let mut prefer_data = false;
+        let mut optional_index = 0;
+        let mut optional_after = Instant::now();
+        let mut burst_bytes = 0;
+        let mut burst_started = Instant::now();
         loop {
             super::super::supervision::gnss_heartbeat();
+            let requested = recording::bootstrap_generation();
+            if raw_status.begin_generation(
+                requested,
+                decoders.each_ref().map(|d| d.has_partial_frame()),
+            ) {
+                optional_index = 0;
+                optional_after = Instant::now();
+                recording::publish(raw_status, timing::capture::now_ns().unwrap_or(0));
+            }
             // An idle deadline also discards plausible but truncated frames.
             // Continuous junk/PPS traffic cannot hide missing navigation.
             if last_navigation.elapsed().as_millis() >= NAVIGATION_TIMEOUT_MS {
                 sensors::GNSS_ERRORS.fetch_add(1, Ordering::Relaxed);
                 break;
             }
+            let mut status_changed = true;
             match verification.poll(Instant::now().as_micros()) {
                 Action::Query => {
                     status.config_queries = status.config_queries.saturating_add(1);
                     // Only query COM1; never drive the unverified COM2 TX path.
-                    if send(&mut command, Command::QueryConfig).await.is_err() {
+                    if send_queued(&mut command, Command::QueryConfig)
+                        .await
+                        .is_err()
+                    {
                         uart_error();
                         verification.failed(Instant::now().as_micros());
                     }
@@ -285,13 +397,33 @@ pub async fn task(
                     status.config_timeouts = status.config_timeouts.saturating_add(1);
                     sensors::GNSS_ERRORS.fetch_add(1, Ordering::Relaxed);
                 }
-                Action::None => {}
+                Action::None => status_changed = false,
             }
             if status.config_verified && !verification.verified() {
-                timing::CLOCK.lock(|clock| clock.borrow_mut().invalidate());
+                let _ = timing::CLOCK.update(timing::ClockSync::invalidate);
             }
+            status_changed |= status.config_verified != verification.verified();
             status.config_verified = verification.verified();
-            super::publish(status);
+            if status_changed {
+                super::publish(status);
+            }
+            // Install optional raw logs gradually while continuously draining
+            // COM2. A burst of ephemerides must not fill the FIFO while setup
+            // sends multiple commands without servicing reception.
+            if optional_index < OPTIONAL_LOGS.len() && Instant::now() >= optional_after {
+                if send_queued(&mut command, Command::Raw(OPTIONAL_LOGS[optional_index]))
+                    .await
+                    .is_err()
+                {
+                    raw_status.optional_write_failures =
+                        raw_status.optional_write_failures.saturating_add(1);
+                }
+                optional_index += 1;
+                // Cached ephemerides can contain many satellites. Half a
+                // second between requests leaves UART bandwidth for PVT/raw
+                // observations while the receiver drains the preceding burst.
+                optional_after = Instant::now() + Duration::from_millis(500);
+            }
             let command_read = async {
                 Timer::at(command_retry_at).await;
                 command.read_async(&mut command_bytes).await
@@ -325,14 +457,17 @@ pub async fn task(
                 }
                 Ok(Either::First(result)) => {
                     prefer_data = true;
-                    // An absent/noisy command return path cannot continually
-                    // win select, starve COM2 or restart healthy navigation.
+                    // Prefer COM2 and yield briefly so a noisy command return
+                    // path cannot monopolize the executor. A 200 ms exclusion
+                    // discarded the 921-byte CONFIG reply (~80 ms at 115200)
+                    // after one error by letting the 128-byte FIFO overflow.
                     if let Err(error) = result {
                         transport::record_rx(1, error, Instant::now().as_micros());
                     }
                     uart_error();
                     decoders[0].reset();
-                    command_retry_at = Instant::now() + Duration::from_millis(IDLE_TIMEOUT_MS);
+                    raw_status.complete_frame(0);
+                    command_retry_at = Instant::now() + Duration::from_micros(100);
                     Timer::after_micros(100).await;
                     continue;
                 }
@@ -343,16 +478,20 @@ pub async fn task(
                     }
                     uart_error();
                     decoders[1].reset();
+                    raw_status.complete_frame(1);
                     uart_failures += 1;
                     if uart_failures >= 4 {
                         break;
                     }
-                    Timer::after_millis(1).await;
+                    // Yield without spending half the 128-byte FIFO service
+                    // margin idle after an error (about 46 bytes arrive per ms).
+                    Timer::after_micros(100).await;
                     continue;
                 }
                 Err(_) => {
-                    for decoder in &mut decoders {
+                    for (port, decoder) in decoders.iter_mut().enumerate() {
                         decoder.reset();
+                        raw_status.complete_frame(port);
                     }
                     continue;
                 }
@@ -360,21 +499,30 @@ pub async fn task(
             transport::record_bytes(port as u8 + 1, bytes.len());
             let received = Instant::now().as_micros();
             let received_ns = timing::capture::now_ns();
+            recording::uart(if port == 1 { 3 } else { 4 }, bytes, received, received_ns);
             for &byte in bytes {
                 contexts[port].push(byte);
                 let frame = match decoders[port].push(byte) {
                     Ok(Some(frame)) => frame,
                     Ok(None) => continue,
                     Err(error) => {
+                        raw_status.complete_frame(port);
                         parse_error(&mut status, &contexts[port], port, error, None, received);
                         continue;
                     }
                 };
+                let credit_frame = raw_status.complete_frame(port);
                 let frame = match frame {
+                    Frame::SkippedBinary { header, .. } => {
+                        if credit_frame {
+                            raw_status.observe(header, received);
+                        }
+                        continue;
+                    }
                     Frame::Ascii(line) => {
                         verification.observe(line, received);
                         if status.config_verified && !verification.verified() {
-                            timing::CLOCK.lock(|clock| clock.borrow_mut().invalidate());
+                            let _ = timing::CLOCK.update(timing::ClockSync::invalidate);
                         }
                         status.config_verified = verification.verified();
                         super::publish(status);
@@ -382,11 +530,20 @@ pub async fn task(
                     }
                     Frame::Binary(frame) => frame,
                 };
+                if credit_frame {
+                    raw_status.observe(frame.header(), received);
+                }
                 // Navigation counters remain available before verification,
                 // but PPS labels and fusion stay gated on the exact readback.
                 match frame.message_id() {
                     9000 => match frame.pps_status() {
                         Ok(message) => {
+                            super::fix::pps(
+                                message,
+                                received,
+                                received_ns,
+                                timing::capture::pps_ns(),
+                            );
                             status.last_pps_quality = Some(message.quality);
                             super::publish(status);
                             if verification.verified()
@@ -419,6 +576,7 @@ pub async fn task(
                                 continue;
                             }
                         };
+                        super::fix::navigation(message, received);
                         match progress.observe(message.header) {
                             EpochState::TimeUnavailable => {
                                 // Cold acquisition can take longer than the
@@ -439,6 +597,9 @@ pub async fn task(
                         last_navigation = Instant::now();
                         advancing += 1;
                         sensors::record_gnss(received);
+                        if super::super::configuration::DATA_COLLECTION_ONLY {
+                            continue;
+                        }
                         let Some(nav) = Navigation::prepare(message) else {
                             continue;
                         };
@@ -458,18 +619,28 @@ pub async fn task(
             }
             let elapsed = rate_start.elapsed().as_millis();
             if elapsed >= 1000 {
+                recording::publish(raw_status, received_ns.unwrap_or(0));
                 sensors::GNSS_RATE_HZ.store((advancing * 1000 / elapsed) as u32, Ordering::Relaxed);
                 advancing = 0;
                 rate_start = Instant::now();
             }
-            // Bound each interrupt-executor poll even if UART input remains
-            // continuously ready. A real 100us suspension lets lower-priority
-            // work run; 1us could expire before this task finished returning.
-            // At 460800 baud fewer than five bytes arrive during the pause.
-            Timer::after_micros(100).await;
+            burst_bytes += bytes.len();
+            if bytes.len() < usize::from(aevia_device_hal::esp32s31::GNSS_RX_FIFO_THRESHOLD)
+                || burst_bytes >= RECEIVE_BURST_BYTES
+                || burst_started.elapsed().as_micros() >= RECEIVE_BURST_US
+            {
+                // Continue immediate fair COM1/COM2 reads within this budget.
+                // A short read means the FIFO was nearly drained: coalesce
+                // new bytes rather than spinning into one-byte log records.
+                // At line rate fewer than five bytes arrive in the suspension;
+                // pending input is drained again before another such pause.
+                Timer::after_micros(100).await;
+                burst_bytes = 0;
+                burst_started = Instant::now();
+            }
         }
         failures = failures.saturating_add(1);
-        timing::CLOCK.lock(|clock| clock.borrow_mut().invalidate());
+        let _ = timing::CLOCK.update(timing::ClockSync::invalidate);
         sensors::GNSS_RATE_HZ.store(0, Ordering::Relaxed);
         Timer::after_millis(100).await;
     }

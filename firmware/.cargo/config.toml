@@ -9,3 +9,8 @@ target = "riscv32imafc-unknown-none-elf"
 
 [unstable]
 build-std = ["alloc", "core"]
+
+# The interrupt-driven acquisition path must keep its 600 us read deadline
+# while the other core runs navigation. Prefer execution speed for this target.
+[profile.release.package.firmware]
+opt-level = 3

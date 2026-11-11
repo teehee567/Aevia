@@ -105,9 +105,10 @@ class QueryEvidenceTests(unittest.TestCase):
     def test_fail_fast_waits_for_two_polls_and_ignores_unfinished_soak_duration(self):
         instance = Probe.__new__(Probe)
         instance.args = SimpleNamespace(image=None, brightness=96, settle=0, seconds=1810,
-                                        interval=5, transport=False, power_diagnostics=False,
-                                        fail_fast=True, minimum_imu_hz=1350,
-                                        maximum_imu_hz=1600, stationary=True)
+                                        interval=5, transport=False, power_diagnostics=False, fix=True,
+                                        power_charge=True,
+                                        fail_fast=True, minimum_imu_hz=675,
+                                        maximum_imu_hz=800, stationary=True)
         instance.records = []
         instance.system = Mock(return_value={"Info": {"recovery": False}})
 
@@ -124,7 +125,23 @@ class QueryEvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "bench fail-fast: power error"):
                 instance.capture()
         self.assertEqual(sum(call.args[0] == "acquisition" for call in instance.query.call_args_list), 2)
-        evaluation.assert_called_once_with(instance.records, 0, 1350, 1600, True)
+        fix_queries = [call.args for call in instance.query.call_args_list if call.args[0] == "fix"]
+        self.assertEqual(fix_queries, [("fix", bytes([1, 11]))] * 2)
+        charge_queries = [call.args for call in instance.query.call_args_list if call.args[0] == "power_charge"]
+        self.assertEqual(charge_queries, [("power_charge", bytes([1, 12]))] * 2)
+        evaluation.assert_called_once_with(instance.records, 0, 675, 800, True, False)
+
+    def test_charge_query_requires_the_matching_typed_response(self):
+        for response, valid in (({"Device": {"PowerChargeStatus": {"verified": True}}}, True),
+                                ({"Device": {"PowerStatus": {"verified": True}}}, False)):
+            with self.subTest(valid=valid):
+                instance = probe(b"\x01\0", json.dumps(response) + "\n")
+                if valid:
+                    self.assertEqual(instance.query("power_charge", bytes([1, 12])), response)
+                else:
+                    with self.assertRaisesRegex(RuntimeError, "unexpected response"):
+                        instance.query("power_charge", bytes([1, 12]))
+                self.assertEqual(instance.records[0]["response"], response)
 
 
 if __name__ == "__main__":

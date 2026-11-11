@@ -167,6 +167,7 @@ pub(crate) async fn task(mut display: Display) {
                 Phase::Navigating => "NAVIGATING",
                 Phase::Degraded => "DEGRADED",
                 Phase::Failed => "ENGINE ERROR",
+                Phase::Recording => "RECORDING",
             };
             let _ = write!(lines[0], "AEVIA / {}", phase);
             if let Some(speed) = state.horizontal_speed_mps {

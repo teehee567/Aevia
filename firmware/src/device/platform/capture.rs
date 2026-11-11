@@ -124,12 +124,13 @@ pub fn maintain() {
 
 /// Fast hardware-counter reads. Channel latches are read before soft 'now', so
 /// an intervening edge can never make the selected latch appear in the future.
-fn read(channel: Option<usize>) -> Option<u64> {
+fn read_evidence(channel: Option<usize>) -> Option<(u64, u32)> {
     CLOCK.lock(|clock| {
         let mut clock = clock.borrow_mut();
         let capture = clock.as_mut()?;
         let latch = channel.map(|channel| registers().cap_ch(channel).read().bits());
-        let Some(now_ticks) = capture.counter.advance_fast(soft_capture()) else {
+        let raw_now = soft_capture();
+        let Some(now_ticks) = capture.counter.advance_fast(raw_now) else {
             ERRORS.fetch_add(1, Ordering::Relaxed);
             *clock = None;
             return None;
@@ -140,16 +141,23 @@ fn read(channel: Option<usize>) -> Option<u64> {
             Some(raw) => capture.counter.captured(raw)?,
             None => now_ticks,
         };
-        ticks.checked_mul(TICK_NS)?.checked_add(capture.origin_ns)
+        Some((
+            ticks.checked_mul(TICK_NS)?.checked_add(capture.origin_ns)?,
+            latch.unwrap_or(raw_now),
+        ))
     })
 }
 
 pub fn now_ns() -> Option<u64> {
-    read(None)
+    read_evidence(None).map(|(time, _)| time)
 }
 pub fn pps_ns() -> Option<u64> {
-    read(Some(0))
+    pps_evidence().map(|(time, _)| time)
+}
+/// Same atomic latch read provides both the extended clock and raw tick word.
+pub fn pps_evidence() -> Option<(u64, u32)> {
+    read_evidence(Some(0))
 }
 pub fn drdy_ns() -> Option<u64> {
-    read(Some(1))
+    read_evidence(Some(1)).map(|(time, _)| time)
 }

@@ -1,11 +1,14 @@
-//! Battery-free evaluation policy, shared by application and recovery.
+//! Verified fitted-battery or charging-disabled policy, shared by application
+//! and recovery. Charging never changes input limits, power paths or NTC setup.
 //! Register access, variant checks and power-path-safe writes belong to HAL.
-use super::interface::{PowerDiagnostics, PowerFailure, PowerStatus};
+use super::interface::{PowerChargeStatus, PowerDiagnostics, PowerFailure, PowerStatus};
 use aevia_device_hal::{
     bq25622::{Bq25622, ByteRegister, Error as ChargerError, Variant},
     embedded_hal::i2c::{self, I2c, Operation},
 };
 use core::cell::Cell;
+
+mod charging;
 
 /// Preserve the backend cause even when embedded-hal maps it to `Other`.
 pub(crate) trait DiagnosticError: i2c::Error {
@@ -151,6 +154,26 @@ static DIAGNOSTICS: embassy_sync::blocking_mutex::Mutex<
     embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex,
     Cell<Option<PowerDiagnostics>>,
 > = embassy_sync::blocking_mutex::Mutex::new(Cell::new(None));
+
+#[cfg(target_arch = "riscv32")]
+static CHARGE_STATUS: embassy_sync::blocking_mutex::Mutex<
+    embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex,
+    Cell<Option<PowerChargeStatus>>,
+> = embassy_sync::blocking_mutex::Mutex::new(Cell::new(None));
+
+pub(crate) fn charge_status() -> PowerChargeStatus {
+    #[cfg(target_arch = "riscv32")]
+    {
+        charging::fresh_status(
+            CHARGE_STATUS.lock(Cell::get).unwrap_or_default(),
+            embassy_time::Instant::now().as_micros(),
+        )
+    }
+    #[cfg(not(target_arch = "riscv32"))]
+    {
+        PowerChargeStatus::default()
+    }
+}
 
 pub(crate) fn diagnostics() -> PowerDiagnostics {
     #[cfg(target_arch = "riscv32")]
@@ -298,12 +321,24 @@ where
 {
     use super::interface;
     let mut diagnostics = self::diagnostics();
-    let status = enforce_diagnosed(
-        bus,
-        interface::power_status().errors,
-        &mut diagnostics,
-        || embassy_time::Instant::now().as_micros(),
-    );
+    let status = if super::configuration::BATTERY_FITTED && super::configuration::CHARGING_ENABLED {
+        let (status, charge) = charging::enforce(
+            bus,
+            interface::power_status().errors,
+            &mut diagnostics,
+            || embassy_time::Instant::now().as_micros(),
+        );
+        CHARGE_STATUS.lock(|current| current.set(Some(charge)));
+        status
+    } else {
+        CHARGE_STATUS.lock(|current| current.set(None));
+        enforce_diagnosed(
+            bus,
+            interface::power_status().errors,
+            &mut diagnostics,
+            || embassy_time::Instant::now().as_micros(),
+        )
+    };
     DIAGNOSTICS.lock(|current| current.set(Some(diagnostics)));
     interface::publish_power(status);
 }

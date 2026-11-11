@@ -16,6 +16,16 @@ pub struct Header {
 }
 
 impl Header {
+    pub(super) fn from_bytes(bytes: &[u8]) -> Self {
+        Self {
+            message_id: u16_at(bytes, 4),
+            time_reference: bytes[8],
+            time_status: bytes[9],
+            week: u16_at(bytes, 10),
+            milliseconds_of_week: u32_at(bytes, 12),
+            output_delay_ms: u16_at(bytes, 22),
+        }
+    }
     /// GPST milliseconds since its epoch, only for the existing verified
     /// GPST/FINE header profile and a timestamp inside a GPS week.
     pub fn gps_epoch_ms(self) -> Option<u64> {
@@ -31,15 +41,7 @@ impl Header {
 
 impl BinaryFrame<'_> {
     pub fn header(self) -> Header {
-        let bytes = self.header_bytes();
-        Header {
-            message_id: self.message_id(),
-            time_reference: bytes[8],
-            time_status: bytes[9],
-            week: u16_at(bytes, 10),
-            milliseconds_of_week: u32_at(bytes, 12),
-            output_delay_ms: u16_at(bytes, 22),
-        }
+        Header::from_bytes(self.header_bytes())
     }
 
     pub fn best_nav_xyz(self) -> Result<BestNavXyz, DecodeError> {
@@ -81,6 +83,7 @@ impl BinaryFrame<'_> {
             week: u32_at(p, 4),
             milliseconds_of_week: u32_at(p, 8),
             pulse_error_ns: i32::from_le_bytes(p[12..16].try_into().unwrap()),
+            offset_time_10ps: i32::from_le_bytes(p[16..20].try_into().unwrap()),
             config: u32_at(p, 20),
         })
     }
@@ -140,6 +143,8 @@ pub struct PpsStatus {
     pub week: u32,
     pub milliseconds_of_week: u32,
     pub pulse_error_ns: i32,
+    /// PPS offset relative to observation time, in 0.01 ns units (N4 R1.2).
+    pub offset_time_10ps: i32,
     pub config: u32,
 }
 

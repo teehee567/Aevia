@@ -182,6 +182,10 @@ class Probe:
             queries.append(("transport", bytes([1, 9])))
         if getattr(self.args, "power_diagnostics", False):
             queries.append(("power_diagnostics", bytes([1, 10])))
+        if getattr(self.args, "fix", False):
+            queries.append(("fix", bytes([1, 11])))
+        if getattr(self.args, "power_charge", False):
+            queries.append(("power_charge", bytes([1, 12])))
         while True:
             summary = {}
             for name, payload in queries:
@@ -194,7 +198,8 @@ class Probe:
             print(json.dumps(summary), flush=True)
             if getattr(self.args, "fail_fast", False) and len(acquisitions) >= 2:
                 report = evaluate(self.records, 0, self.args.minimum_imu_hz,
-                                  self.args.maximum_imu_hz, self.args.stationary)
+                                  self.args.maximum_imu_hz, self.args.stationary,
+                                  getattr(self.args, "navigation", False))
                 if not report["passed"]:
                     raise RuntimeError("bench fail-fast: " + "; ".join(report["failures"]))
             remaining = deadline - time.monotonic()
@@ -228,14 +233,20 @@ def main():
                         help="query appended GNSS UART diagnostics; requires matching new firmware/decoder")
     parser.add_argument("--power-diagnostics", action="store_true",
                         help="also retain charger failure-stage and I2C diagnostics")
+    parser.add_argument("--fix", action="store_true",
+                        help="also retain receiver fix and raw PPS diagnostics, independent of fusion")
+    parser.add_argument("--power-charge", action="store_true",
+                        help="also verify the fitted-battery charging profile; requires matching firmware/decoder")
     parser.add_argument("--bench", action="store_true",
                         help="apply full functional bench gates and save a .summary.json verdict")
     parser.add_argument("--fail-fast", action="store_true",
                         help="stop after the first failed complete bench comparison (requires --bench)")
     parser.add_argument("--stationary", action="store_true",
                         help="also require gravity magnitude and near-zero angular rate; implies --bench")
-    parser.add_argument("--minimum-imu-hz", type=float, default=1350)
-    parser.add_argument("--maximum-imu-hz", type=float, default=1600)
+    parser.add_argument("--navigation", action="store_true",
+                        help="require sustained GNSS/PPS lock, fresh output and fusion progress; implies --bench")
+    parser.add_argument("--minimum-imu-hz", type=float, default=675)
+    parser.add_argument("--maximum-imu-hz", type=float, default=800)
     parser.add_argument("--brightness", type=int, default=96)
     parser.add_argument("--settle", type=float, default=0,
                         help="seconds before sampling, to exclude startup/OTA confirmation")
@@ -251,9 +262,9 @@ def main():
         validate_limits(0, args.minimum_imu_hz, args.maximum_imu_hz)
     except ValueError as error:
         parser.error(str(error))
-    args.bench = args.bench or args.stationary
+    args.bench = args.bench or args.stationary or args.navigation
     if args.fail_fast and not args.bench:
-        parser.error("--fail-fast requires --bench or --stationary")
+        parser.error("--fail-fast requires --bench, --stationary or --navigation")
     probe = None
     error = None
     started = datetime.now(timezone.utc).isoformat()
@@ -271,7 +282,7 @@ def main():
             probe.close()
         if args.bench:
             report = evaluate(records, args.seconds * 0.98, args.minimum_imu_hz,
-                              args.maximum_imu_hz, args.stationary)
+                              args.maximum_imu_hz, args.stationary, args.navigation)
             if error is not None:
                 report["passed"] = False
                 report["failures"].append(error)
@@ -279,6 +290,8 @@ def main():
                            "requested_seconds": args.seconds, "settle_seconds": args.settle,
                            "transport_requested": args.transport,
                            "power_diagnostics_requested": args.power_diagnostics,
+                           "fix_requested": args.fix,
+                           "power_charge_requested": args.power_charge,
                            "journal": str(probe.journal_path) if probe is not None else None,
                            "journal_session": probe.session if probe is not None else None,
                            "capture_sha256": hashlib.sha256(args.output.read_bytes()).hexdigest(),

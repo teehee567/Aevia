@@ -12,6 +12,14 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "riscv32")]
 use super::sensors::{GNSS_DROPS, IMU_DROPS};
 
+/// Publication cadence and freshness limits, shared with ProtocolInfo.
+pub const SNAPSHOT_INTERVAL_US: u64 = super::profile::SNAPSHOT_INTERVAL_US;
+pub const NAVIGATION_MAX_AGE_US: u64 =
+    (super::profile::FUSION_DELAY.as_ns() + super::profile::SMOOTHING_LAG.as_ns()) / 1000
+        + SNAPSHOT_INTERVAL_US
+        + 100_000;
+pub const PUBLICATION_MAX_AGE_US: u64 = 500_000;
+
 #[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
 pub enum Phase {
     #[default]
@@ -20,6 +28,8 @@ pub enum Phase {
     Navigating,
     Degraded,
     Failed,
+    /// Measurement capture is active; live trajectory estimation is disabled.
+    Recording,
 }
 
 /// Last estimator failure, retained across later successful observations.
@@ -104,7 +114,7 @@ pub enum DeviceCommand {
     Status,
     Latest,
     SetIndicators(Indicators),
-    /// Read back the temporary battery-free bench charging policy.
+    /// Read back the applied power policy without changing it.
     PowerStatus,
     /// Low-rate fitted peripheral health and read-only evaluation data.
     PeripheralStatus,
@@ -120,6 +130,23 @@ pub enum DeviceCommand {
     GnssTransportStatus,
     /// Retained charger-policy failure stage and portable bus error evidence.
     PowerDiagnostics,
+    /// Current receiver-only fix and raw PPS evidence, independent of fusion.
+    GnssFixStatus,
+    /// Verified charge limits and charger hardware status, without changing policy.
+    PowerChargeStatus,
+}
+
+impl DeviceCommand {
+    /// Used by USB dispatch and discovery so recovery availability cannot drift.
+    pub const fn available_in_recovery(self) -> bool {
+        matches!(
+            self,
+            Self::PowerStatus
+                | Self::PowerDiagnostics
+                | Self::PowerChargeStatus
+                | Self::ResetStatus
+        )
+    }
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -134,6 +161,8 @@ pub enum DeviceResponse {
     ResetStatus(ResetStatus),
     GnssTransportStatus(GnssTransportStatus),
     PowerDiagnostics(PowerDiagnostics),
+    GnssFixStatus(GnssFixStatus),
+    PowerChargeStatus(PowerChargeStatus),
 }
 
 #[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
@@ -234,6 +263,66 @@ pub struct GnssStatus {
     pub last_pps_quality: Option<u32>,
     /// Bounded evidence for the last parser failure; no errors are suppressed.
     pub last_parser_error: Option<GnssParserError>,
+}
+
+/// Receiver measurements are not a fused trajectory or a timing qualification.
+/// Values are available before PPS lock and estimator alignment. Invalid or
+/// stale fields are absent; raw receiver statuses remain available for diagnosis.
+#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
+pub struct GnssFixStatus {
+    pub qualified: bool,
+    pub received_us: Option<u64>,
+    pub received_age_us: Option<u64>,
+    /// GPST milliseconds since the GPS epoch, only with FINE/GPS receiver time.
+    pub gps_epoch_ms: Option<u64>,
+    pub time_reference: u8,
+    pub time_status: u8,
+    pub output_delay_ms: u16,
+    pub position_status: u32,
+    pub position_type: u32,
+    pub velocity_status: u32,
+    pub velocity_type: u32,
+    pub satellites: u8,
+    pub position_valid: bool,
+    pub velocity_valid: bool,
+    pub position_ecef_m: Option<[f64; 3]>,
+    pub velocity_ecef_mps: Option<[f64; 3]>,
+    pub position_sigma_m: Option<[f32; 3]>,
+    pub velocity_sigma_mps: Option<[f32; 3]>,
+    /// Age includes time since first reception of this epoch, receiver output
+    /// delay and respectively solution age or velocity latency. Not PPS timed.
+    pub position_age_us: Option<u64>,
+    pub velocity_age_us: Option<u64>,
+    pub solution_age_s: Option<f32>,
+    pub differential_age_s: Option<f32>,
+    pub velocity_latency_s: Option<f32>,
+    pub last_pps: Option<GnssPpsDiagnostic>,
+}
+
+#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
+pub struct GnssPpsDiagnostic {
+    pub received_us: u64,
+    pub header_epoch_ms: Option<u64>,
+    pub pulse_epoch_ms: Option<u64>,
+    pub output_delay_ms: u16,
+    pub quality: u32,
+    pub pulse_error_ns: i32,
+    /// Receiver PPS offset relative to observation time, in 0.01 ns units.
+    pub offset_time_10ps: i32,
+    pub config: u32,
+    pub received_capture_ns: Option<u64>,
+    pub latest_pulse_ns: Option<u64>,
+}
+
+fn gnss_fix_status() -> GnssFixStatus {
+    #[cfg(target_arch = "riscv32")]
+    {
+        super::gnss::fix::status()
+    }
+    #[cfg(not(target_arch = "riscv32"))]
+    {
+        GnssFixStatus::default()
+    }
 }
 
 #[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
@@ -446,6 +535,27 @@ pub struct PowerStatus {
     pub errors: u32,
 }
 
+/// Charger-owner readbacks, not ADC measurements or proof of battery current.
+/// All fields are absent before a successful corresponding read. `verified`
+/// describes the applied policy; the hardware may still inhibit charging.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PowerChargeStatus {
+    pub updated_us: Option<u64>,
+    pub verified: bool,
+    pub charging_enabled: Option<bool>,
+    pub charge_current_ma: Option<u16>,
+    pub charge_voltage_mv: Option<u16>,
+    pub input_current_limit_ma: Option<u16>,
+    pub charger_status0: Option<u8>,
+    pub charger_status1: Option<u8>,
+    pub fault_status: Option<u8>,
+    pub precharge_current_ma: Option<u16>,
+    pub termination_current_ma: Option<u16>,
+    pub charger_control0: Option<u8>,
+    pub charger_control1: Option<u8>,
+    pub ntc_control0: Option<u8>,
+}
+
 static POWER: Mutex<CriticalSectionRawMutex, Cell<(PowerStatus, u64)>> = Mutex::new(Cell::new((
     PowerStatus {
         part_info: None,
@@ -521,15 +631,11 @@ impl Snapshot {
         // fusion/smoothing delay, one publication interval and 100 ms of
         // processing/cadence jitter, including when read just before a publish.
         // Neither recent arrivals nor repeated publications renew its epoch.
-        let maximum_age_us =
-            (super::profile::FUSION_DELAY.as_ns() + super::profile::SMOOTHING_LAG.as_ns()) / 1000
-                + super::profile::SNAPSHOT_INTERVAL_US
-                + 100_000;
         let trajectory_stale = self
             .epoch_us
             .and_then(|epoch| now_us.checked_sub(epoch))
-            .is_none_or(|age| age > maximum_age_us);
-        let publication_stale = now_us.saturating_sub(self.updated_us) > 500_000;
+            .is_none_or(|age| age > NAVIGATION_MAX_AGE_US);
+        let publication_stale = now_us.saturating_sub(self.updated_us) > PUBLICATION_MAX_AGE_US;
         if publication_stale || trajectory_stale {
             if publication_stale && !matches!(self.phase, Phase::Failed | Phase::Starting)
                 || matches!(self.phase, Phase::Navigating)
@@ -562,9 +668,13 @@ pub fn command(command: DeviceCommand) -> DeviceResponse {
         DeviceCommand::PowerDiagnostics => {
             DeviceResponse::PowerDiagnostics(super::power::diagnostics())
         }
+        DeviceCommand::PowerChargeStatus => {
+            DeviceResponse::PowerChargeStatus(super::power::charge_status())
+        }
         DeviceCommand::PeripheralStatus => DeviceResponse::PeripheralStatus(peripheral_status()),
         DeviceCommand::AcquisitionStatus => DeviceResponse::AcquisitionStatus(acquisition_status()),
         DeviceCommand::GnssStatus => DeviceResponse::GnssStatus(gnss_status()),
+        DeviceCommand::GnssFixStatus => DeviceResponse::GnssFixStatus(gnss_fix_status()),
         DeviceCommand::GnssTransportStatus => {
             DeviceResponse::GnssTransportStatus(gnss_transport_status())
         }

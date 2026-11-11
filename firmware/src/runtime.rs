@@ -3,7 +3,7 @@
 use crate::{
     commands::Response as SystemResponse,
     device::{
-        self, board, display, maintenance, power, processing, sensors, storage::Storage,
+        self, board, display, maintenance, power, processing, recording, sensors, storage::Storage,
         supervision, usb,
     },
     loader::{
@@ -85,7 +85,7 @@ pub async fn run(spawner: Spawner) -> ! {
     spawner.spawn(serve(serial, updater, mode, watchdog).unwrap());
     spawner.spawn(usb_task(usb_device).unwrap());
     let mut power_bus = board.power_bus;
-    // Apply the battery-free bench policy in recovery as well as application
+    // Apply the configured charging policy in recovery as well as application
     // mode. The subsequent bus owner retries and checks readback every second.
     power::maintain(&mut power_bus);
     if matches!(mode, Ok(Mode::App)) {
@@ -133,7 +133,11 @@ pub async fn run(spawner: Spawner) -> ! {
                         return;
                     }
                 };
-                unsafe { processing::run(address, len) }
+                if device::configuration::DATA_COLLECTION_ONLY {
+                    unsafe { recording::run(application.recording_slot, address, len) }
+                } else {
+                    unsafe { processing::run(address, len) }
+                }
             },
         );
         STARTUP_STAGE.store(3, Ordering::Release);
@@ -176,9 +180,9 @@ async fn serve(
     mut watchdog: Wdt<TIMG0<'static>>,
 ) {
     let (mut sender, mut receiver, control) = serial.split_with_control();
-    let mut frame = Frame::<272>::new();
+    let mut frame = Frame::<{ crate::protocol::FRAME_SIZE }>::new();
     let mut packet = [0; 512];
-    let mut output = [0; 512];
+    let mut output = [0; crate::protocol::RESPONSE_FRAME_SIZE];
     let mut last_data = Instant::now();
     let mut monitor = supervision::Monitor::new(last_data.as_micros());
     let application = matches!(mode, Ok(Mode::App));
@@ -232,15 +236,12 @@ async fn serve(
                 }
                 .map(Response::System),
                 (Ok(_), Ok(Request::Device(command)))
-                    if matches!(mode, Ok(Mode::App))
-                        || matches!(
-                            command,
-                            device::interface::DeviceCommand::PowerStatus
-                                | device::interface::DeviceCommand::PowerDiagnostics
-                                | device::interface::DeviceCommand::ResetStatus
-                        ) =>
+                    if matches!(mode, Ok(Mode::App)) || command.available_in_recovery() =>
                 {
                     Ok(Response::Device(device::interface::command(command)))
+                }
+                (Ok(_), Ok(Request::Recording(request))) if matches!(mode, Ok(Mode::App)) => {
+                    Ok(Response::Recording(recording::command(request)))
                 }
                 (Err(error), _) => Err(*error),
                 _ => Err(Error::Command),
@@ -250,8 +251,8 @@ async fn serve(
                 Response::System(SystemResponse::Error(error))
             });
             let reboot = matches!(response, Response::System(SystemResponse::Reboot));
-            // All current responses fit one HS packet; chunking also supports
-            // larger future responses without tying framing to USB packets.
+            // Recording reads span several HS packets. Framing is independent
+            // of packet boundaries; ordinary telemetry remains compact.
             let sent = match postcard::to_slice_cobs(&response, &mut output) {
                 Ok(bytes) => with_timeout(Duration::from_secs(1), async {
                     for packet in bytes.chunks(512) {

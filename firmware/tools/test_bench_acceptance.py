@@ -20,7 +20,7 @@ def capture():
                             "led_errors": 0, "display_errors": 0, "gauge_errors": 0,
                             "buttons_errors": 0},
             "acquisition": {"updated_us": now, "last_imu_us": now - 500,
-                            "imu_samples": 40000 + index * 7270, "imu_errors": 3,
+                            "imu_samples": 40000 + index * 3635, "imu_errors": 3,
                             "gnss_errors": 1, "imu_drops": 2, "gnss_drops": 0,
                             "gnss_uart_errors": 0, "gnss_parse_errors": 0,
                             "imu_queue_depth": 0, "gnss_queue_depth": 0,
@@ -54,12 +54,194 @@ def add_transport(polls):
     return polls
 
 
+def navigating_capture():
+    polls = capture()
+    for index, poll in enumerate(polls):
+        poll["status"].update({
+            "phase": "Navigating", "epoch_us": poll["status"]["updated_us"] - 120000,
+            "imu_accepted": 1000 + index * 3635, "gnss_fused": 50 + index * 250,
+            "input_rejected": 1, "too_late": 2,
+            "horizontal_speed_mps": 0.02, "vertical_speed_mps": -0.01,
+            "position_ecef_m": [-4645000.0, 2553000.0, -3534000.0],
+            "velocity_ecef_mps": [0.01, -0.01, 0.01],
+        })
+        poll["acquisition"]["timing"].update({
+            "pps_locked": True, "pps_edges": 20 + index * 5,
+            "pps_pairs": 18 + index * 5, "pps_rejected": 2,
+            "pps_age_ms": 1000, "fit_residual_ns": 2000,
+            "generation": 2, "gnss_unsynchronized": 70,
+        })
+        poll["gnss"].update({"navigation_time_ready": True, "last_pps_quality": 2})
+    return polls
+
+
+def add_fix(polls):
+    for index, poll in enumerate(polls):
+        poll["fix"] = {
+            "qualified": False, "position_valid": True, "velocity_valid": True,
+            "received_age_us": 1000, "position_age_us": 11000, "velocity_age_us": 31000,
+            "position_ecef_m": [-4645000.0, 2553000.0, -3534000.0],
+            "velocity_ecef_mps": [0.01, -0.01, 0.01],
+            "gps_epoch_ms": 1470000000000 + index * 5000,
+        }
+    return polls
+
+
+def add_charge(polls):
+    for poll in polls:
+        poll["power"]["control"] = 0xA0
+        poll["power_charge"] = {
+            "updated_us": poll["acquisition"]["updated_us"] - 100000,
+            "verified": True, "charging_enabled": True,
+            "charge_current_ma": 800, "charge_voltage_mv": 4100,
+            "input_current_limit_ma": 500, "charger_status0": 0,
+            "charger_status1": 0, "fault_status": 0,
+            "precharge_current_ma": 80, "termination_current_ma": 40,
+            "charger_control0": 0, "charger_control1": 0xA0, "ntc_control0": 0,
+        }
+    return polls
+
+
 class BenchAcceptanceTests(unittest.TestCase):
+    def test_verified_charge_profile_accepts_idle_full_battery(self):
+        report = evaluate(records(add_charge(capture())))
+        self.assertTrue(report["passed"], report["failures"])
+        self.assertEqual(report["profile"], "charging acquisition bench")
+        self.assertEqual(report["power_charge"]["polls"], 3)
+        self.assertEqual(report["power_charge"]["final"]["charger_status1"], 0)
+        self.assertTrue(evaluate(records(add_charge(navigating_capture())), navigation=True)["passed"])
+
+    def test_charge_profile_rejects_missing_stale_or_inconsistent_readbacks(self):
+        changes = (("verified", False), ("charging_enabled", False),
+                   ("charge_current_ma", 480), ("charge_current_ma", None),
+                   ("charge_voltage_mv", 4200), ("charge_voltage_mv", None),
+                   ("precharge_current_ma", 120), ("termination_current_ma", 80),
+                   ("charger_control1", 0x80), ("charger_control1", None),
+                   ("fault_status", 1), ("fault_status", None),
+                   ("updated_us", None), ("updated_us", 1),
+                   ("updated_us", 99_000_000))
+        for field, value in changes:
+            with self.subTest(field=field, value=value):
+                polls = add_charge(capture())
+                polls[-1]["power_charge"][field] = value
+                self.assertFalse(evaluate(records(polls))["passed"])
+        for control in (None, 0x80, 0xA1, 0xA4):
+            polls = add_charge(capture())
+            polls[-1]["power"]["control"] = control
+            self.assertFalse(evaluate(records(polls))["passed"])
+        polls = add_charge(capture())
+        polls[-1]["power"]["verified"] = False
+        self.assertFalse(evaluate(records(polls))["passed"])
+
+    def test_partial_charge_diagnostics_fail_and_absent_evidence_keeps_old_gate(self):
+        polls = add_charge(capture())
+        del polls[-1]["power_charge"]
+        self.assertFalse(evaluate(records(polls))["passed"])
+        polls = add_charge(capture())
+        for poll in polls:
+            del poll["power_charge"]
+        self.assertFalse(evaluate(records(polls))["passed"])
+        self.assertTrue(evaluate(records(capture()))["passed"])
+        polls = add_charge(capture())
+        polls[-1]["power_charge"] = None
+        self.assertFalse(evaluate(records(polls))["passed"])
+
+    def test_charge_evidence_does_not_relax_acquisition_or_error_gates(self):
+        polls = add_charge(capture())
+        polls[-1]["acquisition"]["imu_errors"] += 1
+        self.assertFalse(evaluate(records(polls))["passed"])
+        polls = add_charge(capture())
+        polls[-1]["power"]["errors"] += 1
+        self.assertFalse(evaluate(records(polls))["passed"])
+
+    def test_optional_fix_is_retained_and_adds_navigation_validity_gates(self):
+        polls = add_fix(navigating_capture())
+        report = evaluate(records(polls), navigation=True)
+        self.assertTrue(report["passed"], report["failures"])
+        self.assertEqual(report["receiver_fix"]["polls"], 3)
+        self.assertEqual(report["receiver_fix"]["final"], polls[-1]["fix"])
+        for field, value in (("qualified", True), ("position_valid", False),
+                             ("velocity_valid", False), ("received_age_us", 500001),
+                             ("position_age_us", None), ("velocity_age_us", -1),
+                             ("position_ecef_m", None), ("velocity_ecef_mps", [float("nan"), 0, 0])):
+            with self.subTest(field=field):
+                polls = add_fix(navigating_capture())
+                polls[-1]["fix"][field] = value
+                self.assertFalse(evaluate(records(polls), navigation=True)["passed"])
+                # Raw receiver evidence remains diagnostic-only for acquisition.
+                self.assertTrue(evaluate(records(polls))["passed"])
+
+    def test_partial_or_wrong_fix_diagnostics_cannot_pass_navigation(self):
+        polls = add_fix(navigating_capture())
+        del polls[-1]["fix"]
+        self.assertFalse(evaluate(records(polls), navigation=True)["passed"])
+        polls = add_fix(navigating_capture())
+        data = records(polls)
+        data[-1]["response"] = {"Device": {"GnssStatus": {}}}
+        self.assertFalse(evaluate(data, navigation=True)["passed"])
+
+    def test_navigation_requires_a_real_workload_and_keeps_qualification_false(self):
+        self.assertFalse(evaluate(records(capture()), navigation=True)["passed"])
+        report = evaluate(records(navigating_capture()), navigation=True, stationary=True)
+        self.assertTrue(report["passed"], report["failures"])
+        self.assertFalse(report["qualified"])
+        self.assertEqual(report["profile"], "battery-free navigation bench")
+        self.assertEqual(report["navigation"]["counter_deltas"]["gnss_fused"], 500)
+        self.assertEqual(report["navigation"]["epoch_age_us"]["maximum"], 120000)
+
+    def test_navigation_does_not_accept_lock_loss_bad_output_or_clock_resets(self):
+        changes = (("status", "phase", "Degraded"), ("status", "epoch_us", None),
+                   ("status", "epoch_us", 0), ("status", "epoch_us", 99_000_000),
+                   ("status", "horizontal_speed_mps", None),
+                   ("status", "horizontal_speed_mps", -1),
+                   ("status", "vertical_speed_mps", float("nan")),
+                   ("status", "position_ecef_m", [1, 2]),
+                   ("status", "velocity_ecef_mps", [1, float("inf"), 3]),
+                   ("status", "input_rejected", 2), ("status", "too_late", 3),
+                   ("gnss", "navigation_time_ready", False), ("gnss", "last_pps_quality", 1),
+                   ("timing", "pps_locked", False), ("timing", "pps_age_ms", 3001),
+                   ("timing", "pps_age_ms", None), ("timing", "fit_residual_ns", 50001),
+                   ("timing", "pps_rejected", 3), ("timing", "generation", 3),
+                   ("timing", "gnss_unsynchronized", 71))
+        for section, field, value in changes:
+            with self.subTest(field=field, value=value):
+                polls = navigating_capture()
+                target = polls[-1]["acquisition"]["timing"] if section == "timing" else polls[-1][section]
+                target[field] = value
+                self.assertFalse(evaluate(records(polls), navigation=True)["passed"])
+
+    def test_navigation_requires_progress_from_estimator_and_pps(self):
+        for field in ("epoch_us", "imu_accepted", "gnss_fused"):
+            with self.subTest(field=field):
+                polls = navigating_capture()
+                polls[-1]["status"][field] = polls[-2]["status"][field]
+                self.assertFalse(evaluate(records(polls), navigation=True)["passed"])
+                del polls[-1]["status"][field]
+                self.assertFalse(evaluate(records(polls), navigation=True)["passed"])
+        for field in ("pps_edges", "pps_pairs"):
+            polls = navigating_capture()
+            for poll in polls:
+                poll["acquisition"]["timing"][field] = 20
+            self.assertFalse(evaluate(records(polls), navigation=True)["passed"])
+            for index, poll in enumerate(polls):
+                poll["acquisition"]["timing"][field] = (0xfffffffe + index * 5) & 0xffffffff
+            self.assertTrue(evaluate(records(polls), navigation=True)["passed"])
+
+    def test_navigation_optional_fields_missing_cannot_crash_or_pass(self):
+        for section, field in (("status", "position_ecef_m"), ("status", "too_late"),
+                               ("status", "imu_accepted"), ("gnss", "last_pps_quality"),
+                               ("timing", "pps_pairs"), ("timing", "generation")):
+            with self.subTest(field=field):
+                polls = navigating_capture()
+                target = polls[-1]["acquisition"]["timing"] if section == "timing" else polls[-1][section]
+                del target[field]
+                self.assertFalse(evaluate(records(polls), navigation=True)["passed"])
+
     def test_absent_accessories_and_no_fix_pass_with_settled_error_baselines(self):
         report = evaluate(records(capture()), minimum_seconds=10, stationary=True)
         self.assertTrue(report["passed"], report["failures"])
         self.assertEqual(report["duration_seconds"], 10)
-        self.assertEqual(report["imu_rate_hz"]["minimum"], 1454)
+        self.assertEqual(report["imu_rate_hz"]["minimum"], 727)
         self.assertFalse(report["qualified"])
 
     def test_new_errors_and_reinitialization_fail(self):
@@ -104,10 +286,23 @@ class BenchAcceptanceTests(unittest.TestCase):
                       evaluate(records(polls))["failures"])
 
     def test_nonfinite_or_invalid_acceptance_limits_are_rejected(self):
-        for limits in ((float("nan"), 1350, 1600), (0, float("inf"), 1600),
-                       (0, 1350, float("inf")), (0, 1600, 1350), (-1, 1350, 1600)):
+        for limits in ((float("nan"), 675, 800), (0, float("inf"), 800),
+                       (0, 675, float("inf")), (0, 800, 675), (-1, 675, 800)):
             with self.subTest(limits=limits), self.assertRaises(ValueError):
                 evaluate([], *limits)
+
+    def test_dec5_rate_contract_rejects_old_profile_and_actual_losses(self):
+        for rate in (674, 801, 1454):
+            polls = capture()
+            for index, poll in enumerate(polls):
+                poll["acquisition"]["imu_samples"] = 40000 + index * rate * 5
+            self.assertFalse(evaluate(records(polls))["passed"])
+        polls = capture()
+        polls[-1]["acquisition"]["timing"]["imu_timing_rejected"] += 1
+        self.assertFalse(evaluate(records(polls))["passed"])
+        polls = capture()
+        polls[-1]["acquisition"]["imu_drops"] += 1
+        self.assertFalse(evaluate(records(polls))["passed"])
 
     def test_optional_transport_reports_deltas_and_requires_healthy_com2_stream(self):
         polls = add_transport(capture())
@@ -160,7 +355,7 @@ class BenchAcceptanceTests(unittest.TestCase):
     def test_counter_wrap_passes_but_reboot_and_freeze_fail(self):
         polls = capture()
         for index, poll in enumerate(polls):
-            poll["acquisition"]["imu_samples"] = (0xfffff000 + index * 7270) & 0xffffffff
+            poll["acquisition"]["imu_samples"] = (0xfffff000 + index * 3635) & 0xffffffff
         self.assertTrue(evaluate(records(polls))["passed"])
         polls[-1]["acquisition"]["updated_us"] = 1000
         self.assertFalse(evaluate(records(polls))["passed"])

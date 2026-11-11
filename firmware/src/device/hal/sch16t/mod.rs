@@ -30,6 +30,8 @@ use embedded_hal::{
 use protocol::Request;
 use registers::STATUS_REGISTERS;
 
+const DEGREES_TO_RADIANS: f64 = core::f64::consts::PI / 180.0;
+
 #[derive(Debug)]
 pub enum Error<E> {
     Spi(E),
@@ -100,6 +102,57 @@ pub struct MotionSample {
     pub acceleration_mps2: [f64; 3],
     /// RATE_X/Y/Z then ACC_X/Y/Z. Valid only for decimated output.
     pub counters: [u8; 6],
+}
+
+/// Native evidence for all axes, including healthy neighbors of a faulted
+/// axis. None identifies a response lost to transport/framing/pipeline error.
+/// `result` keeps the normal checked navigation contract unchanged.
+pub struct MotionCapture<E> {
+    pub frames: [Option<Response>; 6],
+    pub result: Result<MotionSample, Error<E>>,
+}
+
+/// Completed, CRC/status-checked register reads before floating-point scaling.
+/// Capture the host's read-finished timestamp after this is returned, then call
+/// `into_scaled`; conversion performs no SPI operations or hardware accesses.
+pub struct UnscaledMotionCapture<E> {
+    pub frames: [Option<Response>; 6],
+    pub result: Result<UnscaledMotionSample, Error<E>>,
+}
+
+/// Native words and the verified ranges in effect when they were read.
+/// Keeping the scales in this value prevents later reconfiguration from
+/// changing the interpretation of an already captured sample.
+#[derive(Clone, Copy, Debug)]
+pub struct UnscaledMotionSample {
+    pub raw_rate: [i32; 3],
+    pub raw_acceleration: [i32; 3],
+    pub counters: [u8; 6],
+    rate_scale: f64,
+    acc_scale: f64,
+}
+
+impl UnscaledMotionSample {
+    pub fn into_scaled(self) -> MotionSample {
+        let angular_rate_dps = self.raw_rate.map(|v| f64::from(v) * self.rate_scale);
+        MotionSample {
+            raw_rate: self.raw_rate,
+            raw_acceleration: self.raw_acceleration,
+            angular_rate_dps,
+            angular_rate_rps: angular_rate_dps.map(|v| v * DEGREES_TO_RADIANS),
+            acceleration_mps2: self.raw_acceleration.map(|v| f64::from(v) * self.acc_scale),
+            counters: self.counters,
+        }
+    }
+}
+
+impl<E> UnscaledMotionCapture<E> {
+    pub fn into_scaled(self) -> MotionCapture<E> {
+        MotionCapture {
+            frames: self.frames,
+            result: self.result.map(UnscaledMotionSample::into_scaled),
+        }
+    }
 }
 
 impl MotionSample {
@@ -203,17 +256,20 @@ impl<SPI: SpiDevice<u8>, D: DelayNs> Sch16t<SPI, D> {
         &mut self,
         registers: [Register; N],
     ) -> Result<[Response; N], Error<SPI::Error>> {
-        let placeholder = Response {
-            register: Register::FrequencyCounter,
-            written: false,
-            status: SensorStatus::Normal,
-            common_error: false,
-            counter: 0,
-            payload: 0,
-        };
-        let mut result = [placeholder; N];
+        let (frames, failure) = self.read_registers_capture(registers);
+        match failure {
+            Some(error) => Err(error),
+            None => Ok(frames.map(|frame| frame.unwrap())),
+        }
+    }
+
+    fn read_registers_capture<const N: usize>(
+        &mut self,
+        registers: [Register; N],
+    ) -> ([Option<Response>; N], Option<Error<SPI::Error>>) {
+        let mut result = [None; N];
         if N == 0 {
-            return Ok(result);
+            return (result, None);
         }
         let mut failure = self.exchange(Request::read(registers[0])).err();
         for i in 0..N {
@@ -223,7 +279,7 @@ impl<SPI: SpiDevice<u8>, D: DelayNs> Sch16t<SPI, D> {
                 Register::FrequencyCounter
             };
             match self.exchange(Request::read(next)) {
-                Ok(Some(response)) => result[i] = response,
+                Ok(Some(response)) => result[i] = Some(response),
                 Ok(None) => {
                     failure.get_or_insert(Error::Pipeline);
                 }
@@ -232,10 +288,7 @@ impl<SPI: SpiDevice<u8>, D: DelayNs> Sch16t<SPI, D> {
                 }
             }
         }
-        match failure {
-            Some(error) => Err(error),
-            None => Ok(result),
-        }
+        (result, failure)
     }
 
     /// Low-level register access for capabilities beyond typed configuration.
@@ -441,7 +494,28 @@ impl<SPI: SpiDevice<u8>, D: DelayNs> Sch16t<SPI, D> {
     /// Read all six axes using a pipelined burst. Every frame's diagnostic
     /// status is checked. Converted values use the verified initialized ranges.
     pub fn motion(&mut self, output: MotionOutput) -> Result<MotionSample, Error<SPI::Error>> {
-        let config = self.config.ok_or(Error::NotInitialized)?;
+        self.motion_capture(output).result
+    }
+
+    /// Read native axis metadata before applying navigation health policy.
+    /// No extra SPI transfers are added compared with `motion`.
+    pub fn motion_capture(&mut self, output: MotionOutput) -> MotionCapture<SPI::Error> {
+        self.motion_capture_unscaled(output).into_scaled()
+    }
+
+    /// Complete all six register reads and validate their frame/sensor status.
+    /// Floating-point conversion is deferred so the host can timestamp the
+    /// actual read completion independently of software arithmetic latency.
+    pub fn motion_capture_unscaled(
+        &mut self,
+        output: MotionOutput,
+    ) -> UnscaledMotionCapture<SPI::Error> {
+        let Some(config) = self.config else {
+            return UnscaledMotionCapture {
+                frames: [None; 6],
+                result: Err(Error::NotInitialized),
+            };
+        };
         let (registers, rate_scale, acc_scale) = match output {
             MotionOutput::Interpolated => (
                 [
@@ -452,10 +526,10 @@ impl<SPI: SpiDevice<u8>, D: DelayNs> Sch16t<SPI, D> {
                     Register::AccY1,
                     Register::AccZ1,
                 ],
-                config.interpolated_rate_range.lsb_per_degree_per_second(),
+                config.interpolated_rate_range.degrees_per_second_per_lsb(),
                 config
                     .interpolated_acc_range
-                    .lsb_per_metre_per_second_squared(),
+                    .metres_per_second_squared_per_lsb(),
             ),
             MotionOutput::Decimated => (
                 [
@@ -466,27 +540,32 @@ impl<SPI: SpiDevice<u8>, D: DelayNs> Sch16t<SPI, D> {
                     Register::AccY2,
                     Register::AccZ2,
                 ],
-                config.decimated_rate_range.lsb_per_degree_per_second(),
+                config.decimated_rate_range.degrees_per_second_per_lsb(),
                 config
                     .decimated_acc_range
-                    .lsb_per_metre_per_second_squared(),
+                    .metres_per_second_squared_per_lsb(),
             ),
         };
-        let frames = self.read_registers(registers)?;
-        for frame in frames {
-            Self::check_sensor(frame)?;
-        }
-        let raw_rate = core::array::from_fn(|i| frames[i].signed_sensor());
-        let raw_acceleration = core::array::from_fn(|i| frames[i + 3].signed_sensor());
-        let angular_rate_dps = raw_rate.map(|v| f64::from(v) / rate_scale);
-        Ok(MotionSample {
-            raw_rate,
-            raw_acceleration,
-            angular_rate_dps,
-            angular_rate_rps: angular_rate_dps.map(|v| v * core::f64::consts::PI / 180.0),
-            acceleration_mps2: raw_acceleration.map(|v| f64::from(v) / acc_scale),
-            counters: frames.map(|r| r.counter),
-        })
+        let (frames, failure) = self.read_registers_capture(registers);
+        let result = (|| {
+            if let Some(error) = failure {
+                return Err(error);
+            }
+            let valid = frames.map(|frame| frame.unwrap());
+            for frame in valid {
+                Self::check_sensor(frame)?;
+            }
+            let raw_rate = core::array::from_fn(|i| valid[i].signed_sensor());
+            let raw_acceleration = core::array::from_fn(|i| valid[i + 3].signed_sensor());
+            Ok(UnscaledMotionSample {
+                raw_rate,
+                raw_acceleration,
+                counters: valid.map(|r| r.counter),
+                rate_scale,
+                acc_scale,
+            })
+        })();
+        UnscaledMotionCapture { frames, result }
     }
 
     /// Auxiliary interpolated ACC3, with its independently verified range.
@@ -497,7 +576,7 @@ impl<SPI: SpiDevice<u8>, D: DelayNs> Sch16t<SPI, D> {
             Self::check_sensor(frame)?;
         }
         Ok(frames.map(|r| {
-            f64::from(r.signed_sensor()) / config.aux_acc_range.lsb_per_metre_per_second_squared()
+            f64::from(r.signed_sensor()) * config.aux_acc_range.metres_per_second_squared_per_lsb()
         }))
     }
 }

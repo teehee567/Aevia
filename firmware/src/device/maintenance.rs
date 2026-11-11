@@ -34,7 +34,7 @@ fn led_frame(state: &interface::Snapshot, brightness: u8, imu: bool, gnss: bool)
         (
             MiniLed::D35,
             match state.phase {
-                Phase::Navigating => [0, brightness, 0],
+                Phase::Navigating | Phase::Recording => [0, brightness, 0],
                 Phase::Degraded | Phase::Failed => [brightness, 0, 0],
                 _ => [0, 0, brightness],
             },

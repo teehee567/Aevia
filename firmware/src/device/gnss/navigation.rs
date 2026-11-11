@@ -2,6 +2,48 @@
 //! only usable solution fields and their distinct measurement epochs leave here.
 use aevia_device_hal::um980::{BestNavXyz, Header};
 
+/// Field eligibility shared by raw fix publication and estimator preparation.
+/// Keep vector construction and covariance conversion out of the receive path
+/// when collection only needs the original receiver values and validity flags.
+pub(super) struct ValidatedFields {
+    epoch_ms: u64,
+    position_gps_ns: u64,
+    pub position_valid: bool,
+    pub velocity_valid: bool,
+}
+
+impl ValidatedFields {
+    pub fn prepare(message: &BestNavXyz) -> Option<Self> {
+        let epoch_ms = message.header.gps_epoch_ms()?;
+        let position_gps_ns = epoch_ms.checked_mul(1_000_000)?;
+        // Receiver header cadence does not prove freshness of its underlying fix.
+        // Correction ages are irrelevant to SINGLE position and Doppler velocity;
+        // unknown/correction-dependent types conservatively require a fresh age.
+        let correction_fresh = age_fresh(message.differential_age_s);
+        let position_valid = message.position_valid()
+            && age_fresh(message.solution_age_s)
+            && (message.position_type == 16 || correction_fresh);
+        let velocity_valid = message.velocity_valid()
+            && message.velocity_latency_s <= 1.0
+            && (matches!(message.velocity_type, 8 | 16) || correction_fresh);
+        if !position_valid && !velocity_valid {
+            return None;
+        }
+        // A valid latency is at most one second. Modern GPS epochs cannot
+        // underflow, so raw fix publication needs no software-f64 time conversion.
+        // Preserve the original whole-message rejection near the GPS origin.
+        if velocity_valid && position_gps_ns < 1_000_000_000 {
+            position_gps_ns.checked_sub(velocity_latency_ns(message))?;
+        }
+        Some(Self {
+            epoch_ms,
+            position_gps_ns,
+            position_valid,
+            velocity_valid,
+        })
+    }
+}
+
 pub(super) struct Navigation {
     pub epoch_ms: u64,
     pub position_gps_ns: u64,
@@ -17,25 +59,14 @@ pub(super) struct Navigation {
 
 impl Navigation {
     pub fn prepare(message: BestNavXyz) -> Option<Self> {
-        let epoch_ms = message.header.gps_epoch_ms()?;
-        let position_gps_ns = epoch_ms.checked_mul(1_000_000)?;
-        // Receiver header cadence does not prove freshness of its underlying fix.
-        // Correction ages are irrelevant to SINGLE position and Doppler velocity;
-        // unknown/correction-dependent types conservatively require a fresh age.
-        let correction_fresh = age_fresh(message.differential_age_s);
-        let position_valid = message.position_valid()
-            && age_fresh(message.solution_age_s)
-            && (message.position_type == 16 || correction_fresh);
-        // Large latency is not a current velocity measurement. Preserve a
-        // usable position independently of malformed/unavailable velocity.
-        let velocity_valid = message.velocity_valid()
-            && message.velocity_latency_s <= 1.0
-            && (matches!(message.velocity_type, 8 | 16) || correction_fresh);
-        if !position_valid && !velocity_valid {
-            return None;
-        }
+        let ValidatedFields {
+            epoch_ms,
+            position_gps_ns,
+            position_valid,
+            velocity_valid,
+        } = ValidatedFields::prepare(&message)?;
         let latency_ns = if velocity_valid {
-            (f64::from(message.velocity_latency_s) * 1_000_000_000.0) as u64
+            velocity_latency_ns(&message)
         } else {
             0
         };
@@ -73,9 +104,17 @@ impl Navigation {
 }
 
 fn age_fresh(seconds: f32) -> bool {
-    seconds.is_finite()
-        && seconds >= 0.0
-        && f64::from(seconds) * 1_000_000_000.0 <= super::super::profile::MAX_GNSS_AGE_NS as f64
+    const MAX_AGE_SECONDS: f32 = super::super::profile::MAX_GNSS_AGE_NS as f32 / 1_000_000_000.0;
+    // The applied two-second bound is exactly representable. Keep a future
+    // profile change from silently rounding the original nanosecond cutoff.
+    const _: () = assert!(
+        MAX_AGE_SECONDS as f64 * 1_000_000_000.0 == super::super::profile::MAX_GNSS_AGE_NS as f64
+    );
+    seconds.is_finite() && (0.0..=MAX_AGE_SECONDS).contains(&seconds)
+}
+
+fn velocity_latency_ns(message: &BestNavXyz) -> u64 {
+    (f64::from(message.velocity_latency_s) * 1_000_000_000.0) as u64
 }
 
 /// Count actual advancing receiver epochs, independent of requested log rate,
@@ -228,6 +267,75 @@ mod tests {
         message.velocity_type = 50;
         message.differential_age_s = f32::NAN;
         assert!(Navigation::prepare(message).is_none());
+    }
+
+    #[test]
+    fn age_comparison_preserves_nan_sign_and_exact_cutoff_behavior() {
+        let cutoff = 2.0_f32.to_bits();
+        for bits in [
+            0,
+            1,
+            (-0.0_f32).to_bits(),
+            (-f32::MIN_POSITIVE).to_bits(),
+            cutoff - 1,
+            cutoff,
+            cutoff + 1,
+            f32::MAX.to_bits(),
+            f32::INFINITY.to_bits(),
+            f32::NEG_INFINITY.to_bits(),
+            f32::NAN.to_bits(),
+            0xffff_ffff,
+        ] {
+            let seconds = f32::from_bits(bits);
+            let previous = seconds.is_finite()
+                && seconds >= 0.0
+                && f64::from(seconds) * 1_000_000_000.0
+                    <= super::super::super::profile::MAX_GNSS_AGE_NS as f64;
+            assert_eq!(age_fresh(seconds), previous, "age bits {bits:08x}");
+        }
+        assert!(age_fresh(f32::from_bits(cutoff)));
+        assert!(!age_fresh(f32::from_bits(cutoff + 1)));
+    }
+
+    #[test]
+    fn field_validation_preserves_velocity_epoch_underflow_and_overflow_rejection() {
+        for (week, milliseconds, latency, valid) in [
+            (0, 0, 0.0, true),
+            (0, 0, 1.0e-10, true), // Sub-nanosecond latency truncates to zero.
+            (0, 0, 0.125, false),
+            (0, 124, 0.125, false),
+            (0, 125, 0.125, true),
+            (0, 999, 1.0, false),
+            (0, 1000, 1.0, true),
+            (2400, 1000, 1.0, true),
+            (u16::MAX, 1000, 0.0, false),
+        ] {
+            let mut message = fix();
+            message.header.week = week;
+            message.header.milliseconds_of_week = milliseconds;
+            message.velocity_latency_s = latency;
+            let fields = ValidatedFields::prepare(&message);
+            let nav = Navigation::prepare(message);
+            assert_eq!(fields.is_some(), valid, "{week}/{milliseconds}/{latency}");
+            assert_eq!(nav.is_some(), valid);
+            if let Some(nav) = nav {
+                let fields = fields.unwrap();
+                assert!(fields.position_valid && fields.velocity_valid);
+                assert_eq!(nav.epoch_ms, fields.epoch_ms);
+                assert_eq!(nav.position_gps_ns, fields.position_gps_ns);
+                assert_eq!(
+                    nav.position_gps_ns - nav.velocity_gps_ns,
+                    (f64::from(latency) * 1_000_000_000.0) as u64
+                );
+            }
+        }
+        // Invalid velocity is independent: it cannot underflow a valid position.
+        let mut message = fix();
+        message.header.week = 0;
+        message.header.milliseconds_of_week = 0;
+        message.velocity_latency_s = f32::NAN;
+        let fields = ValidatedFields::prepare(&message).unwrap();
+        assert!(fields.position_valid && !fields.velocity_valid);
     }
 
     #[test]

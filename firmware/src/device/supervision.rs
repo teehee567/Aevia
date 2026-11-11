@@ -20,6 +20,8 @@ pub(crate) struct Readings {
     /// Coherent, timing-validated raw IMU samples admitted by acquisition.
     pub imu_samples: u32,
     pub capture_errors: u32,
+    pub recording_required: bool,
+    pub recording_ready: bool,
 }
 
 pub(crate) struct Monitor {
@@ -90,12 +92,19 @@ impl Monitor {
         // Confirmation protects against a functionally broken acquisition
         // image. PPS maintenance and a live idle worker are insufficient:
         // the fitted IMU must produce validated samples and the GNSS owner
-        // itself must progress. A GNSS fix/PPS lock is not required.
+        // itself must progress. Use the tighter confirmation timeout for every
+        // owner: the five-second watchdog tolerance equals the confirmation
+        // window and would otherwise bless a task with only one heartbeat.
+        // A GNSS fix/PPS lock is not required.
         if application
             && self.ready(now_us, startup_stage, readings)
+            && (!readings.recording_required || readings.recording_ready)
             && self.gnss_seen
             && self.imu_seen
+            && now_us.saturating_sub(self.worker_changed_us) <= CONFIRMATION_INPUT_TIMEOUT_US
+            && now_us.saturating_sub(self.acquisition_changed_us) <= CONFIRMATION_INPUT_TIMEOUT_US
             && now_us.saturating_sub(self.gnss_changed_us) <= CONFIRMATION_INPUT_TIMEOUT_US
+            && now_us.saturating_sub(self.imu_owner_changed_us) <= CONFIRMATION_INPUT_TIMEOUT_US
             && now_us.saturating_sub(self.imu_changed_us) <= CONFIRMATION_INPUT_TIMEOUT_US
         {
             self.ready_since_us.get_or_insert(now_us);
@@ -172,6 +181,8 @@ mod hardware {
             imu_owner: IMU_OWNER.load(Ordering::Relaxed),
             imu_samples: super::super::sensors::IMU_SAMPLES.load(Ordering::Relaxed),
             capture_errors: super::super::platform::capture::ERRORS.load(Ordering::Relaxed),
+            recording_required: super::super::configuration::DATA_COLLECTION_ONLY,
+            recording_ready: super::super::recording::confirmation_ready(),
         }
     }
 }
@@ -312,6 +323,26 @@ mod tests {
     }
 
     #[test]
+    fn collection_trial_requires_persisted_data_but_bad_card_keeps_usb_alive() {
+        let mut monitor = Monitor::new(0);
+        for second in 0..=40_u32 {
+            let readings = Readings {
+                worker: second + 1,
+                acquisition: second + 1,
+                gnss_owner: second + 1,
+                imu_owner: second + 1,
+                imu_samples: second + 1,
+                recording_required: true,
+                recording_ready: second >= 35,
+                ..Readings::default()
+            };
+            let now = u64::from(second) * 1_000_000;
+            assert!(monitor.healthy(now, true, 10, readings));
+            assert_eq!(monitor.confirmable(now), second == 40);
+        }
+    }
+
+    #[test]
     fn confirmation_requires_sustained_progress_after_startup() {
         let mut monitor = Monitor::new(0);
         assert!(!monitor.confirmable(0));
@@ -323,6 +354,7 @@ mod tests {
                 imu_owner: second + 1,
                 imu_samples: second + 1,
                 capture_errors: 0,
+                ..Readings::default()
             };
             assert!(monitor.healthy(u64::from(second) * 1_000_000, true, 10, readings));
             assert_eq!(
@@ -346,10 +378,37 @@ mod tests {
                     imu_owner: second + 1,
                     imu_samples: if missing == 0 { 0 } else { 1 },
                     capture_errors: 0,
+                    ..Readings::default()
                 };
                 let now = u64::from(second) * 1_000_000;
                 assert!(monitor.healthy(now, true, 10, readings));
                 assert!(!monitor.confirmable(now));
+            }
+        }
+    }
+
+    #[test]
+    fn one_initial_heartbeat_cannot_confirm_a_stalled_task_at_the_watchdog_boundary() {
+        for stalled in 0..4 {
+            let mut monitor = Monitor::new(0);
+            for second in 0..=10_u32 {
+                let count = second + 1;
+                let readings = Readings {
+                    worker: if stalled == 0 { 1 } else { count },
+                    acquisition: if stalled == 1 { 1 } else { count },
+                    gnss_owner: if stalled == 2 { 1 } else { count },
+                    imu_owner: if stalled == 3 { 1 } else { count },
+                    imu_samples: count,
+                    capture_errors: 0,
+                    ..Readings::default()
+                };
+                let now = u64::from(second) * 1_000_000;
+                // Startup retry tolerance must not bless a wedged candidate.
+                assert!(monitor.healthy(now, true, 10, readings));
+                assert!(
+                    !monitor.confirmable(now),
+                    "owner {stalled}, second {second}"
+                );
             }
         }
     }
@@ -368,6 +427,7 @@ mod tests {
                 imu_owner: second + 1,
                 imu_samples: (u32::MAX - 2).wrapping_add(count),
                 capture_errors: 0,
+                ..Readings::default()
             };
             let now = u64::from(second) * 1_000_000;
             assert!(monitor.healthy(now, true, 10, readings));
@@ -388,6 +448,7 @@ mod tests {
                     imu_owner: if stalled == 1 { 1 } else { count },
                     imu_samples: count,
                     capture_errors: 0,
+                    ..Readings::default()
                 };
                 let now = second * 1_000_000;
                 assert_eq!(

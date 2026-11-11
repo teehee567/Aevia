@@ -34,7 +34,7 @@ the display enabled and disabled.
 
 | Check | Evaluation gate |
 | --- | --- |
-| IMU cadence | Raw admitted rate near the configured DEC4 rate (~1.475 kHz; about 1.454 kHz on this board); investigate persistent reductions. Raw counts are separate from estimator acceptance. |
+| IMU cadence | Raw admitted rate near the configured DEC5 rate (737.5 Hz nominal, 690.625..784.375 Hz from the sensor clock range; about 727 Hz expected on this board); investigate persistent reductions. Raw counts are separate from estimator acceptance. |
 | Read timing | Captured-edge-to-completed-read latency below 600 us in normal operation, verified with a logic analyser. Late bursts increase timing errors and never enter the estimator. |
 | Overload | No new steady-state drops under expected workload; queue high-water observations leave capacity margin (IMU 128, GNSS 16). |
 | GNSS epochs | Advancing trusted rate reported honestly. Cold start without FINE time must not restart the receiver repeatedly. |
@@ -86,25 +86,40 @@ need their own application behavior and throughput evaluation.
 
 ## Connected setup
 
-The current board has no display, battery, buttons or GNSS antenna. Panel rendering,
+The current board has an attached GNSS antenna with partial sky view and no
+display, battery or buttons. Panel rendering,
 battery-gauge polling and button-expander polling are disabled by explicit
 `DISPLAY_FITTED`, `BATTERY_FITTED` and `BUTTONS_FITTED` flags in board.rs.
 Panel readiness, button state and battery values remain unavailable. LED/charger
-health are still observed. No antenna means trusted GNSS time, PPS lock and navigation
-output are expected to remain unavailable; verified CONFIG readback can still be
-tested independently with GnssStatus. Do not count those missing signals as a
-failed cold-start recovery test, or claim an antenna-free run validates fusion.
+health are still observed. Trusted GNSS time, PPS lock and navigation output must
+be checked with the antenna attached before claiming navigation readiness. A
+receiver fix or verified CONFIG readback alone does not establish successful
+PPS association or estimator fusion. The earlier antenna-free capture only
+established acquisition readiness.
 
 Use tools/board_check.py with the host decoder to retain typed responses and raw
 frames. ResetStatus is readable in recovery and distinguishes watchdog reset
 from a retained Rust panic. ImuDiagnostics separates driver faults, late starts,
 late finishes, overwritten captures and SPI timeout phase/context. Initial flash
 confirmation can pause acquisition; compare steady-state deltas after settling.
-The firmware still enforces the 600us completed-read deadline and reports
+Each flash program or sector erase holds the shared critical section from before
+core 1 is parked until after it resumes. In esp-storage 0.10.0,
+[`MultiCoreStrategy::with`](https://docs.rs/crate/esp-storage/0.10.0/source/src/common.rs)
+parks outside the driver's
+[private ROM-call lock](https://docs.rs/crate/esp-storage/0.10.0/source/src/lib.rs).
+Without the outer shared lock, an interrupt can wait on a lock owned by the
+parked core during either gap. The driver resumes core 1 on returned flash errors
+as well as success; the outer lock then releases. This covers individual bounded
+operations, including trial confirmation and Recover, rather than a whole upload.
+Repeated confirmation/Recover cycles with a live worker must verify that the
+intermittent watchdog reset no longer occurs. Measure their acquisition pauses
+separately from the settled navigation gate; host tests cannot exercise CPU parking.
+The firmware enforces a 1ms native-collection completed-read deadline, retains
+600us for navigation, and reports
 unqualified measurements until installation/calibration evidence is available.
-An antenna-free run exercises raw acquisition and queue draining, but does not
-exercise normal estimator stepping. Navigating throughput, PPS timing and accuracy
-remain separate acceptance gates.
+The acquisition profile exercises raw acquisition and queue draining. The
+navigation profile below also requires sustained estimator work and output;
+electrical timing and measurement accuracy still require separate qualification.
 
 ### Reproducible stationary bench gate
 
@@ -159,13 +174,17 @@ complete poll once two polls exist and ends on the first failed gate; the ongoin
 checks do not require the unfinished requested soak duration. `--power-diagnostics`
 retains charger failure-stage and bus-error detail and includes its baseline/final
 values in the verdict; PowerStatus continues to govern acceptance.
+`--fix` retains the receiver's independent position/velocity validity, age,
+uncertainty and raw PPS association evidence through the appended GnssFixStatus
+command. It requires a matching firmware/decoder and remains optional for old
+captures. Its values can diagnose reception before PPS lock or estimator startup.
 
 For scripts importing `Probe`, supply `args.output` to enable its journal and call
 `probe.close()` in a `finally` block to close USB, decoder and journal handles.
 `probe.query("power_diagnostics", bytes([1, 10]))` also works in recovery. Omitting
 `args.output` keeps journaling optional for read-only or mocked callers.
 
-The gate requires advancing IMU counts at 1350..1600 Hz on every poll interval,
+The DEC5 gate requires advancing IMU counts at 675..800 Hz on every poll interval,
 continuous IMU readiness without reinitialization or cycle-clock fallback, no new
 acquisition/transfer/parser/processing errors, CONFIG timeouts or queue drops, no
 retained worker failure or panic, stable reset provenance, fresh worker and
@@ -183,6 +202,40 @@ use rigid, vibration-isolated full-rate stationary captures and temperature
 tracking before making noise, bias or timing-accuracy claims. The configured
 LPF3 bandwidths are 280 Hz for gyro and 240 Hz for acceleration, with the
 datasheet's Dyn1 scaling; this functional gate does not narrow those filters.
+
+### Antenna-backed navigation gate
+
+Use `--navigation` after PPS lock and navigation have settled. It implies
+`--bench` and adds requirements on every recorded poll: phase `Navigating`,
+trusted navigation time, valid PPS quality, PPS lock and age, fit residual within
+the firmware's 50 us bound, finite non-null position/velocity/speeds and a
+trajectory epoch within the profile's 320 ms age budget. Trajectory epochs,
+accepted IMU counts and fused GNSS counts must advance at each poll. PPS edges
+and accepted labels must advance over the observation. New clock resets, PPS
+rejections, unsynchronized GNSS, rejected estimator input or late observations
+fail the gate. Existing settled error baselines remain recorded.
+When `--fix` is present, every poll must also contain valid finite raw position
+and velocity, with reception and individual measurement ages no greater than
+500 ms. Those checks apply only to the navigation profile.
+
+```powershell
+python firmware/tools/board_check.py `
+  --decoder target/board-tools/x86_64-pc-windows-msvc/debug/aevia-board-decode.exe `
+  --run --settle 30 --seconds 1810 --interval 5 --stationary --navigation `
+  --transport --power-diagnostics --fix --fail-fast `
+  --output build/bench/navigation.json
+python firmware/tools/bench_acceptance.py build/bench/navigation.json `
+  --minimum-seconds 1800 --stationary --navigation `
+  --output build/bench/navigation.replay.json
+```
+
+The settling delay is not a fix timeout: allow the receiver to acquire time and
+a solution before starting the acceptance capture. A capture that includes
+cold-start acquisition correctly fails the sustained navigation gate. Use the
+ordinary acquisition profile while diagnosing startup. Both profiles leave
+`qualified=false`; these tests establish functional progress and output
+availability, not calibrated accuracy. The normal five-second poll interval is
+long enough to observe fusion progress and does not measure every estimator step.
 
 Re-evaluate the retained evidence without a board, requiring the full 30 minutes:
 

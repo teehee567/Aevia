@@ -29,6 +29,7 @@ struct Pair {
     local_ns: u64,
 }
 
+#[derive(Clone, Copy)]
 pub(crate) struct ClockSync {
     pulses: [u64; HISTORY],
     pulse_count: usize,
@@ -68,6 +69,15 @@ impl ClockSync {
         self.status.generation = self.status.generation.wrapping_add(1);
     }
 
+    /// Bounded-publication failure: preserve counters while making neither a
+    /// synchronization nor an unchecked age claim. No projection is performed.
+    pub fn invalidate_with_status(&mut self) -> TimingStatus {
+        self.invalidate();
+        let mut status = self.status;
+        status.pps_age_ms = None;
+        status
+    }
+
     pub fn pulse(&mut self, at: u64) {
         if self.pulse_count != 0 && at <= self.pulses[self.pulse_count - 1] {
             return;
@@ -81,19 +91,40 @@ impl ClockSync {
         self.status.pps_edges = self.status.pps_edges.wrapping_add(1);
     }
 
-    /// PPSSTATUS's payload labels the pulse; its header can be a second later.
-    /// Require ENABLE/GPS/rising/1000ms readback, quality 2/3 and whole seconds.
+    /// Integer payload labels retain the documented preceding-pulse semantics.
+    /// Fractional payloads seen on the fitted receiver are not used as pulse
+    /// timestamps: correlate an integer FINE/GPST header with the configured
+    /// physical edge instead. Raw payload and offset remain diagnostic evidence.
     pub fn label(&mut self, label: PpsLabel, received_ns: u64) {
         if !(2..=3).contains(&label.quality)
             || label.config & 0xff != 0x20
             || label.config >> 16 != 1000
-            || !label.epoch_ms.is_multiple_of(1000)
             || label.pulse_error_ns.unsigned_abs() > 10_000
         {
             self.reject();
             return;
         }
-        let Some(gps_ns) = label.epoch_ms.checked_mul(1_000_000) else {
+        let header_correlated = !label.epoch_ms.is_multiple_of(1000);
+        let epoch_ms = if !header_correlated {
+            label.epoch_ms
+        } else if label.header_epoch_ms.is_multiple_of(1000)
+            && label
+                .header_epoch_ms
+                .checked_sub(label.epoch_ms)
+                .is_some_and(|age| age < 1000)
+        {
+            // N4 header week/ms is the GPST observation epoch; output delay
+            // relates it to transmission. CONFIG selects an integer-second
+            // rising edge. The header is already integral: never round payload
+            // or header, and never apply the undocumented offsetTime relation.
+            // Retained Build17548 captures show payload lags of 20 and 160ms;
+            // only its presence within the preceding second is a sanity check.
+            label.header_epoch_ms
+        } else {
+            self.reject();
+            return;
+        };
+        let Some(gps_ns) = epoch_ms.checked_mul(1_000_000) else {
             self.reject();
             return;
         };
@@ -108,7 +139,7 @@ impl ClockSync {
         } else {
             label
                 .header_epoch_ms
-                .checked_sub(label.epoch_ms)
+                .checked_sub(epoch_ms)
                 .and_then(|age| age.checked_mul(1_000_000))
                 .and_then(|age| age.checked_add(label.output_delay_ns))
                 .and_then(|age| received_ns.checked_sub(age))
@@ -130,7 +161,14 @@ impl ClockSync {
             self.reject();
             return;
         };
-        if candidates.next().is_some() || received_ns.saturating_sub(local_ns) > MAX_AGE_NS {
+        let age = received_ns.checked_sub(local_ns);
+        if candidates.next().is_some()
+            || age.is_none_or(|age| age > MAX_AGE_NS)
+            || (header_correlated
+                && self.pair_count < 2
+                && (self.pulses[..self.pulse_count].last() != Some(&local_ns)
+                    || age.is_none_or(|age| age > ASSOCIATION_WINDOW_NS)))
+        {
             self.reject();
             return;
         }

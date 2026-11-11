@@ -1,5 +1,5 @@
 //! `esp-hal`1.2.2 native SDMMC adapter; no SPI fallback or unsafe DMA pointers.
-use super::{BusWidth, Command, NativeHost, ResponseKind, SECTOR_BYTES};
+use super::{BusWidth, Command, MAX_READ_BYTES, NativeHost, ResponseKind, SECTOR_BYTES};
 use esp_hal::{
     Blocking,
     dma::{DmaBufError, aligned::DmaAlignedMut},
@@ -12,12 +12,12 @@ use esp_hal::{
 /// unaligned application buffers and immutable/flash-backed write inputs.
 #[repr(C, align(64))]
 pub struct DmaScratch {
-    bytes: [u8; SECTOR_BYTES],
+    bytes: [u8; MAX_READ_BYTES],
 }
 impl DmaScratch {
     pub const fn new() -> Self {
         Self {
-            bytes: [0; SECTOR_BYTES],
+            bytes: [0; MAX_READ_BYTES],
         }
     }
 }
@@ -93,9 +93,17 @@ impl<const S: u8> NativeHost for Esp32SdHost<'_, '_, S> {
         argument: u32,
         data: &mut [u8],
     ) -> Result<u32, Self::Error> {
-        if !matches!(data.len(), 8 | SECTOR_BYTES) {
-            return Err(Esp32SdHostError::InvalidTransfer);
-        }
+        let (block_size, count) = match (command, data.len()) {
+            (51, 8) => (8, 1),
+            (17, SECTOR_BYTES) => (SECTOR_BYTES, 1),
+            (18, length)
+                if (2 * SECTOR_BYTES..=MAX_READ_BYTES).contains(&length)
+                    && length.is_multiple_of(SECTOR_BYTES) =>
+            {
+                (SECTOR_BYTES, length / SECTOR_BYTES)
+            }
+            _ => return Err(Esp32SdHostError::InvalidTransfer),
+        };
         // S31 internal SRAM is uncached, with 4-byte DMA size alignment;
         // an 8-byte SCR is valid. PSRAM has 64-byte size alignment, hence
         // this scratch must be allocated in SRAM as documented above.
@@ -103,7 +111,12 @@ impl<const S: u8> NativeHost for Esp32SdHost<'_, '_, S> {
             .map_err(Esp32SdHostError::Dma)?;
         let result = self
             .slot
-            .read_blocks_blocking(command, argument, dma, data.len() as u16, 1)
+            // esp-hal 1.2.2 enables and waits for auto-CMD12 for CMD18/count>1.
+            // Its stop-completion path does not separately report late CMD12
+            // response CRC/timeout flags before clearing them. SdCard's next
+            // CMD13 still checks readiness and R1 errors; it cannot recover
+            // those cleared response flags. Data CRC errors remain checked.
+            .read_blocks_blocking(command, argument, dma, block_size as u16, count as u32)
             .map_err(Esp32SdHostError::Controller)?;
         data.copy_from_slice(&self.scratch.bytes[..data.len()]);
         Ok(result[0])
@@ -114,8 +127,9 @@ impl<const S: u8> NativeHost for Esp32SdHost<'_, '_, S> {
         argument: u32,
         data: &[u8; SECTOR_BYTES],
     ) -> Result<u32, Self::Error> {
-        self.scratch.bytes.copy_from_slice(data);
-        let dma = DmaAlignedMut::new(&mut self.scratch.bytes[..]).map_err(Esp32SdHostError::Dma)?;
+        self.scratch.bytes[..SECTOR_BYTES].copy_from_slice(data);
+        let dma = DmaAlignedMut::new(&mut self.scratch.bytes[..SECTOR_BYTES])
+            .map_err(Esp32SdHostError::Dma)?;
         let result = self
             .slot
             .write_blocks_blocking(command, argument, dma, SECTOR_BYTES as u16, 1)

@@ -1,9 +1,11 @@
 //! Receiver lifecycle and PPS verification policy.
 mod diagnostics;
+pub(super) mod fix;
 mod navigation;
 pub(super) mod observation;
 #[cfg(target_arch = "riscv32")]
 mod receiver;
+pub(crate) mod recording;
 pub(super) mod transport;
 mod verification;
 #[cfg(target_arch = "riscv32")]

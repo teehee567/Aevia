@@ -3,6 +3,7 @@
 
 use super::{
     interface::{self, EngineError, Phase, Snapshot},
+    processing_support::InitializationGate,
     profile,
     sensors::{self, GnssSample, ImuSample},
     timing,
@@ -48,7 +49,7 @@ struct Processor {
     session: LiveSession<'static, 'static>,
     imu_sequence: u64,
     gnss_sequence: u64,
-    have_initialization_seed: bool,
+    initialization_gate: InitializationGate,
     imu_rate_covariance: Covariance3,
     imu_acceleration_covariance: Covariance3,
     last_gnss_epoch_ms: Option<(u32, u64)>,
@@ -139,7 +140,7 @@ impl Processor {
             session,
             imu_sequence: 0,
             gnss_sequence: 0,
-            have_initialization_seed: false,
+            initialization_gate: InitializationGate::default(),
             // These immutable interval-average uncertainties belong to the
             // profile. Validate once, rather than repeating software-f64
             // covariance construction for every high-rate IMU sample.
@@ -162,10 +163,20 @@ impl Processor {
         self.snapshot.acceleration_mps2 = sample.acceleration_mps2.map(|x| x as f32);
         self.snapshot.angular_rate_rps = sample.angular_rate_rps.map(|x| x as f32);
         // Inertial data alone cannot initialize terrestrial navigation. Drain
-        // and report every raw sample while waiting for an accepted position/
-        // velocity seed; only subsequent real intervals enter the initializer.
-        // This does not synthesize samples or claim estimator acceptance.
-        if !self.have_initialization_seed {
+        // raw samples until a paired seed is accepted, and after that evidence
+        // expires while still initializing. Active dead reckoning is never gated.
+        let initializing = matches!(self.session.phase(), LivePhase::Initializing);
+        // The engine evaluates initialization-fix freshness at interval start,
+        // not receipt, capture, or interval end. Match that support exactly.
+        let support_start_ns = sample
+            .end_ns
+            .checked_sub(u64::from(sample.duration_ns))
+            .ok_or(StepError::ClockDiscontinuity)?;
+        if !self.initialization_gate.permits_imu(
+            initializing,
+            support_start_ns,
+            profile::MAX_GNSS_AGE_NS,
+        ) {
             return Ok(());
         }
         let time = ObservationTime {
@@ -207,7 +218,14 @@ impl Processor {
             ImuStatus::Degraded,
         )
         .map_err(StepError::InvalidObservation)?;
-        self.step(Some(&LiveObservation::Imu(observation)))
+        let disposition = self.step(Some(&LiveObservation::Imu(observation)))?;
+        self.initialization_gate.observe_imu_result(
+            initializing,
+            support_start_ns,
+            profile::MAX_GNSS_AGE_NS,
+            disposition,
+        );
+        Ok(())
     }
 
     fn gnss(&mut self, sample: GnssSample) -> Result<(), StepError> {
@@ -224,13 +242,17 @@ impl Processor {
         let observation =
             super::gnss::observation::observation(sample, self.gnss_sequence, profile::FRAME.id())?;
         self.step(Some(&LiveObservation::GnssSolution(observation)))
+            .map(|_| ())
     }
 
-    fn step(&mut self, observation: Option<&LiveObservation>) -> Result<(), StepError> {
-        // Before an initialization seed there is no live frontier/metric work.
-        // Raw acquisition may remain active for a long antenna-free cold start.
-        if observation.is_none() && !self.have_initialization_seed {
-            return Ok(());
+    fn step(
+        &mut self,
+        observation: Option<&LiveObservation>,
+    ) -> Result<Option<InputDisposition>, StepError> {
+        // Initialization advances only with real observations. Its inactive
+        // core has no frontier to drain; avoid idle calls even after a seed.
+        if observation.is_none() && matches!(self.session.phase(), LivePhase::Initializing) {
+            return Ok(None);
         }
         let update = self.session.step(LiveStep {
             observation,
@@ -240,9 +262,21 @@ impl Processor {
             (observation, update.input)
             && super::gnss::observation::initialization_seed_accepted(*solution, disposition)
         {
-            self.have_initialization_seed = true;
+            let support = |field: ObservationTime| {
+                field
+                    .effective_time()
+                    .ok()
+                    .and_then(|time| u64::try_from(time.as_ns()).ok())
+            };
+            if let Some((position, velocity)) = solution
+                .position()
+                .and_then(|field| support(field.time))
+                .zip(solution.velocity().and_then(|field| support(field.time)))
+            {
+                self.initialization_gate.accepted_seed(position, velocity);
+            }
         }
-        Ok(())
+        Ok(update.input.map(|(_, disposition)| disposition))
     }
 
     fn record_error(&mut self, error: StepError) {
@@ -382,7 +416,7 @@ pub unsafe fn run(psram_address: usize, psram_len: usize) -> ! {
         super::supervision::worker_heartbeat();
         if !active {
             // At most 2 kHz idle wakeups bound shared RTOS timer/critical-section
-            // traffic. 500 us remains below the earliest DEC4 sample period;
+            // traffic. 500 us remains below the earliest DEC5 sample period;
             // hardware capture, rather than this consumer poll, timestamps it.
             CurrentThreadHandle::get().delay(Duration::from_micros(500));
         }

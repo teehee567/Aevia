@@ -19,6 +19,8 @@ pub enum Command<'a> {
     Recover,
     /// Current application startup stage (available before acquisition starts).
     BootStatus,
+    /// Fixed-layout discovery; query before decoding versioned device telemetry.
+    ProtocolInfo,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -34,4 +36,5 @@ pub enum Response {
     BootStatus {
         stage: u8,
     },
+    ProtocolInfo(crate::protocol::ProtocolInfo),
 }

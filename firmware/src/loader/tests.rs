@@ -7,6 +7,31 @@ use crate::{commands::Command, protocol::Frame};
 use sha2::{Digest, Sha256};
 use std::{cell::RefCell, rc::Rc, vec, vec::Vec};
 
+#[test]
+fn protocol_discovery_is_read_only_in_both_modes_and_during_upload() {
+    use crate::commands::Response;
+    let memory = Memory::new(0);
+    let mut updater = Updater::new(memory.clone(), 0).unwrap();
+    let bytes = image(512);
+    updater
+        .begin(bytes.len() as u32, Sha256::digest(&bytes).into())
+        .unwrap();
+    let before = memory.0.borrow().mutations;
+    assert_eq!(
+        recovery::command(&mut updater, Command::ProtocolInfo),
+        Ok(Response::ProtocolInfo(crate::protocol::info(true)))
+    );
+    assert_eq!(
+        crate::device::command(&mut updater, Command::ProtocolInfo),
+        Ok(Response::ProtocolInfo(crate::protocol::info(false)))
+    );
+    assert_eq!(memory.0.borrow().mutations, before);
+    // Discovery must not abort the active transfer or change its sequence.
+    updater.data(0, &bytes[..256]).unwrap();
+    updater.data(256, &bytes[256..]).unwrap();
+    updater.commit().unwrap();
+}
+
 #[derive(Clone)]
 struct Memory(Rc<RefCell<Nor>>);
 struct Nor {

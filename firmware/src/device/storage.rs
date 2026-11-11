@@ -53,14 +53,24 @@ impl Flash for Storage<'_> {
             .map_err(|_| Error::Flash)
     }
     fn write(&mut self, address: u32, bytes: &[u8]) -> Result<(), Error> {
-        self.0
-            .program(u64::from(address), bytes)
-            .map_err(|_| Error::Flash)
+        // Acquire the shared lock before esp-storage parks core 1, and keep
+        // interrupts masked until it unparks. The driver's private flash lock
+        // only covers the ROM call: otherwise a local interrupt can wait for
+        // the shared lock while its owner is parked on the other core.
+        critical_section::with(|_| {
+            self.0
+                .program(u64::from(address), bytes)
+                .map_err(|_| Error::Flash)
+        })
     }
     fn erase(&mut self, from: u32, to: u32) -> Result<(), Error> {
         let length = to.checked_sub(from).ok_or(Error::Flash)?;
-        self.0
-            .erase(u64::from(from), u64::from(length))
-            .map_err(|_| Error::Flash)
+        // Match write's lock ordering across the complete park/erase/unpark.
+        // Loader callers erase one sector per operation, never an entire slot.
+        critical_section::with(|_| {
+            self.0
+                .erase(u64::from(from), u64::from(length))
+                .map_err(|_| Error::Flash)
+        })
     }
 }

@@ -20,6 +20,73 @@ fn crc_uses_n4_zero_seed_and_no_final_xor() {
     assert_eq!(crc32(b""), 0);
 }
 
+fn bitwise_crc(bytes: &[u8]) -> u32 {
+    let mut crc = 0;
+    for byte in bytes {
+        crc ^= u32::from(*byte);
+        for _ in 0..8 {
+            crc = if crc & 1 != 0 {
+                (crc >> 1) ^ 0xedb8_8320
+            } else {
+                crc >> 1
+            };
+        }
+    }
+    crc
+}
+
+#[test]
+fn table_crc_matches_bitwise_reference_for_all_bytes_and_large_frames() {
+    // Each possible input byte follows multiple nonzero CRC states, exercising
+    // all table indices as well as the carried high CRC bits.
+    for prefix in [0, 1, 0x55, 0xaa, 0xff] {
+        for byte in 0..=u8::MAX {
+            let bytes = [prefix, prefix ^ 0x97, byte];
+            assert_eq!(crc32(&bytes), bitwise_crc(&bytes));
+        }
+    }
+    let payload: Vec<u8> = (0..=u16::MAX).map(|i| (i ^ (i >> 8)) as u8).collect();
+    for length in [0, 1, 23, 24, 127, 128, 484, 512, 4096, 65_535] {
+        assert_eq!(crc32(&payload[..length]), bitwise_crc(&payload[..length]));
+    }
+}
+
+#[test]
+fn maximum_streamed_frame_checks_reference_crc_and_recovers_after_corruption() {
+    let payload: Vec<u8> = (0..u16::MAX).map(|i| i as u8).collect();
+    let mut wire = binary(12, &payload);
+    let end = wire.len() - 4;
+    // Independent reference prevents a shared encoder/decoder CRC mistake
+    // from manufacturing an apparently valid streaming frame.
+    let reference_crc = bitwise_crc(&wire[..end]);
+    wire[end..].copy_from_slice(&reference_crc.to_le_bytes());
+    let mut decoder = Decoder::<512>::new();
+    for corrupted in [true, false] {
+        wire[40] ^= u8::from(corrupted);
+        let mut frames = 0;
+        let mut errors = 0;
+        for &byte in &wire {
+            match decoder.push(byte) {
+                Ok(Some(Frame::SkippedBinary {
+                    message_id,
+                    payload_len,
+                    ..
+                })) => {
+                    assert_eq!(message_id, 12);
+                    assert_eq!(payload_len, u16::MAX);
+                    frames += 1;
+                }
+                Ok(None) => {}
+                Err(DecodeError::Checksum) => errors += 1,
+                other => panic!("unexpected streaming decode: {other:?}"),
+            }
+        }
+        assert_eq!(errors, usize::from(corrupted));
+        assert_eq!(frames, usize::from(!corrupted));
+        wire[40] ^= u8::from(corrupted);
+    }
+}
+
 #[test]
 fn binary_decoder_handles_noise_overlap_and_unknown_messages() {
     let wire = binary(12345, &[1, 2, 3, 4]);
@@ -119,12 +186,20 @@ fn pps_decodes_signed_error_and_rejects_invalid_week_time() {
     payload[4..8].copy_from_slice(&2400_u32.to_le_bytes());
     payload[8..12].copy_from_slice(&2000_u32.to_le_bytes());
     payload[12..16].copy_from_slice(&(-18_i32).to_le_bytes());
+    payload[16..20].copy_from_slice(&2_000_000_000_i32.to_le_bytes());
     let wire = binary(9000, &payload);
     let sample = BinaryFrame::parse(&wire).unwrap().pps_status().unwrap();
     assert_eq!(sample.pulse_error_ns, -18);
+    assert_eq!(sample.offset_time_10ps, 2_000_000_000);
     assert_eq!(sample.gps_epoch_ms(), Some(2400 * 604_800_000 + 2000));
     let mut invalid = sample;
     invalid.header.time_reference = 1;
+    assert_eq!(invalid.gps_epoch_ms(), None);
+    invalid = sample;
+    invalid.header.time_status = 20;
+    assert_eq!(invalid.gps_epoch_ms(), None);
+    invalid = sample;
+    invalid.header.milliseconds_of_week = 604_800_000;
     assert_eq!(invalid.gps_epoch_ms(), None);
     invalid = sample;
     invalid.milliseconds_of_week = 604_800_000;
@@ -180,10 +255,56 @@ fn mixed_decoder_does_not_interpret_ascii_inside_binary_payload() {
             frames.push(match frame {
                 Frame::Binary(value) => (1, value.message_id()),
                 Frame::Ascii(_) => (2, 0),
+                Frame::SkippedBinary { message_id, .. } => (3, message_id),
             });
         }
     }
     assert_eq!(frames, vec![(1, 123), (2, 0)]);
+}
+
+#[test]
+fn mixed_decoder_streams_large_logs_without_interpreting_embedded_frames() {
+    let mut payload = vec![0x55; 4096];
+    let embedded = binary(240, &[0; 112]);
+    payload[70..70 + embedded.len()].copy_from_slice(&embedded);
+    payload[230..238].copy_from_slice(b"$A*41\r\n!");
+    let large = binary(12, &payload);
+    let mut decoder = Decoder::<512>::new();
+    let mut seen = Vec::new();
+    for byte in large.iter().chain(binary(9000, &[0; 60]).iter()) {
+        match decoder.push(*byte).unwrap() {
+            Some(Frame::SkippedBinary {
+                message_id,
+                payload_len,
+                header,
+            }) => {
+                assert_eq!(header.gps_epoch_ms(), Some(2400 * 604_800_000 + 1234));
+                seen.push((message_id, payload_len));
+            }
+            Some(Frame::Binary(frame)) => {
+                seen.push((frame.message_id(), frame.payload().len() as u16))
+            }
+            Some(Frame::Ascii(_)) => panic!("ASCII inside raw observation escaped framing"),
+            None => {}
+        }
+    }
+    assert_eq!(seen, vec![(12, 4096), (9000, 60)]);
+    let mut bad = large.clone();
+    bad[1000] ^= 1;
+    let errors = bad
+        .into_iter()
+        .filter(|byte| decoder.push(*byte) == Err(DecodeError::Checksum))
+        .count();
+    assert_eq!(errors, 1);
+    for byte in &large[..1000] {
+        decoder.push(*byte).unwrap();
+    }
+    decoder.reset();
+    let mut recovered = false;
+    for byte in binary(240, &[0; 112]) {
+        recovered |= matches!(decoder.push(byte).unwrap(), Some(Frame::Binary(_)));
+    }
+    assert!(recovered);
 }
 
 #[test]

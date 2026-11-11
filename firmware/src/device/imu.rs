@@ -4,13 +4,33 @@
 use aevia_device_hal::sch16t::{
     AxisDecimation, AxisFilters, Config, Decimation, Filter, MotionSample, UserInterface,
 };
+#[cfg(any(target_arch = "riscv32", test))]
+mod recording;
 
 const GYRO_DELAY_NS: u64 = 1_400_000;
 const ACCEL_DELAY_NS: u64 = 1_500_000;
 #[cfg(target_arch = "riscv32")]
 pub(super) const DELAY_UNCERTAINTY_NS: u64 = 1_200_000;
-// DEC4's earliest update is ~637 us. Leave margin before that next update.
-const READ_DEADLINE_NS: u64 = 600_000;
+// DEC5 averages sixteen internal samples: F_PRIM/32 is 690.625..784.375Hz.
+// Murata Table 2 / section 5.4.2 give F_PRIM <= 25.1kHz, so the minimum
+// DEC5 update interval is 32 / 25_100 seconds = 1_274_900ns. Native collection
+// finishes within 1ms, leaving >274us margin. Navigation retains its existing
+// 600us policy. Neither bound qualifies sensor delay or timestamp accuracy.
+const NAVIGATION_READ_DEADLINE_NS: u64 = 600_000;
+const NATIVE_READ_DEADLINE_NS: u64 = 1_000_000;
+const MIN_INTERVAL_NS: u64 = 1_200_000;
+const MAX_INTERVAL_NS: u64 = 1_600_000;
+
+const fn read_deadline_ns(native: bool) -> u64 {
+    if native {
+        NATIVE_READ_DEADLINE_NS
+    } else {
+        NAVIGATION_READ_DEADLINE_NS
+    }
+}
+
+#[cfg(target_arch = "riscv32")]
+const ACTIVE_READ_DEADLINE_NS: u64 = read_deadline_ns(super::configuration::DATA_COLLECTION_ONLY);
 
 /// Last driver failure is retained through later success. Kinds: 0 none,
 /// 1 SPI, 2 framing, 3 configuration, 4 identity, 5 readback, 6 startup status,
@@ -109,6 +129,18 @@ static DIAGNOSTICS: embassy_sync::blocking_mutex::Mutex<
 > = embassy_sync::blocking_mutex::Mutex::new(core::cell::Cell::new(None));
 #[cfg(target_arch = "riscv32")]
 static READY_STATE: core::sync::atomic::AtomicBool = core::sync::atomic::AtomicBool::new(false);
+#[cfg(target_arch = "riscv32")]
+static RECORDING_METADATA: embassy_sync::blocking_mutex::Mutex<
+    embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex,
+    core::cell::Cell<Option<[u8; 104]>>,
+> = embassy_sync::blocking_mutex::Mutex::new(core::cell::Cell::new(None));
+
+/// Last verified identity/configuration, suitable as a kind9 session prefix.
+/// The initializer also records any subsequent successful hardware reset.
+#[cfg(target_arch = "riscv32")]
+pub(crate) fn recording_metadata() -> Option<[u8; 104]> {
+    RECORDING_METADATA.lock(core::cell::Cell::get)
+}
 
 #[cfg(target_arch = "riscv32")]
 pub(crate) fn diagnostics() -> ImuDiagnostics {
@@ -121,7 +153,7 @@ pub(crate) fn diagnostics() -> ImuDiagnostics {
 
 #[cfg(target_arch = "riscv32")]
 mod read_timing {
-    use super::{ImuDiagnostics, READ_DEADLINE_NS};
+    use super::{ACTIVE_READ_DEADLINE_NS, ImuDiagnostics};
     use core::sync::atomic::{AtomicU32, Ordering};
     static LATE_STARTS: AtomicU32 = AtomicU32::new(0);
     static LATE_FINISHES: AtomicU32 = AtomicU32::new(0);
@@ -137,10 +169,10 @@ mod read_timing {
         LAST_BURST.store(burst, Ordering::Relaxed);
         MAX_START.fetch_max(start, Ordering::Relaxed);
         MAX_BURST.fetch_max(burst, Ordering::Relaxed);
-        if started.saturating_sub(edge) > READ_DEADLINE_NS {
+        if started.saturating_sub(edge) > ACTIVE_READ_DEADLINE_NS {
             LATE_STARTS.fetch_add(1, Ordering::Relaxed);
         }
-        if finished.saturating_sub(edge) > READ_DEADLINE_NS {
+        if finished.saturating_sub(edge) > ACTIVE_READ_DEADLINE_NS {
             LATE_FINISHES.fetch_add(1, Ordering::Relaxed);
         }
         if latest != Some(edge) {
@@ -170,8 +202,8 @@ fn configuration() -> Config {
         rate_filters: AxisFilters::all(Filter::Lpf3),
         acc_filters: AxisFilters::all(Filter::Lpf3),
         aux_acc_filters: AxisFilters::all(Filter::Lpf3),
-        rate_decimation: AxisDecimation::all(Decimation::Dec4),
-        acc_decimation: AxisDecimation::all(Decimation::Dec4),
+        rate_decimation: AxisDecimation::all(Decimation::Dec5),
+        acc_decimation: AxisDecimation::all(Decimation::Dec5),
         interface: UserInterface {
             data_ready_enabled: true,
             ..Default::default()
@@ -253,10 +285,34 @@ impl Alignment {
         finished_ns: u64,
         latest_edge_ns: Option<u64>,
     ) -> Result<Option<AlignedSample>, Error> {
+        self.push_checked(motion, edge_ns, finished_ns, latest_edge_ns, true)
+    }
+
+    /// Collection telemetry retains native sensor vectors and uses the DEC5
+    /// 1ms completed-read bound. Coherence, range and consecutive-counter
+    /// checks match navigation; no gyro interpolation or support correction.
+    fn push_native(
+        &mut self,
+        motion: MotionSample,
+        edge_ns: u64,
+        finished_ns: u64,
+        latest_edge_ns: Option<u64>,
+    ) -> Result<Option<AlignedSample>, Error> {
+        self.push_checked(motion, edge_ns, finished_ns, latest_edge_ns, false)
+    }
+
+    fn push_checked(
+        &mut self,
+        motion: MotionSample,
+        edge_ns: u64,
+        finished_ns: u64,
+        latest_edge_ns: Option<u64>,
+        align: bool,
+    ) -> Result<Option<AlignedSample>, Error> {
         if latest_edge_ns != Some(edge_ns)
             || finished_ns
                 .checked_sub(edge_ns)
-                .is_none_or(|age| age > READ_DEADLINE_NS)
+                .is_none_or(|age| age > read_deadline_ns(!align))
             || edge_ns < ACCEL_DELAY_NS
         {
             self.clear();
@@ -281,20 +337,31 @@ impl Alignment {
             self.clear();
             return Err(Error::Timing);
         };
-        if !(600_000..=800_000).contains(&duration) || motion.counter_advance(&previous) != [1; 6] {
+        if !(MIN_INTERVAL_NS..=MAX_INTERVAL_NS).contains(&duration)
+            || motion.counter_advance(&previous) != [1; 6]
+        {
             // The current coherent burst seeds the next consecutive pair.
             return Err(Error::Gap);
         }
-        let fraction = (ACCEL_DELAY_NS - GYRO_DELAY_NS) as f64 / duration as f64;
-        Ok(Some(AlignedSample {
-            captured_ns: edge_ns,
-            end_ns: edge_ns - ACCEL_DELAY_NS,
-            duration_ns: duration as u32,
-            acceleration_mps2: motion.acceleration_mps2,
-            angular_rate_rps: core::array::from_fn(|i| {
+        let angular_rate_rps = if align {
+            let fraction = (ACCEL_DELAY_NS - GYRO_DELAY_NS) as f64 / duration as f64;
+            core::array::from_fn(|i| {
                 motion.angular_rate_rps[i]
                     + fraction * (previous.angular_rate_rps[i] - motion.angular_rate_rps[i])
-            }),
+            })
+        } else {
+            motion.angular_rate_rps
+        };
+        Ok(Some(AlignedSample {
+            captured_ns: edge_ns,
+            end_ns: if align {
+                edge_ns - ACCEL_DELAY_NS
+            } else {
+                edge_ns
+            },
+            duration_ns: duration as u32,
+            acceleration_mps2: motion.acceleration_mps2,
+            angular_rate_rps,
         }))
     }
 }
@@ -325,6 +392,7 @@ mod hardware {
         ready: Input<'d>,
         alignment: Alignment,
         edges: EdgeProgress,
+        temperature_after_ns: u64,
     }
 
     impl<'d> Imu<'d> {
@@ -339,6 +407,7 @@ mod hardware {
                 ready,
                 alignment: Alignment::default(),
                 edges: EdgeProgress::default(),
+                temperature_after_ns: 0,
             }
         }
 
@@ -363,6 +432,58 @@ mod hardware {
                 publish_diagnostics(diagnostics().with_error(&error));
                 Error::Driver
             })?;
+            let mut metadata = [0_u8; 104];
+            metadata[0] = 1;
+            metadata[1] = 12;
+            for (index, value) in [
+                identity.component,
+                identity.asic,
+                identity.serial[0],
+                identity.serial[1],
+                identity.serial[2],
+            ]
+            .into_iter()
+            .enumerate()
+            {
+                metadata[2 + index * 2..4 + index * 2].copy_from_slice(&value.to_le_bytes());
+            }
+            for (index, (register, value)) in configuration().registers().into_iter().enumerate() {
+                metadata[12 + index * 3] = register.address();
+                metadata[13 + index * 3..15 + index * 3].copy_from_slice(&value.to_le_bytes());
+            }
+            for (offset, value) in [
+                (48, GYRO_DELAY_NS as u32),
+                (52, ACCEL_DELAY_NS as u32),
+                (56, DELAY_UNCERTAINTY_NS as u32),
+                (60, 100),
+                (88, ACTIVE_READ_DEADLINE_NS as u32),
+                (92, MIN_INTERVAL_NS as u32),
+                (96, MAX_INTERVAL_NS as u32),
+            ] {
+                metadata[offset..offset + 4].copy_from_slice(&value.to_le_bytes());
+            }
+            let config = configuration();
+            for (offset, value) in [
+                (
+                    64,
+                    core::f64::consts::PI
+                        / 180.0
+                        / config.decimated_rate_range.lsb_per_degree_per_second(),
+                ),
+                (
+                    72,
+                    1.0 / config
+                        .decimated_acc_range
+                        .lsb_per_metre_per_second_squared(),
+                ),
+                (80, 737.5_f64),
+            ] {
+                metadata[offset..offset + 8].copy_from_slice(&value.to_le_bytes());
+            }
+            metadata[100] = 1; // decimated output
+            metadata[101] = 1; // profile schema, unqualified
+            RECORDING_METADATA.lock(|cell| cell.set(Some(metadata)));
+            crate::device::recording::capture(9, capture::now_ns().unwrap_or(0), &metadata);
             // EN_SENSOR starts DRDY before the HAL's 215 ms settling wait.
             // Drain that old output without treating its age as a sampling
             // failure, then transfer ownership for fresh-edge acquisition.
@@ -414,8 +535,25 @@ mod hardware {
                     self.alignment.clear();
                     return Err(Error::Timing);
                 };
-                // HAL drains all six axes even when a frame fails, rearming DRDY.
-                let motion = match self.driver.motion(MotionOutput::Decimated) {
+                // HAL drains all six axes even when a frame fails, rearming
+                // DRDY. Timestamp the completed register reads before software
+                // floating-point scaling. Apply the selected profile's
+                // absolute bound even if DRDY remains high during a stall.
+                let captured = self.driver.motion_capture_unscaled(MotionOutput::Decimated);
+                let finished = capture::now_ns();
+                let latest = capture::drdy_ns();
+                let captured = captured.into_scaled();
+                let payload = recording::native(
+                    captured.frames,
+                    captured.result.as_ref().ok().copied(),
+                    edge_ns,
+                    started_ns,
+                    finished,
+                    latest,
+                    ACTIVE_READ_DEADLINE_NS,
+                );
+                crate::device::recording::capture(2, edge_ns, &payload);
+                let motion = match captured.result {
                     Ok(motion) => motion,
                     Err(error) => {
                         publish_diagnostics(diagnostics().with_error_at(&error, Some(edge_ns)));
@@ -436,7 +574,7 @@ mod hardware {
                         );
                     }
                 };
-                let Some(finished_ns) = capture::now_ns() else {
+                let Some(finished_ns) = finished else {
                     self.alignment.clear();
                     return Err(Error::Timing);
                 };
@@ -444,9 +582,22 @@ mod hardware {
                     (finished_ns.saturating_sub(edge_ns) / 1000).min(u64::from(u32::MAX)) as u32,
                     Ordering::Relaxed,
                 );
-                let latest = capture::drdy_ns();
                 read_timing::observe(edge_ns, started_ns, finished_ns, latest);
-                let aligned = self.alignment.push(motion, edge_ns, finished_ns, latest);
+                if finished_ns >= self.temperature_after_ns {
+                    self.temperature_after_ns = finished_ns.saturating_add(1_000_000_000);
+                    let result = self.driver.temperature_celsius();
+                    let mut temperature = [0_u8; 8];
+                    temperature[0] = 1;
+                    temperature[1] = u8::from(result.is_ok());
+                    temperature[4..8].copy_from_slice(&result.unwrap_or(0.0).to_le_bytes());
+                    crate::device::recording::capture(7, finished_ns, &temperature);
+                }
+                let aligned = if super::super::configuration::DATA_COLLECTION_ONLY {
+                    self.alignment
+                        .push_native(motion, edge_ns, finished_ns, latest)
+                } else {
+                    self.alignment.push(motion, edge_ns, finished_ns, latest)
+                };
                 if matches!(aligned, Err(Error::Range)) {
                     publish_diagnostics(diagnostics().with_numeric_range(&motion, edge_ns));
                 }
@@ -484,7 +635,8 @@ mod hardware {
                 super::super::supervision::imu_heartbeat();
                 match imu.initialize().await {
                     Ok(()) => break,
-                    Err(_) => {
+                    Err(error) => {
+                        recording::fault(error, diagnostics(), capture::now_ns().unwrap_or(0));
                         sensors::IMU_ERRORS.fetch_add(1, Ordering::Relaxed);
                         Timer::after_secs(1).await;
                     }
@@ -526,6 +678,7 @@ mod hardware {
                             Error::Driver => {}
                         }
                         publish_diagnostics(diag);
+                        recording::fault(error, diag, capture::now_ns().unwrap_or(0));
                         if matches!(error, Error::Timing | Error::Gap) {
                             sensors::IMU_TIMING_ERRORS.fetch_add(1, Ordering::Relaxed);
                         }
@@ -539,7 +692,7 @@ mod hardware {
                 // the lower-priority RTOS timer. If it is already high, leave a
                 // real gap so an overloaded level-ready source cannot keep the
                 // interrupt executor running forever. The hardware measurement
-                // deadline remains 600 us in either path.
+                // deadline still applies to the complete hardware read.
                 if imu.ready.is_high() {
                     Timer::after_micros(100).await;
                 }
@@ -583,14 +736,179 @@ mod tests {
                 .unwrap()
                 .is_none()
         );
-        let sample = push(&mut alignment, motion(0, 2.0), 10_700_000)
+        let sample = push(&mut alignment, motion(0, 2.0), 11_400_000)
             .unwrap()
             .unwrap();
-        assert_eq!(sample.captured_ns, 10_700_000);
-        assert_eq!(sample.end_ns, 9_200_000);
-        assert_eq!(sample.duration_ns, 700_000);
-        assert!((sample.angular_rate_rps[0] - (2.0 - 1.0 / 7.0)).abs() < 1.0e-12);
+        assert_eq!(sample.captured_ns, 11_400_000);
+        assert_eq!(sample.end_ns, 9_900_000);
+        assert_eq!(sample.duration_ns, 1_400_000);
+        assert!((sample.angular_rate_rps[0] - (2.0 - 1.0 / 14.0)).abs() < 1.0e-12);
         assert_eq!(sample.acceleration_mps2, [1.0, 2.0, 9.8]);
+    }
+
+    #[test]
+    fn collection_telemetry_preserves_native_vectors_with_the_same_coherence_gates() {
+        let mut collection = Alignment::default();
+        let first = motion(15, 1.0);
+        assert!(
+            collection
+                .push_native(first, 10_000_000, 10_050_000, Some(10_000_000))
+                .unwrap()
+                .is_none()
+        );
+        let next = motion(0, 2.0);
+        let sample = collection
+            .push_native(next, 11_400_000, 11_450_000, Some(11_400_000))
+            .unwrap()
+            .unwrap();
+        assert_eq!(sample.angular_rate_rps, next.angular_rate_rps);
+        assert_eq!(sample.acceleration_mps2, next.acceleration_mps2);
+        assert_eq!(sample.captured_ns, 11_400_000);
+        assert_eq!(sample.end_ns, 11_400_000);
+        assert_eq!(sample.duration_ns, 1_400_000);
+
+        // Both paths reject reads beyond the native bound, overwritten, missing,
+        // repeated and invalid samples, and retain the same reseeding policy.
+        for case in 0..6 {
+            let mut navigation = Alignment::default();
+            let mut collection = Alignment::default();
+            navigation
+                .push(first, 10_000_000, 10_050_000, Some(10_000_000))
+                .unwrap();
+            collection
+                .push_native(first, 10_000_000, 10_050_000, Some(10_000_000))
+                .unwrap();
+            let mut current = next;
+            let mut end = 11_450_000;
+            let mut latest = Some(11_400_000);
+            match case {
+                0 => end = 12_400_001,
+                1 => latest = Some(12_800_000),
+                2 => current.counters[4] = 15,
+                3 => current.counters[4] = 1,
+                4 => current.acceleration_mps2[2] = f64::NAN,
+                _ => current.angular_rate_dps[0] = 301.0,
+            }
+            let expected = navigation
+                .push(current, 11_400_000, end, latest)
+                .unwrap_err();
+            assert_eq!(
+                collection
+                    .push_native(current, 11_400_000, end, latest)
+                    .unwrap_err(),
+                expected
+            );
+            let mut after = motion(1, 3.0);
+            after.counters[4] = current.counters[4].wrapping_add(1) & 15;
+            let expected_seed = navigation
+                .push(after, 12_800_000, 12_850_000, Some(12_800_000))
+                .unwrap()
+                .is_some();
+            assert_eq!(
+                collection
+                    .push_native(after, 12_800_000, 12_850_000, Some(12_800_000))
+                    .unwrap()
+                    .is_some(),
+                expected_seed
+            );
+        }
+    }
+
+    #[test]
+    fn completed_read_bounds_are_profile_specific_and_inclusive() {
+        for native in [false, true] {
+            for age in [600_000, 600_001, 1_000_000, 1_000_001, 18_545_200] {
+                let mut alignment = Alignment::default();
+                alignment
+                    .push_checked(
+                        motion(15, 1.0),
+                        10_000_000,
+                        10_050_000,
+                        Some(10_000_000),
+                        !native,
+                    )
+                    .unwrap();
+                let result = alignment.push_checked(
+                    motion(0, 2.0),
+                    11_400_000,
+                    11_400_000 + age,
+                    Some(11_400_000),
+                    !native,
+                );
+                if age <= read_deadline_ns(native) {
+                    assert!(result.unwrap().is_some());
+                } else {
+                    // Even matching modulo counters and a held DRDY latch
+                    // cannot make a delayed burst valid. Clear its history.
+                    assert_eq!(result.unwrap_err(), Error::Timing);
+                    assert!(
+                        alignment
+                            .push_checked(
+                                motion(1, 3.0),
+                                12_800_000,
+                                12_850_000,
+                                Some(12_800_000),
+                                !native
+                            )
+                            .unwrap()
+                            .is_none()
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn extended_native_window_preserves_all_axis_and_edge_coherence_checks() {
+        for axis in 0..6 {
+            for advance in [0, 2] {
+                let mut alignment = Alignment::default();
+                alignment
+                    .push_native(motion(15, 1.0), 10_000_000, 10_800_000, Some(10_000_000))
+                    .unwrap();
+                let mut current = motion(0, 2.0);
+                current.counters[axis] = (15 + advance) & 15;
+                assert_eq!(
+                    alignment
+                        .push_native(current, 11_400_000, 12_200_000, Some(11_400_000))
+                        .unwrap_err(),
+                    Error::Gap
+                );
+            }
+        }
+        for (finished, latest) in [
+            (12_200_000, None),
+            (12_200_000, Some(12_800_000)),
+            (11_399_999, Some(11_400_000)),
+        ] {
+            let mut alignment = Alignment::default();
+            alignment
+                .push_native(motion(1, 1.0), 10_000_000, 10_800_000, Some(10_000_000))
+                .unwrap();
+            assert_eq!(
+                alignment
+                    .push_native(motion(2, 2.0), 11_400_000, finished, latest)
+                    .unwrap_err(),
+                Error::Timing
+            );
+            assert!(
+                alignment
+                    .push_native(motion(3, 3.0), 12_800_000, 13_600_000, Some(12_800_000))
+                    .unwrap()
+                    .is_none()
+            );
+        }
+        // A modulo-16 wrap cannot disguise missing sample support.
+        let mut alignment = Alignment::default();
+        alignment
+            .push_native(motion(15, 1.0), 10_000_000, 10_800_000, Some(10_000_000))
+            .unwrap();
+        assert_eq!(
+            alignment
+                .push_native(motion(0, 2.0), 33_800_000, 34_600_000, Some(33_800_000))
+                .unwrap_err(),
+            Error::Gap
+        );
     }
 
     #[test]
@@ -601,12 +919,12 @@ mod tests {
             let mut current = motion(2, 2.0);
             current.counters[4] = 1 + advance;
             assert_eq!(
-                push(&mut alignment, current, 10_700_000).unwrap_err(),
+                push(&mut alignment, current, 11_400_000).unwrap_err(),
                 Error::Gap
             );
             let mut next = motion(3, 2.0);
             next.counters[4] = current.counters[4] + 1;
-            assert!(push(&mut alignment, next, 11_400_000).unwrap().is_some());
+            assert!(push(&mut alignment, next, 12_800_000).unwrap().is_some());
         }
         let mut alignment = Alignment::default();
         push(&mut alignment, motion(1, 1.0), 10_000_000).unwrap();
@@ -620,20 +938,20 @@ mod tests {
     #[test]
     fn late_overwritten_or_backward_capture_discards_alignment_history() {
         for (finished, latest) in [
-            (11_300_001, Some(10_700_000)),
-            (10_750_000, Some(11_400_000)),
-            (10_699_999, Some(10_700_000)),
+            (12_000_001, Some(11_400_000)),
+            (11_450_000, Some(12_800_000)),
+            (11_399_999, Some(11_400_000)),
         ] {
             let mut alignment = Alignment::default();
             push(&mut alignment, motion(1, 1.0), 10_000_000).unwrap();
             assert_eq!(
                 alignment
-                    .push(motion(2, 2.0), 10_700_000, finished, latest)
+                    .push(motion(2, 2.0), 11_400_000, finished, latest)
                     .unwrap_err(),
                 Error::Timing
             );
             assert!(
-                push(&mut alignment, motion(3, 2.0), 11_400_000)
+                push(&mut alignment, motion(3, 2.0), 12_800_000)
                     .unwrap()
                     .is_none()
             );
@@ -730,10 +1048,35 @@ mod tests {
         assert_eq!(config.rate_decimation, config.acc_decimation);
         assert_eq!(
             config.rate_decimation,
-            AxisDecimation::all(Decimation::Dec4)
+            AxisDecimation::all(Decimation::Dec5)
         );
         assert!(config.interface.data_ready_enabled);
         assert!(!config.interface.data_ready_active_low);
+    }
+
+    #[test]
+    fn dec5_accepts_physical_rate_range_and_rejects_old_or_missing_intervals() {
+        // F_PRIM datasheet extremes 22.1..25.1kHz, divided by 32.
+        for duration in [1_274_900, 1_447_964] {
+            let mut alignment = Alignment::default();
+            push(&mut alignment, motion(1, 1.0), 10_000_000).unwrap();
+            let sample = push(&mut alignment, motion(2, 1.0), 10_000_000 + duration)
+                .unwrap()
+                .unwrap();
+            assert_eq!(u64::from(sample.duration_ns), duration);
+        }
+        for duration in [700_000, MIN_INTERVAL_NS - 1, MAX_INTERVAL_NS + 1, 2_800_000] {
+            let mut alignment = Alignment::default();
+            push(&mut alignment, motion(1, 1.0), 10_000_000).unwrap();
+            assert_eq!(
+                push(&mut alignment, motion(2, 1.0), 10_000_000 + duration).unwrap_err(),
+                Error::Gap,
+            );
+        }
+        assert_eq!(Decimation::Dec5.nominal_output_rate_hz(), 737.5);
+        assert_eq!(read_deadline_ns(false), 600_000);
+        assert_eq!(read_deadline_ns(true), 1_000_000);
+        assert!(NATIVE_READ_DEADLINE_NS < 1_274_900);
     }
 
     #[test]

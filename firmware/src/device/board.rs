@@ -15,11 +15,12 @@ use esp_hal::{
 };
 
 pub(crate) type PowerBus = I2c<'static, Blocking>;
-// Connected evaluation board: no panel, buttons or battery. Enable these only for
-// the corresponding fitted setup; absent accessories need no periodic I/O.
-pub(crate) const DISPLAY_FITTED: bool = false;
-pub(crate) const BATTERY_FITTED: bool = false;
-pub(crate) const BUTTONS_FITTED: bool = false;
+pub(crate) type RecordingSlot = esp_hal::sdmmc::Slot<'static, 0, Blocking>;
+static SD_CONTROLLER: static_cell::StaticCell<esp_hal::sdmmc::SdHostController<'static>> =
+    static_cell::StaticCell::new();
+// Connected evaluation board: battery fitted, no panel or buttons. Absent
+// accessories need no periodic I/O.
+pub(crate) use super::configuration::{BATTERY_FITTED, BUTTONS_FITTED, DISPLAY_FITTED};
 pub(crate) const ACQUISITION_PRIORITY: Priority = Priority::Priority5;
 pub(crate) const GNSS_PRIORITY: Priority = Priority::Priority3;
 const SENSOR_INTERRUPT_PRIORITY: Priority = Priority::Priority6;
@@ -53,6 +54,7 @@ pub(crate) struct ApplicationBuilder {
     uart2: UART2<'static>,
     spi2: SPI2<'static>,
     spi3: SPI3<'static>,
+    sdhost: SDHOST<'static>,
     psram: PSRAM<'static>,
     cpu: CPU_CTRL<'static>,
     worker_interrupt: FROM_CPU_INTR1<'static>,
@@ -79,6 +81,7 @@ pub(crate) struct Application {
     pub memory: platform::EstimatorMemory,
     pub cpu: CPU_CTRL<'static>,
     pub worker_interrupt: FROM_CPU_INTR1<'static>,
+    pub recording_slot: RecordingSlot,
 }
 
 impl Board {
@@ -173,6 +176,7 @@ impl Board {
                 uart2: p.UART2,
                 spi2: p.SPI2,
                 spi3: p.SPI3,
+                sdhost: p.SDHOST,
                 psram: p.PSRAM,
                 cpu: p.CPU_CTRL,
                 worker_interrupt: p.FROM_CPU_INTR1,
@@ -258,6 +262,21 @@ impl ApplicationBuilder {
             pins.output(wiring::display::BACKLIGHT, Level::Low),
         );
         let led_enable = pins.output(wiring::power::LED_ENABLE, Level::Low);
+        // Native four-bit SDHOST slot 0. Its owner lives for the application;
+        // only the recorder worker issues card commands or accesses DMA memory.
+        let sd = SD_CONTROLLER.init(
+            esp_hal::sdmmc::SdHostController::new(self.sdhost, Default::default())
+                .expect("SDHOST configuration"),
+        );
+        let recording_slot = sd
+            .slot::<0>(Default::default())
+            .expect("SD slot")
+            .with_clk(GPIO24::try_from(pins.take(wiring::sd::CLK)).expect("SD CLK wiring"))
+            .with_cmd(GPIO25::try_from(pins.take(wiring::sd::CMD)).expect("SD CMD wiring"))
+            .with_data0(GPIO20::try_from(pins.take(wiring::sd::DATA[0])).expect("SD D0 wiring"))
+            .with_data1(GPIO21::try_from(pins.take(wiring::sd::DATA[1])).expect("SD D1 wiring"))
+            .with_data2(GPIO22::try_from(pins.take(wiring::sd::DATA[2])).expect("SD D2 wiring"))
+            .with_data3(GPIO23::try_from(pins.take(wiring::sd::DATA[3])).expect("SD D3 wiring"));
         // MAX16169 active-low kill is released; retain its owner for application life.
         let power_hold = Output::new(
             pins.take(wiring::power::KILL_N),
@@ -281,6 +300,7 @@ impl ApplicationBuilder {
             memory,
             cpu: self.cpu,
             worker_interrupt: self.worker_interrupt,
+            recording_slot,
         }
     }
 }

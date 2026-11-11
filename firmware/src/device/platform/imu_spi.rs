@@ -6,7 +6,7 @@ const FIFO_BYTES: usize = 64;
 // A six-byte frame normally takes 6 us at 8 MHz, but interrupt execution may
 // delay polling. Bound a wedged controller by the full read budget instead of
 // resetting completed/usable transfers at an arbitrary smaller threshold.
-// Acquisition independently rejects every complete burst older than 600 us.
+// Acquisition independently applies its profile's complete-burst deadline.
 const TRANSFER_US: u32 = 600;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -55,7 +55,7 @@ impl<R: Registers> BoundedBus<R> {
                 // An interrupt can run between the busy read and clock read.
                 // Completion during that interval must not reset a healthy
                 // controller. Acquisition still rejects a burst older than its
-                // independent 600 us measurement deadline.
+                // independent profile-specific measurement deadline.
                 if !self.pending(phase) {
                     return Ok(());
                 }

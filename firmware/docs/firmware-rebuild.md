@@ -30,7 +30,7 @@ Keep the recovery loader and existing command indices compatible.
 
 ## Timing and evaluation requirements
 
-- IMU: read each DEC4 epoch before the next output update; discard ambiguous
+- IMU: read each DEC5 epoch before the next output update; discard ambiguous
   reads and reseed continuity after gaps. No repeated samples to fill gaps.
 - GNSS: use receiver measurement epochs mapped to the shared capture counter;
   never substitute UART arrival time for a missing PPS lock. Independent valid

@@ -337,3 +337,183 @@ fn counter_wrap_is_explicit() {
     assert_eq!(new.counter_advance(&old), [1, 2, 4, 0, 1, 1]);
     assert_eq!(BusError.kind(), ErrorKind::Other);
 }
+
+#[test]
+fn native_capture_preserves_faulted_axes_without_accepting_them() {
+    let mut bus = Bus::new();
+    bus.sensor_status = 2;
+    bus.sensor[Register::RateX2.address() as usize - 1] = -123_456;
+    let mut imu = Sch16t::new(bus, Delay::default());
+    imu.initialize(Config::default()).unwrap();
+    let captured = imu.motion_capture_unscaled(MotionOutput::Decimated);
+    assert!(matches!(captured.result, Err(Error::SensorStatus { .. })));
+    assert!(captured.frames.iter().all(Option::is_some));
+    let first = captured.frames[0].unwrap();
+    assert_eq!(first.signed_sensor(), -123_456);
+    assert_eq!(first.status, SensorStatus::Saturation);
+    assert_eq!(first.counter, 15);
+    assert_eq!(captured.frames[5].unwrap().register, Register::AccZ2);
+    assert!(matches!(
+        captured.into_scaled().result,
+        Err(Error::SensorStatus {
+            payload: 0x0e1dc0,
+            counter: 15,
+            ..
+        })
+    ));
+}
+
+#[test]
+fn native_capture_keeps_neighbor_axes_when_one_frame_crc_fails() {
+    let mut imu = Sch16t::new(Bus::new(), Delay::default());
+    imu.initialize(Config::default()).unwrap();
+    let before = imu.spi.transfers.len();
+    // The third transfer retires RATE_Y2 in the seven-transfer pipeline.
+    imu.spi.corrupt_at = Some(before + 3);
+    let captured = imu.motion_capture_unscaled(MotionOutput::Decimated);
+    assert!(matches!(
+        captured.result,
+        Err(Error::Frame(FrameError::Crc))
+    ));
+    assert!(captured.frames[1].is_none());
+    assert!(captured.frames[0].is_some());
+    assert!(captured.frames[2..].iter().all(Option::is_some));
+    assert_eq!(imu.spi.transfers.len() - before, 7);
+    assert!(matches!(
+        captured.into_scaled().result,
+        Err(Error::Frame(FrameError::Crc))
+    ));
+}
+
+#[test]
+fn native_read_completes_before_conversion_and_keeps_the_verified_ranges() {
+    let mut bus = Bus::new();
+    let raw = [-524_288, 0, 524_287, 524_287, -524_288, 1];
+    for (axis, value) in raw.into_iter().enumerate() {
+        bus.sensor[Register::RateX2.address() as usize - 1 + axis] = value;
+    }
+    let mut imu = Sch16t::new(bus, Delay::default());
+    imu.initialize(Config {
+        decimated_rate_range: RateRange::Dyn4,
+        decimated_acc_range: AccRange::Dyn4,
+        ..Config::default()
+    })
+    .unwrap();
+    let before = imu.spi.transfers.len();
+    let captured = imu.motion_capture_unscaled(MotionOutput::Decimated);
+    assert_eq!(imu.spi.transfers.len() - before, 7);
+    let native = captured.result.as_ref().unwrap();
+    assert_eq!(native.raw_rate, raw[..3]);
+    assert_eq!(native.raw_acceleration, raw[3..]);
+    assert_eq!(native.counters, [15; 6]);
+    let expected = imu.motion(MotionOutput::Decimated).unwrap();
+    // Conversion owns its words/ranges. It works after the hardware driver has
+    // been released, and cannot issue additional transfers or use new ranges.
+    let (bus, _) = imu.release();
+    assert_eq!(bus.transfers.len() - before, 14);
+    let converted = captured.into_scaled();
+    assert_eq!(converted.result.unwrap(), expected);
+    assert!(converted.frames.iter().all(Option::is_some));
+}
+
+#[test]
+fn reciprocal_conversion_stays_below_one_hundred_millionth_lsb_for_every_20_bit_value() {
+    // Independent reference is the preceding division formula. Exhaust the
+    // entire signed payload domain, including both extrema, for every range.
+    let rates = [
+        RateRange::Dyn1,
+        RateRange::Dyn2,
+        RateRange::Dyn3,
+        RateRange::Dyn4,
+    ];
+    let accelerations = [
+        AccRange::Dyn1,
+        AccRange::Dyn2,
+        AccRange::Dyn3,
+        AccRange::Dyn4,
+    ];
+    let auxiliaries = [
+        AuxAccRange::Dyn0,
+        AuxAccRange::Dyn1,
+        AuxAccRange::Dyn2,
+        AuxAccRange::Dyn3,
+        AuxAccRange::Dyn4,
+    ];
+    let mut maximum_error_lsb = 0.0_f64;
+    for raw in -524_288..524_288 {
+        let raw = f64::from(raw);
+        for range in rates {
+            let sensitivity = range.lsb_per_degree_per_second();
+            let previous_dps = raw / sensitivity;
+            let actual_dps = raw * range.degrees_per_second_per_lsb();
+            let previous_rps = previous_dps * core::f64::consts::PI / 180.0;
+            let actual_rps = actual_dps * DEGREES_TO_RADIANS;
+            maximum_error_lsb =
+                maximum_error_lsb.max((actual_dps - previous_dps).abs() * sensitivity);
+            maximum_error_lsb = maximum_error_lsb
+                .max((actual_rps - previous_rps).abs() * sensitivity / DEGREES_TO_RADIANS);
+        }
+        for range in accelerations {
+            let sensitivity = range.lsb_per_metre_per_second_squared();
+            let previous = raw / sensitivity;
+            let actual = raw * range.metres_per_second_squared_per_lsb();
+            maximum_error_lsb = maximum_error_lsb.max((actual - previous).abs() * sensitivity);
+        }
+        for range in auxiliaries {
+            let sensitivity = range.lsb_per_metre_per_second_squared();
+            let previous = raw / sensitivity;
+            let actual = raw * range.metres_per_second_squared_per_lsb();
+            maximum_error_lsb = maximum_error_lsb.max((actual - previous).abs() * sensitivity);
+        }
+    }
+    assert!(
+        maximum_error_lsb < 1.0e-8,
+        "maximum conversion error: {maximum_error_lsb} LSB"
+    );
+}
+
+#[test]
+fn both_motion_outputs_keep_full_raw_extrema_and_their_independent_verified_ranges() {
+    let raw_rate = [-524_288, 0, 524_287];
+    let raw_acceleration = [524_287, -524_288, 1];
+    let mut bus = Bus::new();
+    for first in [Register::RateX1, Register::RateX2] {
+        for (axis, raw) in raw_rate.into_iter().chain(raw_acceleration).enumerate() {
+            bus.sensor[first.address() as usize - 1 + axis] = raw;
+        }
+    }
+    let mut imu = Sch16t::new(bus, Delay::default());
+    imu.initialize(Config {
+        interpolated_rate_range: RateRange::Dyn3,
+        decimated_rate_range: RateRange::Dyn4,
+        interpolated_acc_range: AccRange::Dyn2,
+        decimated_acc_range: AccRange::Dyn4,
+        ..Config::default()
+    })
+    .unwrap();
+    for (output, rate_sensitivity, acc_sensitivity) in [
+        (MotionOutput::Interpolated, 3200.0, 6400.0),
+        (MotionOutput::Decimated, 6400.0, 25600.0),
+    ] {
+        let sample = imu.motion(output).unwrap();
+        assert_eq!(sample.raw_rate, raw_rate);
+        assert_eq!(sample.raw_acceleration, raw_acceleration);
+        assert_eq!(sample.counters, [15; 6]);
+        for axis in 0..3 {
+            let previous_dps = f64::from(raw_rate[axis]) / rate_sensitivity;
+            let previous_rps = previous_dps * core::f64::consts::PI / 180.0;
+            let previous_acc = f64::from(raw_acceleration[axis]) / acc_sensitivity;
+            assert!(
+                (sample.angular_rate_dps[axis] - previous_dps).abs() * rate_sensitivity < 1.0e-8
+            );
+            assert!(
+                (sample.angular_rate_rps[axis] - previous_rps).abs() * rate_sensitivity
+                    / DEGREES_TO_RADIANS
+                    < 1.0e-8
+            );
+            assert!(
+                (sample.acceleration_mps2[axis] - previous_acc).abs() * acc_sensitivity < 1.0e-8
+            );
+        }
+    }
+}

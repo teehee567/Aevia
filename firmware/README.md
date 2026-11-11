@@ -1,21 +1,30 @@
 # V2 Mini firmware
-Button-free sensor acquisition and onboard `aevia-trajectory` processing for the
+
+The current build prioritizes race data collection. See [recording and USB
+retrieval](docs/race-recording.md) for the no-app workflow and [candidate
+validation](docs/race-candidate-2026-11-11.md) for verified results and remaining
+hardware checks. It is not yet a hardware-validated race release.
+
+Button-free sensor recording for the
 ESP32-S31 / UM980 / SCH16T-K01 board. The application configures the UM980 for
-50 Hz binary BESTNAVXYZ and attempts each SCH16T DEC4 epoch (about 1.475 kHz),
+50 Hz binary BESTNAVXYZ and attempts each SCH16T DEC5 epoch (737.5 Hz nominal),
 rejecting late or ambiguous reads.
 The receiver's actual advancing epoch rate is reported; requesting 50 Hz does
 not guarantee that rate in every receiver firmware/positioning mode.
 
 Core 0 handles acquisition, USB and indicators. Acquisition begins after the
 worker completes its PSRAM check and workspace setup, avoiding startup queue
-overflow and cache contention. Core 1 owns the estimator, with
-internal-SRAM hot state and an exclusively reserved PSRAM history. Navigation
-runs at 200 Hz with a 100 ms fusion delay and 20 ms smoothing lag. Separate
-bounded IMU/GNSS queues never wait for USB or the display. Overload increments
-counters and leaves a time gap instead of silently integrating repeated data.
+overflow and cache contention. Core 1 owns the SD card and filesystem, with a
+4 MiB PSRAM capture queue. Original IMU bursts, UART data, physical PPS edges,
+temperature, configuration and fault evidence are recorded before estimator
+filtering. The collector starts without a fix or PPS lock. Live trajectory
+processing is disabled by `configuration::DATA_COLLECTION_ONLY`; its existing
+implementation remains available for later integration. Capture never waits
+for SD writes or USB. Overload increments counters and leaves explicit sequence
+gaps. Files rotate near 2 GiB and USB commands retrieve their checksummed prefix.
 
 The application consumes `aevia-device-hal` directly for SCH16T, UM980
-framing/messages/commands, BQ25622E, LP5813, ST7789, MAX17048, TCA9536A and flash.
+framing/messages/commands, SDMMC, BQ25622E, LP5813, ST7789, MAX17048, TCA9536A and flash.
 HAL startup handling now acknowledges both post-EOI status reads before judging final sensor health; persistent faults still fail initialization. `device/board.rs` constructs the fitted resources
 using HAL's wiring constants. `device/platform` owns missing S31 capture,
 PMA/cache setup and bounded panel bus access; `device/timing` owns clock fitting
@@ -50,13 +59,20 @@ still need board calibration. The explicit development timing approximation
 retains the supplied uncertainty as metadata but does not propagate it or
 resample the interval; those inputs remain degraded. See [timing implementation](docs/timing.md)
 for sources, assumptions, rejection rules and board validation. The firmware
-does not record sessions to SD or enable radios.
+records original evidence to an existing supported exFAT card. Radios remain
+disabled. No card formatting, automatic deletion or overwrite is performed.
 
-For the current battery-free bench setup, firmware disables BQ25622E charging
-and its charger watchdog through the GPIO6/7 power I2C bus, in both application
-and recovery modes. USB system power stays enabled. The policy is reapplied
-after boot and checked every second; attaching a battery does not enable
-charging in this build. `DeviceCommand::PowerStatus` (appended index 3, frame
+For the connected single-cell 2000 mAh, 3.7 V battery, the development charging
+profile targets 800 mA and a conservative 4.10 V ceiling through the GPIO6/7
+power I2C bus. Limits are read back before enabling charge; the watchdog is
+disabled and existing input limits, power paths and temperature protections
+are preserved. Actual charging may be reduced or suspended by those limits.
+The policy is checked every second in application and recovery modes.
+This is a running-firmware policy, not a hardware
+interlock: the charger can use its autonomous defaults before firmware runs,
+including during ROM recovery. The board's two-wire battery connector has no
+cell thermistor input; the onboard thermistor measures its own location.
+`DeviceCommand::PowerStatus` (appended index 3, frame
 `03 01 03 00`) returns the part ID, control/status register readbacks,
 verification result and error count, including in recovery. Existing command,
 response and snapshot layouts are unchanged; the new response is appended at
@@ -64,7 +80,34 @@ device response index 2. The shared bus uses 100kHz to meet the charger's
 standard-mode timing requirements. See [TI BQ25622E Rev. C, sections 8.4.1,
 8.5.1 and 8.6.2.10](https://www.ti.com/lit/ds/symlink/bq25622e.pdf).
 
+`PowerChargeStatus` (device command 12, response 11) returns fresh readbacks of
+the programmed charge limits, charge-enable state, input-current limit, charger
+status and faults. These are not measured battery-current values. Existing
+`PeripheralStatus` reports battery voltage and the gauge's SOC estimate.
+Use `board_check.py --power-charge --bench` for the charging-profile gate;
+older captures without this evidence retain the charging-disabled bench gate.
+
 ## Build and flash
+
+For app development, start with the [versioned application interface](docs/app-interface.md).
+`System::ProtocolInfo` (`01 02 08 00`) reports schema/firmware versions, per-mode
+command masks, fitted accessories, supported features and frame/freshness limits.
+Existing telemetry layouts are preserved; discovery is appended at system
+command index 8 and response index 5.
+
+On Windows, produce a matching application image, ELF, decoder and checksum
+manifest from the repository root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File firmware/tools/build_release.ps1
+```
+
+The helper runs host tests, builds with pinned dependency lockfiles and packages
+artifacts under `firmware/build/releases/<UTC timestamp>/`. It never flashes.
+`manifest.json` records tool versions, source/artifact hashes and the decoder's
+compiled ProtocolInfo; `build-status.json` must say `complete: true`. A bundle
+does not by itself establish hardware acceptance. Pass explicit `-Cargo` or
+`-Espflash` paths if the tools are outside PATH and `~/.cargo/bin`.
 
 ```sh
 cargo build --release -p firmware
@@ -168,7 +211,9 @@ actual GNSS rate, queue depth/high-water observations, drops, maximum observed
 DRDY-to-read latency and PPS/capture diagnostics. It works even if PSRAM or
 estimator startup fails. Counters/depths are sampled separately across cores;
 high-water observations can miss a concurrent drain. The latency maximum
-includes rejected late bursts; the IMU acceptance deadline is 600 microseconds.
+includes rejected late bursts; the IMU acceptance deadline is 1 ms for native
+collection and 600 microseconds for navigation. The active bound is recorded
+in each file's IMU configuration metadata; raw timestamps remain available.
 Existing snapshot layouts and enum indices remain unchanged; the new responses
 are appended at device response indices 3 and 4.
 
@@ -201,14 +246,16 @@ implementation. See [evaluation procedure](docs/evaluation.md) and the
 
 ## Connected board configuration and diagnostics
 
-The current connected setup has no panel, buttons, battery or GNSS antenna.
-`device/board.rs` sets `DISPLAY_FITTED=false`, `BUTTONS_FITTED=false` and
-`BATTERY_FITTED=false`: no panel task, button polling or battery-gauge polling
-runs. Missing buttons report unavailable rather than an unpressed control.
-Charging remains disabled in both
-application and recovery. Enable the corresponding fitted-accessory flag before
-using that accessory. Missing navigation/PPS lock without an antenna is expected;
-it must not cause receiver reset loops or manufactured navigation output.
+The current connected setup has a GNSS antenna and a user-reported single-cell
+2000 mAh, 3.7 V battery (102560), with no panel or buttons.
+`device/configuration.rs` sets `DISPLAY_FITTED=false`, `BUTTONS_FITTED=false` and
+`BATTERY_FITTED=true`: battery voltage and the gauge's uncalibrated SOC estimate
+are read once per second. No panel task or button polling runs. Missing buttons
+report unavailable rather than an unpressed control.
+The current battery profile is an initial low-current charging configuration,
+not a manufacturer-qualified cell model. Enable the corresponding fitted-accessory flag before
+using that accessory. Limited sky view can delay a receiver fix. Missing
+navigation/PPS lock must not cause receiver reset loops or manufactured output.
 
 Additional device commands append to the existing schema:
 
@@ -227,6 +274,10 @@ Additional device commands append to the existing schema:
   readbacks and subsequent successful-attempt counts. Also available in recovery.
   Timeout, NACK and a policy mismatch remain observable after verification
   recovers. Existing `PowerStatus` is unchanged.
+- `GnssFixStatus` (index 11, response index 10): independent raw receiver fix,
+  per-field validity/freshness and retained PPS-label diagnostics, available
+  before estimator initialization or PPS association succeeds. This is separate
+  from the fused Snapshot and remains unqualified.
 
 Recovery mode intentionally leaves application LEDs off. Send Run to start the
 application. Watchdog eligibility follows worker, capture-maintenance, GNSS-owner
@@ -234,6 +285,8 @@ and IMU-owner progress with
 bounded startup grace; it does not require satellites or a valid navigation fix.
 OTA candidates start NEW and require sustained worker/capture health, advancing
 raw IMU samples and a live GNSS owner before confirmation. A fix is not required.
+The collection build additionally requires successful SD persistence without
+recording overflow or storage errors before confirming an OTA trial.
 An unconfirmed candidate can select the previous healthy image when Rust startup
 runs. Faults before Rust startup still require a separately provisioned,
 verified rollback-enabled second-stage bootloader.
@@ -268,13 +321,15 @@ Short IMU SPI delays and controller deadlines use a checked CPU0 cycle counter
 at the configured fixed frequency, with an observable vendor-timer fallback.
 This removes shared SYSTIMER polling from the hot transfer path; measurement
 epochs still come exclusively from MCPWM capture. SPI2 recovery is bounded by
-a 600us FIFO-operation timeout, independently of the 600us complete-burst
-admission limit. Delayed or overwritten measurements remain rejected.
+a 600us FIFO-operation timeout, independently of the complete-burst admission
+limit (1ms native collection, 600us navigation). Delayed or overwritten
+measurements remain rejected.
 Capture wrap extension is fast; a separate 100ms wall-clock validation detects
 stopped/wrong-rate clocks without frequent reads resetting its reference.
 The supervised watchdog bounds outages far below the counter's half-wrap.
 
-Before the first accepted GNSS position/velocity seed, the worker drains raw
+In the optional estimator build (`DATA_COLLECTION_ONLY=false`), before the
+first accepted GNSS position/velocity seed, the worker drains raw
 IMUs and updates diagnostics but avoids futile estimator initialization work.
 After that seed, ordinary estimator ingestion uses original hardware timestamps
 and sequences. This leaves raw acquisition useful during antenna-free bring-up.

@@ -4,10 +4,10 @@ Portable `no_std` hardware drivers and interfaces, kept entirely in this folder.
 The current board is **V2 Mini**. Earlier full-size V2 components are separate;
 their presence here does not mean they are populated on V2 Mini.
 
-This is an independent crate named `aevia-device-hal`. It is deliberately not
-connected to `device/mod.rs`, the application, the loader, or the outer Cargo
-workspace. Integration can use a path dependency on this folder in a later
-change. Existing device drivers and application policies continue to run as before.
+This independent crate is named `aevia-device-hal`. The firmware consumes it
+through a path dependency for sensor drivers, power peripherals and flash.
+It retains its own Cargo workspace so portable driver tests can run separately.
+Scheduling, timestamp policy and estimator integration remain in device code.
 
 ## Design
 
@@ -36,7 +36,7 @@ recording do not belong in these drivers.
 
 ## Use from firmware
 
-For later integration, the consuming manifest can declare:
+The firmware manifest declares:
 
 ```toml
 [dependencies]

@@ -7,8 +7,9 @@
 //! installed `esp-hal` 1.2.2 `sdmmc` and `dma::aligned` implementations.
 //!
 //! This driver uses native SD, not SPI or SDIO I/O devices. It supports SDSC,
-//! SDHC and SDXC at 3.3 V, default-speed signaling up to 25 MHz and single-sector
-//! transfers. It does not switch to 1.8 V, UHS/high-speed modes or queued writes.
+//! SDHC and SDXC at 3.3 V, default-speed signaling up to 25 MHz, single-sector
+//! writes and reads of up to eight sectors. It does not switch to 1.8 V,
+//! UHS/high-speed modes or queued writes.
 //! Supply stabilization, peripheral/pin setup, electrical pullups, filesystem and
 //! bus synchronization belong to the caller. Constructors perform no I/O.
 //!
@@ -19,7 +20,7 @@
 //! Any host/status failure invalidates the cached initialization. A failed write
 //! can have modified the card; no power-loss atomicity is promised.
 
-use crate::interfaces::BlockStorage;
+use crate::interfaces::{BlockStorage, ReadSectors};
 use embedded_hal::delay::DelayNs;
 
 #[cfg(all(feature = "esp32s31", target_arch = "riscv32"))]
@@ -28,6 +29,8 @@ mod esp32;
 pub use esp32::{DmaScratch, Esp32SdHost, Esp32SdHostError};
 
 pub const SECTOR_BYTES: usize = 512;
+pub const MAX_READ_SECTORS: usize = 8;
+pub const MAX_READ_BYTES: usize = MAX_READ_SECTORS * SECTOR_BYTES;
 pub const INITIAL_CLOCK_HZ: u32 = 400_000;
 pub const MAX_DEFAULT_CLOCK_HZ: u32 = 25_000_000;
 const VOLTAGE_WINDOW: u32 = 0x0030_0000; // 3.2–3.4 V, 3.3 V host.
@@ -87,7 +90,10 @@ pub trait NativeHost {
     /// At least 74 clocks with CMD/data released high, after power stabilizes.
     fn send_initial_clocks(&mut self) -> Result<(), Self::Error>;
     fn command(&mut self, command: Command) -> Result<[u32; 4], Self::Error>;
-    /// One CRC-checked block; length is either8 (SCR) or512 in this driver.
+    /// CRC-checked CMD51/SCR (8 bytes), CMD17 (512 bytes), or CMD18 (2..8
+    /// sectors). CMD18 must wait for CMD12 stop completion before return and
+    /// preserve detected command/data/stop failures. No partial success is
+    /// permitted. The caller also checks card status after the transfer.
     fn read_data(
         &mut self,
         command: u8,
@@ -158,6 +164,7 @@ pub enum Error<E> {
     ReadyTimeout,
     CardStatus(u32),
     CardState(u8),
+    InvalidLength,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -403,9 +410,26 @@ impl<H: NativeHost, D: DelayNs> SdCard<H, D> {
         sector: u64,
         data: &mut [u8; SECTOR_BYTES],
     ) -> Result<(), Error<H::Error>> {
+        self.read_sectors(sector, data)
+    }
+    /// Read a bounded contiguous range. Entire-range validation precedes the
+    /// first card command; transport/status failures invalidate initialization.
+    /// Discard the complete destination buffer if this returns an error.
+    pub fn read_sectors(&mut self, sector: u64, data: &mut [u8]) -> Result<(), Error<H::Error>> {
+        if data.is_empty()
+            || data.len() > MAX_READ_BYTES
+            || !data.len().is_multiple_of(SECTOR_BYTES)
+        {
+            return Err(Error::InvalidLength);
+        }
+        let count = (data.len() / SECTOR_BYTES) as u64;
         let (info, address) = self.address(sector)?;
+        let last = sector.checked_add(count - 1).ok_or(Error::OutOfRange)?;
+        // Also checks byte-address representability for SDSC, not only capacity.
+        self.address(last)?;
         self.wait_ready(info.relative_address)?;
-        let response = self.host.read_data(17, address, data).map_err(|e| {
+        let command = if count == 1 { 17 } else { 18 };
+        let response = self.host.read_data(command, address, data).map_err(|e| {
             self.info = None;
             Error::Host(e)
         })?;
@@ -454,6 +478,12 @@ impl<H: NativeHost, D: DelayNs> BlockStorage for SdCard<H, D> {
     }
     fn flush(&mut self) -> Result<(), Self::Error> {
         SdCard::flush(self)
+    }
+}
+
+impl<H: NativeHost, D: DelayNs> ReadSectors for SdCard<H, D> {
+    fn read_sectors(&mut self, first_sector: u64, data: &mut [u8]) -> Result<(), Self::Error> {
+        SdCard::read_sectors(self, first_sector, data)
     }
 }
 

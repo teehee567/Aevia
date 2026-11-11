@@ -44,6 +44,14 @@ pub trait BlockStorage {
     fn flush(&mut self) -> Result<(), Self::Error>;
 }
 
+/// Optional bounded contiguous reads, without changing single-sector writes.
+/// Accept one to eight complete 512-byte sectors. Validate the entire range
+/// before I/O; propagate transfer/CRC/status errors without partial success.
+/// On error the caller must discard all returned buffer contents.
+pub trait ReadSectors: BlockStorage {
+    fn read_sectors(&mut self, first_sector: u64, data: &mut [u8]) -> Result<(), Self::Error>;
+}
+
 /// Addressed, byte-oriented NOR operations; implementations enforce alignment,
 /// erase geometry and flash execution/multicore exclusion.
 pub trait NorStorage {

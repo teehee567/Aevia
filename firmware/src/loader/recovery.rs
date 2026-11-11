@@ -34,6 +34,7 @@ fn execute<F: Flash>(updater: &mut Updater<F>, command: Command<'_>) -> Result<R
         }
         Command::Recover => return Err(Error::Command),
         Command::BootStatus => return Ok(Response::BootStatus { stage: 0 }),
+        Command::ProtocolInfo => return Ok(Response::ProtocolInfo(crate::protocol::info(true))),
     }
     Ok(Response::Ok)
 }

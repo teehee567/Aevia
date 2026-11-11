@@ -2,7 +2,8 @@
 """Evaluate retained board_check frames without accessing hardware.
 
 These are functional bench gates, not sensor/timing accuracy qualification.
-Missing GNSS lock, a panel, buttons and a battery are permitted by this profile.
+The optional navigation profile requires sustained GNSS/PPS and fusion progress.
+Missing display, buttons and battery are permitted by both profiles.
 """
 import argparse
 import json
@@ -21,7 +22,9 @@ RESPONSES = {
     "reset": ("Device", "ResetStatus"),
 }
 OPTIONAL_RESPONSES = {"transport": ("Device", "GnssTransportStatus"),
-                      "power_diagnostics": ("Device", "PowerDiagnostics")}
+                      "power_diagnostics": ("Device", "PowerDiagnostics"),
+                      "fix": ("Device", "GnssFixStatus"),
+                      "power_charge": ("Device", "PowerChargeStatus")}
 ALL_RESPONSES = RESPONSES | OPTIONAL_RESPONSES
 
 
@@ -33,8 +36,8 @@ def validate_limits(minimum_seconds, minimum_imu_hz, maximum_imu_hz):
         raise ValueError("duration must be nonnegative and IMU rate limits positive and ordered")
 
 
-def evaluate(records, minimum_seconds=0, minimum_imu_hz=1350,
-             maximum_imu_hz=1600, stationary=False):
+def evaluate(records, minimum_seconds=0, minimum_imu_hz=675,
+             maximum_imu_hz=800, stationary=False, navigation=False):
     """Return a machine-readable verdict; counter baselines exclude startup.
 
     All diagnostics in a complete poll must have their expected response type.
@@ -71,11 +74,13 @@ def evaluate(records, minimum_seconds=0, minimum_imu_hz=1350,
         require(required <= set(current), "incomplete diagnostic poll")
     complete = [poll for poll in polls if required <= set(poll)]
     require(len(complete) >= 2, "at least two complete diagnostic polls required")
-    report = {"passed": False, "profile": "battery-free acquisition bench",
+    report = {"passed": False,
+              "profile": "battery-free navigation bench" if navigation else "battery-free acquisition bench",
               "qualified": False, "stationary": stationary,
+              "navigation_required": navigation,
               "polls": len(complete), "failures": failures,
-              "limitations": ["No GNSS/PPS lock or navigation workload requirement",
-                              "No display, button, battery, SD or radio qualification",
+              "limitations": ([] if navigation else ["No GNSS/PPS lock or navigation workload requirement"]) +
+                             ["No display, button, battery, SD or radio qualification",
                               "No electrical timing, calibration or accuracy qualification"]}
     if len(complete) < 2:
         return report
@@ -86,6 +91,18 @@ def evaluate(records, minimum_seconds=0, minimum_imu_hz=1350,
         report["power_diagnostics"] = {"polls": len(power_diagnostics),
                                        "baseline": power_diagnostics[0],
                                        "final": power_diagnostics[-1]}
+
+    charge_polls = [poll["power_charge"] for poll in complete if "power_charge" in poll]
+    if charge_polls:
+        require(len(charge_polls) == len(complete),
+                "charging profile diagnostics missing from some polls")
+        report["profile"] = "charging navigation bench" if navigation else "charging acquisition bench"
+        report["power_charge"] = {"polls": len(charge_polls),
+                                  "baseline": charge_polls[0], "final": charge_polls[-1]}
+
+    fixes = [poll["fix"] for poll in complete if "fix" in poll]
+    if fixes:
+        report["receiver_fix"] = {"polls": len(fixes), "baseline": fixes[0], "final": fixes[-1]}
 
     transport_polls = [poll["transport"] for poll in complete if "transport" in poll]
     if transport_polls:
@@ -173,10 +190,13 @@ def evaluate(records, minimum_seconds=0, minimum_imu_hz=1350,
         require(imu["cycle_clock_active"], "IMU cycle-clock fallback active")
         require(acq["imu_queue_depth"] < 128 and acq["gnss_queue_depth"] < 16,
                 "sensor queue has no capacity margin")
-        require(poll["power"]["verified"], "charging-disabled power policy unverified")
-        require(poll["power"]["control"] is not None and
-                poll["power"]["control"] & 0x27 == 0,
-                "charging/watchdog disable control bits not confirmed")
+        if charge_polls:
+            evaluate_charging(poll, require)
+        else:
+            require(poll["power"]["verified"], "charging-disabled power policy unverified")
+            require(poll["power"]["control"] is not None and
+                    poll["power"]["control"] & 0x27 == 0,
+                    "charging/watchdog disable control bits not confirmed")
         require(poll["peripherals"]["leds_ready"], "LED controller unavailable")
         require(0 <= acq["updated_us"] - poll["peripherals"]["updated_us"] <= 3000000,
                 "peripheral maintenance stale")
@@ -197,6 +217,9 @@ def evaluate(records, minimum_seconds=0, minimum_imu_hz=1350,
     def bounds(values):
         return {"minimum": min(values), "maximum": max(values)} if values else None
 
+    if navigation:
+        report["navigation"] = evaluate_navigation(complete, require)
+
     report.update({"passed": not failures, "duration_seconds": duration,
                    "device_uptime_seconds": last["updated_us"] / 1e6,
                    "imu_samples_observed": sum((b["imu_samples"] - a["imu_samples"]) & 0xffffffff
@@ -216,21 +239,138 @@ def evaluate(records, minimum_seconds=0, minimum_imu_hz=1350,
     return report
 
 
+def evaluate_charging(poll, require):
+    """Verify readbacks; an idle/full battery need not be actively charging."""
+    charge = poll.get("power_charge")
+    if not isinstance(charge, dict):
+        require(False, "charging profile diagnostics missing or malformed")
+        return
+    require(poll["power"]["verified"] is True and charge.get("verified") is True,
+            "charging power policy unverified")
+    control = poll["power"].get("control")
+    require(type(control) is int and 0 <= control <= 255 and control & 0x27 == 0x20
+            and charge.get("charging_enabled") is True
+            and type(charge.get("charger_control1")) is int
+            and charge["charger_control1"] == control,
+            "charging enable/watchdog control readbacks disagree or are disabled")
+    updated = charge.get("updated_us")
+    # This optional query follows acquisition in the poll. A maintenance pass
+    # between them may legitimately carry a slightly newer device timestamp.
+    require(type(updated) is int and updated >= 0 and
+            -1_000_000 <= poll["acquisition"]["updated_us"] - updated <= 3_000_000,
+            "charging profile readbacks missing, future or stale")
+    require(type(charge.get("charge_current_ma")) is int and charge["charge_current_ma"] == 800,
+            "charge current readback differs from 800 mA profile")
+    require(type(charge.get("charge_voltage_mv")) is int and charge["charge_voltage_mv"] == 4100,
+            "charge voltage readback differs from 4100 mV profile")
+    require(type(charge.get("precharge_current_ma")) is int and charge["precharge_current_ma"] == 80
+            and type(charge.get("termination_current_ma")) is int and charge["termination_current_ma"] == 40,
+            "precharge/termination readbacks differ from 80/40 mA profile")
+    require(type(charge.get("fault_status")) is int and charge["fault_status"] == 0,
+            "charger fault status missing or nonzero")
+
+
+def evaluate_navigation(polls, require):
+    """Require a settled navigating workload, not only live raw sensor traffic.
+
+    Use the worker publication time for epoch age because USB queries are
+    sequential. The firmware also expires output against the actual query time.
+    Rejections are compared to settled baselines, including PPS cold-start loss.
+    """
+    def finite(value):
+        return type(value) in (int, float) and math.isfinite(value)
+
+    statuses = [poll["status"] for poll in polls]
+    timings = [poll["acquisition"]["timing"] for poll in polls]
+    fixes = [poll["fix"] for poll in polls if "fix" in poll]
+    if fixes:
+        require(len(fixes) == len(polls), "GNSS fix diagnostics missing from some navigation polls")
+        for fix in fixes:
+            require(fix.get("qualified") is False, "receiver fix unexpectedly claims qualification")
+            require(fix.get("position_valid") is True and fix.get("velocity_valid") is True,
+                    "receiver position or velocity fix not continuously valid")
+            for field in ("received_age_us", "position_age_us", "velocity_age_us"):
+                age = fix.get(field)
+                require(type(age) is int and 0 <= age <= 500000,
+                        f"receiver fix {field} missing or stale")
+            for field in ("position_ecef_m", "velocity_ecef_mps"):
+                values = fix.get(field)
+                require(isinstance(values, list) and len(values) == 3 and all(map(finite, values)),
+                        f"receiver fix {field} missing or invalid")
+    ages = []
+    for poll in polls:
+        status, timing, gnss = poll["status"], poll["acquisition"]["timing"], poll["gnss"]
+        require(status["phase"] == "Navigating", "navigation phase not continuously Navigating")
+        require(gnss.get("navigation_time_ready") is True, "GNSS navigation time not ready")
+        require(gnss.get("last_pps_quality") in (2, 3), "GNSS PPS quality not valid")
+        require(timing.get("pps_locked") is True, "PPS not continuously locked")
+        age = timing.get("pps_age_ms")
+        require(finite(age) and 0 <= age <= 3000, "PPS label missing or stale")
+        residual = timing.get("fit_residual_ns")
+        require(finite(residual) and 0 <= residual <= 50000, "PPS fit residual outside timing bound")
+        epoch = status.get("epoch_us")
+        valid_epoch = type(epoch) is int and 0 <= status["updated_us"] - epoch <= 320000
+        require(valid_epoch, "navigation epoch missing, future or stale")
+        if valid_epoch:
+            ages.append(status["updated_us"] - epoch)
+        for field in ("horizontal_speed_mps", "vertical_speed_mps"):
+            value = status.get(field)
+            require(finite(value) and (field != "horizontal_speed_mps" or value >= 0),
+                    f"navigation {field} missing or invalid")
+        for field in ("position_ecef_m", "velocity_ecef_mps"):
+            values = status.get(field)
+            require(isinstance(values, list) and len(values) == 3 and all(map(finite, values)),
+                    f"navigation {field} missing or invalid")
+
+    deltas = {}
+    for field in ("epoch_us", "imu_accepted", "gnss_fused"):
+        values = [status.get(field) for status in statuses]
+        valid = all(type(value) is int and value >= 0 for value in values)
+        require(valid and all(current > previous for previous, current in zip(values, values[1:])),
+                f"navigation {field} did not advance on every poll")
+        deltas[field] = values[-1] - values[0] if valid else None
+    for field in ("input_rejected", "too_late"):
+        values = [status.get(field) for status in statuses]
+        require(all(type(value) is int and value >= 0 for value in values)
+                and all(value == values[0] for value in values),
+                f"navigation {field} missing or changed during observation")
+    for field in ("pps_rejected", "gnss_unsynchronized", "generation"):
+        values = [timing.get(field) for timing in timings]
+        require(all(type(value) is int and value >= 0 for value in values)
+                and all(value == values[0] for value in values),
+                f"timing.{field} missing or changed during navigation")
+    # PPS runs at 1 Hz. A subsecond USB poll need not contain a new edge, but
+    # a complete observation must show new physical edges and accepted labels.
+    for field in ("pps_edges", "pps_pairs"):
+        values = [timing.get(field) for timing in timings]
+        valid = all(type(value) is int and 0 <= value <= 0xffffffff for value in values)
+        delta = (values[-1] - values[0]) & 0xffffffff if valid else 0
+        require(valid and 0 < delta < 0x80000000,
+                f"timing.{field} did not advance during navigation")
+        deltas[field] = delta if valid else None
+    return {"counter_deltas": deltas,
+            "epoch_age_us": {"minimum": min(ages), "maximum": max(ages)} if ages else None,
+            "final_position_ecef_m": statuses[-1].get("position_ecef_m"),
+            "final_velocity_ecef_mps": statuses[-1].get("velocity_ecef_mps")}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("capture", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--minimum-seconds", type=float, default=0)
-    parser.add_argument("--minimum-imu-hz", type=float, default=1350)
-    parser.add_argument("--maximum-imu-hz", type=float, default=1600)
+    parser.add_argument("--minimum-imu-hz", type=float, default=675)
+    parser.add_argument("--maximum-imu-hz", type=float, default=800)
     parser.add_argument("--stationary", action="store_true")
+    parser.add_argument("--navigation", action="store_true",
+                        help="require sustained PPS lock, fresh navigation output and estimator progress")
     args = parser.parse_args()
     try:
         validate_limits(args.minimum_seconds, args.minimum_imu_hz, args.maximum_imu_hz)
     except ValueError as error:
         parser.error(str(error))
     report = evaluate(json.loads(args.capture.read_text()), args.minimum_seconds,
-                      args.minimum_imu_hz, args.maximum_imu_hz, args.stationary)
+                      args.minimum_imu_hz, args.maximum_imu_hz, args.stationary, args.navigation)
     output = json.dumps(report, indent=2) + "\n"
     if args.output:
         args.output.write_text(output)

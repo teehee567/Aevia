@@ -159,12 +159,35 @@ impl<const N: usize> Default for BinaryDecoder<N> {
 pub fn crc32(bytes: &[u8]) -> u32 {
     let mut crc = 0_u32;
     for &byte in bytes {
-        crc ^= u32::from(byte);
-        for _ in 0..8 {
-            crc = (crc >> 1) ^ (0xedb8_8320 & 0_u32.wrapping_sub(crc & 1));
-        }
+        crc = crc32_byte(crc, byte);
     }
     crc
+}
+
+const fn crc32_table() -> [u32; 256] {
+    let mut table = [0; 256];
+    let mut index = 0;
+    while index < table.len() {
+        let mut value = index as u32;
+        let mut bit = 0;
+        while bit < 8 {
+            value = (value >> 1) ^ (0xedb8_8320 & 0_u32.wrapping_sub(value & 1));
+            bit += 1;
+        }
+        table[index] = value;
+        index += 1;
+    }
+    table
+}
+
+// OBSVM frames can occupy the UART at line rate for many FIFO fills. One
+// lookup replaces eight per-byte polynomial rounds in both bounded and
+// streaming decoding; the N4 initial value and final-XOR convention stay zero.
+static CRC32_TABLE: [u32; 256] = crc32_table();
+
+#[inline]
+fn crc32_byte(crc: u32, byte: u8) -> u32 {
+    (crc >> 8) ^ CRC32_TABLE[((crc ^ u32::from(byte)) & 0xff) as usize]
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -317,6 +340,13 @@ impl<const N: usize> Default for AsciiDecoder<N> {
 pub enum Frame<'a> {
     Binary(BinaryFrame<'a>),
     Ascii(AsciiSentence<'a>),
+    /// Complete CRC-valid binary frame larger than the typed decoder buffer.
+    /// Its original bytes must be retained by the UART capture consumer.
+    SkippedBinary {
+        message_id: u16,
+        payload_len: u16,
+        header: super::Header,
+    },
 }
 
 #[derive(Clone, Copy)]
@@ -324,16 +354,31 @@ enum Mode {
     Search,
     Binary,
     Ascii,
+    Streaming,
+}
+
+#[derive(Clone, Copy)]
+struct Streaming {
+    remaining: usize,
+    message_id: u16,
+    payload_len: u16,
+    crc: u32,
+    expected: u32,
+    header: [u8; HEADER_LEN],
+    position: usize,
 }
 
 /// Mixed-stream decoder for UART ports with binary logs and ASCII replies.
 /// Capacity N applies separately to a complete binary frame and ASCII line.
+/// Larger binary frames are consumed with a streaming CRC and reported as
+/// `SkippedBinary`; their payload never enters the ASCII/search state.
 /// Unsupported Unicore long ASCII '#...' messages are skipped; use the raw
 /// UART read API if those logs are enabled. RTCM input is sent with corrections.
 pub struct Decoder<const N: usize = 512> {
     binary: BinaryDecoder<N>,
     ascii: AsciiDecoder<N>,
     mode: Mode,
+    streaming: Option<Streaming>,
 }
 
 impl<const N: usize> Decoder<N> {
@@ -342,6 +387,7 @@ impl<const N: usize> Decoder<N> {
             binary: BinaryDecoder::new(),
             ascii: AsciiDecoder::new(),
             mode: Mode::Search,
+            streaming: None,
         }
     }
 
@@ -349,9 +395,47 @@ impl<const N: usize> Decoder<N> {
         self.binary.reset();
         self.ascii.reset();
         self.mode = Mode::Search;
+        self.streaming = None;
+    }
+
+    /// Whether the next completed frame could contain previously pushed bytes.
+    /// This lets a raw recorder avoid crediting a frame spanning a file boundary
+    /// while retaining decoder state and the exact underlying UART byte stream.
+    pub fn has_partial_frame(&self) -> bool {
+        match self.mode {
+            Mode::Search | Mode::Binary => self.binary.buffered_len() != 0,
+            Mode::Ascii => self.ascii.len != 0,
+            Mode::Streaming => true,
+        }
     }
 
     pub fn push(&mut self, byte: u8) -> Result<Option<Frame<'_>>, DecodeError> {
+        if let Some(stream) = self.streaming.as_mut() {
+            if stream.position < HEADER_LEN {
+                stream.header[stream.position] = byte;
+            }
+            stream.position += 1;
+            if stream.remaining > 4 {
+                stream.crc = crc32_byte(stream.crc, byte);
+            } else {
+                stream.expected |= u32::from(byte) << ((4 - stream.remaining) * 8);
+            }
+            stream.remaining -= 1;
+            if stream.remaining != 0 {
+                return Ok(None);
+            }
+            let stream = self.streaming.take().unwrap();
+            self.mode = Mode::Search;
+            return if stream.crc == stream.expected {
+                Ok(Some(Frame::SkippedBinary {
+                    message_id: stream.message_id,
+                    payload_len: stream.payload_len,
+                    header: super::Header::from_bytes(&stream.header),
+                }))
+            } else {
+                Err(DecodeError::Checksum)
+            };
+        }
         if matches!(self.mode, Mode::Search) {
             self.mode = if self.binary.buffered_len() != 0 || byte == SYNC[0] {
                 Mode::Binary
@@ -373,8 +457,32 @@ impl<const N: usize> Decoder<N> {
             self.binary.reset();
             self.mode = Mode::Binary;
         }
+        // Length is known at byte eight. Consume larger native observation
+        // logs without storing their payload or searching inside it for ASCII
+        // commands/sync. Memory remains bounded and the complete CRC is checked.
+        if matches!(self.mode, Mode::Binary) && self.binary.len == 7 {
+            let payload_len = u16::from_le_bytes([self.binary.bytes[6], byte]);
+            let total = usize::from(payload_len) + OVERHEAD;
+            if total > N {
+                let mut header = [0; HEADER_LEN];
+                header[..7].copy_from_slice(&self.binary.bytes[..7]);
+                header[7] = byte;
+                self.streaming = Some(Streaming {
+                    remaining: total - 8,
+                    message_id: u16::from_le_bytes([self.binary.bytes[4], self.binary.bytes[5]]),
+                    payload_len,
+                    crc: crc32_byte(crc32(&self.binary.bytes[..7]), byte),
+                    expected: 0,
+                    header,
+                    position: 8,
+                });
+                self.binary.reset();
+                self.mode = Mode::Streaming;
+                return Ok(None);
+            }
+        }
         match self.mode {
-            Mode::Search => Ok(None),
+            Mode::Search | Mode::Streaming => Ok(None),
             Mode::Binary => match self.binary.push(byte) {
                 Ok(Some(frame)) => {
                     self.mode = Mode::Search;

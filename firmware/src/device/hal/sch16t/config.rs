@@ -1,6 +1,15 @@
 //! Typed settings from local datasheet §§7.4.1–7.4.5, Tables 58–78.
 use super::Register;
 
+// Named constants force compile-time division even when the range is selected
+// at runtime. The S31 has no hardware f64 divide; per-sample conversion only
+// needs a multiplication by the selected fixed sensitivity reciprocal.
+const PER_LSB_1600: f64 = 1.0 / 1600.0;
+const PER_LSB_3200: f64 = 1.0 / 3200.0;
+const PER_LSB_6400: f64 = 1.0 / 6400.0;
+const PER_LSB_12800: f64 = 1.0 / 12800.0;
+const PER_LSB_25600: f64 = 1.0 / 25600.0;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ConfigError {
     SaturationFilter,
@@ -54,6 +63,14 @@ pub enum RateRange {
 }
 
 impl RateRange {
+    pub(super) const fn degrees_per_second_per_lsb(self) -> f64 {
+        match self {
+            Self::Dyn1 | Self::Dyn2 => PER_LSB_1600,
+            Self::Dyn3 => PER_LSB_3200,
+            Self::Dyn4 => PER_LSB_6400,
+        }
+    }
+
     /// 48-bit frames carry 20-bit output values.
     pub const fn lsb_per_degree_per_second(self) -> f64 {
         match self {
@@ -75,6 +92,15 @@ pub enum AccRange {
 }
 
 impl AccRange {
+    pub(super) const fn metres_per_second_squared_per_lsb(self) -> f64 {
+        match self {
+            Self::Dyn1 => PER_LSB_3200,
+            Self::Dyn2 => PER_LSB_6400,
+            Self::Dyn3 => PER_LSB_12800,
+            Self::Dyn4 => PER_LSB_25600,
+        }
+    }
+
     pub const fn lsb_per_metre_per_second_squared(self) -> f64 {
         match self {
             Self::Dyn1 => 3200.0,
@@ -97,6 +123,16 @@ pub enum AuxAccRange {
 }
 
 impl AuxAccRange {
+    pub(super) const fn metres_per_second_squared_per_lsb(self) -> f64 {
+        match self {
+            Self::Dyn0 => PER_LSB_1600,
+            Self::Dyn1 => PER_LSB_3200,
+            Self::Dyn2 => PER_LSB_6400,
+            Self::Dyn3 => PER_LSB_12800,
+            Self::Dyn4 => PER_LSB_25600,
+        }
+    }
+
     pub const fn lsb_per_metre_per_second_squared(self) -> f64 {
         match self {
             Self::Dyn0 => 1600.0,
@@ -311,7 +347,8 @@ impl Config {
         self.interface.validate()
     }
 
-    pub(crate) const fn registers(self) -> [(Register, u16); 12] {
+    /// Register/value configuration image verified during initialization.
+    pub const fn registers(self) -> [(Register, u16); 12] {
         [
             (Register::FilterRate, self.rate_filters.bits()),
             (Register::FilterAcc12, self.acc_filters.bits()),

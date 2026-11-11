@@ -27,6 +27,8 @@ struct Mock {
     ready_wait: u16,
     fail_command: Option<(u8, MockError)>,
     fail_read: bool,
+    fail_after_read: Option<MockError>,
+    busy_after_read: u16,
     data_status: u32,
     app_accepted: bool,
 }
@@ -57,6 +59,8 @@ impl Mock {
             ready_wait: 0,
             fail_command: None,
             fail_read: false,
+            fail_after_read: None,
+            busy_after_read: 0,
             data_status: ready(),
             app_accepted: true,
         }
@@ -153,7 +157,20 @@ impl NativeHost for Mock {
                 data.copy_from_slice(&self.scr);
             }
             17 => data.fill(0x6b),
+            18 => {
+                assert!((1024..=MAX_READ_BYTES).contains(&data.len()));
+                assert!(data.len().is_multiple_of(SECTOR_BYTES));
+                for (index, sector) in data.chunks_exact_mut(SECTOR_BYTES).enumerate() {
+                    sector.fill(0x60 + index as u8);
+                }
+            }
             other => panic!("unexpected data command{other}"),
+        }
+        if matches!(command, 17 | 18) {
+            self.ready_wait = self.busy_after_read;
+            if let Some(error) = self.fail_after_read {
+                self.fail_command = Some((13, error));
+            }
         }
         Ok(self.data_status)
     }
@@ -259,6 +276,118 @@ fn high_capacity_addresses_sectors_and_accepts_the_last_two_tb_sector() {
         Err(Error::OutOfRange)
     );
     assert_eq!(card.host.events.len(), count);
+}
+
+#[test]
+fn bounded_bulk_read_uses_one_transfer_and_checks_readiness_before_and_after() {
+    for host in [Mock::high(), Mock::standard(false)] {
+        let mut card = initialized(host);
+        let argument = if card.info().unwrap().block_addressed {
+            3
+        } else {
+            3 * 512
+        };
+        card.host.events.clear();
+        let delay = card.delay.milliseconds;
+        let mut data = [0; MAX_READ_BYTES];
+        ReadSectors::read_sectors(&mut card, 3, &mut data).unwrap();
+        assert_eq!(
+            card.host.events,
+            [
+                Event::Command(Command::short(13, 0x1234 << 16)),
+                Event::Read(18, argument, MAX_READ_BYTES),
+                Event::Command(Command::short(13, 0x1234 << 16)),
+            ]
+        );
+        for (index, sector) in data.chunks_exact(SECTOR_BYTES).enumerate() {
+            assert_eq!(sector, [0x60 + index as u8; SECTOR_BYTES]);
+        }
+        assert_eq!(card.delay.milliseconds, delay);
+        card.host.events.clear();
+        card.read_sectors(3, &mut data[..512]).unwrap();
+        assert_eq!(card.host.events[1], Event::Read(17, argument, 512));
+    }
+}
+
+#[test]
+fn bulk_read_rejects_bad_lengths_and_whole_range_before_io() {
+    let mut card = initialized(Mock::high());
+    let mut data = [0; MAX_READ_BYTES + SECTOR_BYTES];
+    card.host.events.clear();
+    for length in [
+        0,
+        1,
+        511,
+        513,
+        MAX_READ_BYTES - 1,
+        MAX_READ_BYTES + 1,
+        data.len(),
+    ] {
+        assert_eq!(
+            card.read_sectors(0, &mut data[..length]),
+            Err(Error::InvalidLength)
+        );
+    }
+    let sectors = card.sector_count();
+    for start in [sectors - 7, sectors, u64::MAX - 3] {
+        assert_eq!(
+            card.read_sectors(start, &mut data[..MAX_READ_BYTES]),
+            Err(Error::OutOfRange)
+        );
+    }
+    assert!(card.host.events.is_empty());
+    assert!(card.info().is_some());
+
+    let mut host = Mock::high();
+    host.csd = high_csd(0x3f_ffff);
+    let mut card = initialized(host);
+    card.host.events.clear();
+    card.read_sectors((1_u64 << 32) - 8, &mut data[..MAX_READ_BYTES])
+        .unwrap();
+    assert_eq!(
+        card.host.events[1],
+        Event::Read(18, u32::MAX - 7, MAX_READ_BYTES)
+    );
+}
+
+#[test]
+fn bulk_read_transport_status_and_post_stop_failures_invalidate_the_card() {
+    for stage in 0..5 {
+        let mut card = initialized(Mock::high());
+        let expected = match stage {
+            0 => {
+                card.host.fail_command = Some((13, MockError::Crc));
+                Error::Host(MockError::Crc)
+            }
+            1 => {
+                card.host.fail_read = true;
+                Error::Host(MockError::Crc)
+            }
+            2 => {
+                card.host.fail_after_read = Some(MockError::ResponseTimeout);
+                Error::Host(MockError::ResponseTimeout)
+            }
+            3 => {
+                card.host.data_status = 1 << 19;
+                Error::CardStatus(1 << 19)
+            }
+            _ => {
+                card.host.busy_after_read = 100;
+                card.ready_attempts = 3;
+                Error::ReadyTimeout
+            }
+        };
+        assert_eq!(
+            card.read_sectors(0, &mut [0; MAX_READ_BYTES]),
+            Err(expected),
+            "stage {stage}"
+        );
+        assert!(card.info().is_none(), "stage {stage}");
+        assert_eq!(
+            card.read_sectors(0, &mut [0; 1024]),
+            Err(Error::NotInitialized)
+        );
+    }
 }
 
 #[test]
