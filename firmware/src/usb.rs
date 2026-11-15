@@ -1,64 +1,54 @@
 use embassy_usb::{
     Builder, Config, UsbDevice,
-    class::cdc_acm::{CdcAcmClass, State},
+    class::cdc_acm::{BufferedReceiver, CdcAcmClass, Sender, State},
 };
 use esp_hal::{
     peripherals::USB_HS,
     usb::otg::{Usb, embassy_usb_device::Driver},
 };
 
-use crate::globals::{DEVICE_PID, SERIALID, USBVID};
+pub type Device = UsbDevice<'static, Driver<'static>>;
+pub type Serial = CdcAcmClass<'static, Driver<'static>>;
+pub type Input = BufferedReceiver<'static, Driver<'static>>;
+pub type Output = Sender<'static, Driver<'static>>;
 
-pub type Device<'d> = UsbDevice<'d, Driver<'d>>;
-pub type Serial<'d> = CdcAcmClass<'d, Driver<'d>>;
-
-pub struct Buffers<'d> {
+pub struct Buffers {
     out: [u8; 1024],
     descriptors: [u8; 256],
     bos: [u8; 256],
     control: [u8; 64],
-    serial_number: [u8; 12],
-    state: State<'d>,
+    state: State<'static>,
 }
 
-impl Buffers<'_> {
-    pub const fn new() -> Self {
+impl Default for Buffers {
+    fn default() -> Self {
         Self {
             out: [0; 1024],
             descriptors: [0; 256],
             bos: [0; 256],
             control: [0; 64],
-            serial_number: [0; 12],
             state: State::new(),
         }
     }
 }
 
-impl Default for Buffers<'_> {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-pub fn init<'d>(peripheral: USB_HS<'d>, buffers: &'d mut Buffers<'d>) -> (Device<'d>, Serial<'d>) {
+pub fn init(peripheral: USB_HS<'static>, buffers: &'static mut Buffers) -> (Device, Serial) {
     let driver = Driver::new(
         Usb::new_hs(peripheral),
         &mut buffers.out,
         Default::default(),
     );
-
-    let mut config = Config::new(USBVID, DEVICE_PID);
-    config.manufacturer = Some("teehee567");
-    config.product = Some("Aevia Loader");
-    config.serial_number = SOME(SERIALID);
-
+    let mut config = Config::new(0xc0c0, 0xcafe);
+    config.manufacturer = Some("Aevia");
+    config.product = Some("Aevia");
+    config.serial_number = Some("AEVIADEVBOARD");
     let mut builder = Builder::new(
         driver,
         config,
         &mut buffers.descriptors,
         &mut buffers.bos,
-        &mut buffers.msos,
         &mut buffers.control,
+        &mut [],
     );
     let serial = CdcAcmClass::new(&mut builder, &mut buffers.state, 512);
     (builder.build(), serial)
