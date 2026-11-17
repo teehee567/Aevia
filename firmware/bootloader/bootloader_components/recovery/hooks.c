@@ -4,7 +4,7 @@
 #include "esp_rom_sys.h"
 #include "soc/reset_reasons.h"
 
-// Must match src/lib.rs and partitions.csv. Unknown/torn records select recovery.
+// Must match src/loader.rs and partitions.csv. Unknown/torn records select recovery.
 #define STATE 0x9000
 #define SECTOR 0x1000
 #define APP_SIZE 0xf70000

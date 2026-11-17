@@ -1,3 +1,6 @@
 [build]
 target = "riscv32imafc-unknown-none-elf"
 target-dir = "target"
+
+[target.riscv32imafc-unknown-none-elf]
+runner = "uv run --cache-dir target/uv-cache --script tools/upload.py"

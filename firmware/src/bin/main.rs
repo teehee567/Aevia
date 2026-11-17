@@ -5,7 +5,7 @@ esp_bootloader_esp_idf::esp_app_desc!();
 
 #[panic_handler]
 fn panic(_: &core::panic::PanicInfo) -> ! {
-    esp_hal::system::software_reset()
+    firmware::restart()
 }
 
 #[esp_rtos::main]
