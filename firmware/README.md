@@ -24,8 +24,7 @@ before setting the recording boundary; a failure within ten seconds returns an
 error without starting later. Stop drains the SD queue and flushes a final
 closed page. The recorder never formats the card or deletes existing files;
 FAT32/GPT volumes are currently unsupported, and dirty exFAT volumes permit only
-retrieval. Bluetooth is not enabled. The upstream radio SDK has S31 support, but
-this build does not include or claim a tested Bluetooth transport.
+retrieval. Live telemetry and recording controls work over USB or Bluetooth LE. SD downloads use USB.
 
 The acquisition adapters were recovered from this repository's `76c78f5`
 implementation, with capture, timing and memory support adapted from `31a20b4`.
@@ -63,8 +62,8 @@ available, otherwise arrival-only development timing; it never silently switches
 latency models mid-session. Lost PPS mapping suspends GNSS fusion, while inertial
 propagation continues; start a new session to select a recovered clock generation.
 
-The engine preflight declares 163,824 bytes of hot SRAM, a 32 KiB stack contract,
-and 2,107,760 bytes of PSRAM. Firmware reserves a physical 64 KiB worker stack
+The engine preflight declares 28,608 bytes of hot SRAM, a 32 KiB stack contract,
+and 2,242,672 bytes of PSRAM. Firmware reserves a physical 64 KiB worker stack
 because historical hardware preflight exceeded 32 KiB. This allocation is not a
 measured high-water bound. This RTOS does not save floating-point task context:
 CPU1 has one floating-point worker and integer-only idle/storage/interrupt paths.
@@ -131,6 +130,21 @@ The LED driver uses the fitted LP5813 scan groups and verifies configuration,
 PWM readback and driver fault registers. GNSS no-fix does not turn D32 red.
 The indicators use one quarter of their USB PWM duty on battery. Steady colours
 are still verified at each battery poll and PWM is written only when it changes.
+
+## Bluetooth LE
+
+The application advertises as **Aevia V2 Mini** and accepts one central.
+The firmware pins the 21 October 2026 Espressif Rust SDK revision with the
+ESP32-S31 BLE controller. During two sets of 25 Bluetooth reads on the bench,
+the IMU ran at 733–735 Hz and GNSS at about 50 Hz. The receiver reported one
+IMU error and zero SD queue drops. The 18 November revision missed IMU capture
+deadlines with PSRAM active. The controller uses an additional 80 KiB internal
+heap. The delayed GNSS measurement queue shares the PSRAM history workspace at its
+original capacity. [Pinned S31 driver](https://github.com/esp-rs/esp-hal/tree/b46965413093d7b91a35ddcb5579b4579af9d624/esp-radio/src/ble/btdm2)
+
+The app reads a display snapshot at 5 Hz and can start or stop an SD recording.
+A lost Bluetooth connection leaves the receiver recording and available for
+reconnection. [GATT characteristics](docs/application-protocol.md#bluetooth-le)
 
 ## Build and upload
 
@@ -204,7 +218,7 @@ separate. See [the application protocol](docs/application-protocol.md).
 ## Layout and protocol
 
 `partitions.csv` reserves state at `0x9000`, recovery at `0x10000..0x90000`,
-and the application at `0x90000..0x1000000`. SDK crates come from crates.io;
+and the application at `0x90000..0x1000000`. The ESP SDK revision is pinned in Cargo.toml;
 S31 flash-capacity and watchdog fixes live in `src/flash.rs` and
 `src/watchdog.rs`.
 

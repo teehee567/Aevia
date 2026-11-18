@@ -32,7 +32,7 @@ impl<'a> LiveCore<'a> {
         &mut self,
         observation: Scheduled<GnssObservation>,
     ) -> Result<EnqueueDisposition, LiveCoreError> {
-        if self.scheduler.is_finishing() {
+        if self.history.scheduler.is_finishing() {
             return Err(LiveCoreError::InputClosed);
         }
         if observation.key.time != observation.value.time {
@@ -42,7 +42,7 @@ impl<'a> LiveCore<'a> {
         if observation.key.time < self.filter.state.time {
             return Ok(EnqueueDisposition::TooLateForLive);
         }
-        Ok(self.scheduler.enqueue(observation))
+        Ok(self.history.scheduler.enqueue(observation))
     }
 
     /// Atomically enqueues the independently timed position and velocity
@@ -52,7 +52,7 @@ impl<'a> LiveCore<'a> {
         &mut self,
         mut observations: [Option<Scheduled<GnssObservation>>; 2],
     ) -> Result<[Option<EnqueueDisposition>; 2], LiveCoreError> {
-        if self.scheduler.is_finishing() {
+        if self.history.scheduler.is_finishing() {
             return Err(LiveCoreError::InputClosed);
         }
         for observation in observations.iter().flatten() {
@@ -69,6 +69,7 @@ impl<'a> LiveCore<'a> {
             }
         }
         let accepted = self
+            .history
             .scheduler
             .enqueue_pair_atomic(&observations)
             .map_err(LiveCoreError::MeasurementQueueRejected)?;
@@ -84,7 +85,7 @@ impl<'a> LiveCore<'a> {
         &mut self,
         interval: ImuInterval,
     ) -> Result<IngestDisposition, LiveCoreError> {
-        if self.scheduler.is_finishing() {
+        if self.history.scheduler.is_finishing() {
             return Err(LiveCoreError::InputClosed);
         }
         interval.validate().map_err(LiveCoreError::Preintegration)?;
@@ -178,7 +179,8 @@ impl<'a> LiveCore<'a> {
 
         // Every remaining operation has been prevalidated and capacity-checked;
         // the accepted observation becomes visible as one transaction.
-        self.scheduler
+        self.history
+            .scheduler
             .observe_trusted_imu(interval.end)
             .map_err(LiveCoreError::Scheduler)?;
         if let Some(gap) = bridge {

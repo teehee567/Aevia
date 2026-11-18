@@ -21,10 +21,11 @@ impl<'a> LiveCore<'a> {
     }
 
     pub(crate) fn finish(&mut self) -> Result<FinishReport, LiveCoreError> {
-        if self.scheduler.is_finishing() {
+        if self.history.scheduler.is_finishing() {
             return Err(LiveCoreError::InputClosed);
         }
         let terminal_time = self
+            .history
             .scheduler
             .latest_trusted_imu()
             .ok_or(LiveCoreError::Scheduler(SchedulerError::NoTrustedImu))?;
@@ -69,7 +70,10 @@ impl<'a> LiveCore<'a> {
             }
         }
 
-        self.scheduler.finish().map_err(LiveCoreError::Scheduler)?;
+        self.history
+            .scheduler
+            .finish()
+            .map_err(LiveCoreError::Scheduler)?;
         if let Some(segment) = staged_segment {
             self.history
                 .predicted
@@ -153,16 +157,16 @@ impl<'a> LiveCore<'a> {
 
     pub(crate) fn status(&self) -> Result<LiveCoreStatus, LiveCoreError> {
         Ok(LiveCoreStatus {
-            corrected_frontier: self.scheduler.processed_frontier(),
+            corrected_frontier: self.history.scheduler.processed_frontier(),
             published_frontier: self.history.published_frontier,
             corrected_state_time: self.filter.state.time,
-            present_input_time: self.scheduler.latest_trusted_imu(),
-            queued_measurements: self.scheduler.queued_measurements(),
+            present_input_time: self.history.scheduler.latest_trusted_imu(),
+            queued_measurements: self.history.scheduler.queued_measurements(),
             retained_imu_intervals: self.history.imu.len()
                 + usize::from(self.corrected_pending_interval.is_some()),
             retained_corrected_segments: self.history.corrected.len(),
             retained_predictor_segments: self.history.predicted.len(),
-            finishing: self.scheduler.is_finishing(),
+            finishing: self.history.scheduler.is_finishing(),
             drained: self.is_drained_internal()?,
             predictor_tracking: self.predictor.tracking_error,
             predictor_tracking_degraded: self.predictor.tracking_degraded(),

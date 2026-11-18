@@ -180,6 +180,14 @@ static STORAGE_STOP_PENDING: Mutex<CriticalSectionRawMutex, RefCell<bool>> =
     Mutex::new(RefCell::new(false));
 // 0 idle, 1 requested, 2 command transmitted and receiver given settling time.
 static RECEIVER_RESTORE: Mutex<CriticalSectionRawMutex, RefCell<u8>> = Mutex::new(RefCell::new(0));
+pub(crate) async fn wait_for_sd_close() -> bool {
+    let deadline = Instant::now() + Duration::from_secs(10);
+    while (stop_pending() || !crate::storage::snapshot().closed) && Instant::now() < deadline {
+        Timer::after_millis(10).await;
+    }
+    !stop_pending() && crate::storage::snapshot().closed
+}
+
 pub async fn prepare_recovery() -> bool {
     update(|s| {
         s.starting = false;
@@ -190,11 +198,7 @@ pub async fn prepare_recovery() -> bool {
             crate::storage::request_stop();
         }
     });
-    let deadline = Instant::now() + Duration::from_secs(10);
-    while (stop_pending() || !crate::storage::snapshot().closed) && Instant::now() < deadline {
-        Timer::after_millis(10).await;
-    }
-    if stop_pending() || !crate::storage::snapshot().closed {
+    if !wait_for_sd_close().await {
         return false;
     }
     // Preserve compatibility with older MCU images that probe command COM1 at
@@ -405,10 +409,9 @@ fn enqueue(sample: Sample) {
             hacc_m,
             ..
         } = sample
+            && (!valid || latency_ms != 0 || !(0.0..=25.0).contains(&hacc_m))
         {
-            if !valid || latency_ms != 0 || !(0.0..=25.0).contains(&hacc_m) {
-                s.rejected_fix_count = s.rejected_fix_count.wrapping_add(1);
-            }
+            s.rejected_fix_count = s.rejected_fix_count.wrapping_add(1);
         }
         let (health, latest, t_us) = match sample {
             Sample::Gnss { t_us, .. } => (&mut s.gnss, &mut s.last_gnss, t_us),
@@ -451,19 +454,14 @@ fn enqueue(sample: Sample) {
     }
 }
 pub fn toggle_recording() {
-    if STATE.lock(|s| s.borrow().starting) {
-        update(|s| s.starting = false);
-        crate::storage::request_stop();
-        return;
-    }
-    if !STATE.lock(|s| s.borrow().recording.active) {
+    if STATE.lock(|s| {
+        let s = s.borrow();
+        s.starting || s.recording.active
+    }) {
+        stop_recording();
+    } else {
         let _ = begin_recording_start();
-        return;
     }
-    update(|s| {
-        s.recording.stop(Instant::now().as_micros());
-        request_storage_stop(s.recording.stopped_at_us.unwrap());
-    });
 }
 fn begin_recording_start() -> Result<(), ()> {
     STATE.lock(|cell| {
@@ -482,6 +480,49 @@ fn begin_recording_start() -> Result<(), ()> {
         Ok(())
     })
 }
+pub(crate) async fn start_recording(raw_usb: bool) -> Result<(), &'static str> {
+    // A second display client must not disable an active USB raw capture.
+    update(|s| {
+        if raw_usb || (!s.recording.active && !s.starting) {
+            s.queue_enabled = raw_usb;
+        }
+    });
+    if begin_recording_start().is_err() {
+        return Err("previous recording still closing");
+    }
+    let deadline = Instant::now() + Duration::from_secs(10);
+    loop {
+        complete_recording_start();
+        if STATE.lock(|s| s.borrow().recording.active) {
+            break;
+        }
+        if !STATE.lock(|s| s.borrow().starting) {
+            return Err("recording start cancelled");
+        }
+        let sd = crate::storage::snapshot();
+        if sd.error.is_some() || Instant::now() >= deadline {
+            update(|s| s.starting = false);
+            crate::storage::request_stop();
+            return Err("SD start preparation failed");
+        }
+        Timer::after_millis(5).await;
+    }
+    Ok(())
+}
+
+pub(crate) fn stop_recording() {
+    update(|s| {
+        if s.recording.active {
+            s.recording.stop(Instant::now().as_micros());
+            request_storage_stop(s.recording.stopped_at_us.unwrap());
+        }
+        if s.starting {
+            s.starting = false;
+            crate::storage::request_stop();
+        }
+    });
+}
+
 fn complete_recording_start() {
     STATE.lock(|cell| {
         let mut s = cell.borrow_mut();
@@ -591,27 +632,10 @@ pub async fn request(text: &str, out: &mut Response<RESPONSE_SIZE>) {
         && request.after.is_none()
         && request.id.is_none()
         && request.sector.is_none()
+        && let Err(message) = start_recording(request.op == "start").await
     {
-        update(|s| s.queue_enabled = request.op == "start");
-        if begin_recording_start().is_err() {
-            let _ = out.push_str("{\"ok\":false,\"error\":\"previous recording still closing\"}");
-            return;
-        }
-        let deadline = Instant::now() + Duration::from_secs(10);
-        loop {
-            complete_recording_start();
-            if STATE.lock(|s| s.borrow().recording.active) {
-                break;
-            }
-            let sd = crate::storage::snapshot();
-            if sd.error.is_some() || Instant::now() >= deadline {
-                update(|s| s.starting = false);
-                crate::storage::request_stop();
-                let _ = out.push_str("{\"ok\":false,\"error\":\"SD start preparation failed\"}");
-                return;
-            }
-            Timer::after_millis(5).await;
-        }
+        let _ = write!(out, "{{\"ok\":false,\"error\":\"{message}\"}}");
+        return;
     }
     if matches!(request.op, "files" | "read") {
         let query = match (request.op, request.after, request.id, request.sector) {
@@ -653,12 +677,8 @@ pub async fn request(text: &str, out: &mut Response<RESPONSE_SIZE>) {
     } else if request.op == "stop" {
         // A successful stop response confirms queued SD writes and the final
         // committed page reached the card's ready/flush barrier.
-        let deadline = Instant::now() + Duration::from_secs(10);
-        while (stop_pending() || !crate::storage::snapshot().closed) && Instant::now() < deadline {
-            Timer::after_millis(10).await;
-        }
         out.clear();
-        if stop_pending() || !crate::storage::snapshot().closed {
+        if !wait_for_sd_close().await {
             let _ = out.push_str("{\"ok\":false,\"error\":\"SD stop flush timeout\"}");
         } else {
             let _ = make_response(&request, out).await;
@@ -689,14 +709,10 @@ async fn read_blocks(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>) -
     out.push_str("]}").map_err(|_| ())
 }
 
-fn display_response(out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
+pub(crate) fn display_frame() -> crate::display::DisplayFrame {
     use crate::display::{DisplayAcceleration, DisplayFix, DisplayFrame};
     let (session, recording, count, rejected_fix_count, gnss, imu) = STATE.lock(|cell| {
-        let mut s = cell.borrow_mut();
-        if s.queue_enabled {
-            s.queue_enabled = false;
-            s.queue.clear();
-        }
+        let s = cell.borrow();
         (
             s.session,
             s.recording,
@@ -749,7 +765,7 @@ fn display_response(out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
         }),
         _ => None,
     };
-    let frame = DisplayFrame {
+    DisplayFrame {
         uptime_us: Instant::now().as_micros(),
         session,
         recording: recording.active,
@@ -759,7 +775,17 @@ fn display_response(out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
         rejected_fix_count,
         fix,
         imu,
-    };
+    }
+}
+
+fn display_response(out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
+    update(|s| {
+        if s.queue_enabled {
+            s.queue_enabled = false;
+            s.queue.clear();
+        }
+    });
+    let frame = display_frame();
     let mut buf = [0; 160];
     let data = postcard::to_slice(&frame, &mut buf).map_err(|_| ())?;
     out.push_str(r#"{"ok":true,"d":""#).map_err(|_| ())?;
@@ -807,17 +833,12 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
     {
         return Err(());
     }
+    if request.op == "stop" {
+        stop_recording();
+    }
     let (recording, started_at_us, stopped_at_us, session, gnss, imu, last_gnss, last_imu) = STATE
         .lock(|cell| {
-            let mut s = cell.borrow_mut();
-            if request.op == "stop" && s.recording.active {
-                s.recording.stop(Instant::now().as_micros());
-                request_storage_stop(s.recording.stopped_at_us.unwrap());
-            }
-            if request.op == "stop" && s.starting {
-                s.starting = false;
-                crate::storage::request_stop();
-            }
+            let s = cell.borrow();
             (
                 s.recording.active,
                 s.recording.started_at_us,
@@ -931,7 +952,7 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
         crate::configuration::BUTTONS_FITTED
     )
     .map_err(|_| ())?;
-    write!(out, ",\"led\":\"{}\",\"display\":\"{}\",\"storage\":\"sd-exfat-and-usb-host\",\"bluetooth\":\"not-enabled\",\"timing\":\"hardware-capture-with-unqualified-delay-model\",\"samples\":[", crate::drivers::lp5813::status(), crate::tasks::display::status()).map_err(|_| ())?;
+    write!(out, ",\"led\":\"{}\",\"display\":\"{}\",\"storage\":\"sd-exfat-and-usb-host\",\"bluetooth\":\"ble-display-v1\",\"timing\":\"hardware-capture-with-unqualified-delay-model\",\"samples\":[", crate::drivers::lp5813::status(), crate::tasks::display::status()).map_err(|_| ())?;
     serialized(2, began);
     embassy_futures::yield_now().await;
     for i in 0..if request.op == "poll" { 8 } else { 0 } {

@@ -30,29 +30,32 @@ postcard = { version = "1.1.3", default-features = false }
 cobs = { version = "0.3", default-features = false }
 md-5 = { version = "0.10.6", default-features = false }
 
-esp-hal = { version = "~1.2.2", features = ["esp32s31", "unstable"] }
+esp-radio = { git = "https://github.com/esp-rs/esp-hal.git", rev = "b46965413093d7b91a35ddcb5579b4579af9d624", features = ["esp32s31", "unstable", "ble"] }
+trouble-host = { version = "0.7", default-features = false, features = ["peripheral", "gatt", "derive", "default-packet-pool-mtu-128"] }
+esp-hal = { git = "https://github.com/esp-rs/esp-hal.git", rev = "b46965413093d7b91a35ddcb5579b4579af9d624", features = ["esp32s31", "unstable"] }
 
-esp-rtos = { version = "0.4.0", features = [
+esp-rtos = { git = "https://github.com/esp-rs/esp-hal.git", rev = "b46965413093d7b91a35ddcb5579b4579af9d624", features = [
+  "esp-radio",
   "embassy",
   "esp-alloc",
   "esp32s31",
 ] }
 
-esp-bootloader-esp-idf = { version = "0.6.0", features = ["esp32s31",] }
+esp-bootloader-esp-idf = { git = "https://github.com/esp-rs/esp-hal.git", rev = "b46965413093d7b91a35ddcb5579b4579af9d624", features = ["esp32s31",] }
 
 embassy-executor = "0.10.0"
 embassy-futures = "0.1.2"
 embassy-time = "0.5.1"
 embassy-usb = { version = "0.6.0", default-features = false }
-esp-alloc = { version = "0.11.0", features = ["esp32s31"] }
-esp-storage = { version = "0.10.0", features = ["esp32s31"] }
+esp-alloc = { git = "https://github.com/esp-rs/esp-hal.git", rev = "b46965413093d7b91a35ddcb5579b4579af9d624", features = ["esp32s31"] }
+esp-storage = { git = "https://github.com/esp-rs/esp-hal.git", rev = "b46965413093d7b91a35ddcb5579b4579af9d624", features = ["esp32s31"] }
 static_cell = "2.1.1"
 heapless = "0.9.3"
 embassy-sync = "0.8.0"
 embedded-io-async = "0.7.0"
 embedded-hal = "1.0.0"
 critical-section = "1.2.0"
-esp32s31 = "0.3.0"
+esp32s31 = { git = "https://github.com/esp-rs/esp-pacs.git", rev = "f7f79f2" }
 serde-json-core = "0.6.0"
 
 [features]

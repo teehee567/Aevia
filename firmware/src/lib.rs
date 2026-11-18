@@ -2,6 +2,7 @@
 
 mod app;
 pub mod battery;
+mod ble;
 mod board;
 pub mod buttons;
 pub mod capture;
@@ -44,14 +45,18 @@ pub async fn run<const RECOVERY: bool>(spawner: Spawner) -> ! {
     let mut peripherals = esp_hal::init(config);
     watchdog::disable_boot_watchdogs(&mut peripherals.TIMG0, &mut peripherals.TIMG1);
     esp_alloc::heap_allocator!(#[esp_hal::ram(reclaimed)] size: 8176);
+    if !RECOVERY {
+        esp_alloc::heap_allocator!(size: 80 * 1024);
+    }
 
     let timers = TimerGroup::new(peripherals.TIMG0);
     let mut watchdog = timers.wdt;
     watchdog::start(&mut watchdog);
-    esp_rtos::start(timers.timer0, peripherals.FROM_CPU_INTR0);
+    esp_rtos::start(timers.timer0);
     spawner.spawn(feed(watchdog).unwrap());
 
     if !RECOVERY && !cfg!(feature = "diagnostic-usb-only") {
+        spawner.spawn(ble::run(peripherals.BT).unwrap());
         let recording_slot = board::start(
             spawner,
             board::Hardware {
@@ -120,7 +125,6 @@ pub async fn run<const RECOVERY: bool>(spawner: Spawner) -> ! {
             core::sync::atomic::fence(core::sync::atomic::Ordering::SeqCst);
             esp_rtos::start_second_core(
                 peripherals.CPU_CTRL.reborrow(),
-                peripherals.FROM_CPU_INTR1,
                 STORAGE_STACK.take(),
                 move || {
                     if let Some(psram) = psram {

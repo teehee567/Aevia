@@ -114,7 +114,7 @@ impl<'a> LiveCore<'a> {
                 stop = measurement_time;
             }
         }
-        if (self.scheduler.is_finishing() || exact_target) && target < stop {
+        if (self.history.scheduler.is_finishing() || exact_target) && target < stop {
             stop = target;
         }
         if stop <= self.filter.state.time {

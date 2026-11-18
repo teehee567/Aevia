@@ -96,6 +96,12 @@ class FakeBackend {
         result = devices;
       case 'device_sessions':
         result = deviceSessions;
+      case 'device_session_preview':
+        result = {
+          'id': q['id'],
+          'duration_s': 12.0,
+          'metadata': {'gnss_log': 'SPPNAVB'},
+        };
       case 'download':
         session['source'] = 'V2 Mini SD';
         state['sessions'] = [session];
@@ -992,6 +998,7 @@ void main() {
     final backend = FakeBackend();
     backend.state['device'] = {
       'connected': true,
+      'transport': 'USB',
       'fix_quality': 'no fix',
       'battery': {'status': 'charging', 'millivolts': 3800},
       'navigation': {
@@ -1012,7 +1019,7 @@ void main() {
       'accessories': {'buttons_fitted': false},
     };
     final controller = await mount(tester, backend, size: const Size(390, 844));
-    for (final page in [0, 1, 3, 4, 6, 7, 5]) {
+    for (final page in [0, 1, 3, 4, 6, 7, AeviaController.boardPage, 5]) {
       controller.navigate(page);
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull, reason: 'page $page');
@@ -1090,14 +1097,21 @@ void main() {
         {'id': 7, 'bytes': 2048, 'closed': true},
         {'id': 8, 'bytes': 512, 'closed': false},
       ];
+      (backend.state['device'] as Map)['transport'] = 'USB';
       final controller = await mount(tester, backend);
-      controller.navigate(5);
+      controller.navigate(AeviaController.boardPage);
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Refresh'));
       await tester.tap(find.text('Refresh'));
       await tester.pumpAndSettle();
       expect(find.text('Recording 7'), findsOneWidget);
       expect(find.text('Recording 8'), findsOneWidget);
+      expect(backend.calls.any((q) => q['op'] == 'download'), isFalse);
+      await tester.tap(find.text('Preview').last);
+      await tester.pumpAndSettle();
+      expect(find.text('0:12.000'), findsOneWidget);
+      expect(backend.calls.last['id'], 7);
+      expect(backend.calls.any((q) => q['op'] == 'download'), isFalse);
       final downloads = find.widgetWithText(
         OutlinedButton,
         'Download & analyze',
@@ -1124,8 +1138,8 @@ void main() {
       (backend.state['device'] as Map)['sd'] = {'state': 'ready'};
       await controller.poll();
       await tester.pumpAndSettle();
-      await tester.ensureVisible(downloads.at(1));
-      await tester.tap(downloads.at(1));
+      await tester.ensureVisible(downloads.first);
+      await tester.tap(downloads.first);
       await tester.pumpAndSettle();
       expect(backend.calls.lastWhere((q) => q['op'] == 'download')['id'], 8);
       expect(find.text('V2 MINI SD'), findsOneWidget);
@@ -1133,4 +1147,42 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets('board directory is on demand and unavailable after losing USB', (
+    tester,
+  ) async {
+    final backend = FakeBackend();
+    backend.state['device'] = {
+      'connected': true,
+      'transport': 'USB',
+      'port': 'COM1',
+    };
+    final c = await mount(tester, backend);
+    c.navigate(AeviaController.boardPage);
+    await tester.pumpAndSettle();
+    expect(backend.calls.any((q) => q['op'] == 'device_sessions'), isFalse);
+    await c.refreshDeviceSessions();
+    await tester.pumpAndSettle();
+    expect(find.text('No recordings on this SD card.'), findsOneWidget);
+    backend.deviceSessions = [
+      {'id': 42, 'bytes': 512, 'closed': true},
+    ];
+    await c.refreshDeviceSessions();
+    await tester.pumpAndSettle();
+    expect(find.text('Recording 42'), findsOneWidget);
+    for (final device in [
+      {'connected': false},
+      {'connected': true, 'transport': 'Bluetooth'},
+    ]) {
+      backend.state['device'] = device;
+      await c.poll();
+      await tester.pumpAndSettle();
+      expect(find.text('Board data requires USB'), findsOneWidget);
+      expect(find.text('Recording 42'), findsNothing);
+      final before = backend.calls.length;
+      await c.refreshDeviceSessions();
+      await c.previewDeviceSession(42);
+      await c.downloadDeviceSession(42);
+      expect(backend.calls.length, before);
+    }
+  });
 }

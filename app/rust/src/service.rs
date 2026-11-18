@@ -2,6 +2,7 @@
 //! Flutter frame timing cannot drop sensor data.
 use crate::model::*;
 use serde_json::{json, Value};
+#[cfg(not(target_os = "ios"))]
 use serialport::{SerialPort, SerialPortType};
 use std::{
     fs::{self, File, OpenOptions},
@@ -61,11 +62,29 @@ struct Capture {
     binary_first_imu: Option<Value>,
     binary_last_imu: Option<Value>,
 }
+enum Receiver {
+    #[cfg(not(target_os = "ios"))]
+    Usb(Box<dyn SerialPort>),
+    #[cfg(any(windows, target_os = "ios"))]
+    Bluetooth(crate::ble::Connection),
+}
+
+impl Receiver {
+    fn name(&self) -> &'static str {
+        match self {
+            #[cfg(not(target_os = "ios"))]
+            Self::Usb(_) => "USB",
+            #[cfg(any(windows, target_os = "ios"))]
+            Self::Bluetooth(_) => "Bluetooth",
+        }
+    }
+}
+
 struct Service {
     root: PathBuf,
     preferences: Preferences,
     sessions: Vec<Value>,
-    port: Option<Box<dyn SerialPort>>,
+    port: Option<Receiver>,
     port_name: Option<String>,
     status: String,
     latest: Value,
@@ -105,9 +124,10 @@ pub fn request(input: String) -> String {
                         }
                         let display_only = capture.display_only;
                         let before = service.sequence;
+                        let started = Instant::now();
                         service.collect_for(COLLECT_TURN_BUDGET);
                         Some(if display_only {
-                            DISPLAY_INTERVAL
+                            DISPLAY_INTERVAL.saturating_sub(started.elapsed())
                         } else {
                             service.next_collection_delay(service.sequence != before)
                         })
@@ -319,7 +339,12 @@ impl Service {
                 std::env::var_os("LOCALAPPDATA")
                     .map(PathBuf::from)
                     .or_else(|| {
-                        std::env::var_os("HOME").map(|p| PathBuf::from(p).join(".local/share"))
+                        let data = if cfg!(target_os = "ios") {
+                            "Library/Application Support"
+                        } else {
+                            ".local/share"
+                        };
+                        std::env::var_os("HOME").map(|p| PathBuf::from(p).join(data))
                     })
                     .unwrap_or_else(std::env::temp_dir)
                     .join("Aevia")
@@ -386,7 +411,11 @@ impl Service {
             "state" => Ok(self.state()),
             "poll" => {
                 let view = q["view"].as_str().unwrap_or("live");
-                self.poll_view(view)?;
+                if let Err(error) = self.poll_view(view) {
+                    if view != "board_data" || self.port.is_some() {
+                        return Err(error);
+                    }
+                }
                 Ok(if q["view"].is_string() {
                     self.snapshot(view)
                 } else {
@@ -395,6 +424,7 @@ impl Service {
             }
             "devices" => devices(),
             "device_sessions" => self.device_sessions(),
+            "device_session_preview" => self.device_session_preview(q),
             "download" => self.download(q),
             "inspect" => {
                 let started = Instant::now();
@@ -414,20 +444,20 @@ impl Service {
                     return Err("Stop recording before changing devices".into());
                 }
                 let name = text(q, "port")?;
-                let mut port = serialport::new(name, 115200)
-                    .timeout(Duration::from_millis(800))
-                    .open()
-                    .map_err(io_error)?;
-                port.write_data_terminal_ready(true).map_err(io_error)?;
-                port.write_request_to_send(false).map_err(io_error)?;
-                let _ = port.clear(serialport::ClearBuffer::All);
-                let status = transact(port.as_mut(), "status")?;
-                if status.get("protocol").and_then(Value::as_u64) != Some(1) {
+                let mut port = match name {
+                    #[cfg(any(windows, target_os = "ios"))]
+                    "ble" => Receiver::Bluetooth(crate::ble::Connection::connect()?),
+                    _ => open_usb(name)?,
+                };
+                let status = transact(&mut port, "status")?;
+                if port.name() == "USB" && status["protocol"] != 1 {
                     return Err(
                         "Unsupported Aevia application protocol; install the matching firmware"
                             .into(),
                     );
                 }
+                self.status = format!("Connected via {}", port.name());
+                self.last_full_status = None;
                 self.port = Some(port);
                 self.port_name = Some(name.into());
                 self.latest = Value::Null;
@@ -436,7 +466,6 @@ impl Service {
                 self.imu_rate_sample = None;
                 self.imu_rate = None;
                 self.merge_device_reply(status);
-                self.status = "Connected via USB".into();
                 Ok(self.state())
             }
             "disconnect" => {
@@ -453,7 +482,14 @@ impl Service {
                 Ok(self.state())
             }
             "stop" => {
-                self.stop()?;
+                if self.capture.is_none() && self.latest["recording"] == true {
+                    if let Some(port) = self.port.as_mut().filter(|p| p.name() == "Bluetooth") {
+                        let reply = transact(port, "stop")?;
+                        self.merge_device_reply(reply);
+                    }
+                } else {
+                    self.stop()?;
+                }
                 Ok(self.state())
             }
             "sessions" => {
@@ -550,7 +586,7 @@ impl Service {
         let Some(port) = self.port.as_mut() else {
             return Ok(());
         };
-        if view == "idle" {
+        if view == "idle" || (view == "board_data" && port.name() != "USB") {
             return Ok(());
         }
         let diagnostics = matches!(view, "diagnostics" | "receiver");
@@ -563,8 +599,13 @@ impl Service {
         let full_due = self
             .last_full_status
             .is_none_or(|t| t.elapsed() >= interval);
-        let op = if self.last_full_status.is_none()
-            || view == "diagnostics"
+        let op = if port.name() == "Bluetooth" {
+            if self.capture.is_some() {
+                return Ok(());
+            }
+            "display"
+        } else if self.last_full_status.is_none()
+            || matches!(view, "diagnostics" | "board_data")
             || (diagnostics && full_due)
         {
             "status"
@@ -577,7 +618,7 @@ impl Service {
         } else {
             return Ok(());
         };
-        match transact(port.as_mut(), op) {
+        match transact(port, op) {
             Ok(value) => {
                 self.merge_device_reply(value);
                 self.sequence += 1;
@@ -796,12 +837,15 @@ impl Service {
             .as_ref()
             .and_then(|c| c.session.samples.last())
             .map(|s| s.time_s);
-        let mut device = json!({"connected":self.port.is_some(),"port":self.port_name,"status":self.status,
+        let mut device = json!({"connected":self.port.is_some(),"port":self.port_name,"transport":self.port.as_ref().map(Receiver::name),"status":self.status,
             "display_v1":self.latest["display_v1"],"recording":self.latest.get("recording"),
             "satellites":gnss.get("satellites"),"fix_quality":if stale {"stale"} else if valid {"valid"} else {"no fix"},
             "battery_percent":if stale {None} else if let Some(p)=self.latest.get("display_battery"){Some(p)}else if !diagnostics_stale {self.latest["battery"].get("percent")} else {None},
             "gnss_hz":if stale||(diagnostics_stale && self.latest.get("display_battery").is_none()){None}else{self.gnss_rate},
             "imu":{"age_us":self.sensor_age_us("imu"),"latest":self.latest["imu"].get("latest")}});
+        if view == "board_data" && self.port.as_ref().is_some_and(|p| p.name() == "USB") {
+            device["sd"] = self.latest["sd"].clone();
+        }
         if matches!(view, "all" | "receiver" | "diagnostics") {
             let mut gnss_health = self.latest["gnss"].clone();
             if gnss_health.is_object() {
@@ -832,7 +876,7 @@ impl Service {
                 "acquisition_profile":self.latest.get("acquisition_profile"),"ppk":ppk_health,"imu":imu,
                 "dropped":self.latest.get("dropped"),"usb_queue":self.latest.get("usb_queue"),"gnss":gnss_health,"gnss_uart":self.latest.get("gnss_uart"),"gnss_byte_queue":self.latest.get("gnss_byte_queue"),
             "imu_status":self.latest["imu"].get("status"),"storage":self.latest.get("storage"),
-            "storage_status":self.latest.get("storage"),"sd":self.latest.get("sd"),"battery":self.latest.get("battery"),"bluetooth":"unavailable",
+            "storage_status":self.latest.get("storage"),"sd":self.latest.get("sd"),"battery":self.latest.get("battery"),"bluetooth":self.latest.get("bluetooth"),
             "navigation":self.latest.get("navigation"),"installation":self.latest.get("installation"),"capture_timing":self.latest.get("capture_timing"),
             "imu_diagnostics":self.latest.get("imu_diagnostics"),
             "led":self.latest.get("led"),"display":self.latest.get("display"),"buttons":self.latest.get("buttons"),"accessories":self.latest.get("accessories")});
@@ -904,7 +948,8 @@ impl Service {
             drag: self.preferences.drag.clone(),
             analysis: Analysis::default(),
         };
-        let display_only = self.latest["display_v1"] == true && q["display_only"] == true;
+        let display_only = port.name() == "Bluetooth"
+            || (self.latest["display_v1"] == true && q["display_only"] == true);
         if display_only {
             session.source = "V2 Mini display snapshots".into();
             session.provenance = json!({"kind":"display_v1","nominal_hz":5,"warnings":[
@@ -929,7 +974,7 @@ impl Service {
         writeln!(journal, "{}", json!({"session":session})).map_err(io_error)?;
         journal.sync_data().map_err(io_error)?;
         let response = transact(
-            port.as_mut(),
+            port,
             if display_only {
                 "start_display"
             } else {
@@ -1008,7 +1053,7 @@ impl Service {
         }
         if let Some(port) = self.port.as_mut() {
             let pending_tail;
-            match transact(port.as_mut(), "stop") {
+            match transact(port, "stop") {
                 Ok(value) => {
                     pending_tail = if self.capture.as_ref().is_some_and(|c| c.display_only) {
                         None
@@ -1087,8 +1132,8 @@ impl Service {
         }
         self.status = if capture.interrupted {
             "Incomplete recording saved; capture journal retained".into()
-        } else if self.port.is_some() {
-            "Connected via USB".into()
+        } else if let Some(port) = &self.port {
+            format!("Connected via {}", port.name())
         } else {
             "Disconnected; recording saved".into()
         };
@@ -1119,7 +1164,7 @@ impl Service {
         }
         self.collect_with_tail(budget, tail_records, |service| {
             let query = service.next_collection_query();
-            transact_query(service.port.as_mut().unwrap().as_mut(), &query)
+            transact_query(service.port.as_mut().unwrap(), &query)
         })
     }
     #[cfg(test)]
@@ -1157,7 +1202,7 @@ impl Service {
                             .is_some_and(|(now, start)| now != start);
                         let clock_reset = value["uptime_us"]
                             .as_u64()
-                            .zip(capture.health_start["started_at_us"].as_u64())
+                            .zip(capture.health_start["observed_at_us"].as_u64())
                             .is_some_and(|(now, start)| now < start);
                         if session_changed || clock_reset {
                             // Saving this capture must never send Stop to a new receiver session.
@@ -1277,7 +1322,7 @@ impl Service {
                     self.status =
                         format!("Connection lost: {error}. Stop to save received recording.");
                     if let Some(capture) = self.capture.as_mut() {
-                        interrupt_capture(capture, &format!("USB connection lost: {error}"));
+                        interrupt_capture(capture, &format!("Receiver connection lost: {error}"));
                     }
                     break;
                 }
@@ -1527,12 +1572,23 @@ impl Service {
             json!({"path":path.to_string_lossy(),"samples":s.samples.len(),"format":format,"paired_files":paired_files,"warnings":if format=="json"{vec![]}else{vec!["CSV/GPX exports contain projected GNSS data only. Use JSON and its paired files to retain full raw evidence."]}}),
         )
     }
+    fn storage_port(&mut self) -> Result<&mut Receiver, String> {
+        let port = self
+            .port
+            .as_mut()
+            .filter(|p| p.name() == "USB")
+            .ok_or("Connect the receiver over USB to browse recordings")?;
+        if self.capture.is_some() || self.latest["recording"] == true {
+            return Err("Stop recording before browsing the SD card".into());
+        }
+        Ok(port)
+    }
     fn device_sessions(&mut self) -> Result<Value, String> {
-        let port = self.port.as_mut().ok_or("Connect a V2 Mini first")?;
+        let port = self.storage_port()?;
         let mut files = vec![];
         let mut after = 0u64;
         for _ in 0..1000 {
-            let response = transact_query(port.as_mut(), &json!({"op":"files","after":after}))?;
+            let response = transact_query(port, &json!({"op":"files","after":after}))?;
             let Some(file) = response.get("file").filter(|v| !v.is_null()) else {
                 return Ok(json!(files));
             };
@@ -1547,15 +1603,14 @@ impl Service {
         }
         Err("Device file listing exceeds 1000 sessions".into())
     }
-    fn download(&mut self, q: &Value) -> Result<Value, String> {
+    fn device_file(&mut self, q: &Value) -> Result<(u64, u64, bool), String> {
         let id = q
             .get("id")
             .and_then(Value::as_u64)
             .ok_or("Missing numeric device file id")?;
-        let batch = self.latest["read_blocks"].as_u64().unwrap_or(0).min(8);
-        let port = self.port.as_mut().ok_or("Connect a V2 Mini first")?;
+        let port = self.storage_port()?;
         let entry = transact_query(
-            port.as_mut(),
+            port,
             &json!({"op":"files","after":id.checked_sub(1).ok_or("Invalid file id")?}),
         )?;
         let entry = &entry["file"];
@@ -1566,7 +1621,24 @@ impl Service {
         if bytes == 0 || bytes % 512 != 0 || bytes > MAX_CAPTURE_BYTES {
             return Err("Invalid or oversized device recording".into());
         }
+        let closed = entry["closed"].as_bool().ok_or("Missing device file state")?;
+        Ok((id, bytes, closed))
+    }
+    fn device_session_preview(&mut self, q: &Value) -> Result<Value, String> {
+        let (id, bytes, closed) = self.device_file(q)?;
+        let port = self.storage_port()?;
+        crate::board_recording::preview(id, bytes / 512, closed, |sector| {
+            let response = transact_query(port, &json!({"op":"read","id":id,"sector":sector}))?;
+            download_chunk(&response, id, sector, 1, false)?
+                .try_into()
+                .map_err(|_| "Invalid sector length".into())
+        })
+    }
+    fn download(&mut self, q: &Value) -> Result<Value, String> {
+        let (id, bytes, _) = self.device_file(q)?;
+        let batch = self.latest["read_blocks"].as_u64().unwrap_or(0).min(8);
         let path = self.root.join(format!("download-{id}-{}.aev", now_ms()));
+        let port = self.storage_port()?;
         let mut file = OpenOptions::new()
             .create_new(true)
             .write(true)
@@ -1581,7 +1653,7 @@ impl Service {
             } else {
                 json!({"op":"read","id":id,"sector":sector})
             };
-            let response = transact_query(port.as_mut(), &query)?;
+            let response = transact_query(port, &query)?;
             let chunk = download_chunk(&response, id, sector, count, batch > 0)?;
             file.write_all(&chunk).map_err(io_error)?;
             sector += count;
@@ -1888,8 +1960,11 @@ fn append_record(c: &mut Capture, record: Value) -> Result<(), String> {
     append_record_with_limit(c, record, MAX_CAPTURE_DATA_BYTES)
 }
 fn before_capture_start(capture: &Capture, record: &Value) -> bool {
-    capture.health_start["started_at_us"]
-        .as_u64()
+    let mut start = capture.health_start["started_at_us"].as_u64();
+    if start.is_none() && capture.display_only {
+        start = capture.health_start["observed_at_us"].as_u64();
+    }
+    start
         .zip(record["t_us"].as_u64())
         .is_some_and(|(start, at)| at < start)
 }
@@ -2188,6 +2263,29 @@ fn append_record_with_limit(
     Ok(())
 }
 
+#[cfg(not(target_os = "ios"))]
+fn open_usb(name: &str) -> Result<Receiver, String> {
+    let mut port = serialport::new(name, 115200)
+        .timeout(Duration::from_millis(800))
+        .open()
+        .map_err(io_error)?;
+    port.write_data_terminal_ready(true).map_err(io_error)?;
+    port.write_request_to_send(false).map_err(io_error)?;
+    let _ = port.clear(serialport::ClearBuffer::All);
+    Ok(Receiver::Usb(port))
+}
+
+#[cfg(target_os = "ios")]
+fn open_usb(_: &str) -> Result<Receiver, String> {
+    Err("Use Bluetooth to connect on iOS".into())
+}
+
+#[cfg(target_os = "ios")]
+fn devices() -> Result<Value, String> {
+    Ok(json!([]))
+}
+
+#[cfg(not(target_os = "ios"))]
 fn devices() -> Result<Value, String> {
     Ok(json!(serialport::available_ports().map_err(io_error)?.into_iter().filter_map(|p|{
     match p.port_type {SerialPortType::UsbPort(info) if info.vid==0xc0c0 && (info.pid==0xfeed || info.pid==0xcafe)=>Some(json!({"port":p.port_name,"name":info.product.unwrap_or_else(||"Aevia V2 Mini".into()),"recovery":info.pid==0xcafe})),_=>None}
@@ -2255,27 +2353,7 @@ fn decode_reply(frame: &[u8]) -> Result<Value, String> {
     }
     if let Some(payload) = value.get("d") {
         let bytes = crate::binary::from_base64(payload.as_str().ok_or("Invalid display payload")?)?;
-        let (frame, rest) =
-            postcard::take_from_bytes::<crate::display::DisplayFrame>(&bytes).map_err(io_error)?;
-        if !rest.is_empty() {
-            return Err("Trailing display bytes".into());
-        }
-        let fix = frame.fix.map(|f| {
-            json!({"kind":"gnss","t_us":f.t_us,
-            "gps_week":f.gps_week,"gps_tow_ms":f.gps_tow_ms,"lat":f.lat,"lon":f.lon,
-            "alt_m":f.altitude_m,"speed_mps":f.speed_mps,"heading_deg":f.heading_deg,
-            "vertical_mps":f.vertical_mps,"hacc_m":f.hacc_m,"latency_ms":f.latency_ms,
-            "satellites":f.satellites,"valid":f.valid})
-        });
-        let imu = frame
-            .imu
-            .map(|i| json!({"kind":"imu","t_us":i.t_us,"valid":i.valid,"accel":i.accel}));
-        return Ok(
-            json!({"compact":true,"display_v1":true,"uptime_us":frame.uptime_us,
-            "display_battery":frame.battery_percent,"session":frame.session,"recording":frame.recording,
-            "stopped_at_us":frame.stopped_at_us,"rejected_fix_count":frame.rejected_fix_count,"gnss":{"count":frame.gnss_count,"latest":fix},
-            "imu":{"latest":imu},"pending":0}),
-        );
+        return decode_display(&bytes);
     }
     if value["binary"] == true {
         if value.get("samples").is_some_and(|samples| {
@@ -2298,10 +2376,52 @@ fn decode_reply(frame: &[u8]) -> Result<Value, String> {
     }
     Ok(value)
 }
-fn transact(port: &mut dyn SerialPort, op: &str) -> Result<Value, String> {
+fn decode_display(bytes: &[u8]) -> Result<Value, String> {
+    let (frame, rest) =
+        postcard::take_from_bytes::<crate::display::DisplayFrame>(bytes).map_err(io_error)?;
+    if !rest.is_empty() {
+        return Err("Trailing display bytes".into());
+    }
+    let fix = frame.fix.map(|f| {
+        json!({"kind":"gnss","t_us":f.t_us,
+            "gps_week":f.gps_week,"gps_tow_ms":f.gps_tow_ms,"lat":f.lat,"lon":f.lon,
+            "alt_m":f.altitude_m,"speed_mps":f.speed_mps,"heading_deg":f.heading_deg,
+            "vertical_mps":f.vertical_mps,"hacc_m":f.hacc_m,"latency_ms":f.latency_ms,
+            "satellites":f.satellites,"valid":f.valid})
+    });
+    let imu = frame
+        .imu
+        .map(|i| json!({"kind":"imu","t_us":i.t_us,"valid":i.valid,"accel":i.accel}));
+    Ok(
+        json!({"compact":true,"display_v1":true,"uptime_us":frame.uptime_us,
+            "display_battery":frame.battery_percent,"session":frame.session,"recording":frame.recording,
+            "stopped_at_us":frame.stopped_at_us,"rejected_fix_count":frame.rejected_fix_count,"gnss":{"count":frame.gnss_count,"latest":fix},
+            "imu":{"latest":imu},"pending":0}),
+    )
+}
+
+fn transact(port: &mut Receiver, op: &str) -> Result<Value, String> {
     transact_query(port, &json!({"op":op}))
 }
-fn transact_query(port: &mut dyn SerialPort, query: &Value) -> Result<Value, String> {
+fn transact_query(port: &mut Receiver, query: &Value) -> Result<Value, String> {
+    match port {
+        #[cfg(not(target_os = "ios"))]
+        Receiver::Usb(port) => usb_query(port.as_mut(), query),
+        #[cfg(any(windows, target_os = "ios"))]
+        Receiver::Bluetooth(link) => {
+            match query["op"].as_str() {
+                Some("status" | "display") => {}
+                Some("start_display") => link.record(true)?,
+                Some("stop") => link.record(false)?,
+                _ => return Err("Connect via USB for this operation".into()),
+            }
+            decode_display(&link.read()?)
+        }
+    }
+}
+
+#[cfg(not(target_os = "ios"))]
+fn usb_query(port: &mut dyn SerialPort, query: &Value) -> Result<Value, String> {
     let operation = query["op"].as_str().unwrap_or("");
     let timeout = if matches!(
         operation,

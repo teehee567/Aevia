@@ -78,6 +78,17 @@ class DiagnosticsView extends StatelessWidget {
       );
     }
 
+    if (c.bluetooth) {
+      return EmptyState(
+        'Full diagnostics use USB',
+        'Live telemetry is available in Live.',
+        icon: Icons.bluetooth_connected,
+        action: OutlinedButton(
+          onPressed: () => c.navigate(0),
+          child: const Text('Open Live'),
+        ),
+      );
+    }
     final device = c.device;
     final recordingMax = c.recording
         ? object(c.live['analysis'])['max_speed_mps']

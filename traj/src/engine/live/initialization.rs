@@ -188,7 +188,7 @@ impl LiveSession<'_, '_> {
         };
         self.internal
             .core
-            .initialize(&config, &seed, &self.psram.history)
+            .initialize(&config, &seed, &mut self.psram.history)
             .map_err(map_core_step_error)?;
         let initial_ingest = {
             let mut core = LiveCore::attach(&mut self.internal.core, &mut self.psram.history);

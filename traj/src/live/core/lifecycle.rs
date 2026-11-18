@@ -71,7 +71,7 @@ impl<'a> LiveCore<'a> {
         next_clock_from_previous: &[[f32; crate::live::MAX_CONSIDER]; 2],
         innovation_covariance_upper: [f32; 3],
     ) -> Result<(), LiveCoreError> {
-        if self.scheduler.queued_measurements() != 0 || self.history.smoothing.has_tail() {
+        if self.history.scheduler.queued_measurements() != 0 || self.history.smoothing.has_tail() {
             return Err(LiveCoreError::ClockTransitionRequiresReinitialization);
         }
         let state = &mut *self.state;
@@ -99,12 +99,15 @@ impl<'a> LiveCore<'a> {
             return false;
         }
         let mut safe = true;
-        let result = self.scheduler.try_for_each_measurement(|measurement| {
-            if measurement.key.time >= at {
-                safe = false;
-            }
-            Ok::<(), ()>(())
-        });
+        let result = self
+            .history
+            .scheduler
+            .try_for_each_measurement(|measurement| {
+                if measurement.key.time >= at {
+                    safe = false;
+                }
+                Ok::<(), ()>(())
+            });
         result.is_ok() && safe
     }
 
@@ -161,11 +164,13 @@ impl<'a> LiveCore<'a> {
             .smoothing
             .validate_reanchor(&transform)
             .map_err(LiveCoreError::Reanchor)?;
-        self.scheduler.try_for_each_measurement(|scheduled| {
-            mapped_gnss(scheduled.value, &transform)
-                .validate()
-                .map_err(LiveCoreError::Eskf)
-        })?;
+        self.history
+            .scheduler
+            .try_for_each_measurement(|scheduled| {
+                mapped_gnss(scheduled.value, &transform)
+                    .validate()
+                    .map_err(LiveCoreError::Eskf)
+            })?;
 
         // Raw retained IMU quantities and partial preintegrations are all in
         // body coordinates. Validate that support before committing, but do
@@ -220,9 +225,11 @@ impl<'a> LiveCore<'a> {
         self.history.corrected.apply_reanchor(&transform);
         self.history.predicted.apply_reanchor(&transform);
         self.history.smoothing.apply_reanchor(&transform);
-        self.scheduler.for_each_measurement_mut(|scheduled| {
-            scheduled.value = mapped_gnss(scheduled.value, &transform);
-        });
+        self.history
+            .scheduler
+            .for_each_measurement_mut(|scheduled| {
+                scheduled.value = mapped_gnss(scheduled.value, &transform);
+            });
         Ok(())
     }
 }

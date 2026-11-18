@@ -144,7 +144,7 @@ fn predictor_frontier_uses_nominal_velocity_across_position_correction_case() {
     tuning.fusion_delay_ns = 100_000_000;
     tuning.navigation_period_ns = 5_000_000;
     tuning.predictor.velocity_reset_threshold_mps = 5.0;
-    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &history).unwrap();
+    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &mut history).unwrap();
     let mut core = LiveCore::attach(&mut state, &mut history);
     let start = core.corrected_endpoint;
     let mut end = start;
@@ -158,7 +158,8 @@ fn predictor_frontier_uses_nominal_velocity_across_position_correction_case() {
     core.predictor.state.time = SessionTime::from_ns(100_000_000);
     core.filter.state.time = SessionTime::from_ns(3_750_000);
     core.filter.state.position_n.z = -0.025;
-    core.scheduler
+    core.history
+        .scheduler
         .observe_trusted_imu(SessionTime::from_ns(150_000_000))
         .unwrap();
     let pending = PendingCorrectedSegment {
@@ -186,7 +187,7 @@ fn predictor_hard_reset_updates_retained_history_before_the_next_frontier_case()
     tuning.fusion_delay_ns = 100_000_000;
     tuning.navigation_period_ns = 5_000_000;
     tuning.predictor.attitude_reset_threshold_rad = 0.5;
-    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &history).unwrap();
+    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &mut history).unwrap();
     let mut core = LiveCore::attach(&mut state, &mut history);
     let mut endpoint = core.corrected_endpoint;
     for index in 1..=20 {
@@ -199,7 +200,8 @@ fn predictor_hard_reset_updates_retained_history_before_the_next_frontier_case()
     }
     core.predictor.state = endpoint.state;
     core.predictor_endpoint = endpoint;
-    core.scheduler
+    core.history
+        .scheduler
         .observe_trusted_imu(SessionTime::from_ns(150_000_000))
         .unwrap();
     let corrected_orientation = UnitQuaternion::from_axis_angle(&Vector3::z_axis(), 0.7);
@@ -271,7 +273,7 @@ fn smoothed_run(credits: u16, with_gnss: bool) -> (std::vec::Vec<DenseSegment>, 
     let mut history = LiveCoreHistory::new();
     let mut tuning = config();
     tuning.smoothing_lag_ns = 100_000_000;
-    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &history).unwrap();
+    let mut state = LiveCoreState::new(tuning, seed().borrowed(), &mut history).unwrap();
     let mut core = LiveCore::attach(&mut state, &mut history);
     if with_gnss {
         core.ingest_gnss(gnss(100_000_000, 1, 1.0)).unwrap();
@@ -398,7 +400,8 @@ fn ecef_orientation(
 
 fn first_queued(core: &LiveCore<'_>) -> Scheduled<GnssObservation> {
     let mut result = None;
-    core.scheduler
+    core.history
+        .scheduler
         .try_for_each_measurement(|entry| {
             if result.is_none() {
                 result = Some(*entry);
@@ -420,7 +423,7 @@ fn construction_reports_static_memory_and_rejects_dirty_history() {
         let mut state = LiveCoreState::placeholder();
         let seed = seed();
         assert_eq!(
-            state.initialize(&config(), &seed.borrowed(), &history),
+            state.initialize(&config(), &seed.borrowed(), &mut history),
             Err(LiveCoreError::HistoryNotEmptyOrInvalidSeed)
         );
         assert!(!state.is_active());
@@ -431,13 +434,13 @@ fn construction_reports_static_memory_and_rejects_dirty_history() {
 #[test]
 fn in_place_initialization_matches_constructor_and_failure_resets() {
     with_large_stack(|| {
-        let history = LiveCoreHistory::new();
+        let mut history = LiveCoreHistory::new();
         let config = config();
         let seed = seed();
-        let constructed = LiveCoreState::new(config, seed.borrowed(), &history).unwrap();
+        let constructed = LiveCoreState::new(config, seed.borrowed(), &mut history).unwrap();
         let mut in_place = LiveCoreState::placeholder();
         in_place
-            .initialize(&config, &seed.borrowed(), &history)
+            .initialize(&config, &seed.borrowed(), &mut history)
             .unwrap();
         assert_eq!(in_place, constructed);
         assert!(in_place.is_active());
@@ -445,7 +448,7 @@ fn in_place_initialization_matches_constructor_and_failure_resets() {
         let mut invalid = config;
         invalid.navigation_period_ns = 0;
         assert_eq!(
-            in_place.initialize(&invalid, &seed.borrowed(), &history),
+            in_place.initialize(&invalid, &seed.borrowed(), &mut history),
             Err(LiveCoreError::InvalidConfiguration)
         );
         assert!(!in_place.is_active());
@@ -458,7 +461,7 @@ fn in_place_initialization_matches_constructor_and_failure_resets() {
 fn delayed_frontier_and_present_predictor_are_distinct() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         for index in 0..5 {
             let start = index * 2_500_000;
@@ -483,7 +486,7 @@ fn delayed_frontier_and_present_predictor_are_distinct() {
 fn same_epoch_gnss_is_applied_before_segment_becomes_immutable() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         assert_eq!(
             core.ingest_gnss(gnss(2_500_000, 1, 1.0)).unwrap(),
@@ -511,7 +514,7 @@ fn same_epoch_gnss_is_applied_before_segment_becomes_immutable() {
 fn gnss_pair_duplicate_rejection_leaves_live_queue_unchanged() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         let duplicate = gnss(2_500_000, 1, 1.0);
         assert_eq!(
@@ -520,12 +523,12 @@ fn gnss_pair_duplicate_rejection_leaves_live_queue_unchanged() {
                 EnqueueDisposition::Duplicate
             ))
         );
-        assert_eq!(core.scheduler.queued_measurements(), 0);
+        assert_eq!(core.history.scheduler.queued_measurements(), 0);
         assert_eq!(
             core.ingest_gnss(gnss(2_500_000, 2, 2.0)).unwrap(),
             EnqueueDisposition::Queued
         );
-        assert_eq!(core.scheduler.queued_measurements(), 1);
+        assert_eq!(core.history.scheduler.queued_measurements(), 1);
     });
 }
 
@@ -533,7 +536,7 @@ fn gnss_pair_duplicate_rejection_leaves_live_queue_unchanged() {
 fn one_drain_preserves_all_accepted_gnss_quality_transitions_in_order() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         let first = gnss(2_500_000, 1, 0.0);
         let mut second = gnss(5_000_000, 2, 0.0);
@@ -581,7 +584,7 @@ fn queued_previous_segment_measurement_blocks_clock_relabel_transactionally() {
         seeded.active_consider = 2;
         seeded.consider_covariance[(0, 0)] = 1.0;
         seeded.consider_covariance[(1, 1)] = 1.0;
-        let mut state = LiveCoreState::new(config(), seeded.borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seeded.borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         core.ingest_gnss(gnss(2_500_000, 1, 1.0)).unwrap();
         let before = core.filter;
@@ -594,7 +597,7 @@ fn queued_previous_segment_measurement_blocks_clock_relabel_transactionally() {
             Err(LiveCoreError::ClockTransitionRequiresReinitialization)
         );
         assert_eq!(core.filter, before);
-        assert_eq!(core.scheduler.queued_measurements(), 1);
+        assert_eq!(core.history.scheduler.queued_measurements(), 1);
     });
 }
 
@@ -602,7 +605,7 @@ fn queued_previous_segment_measurement_blocks_clock_relabel_transactionally() {
 fn short_gap_is_materialized_and_marks_corrected_output_degraded() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         core.ingest_imu(imu(0, 2_500_000)).unwrap();
         let disposition = core.ingest_imu(imu(5_000_000, 7_500_000)).unwrap();
@@ -631,7 +634,7 @@ fn short_gap_is_materialized_and_marks_corrected_output_degraded() {
 fn finish_flushes_partial_predictor_and_drains_exactly_to_last_imu() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         core.ingest_imu(imu(0, 1_000_000)).unwrap();
         let finish = core.finish().unwrap();
@@ -649,7 +652,7 @@ fn finish_flushes_partial_predictor_and_drains_exactly_to_last_imu() {
 fn an_insufficient_quota_does_not_consume_raw_evidence() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         for index in 0..5 {
             let start = index * 2_500_000;
@@ -669,7 +672,7 @@ fn an_insufficient_quota_does_not_consume_raw_evidence() {
 fn partial_propagation_planning_is_charged_without_committing_evidence() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         for index in 0..10 {
             let start = index * 1_250_000;
@@ -716,7 +719,7 @@ fn reanchor_is_atomic_and_preserves_all_retained_physical_state() {
         let new = anchor(2, Vector3::new(6_000_120.0, 970.0, 2_008.0), 0.42);
         let old_again = EcefAnchor::new(3, old.origin_ecef_m, old.ecef_to_n).unwrap();
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
 
         let mut delayed = gnss(15_000_000, 77, 18.0);
@@ -738,7 +741,7 @@ fn reanchor_is_atomic_and_preserves_all_retained_physical_state() {
         core.drain(&mut quota).unwrap();
         assert_eq!(core.history.corrected.len(), 1);
         assert!(core.pending_corrected_segment.is_some());
-        assert_eq!(core.scheduler.queued_measurements(), 1);
+        assert_eq!(core.history.scheduler.queued_measurements(), 1);
 
         let filter_before = core.filter;
         let present_before = core.present_state().unwrap();
@@ -904,7 +907,7 @@ fn gnss_fusion_uses_measurement_epoch_imu_not_packet_arrival_values() {
         arrival_force: Vector3<f32>,
     ) -> (NavState, NavMatrix, DrainReport) {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         let mut observation = gnss(2_500_000, 1, 0.1);
         observation.value.velocity_n = Some(Vector3::zeros());
@@ -955,7 +958,7 @@ fn held_sample_covariance_is_invariant_to_navigation_cadence() {
             .gyro_bias_random_walk_covariance_density
             .fill(0.0);
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(configuration, seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(configuration, seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         let mut sample = imu(0, 10_000_000);
         sample.omega_ib_b.fill(0.0);
@@ -987,7 +990,7 @@ fn gnss_sample_correlation_uses_first_and_right_owned_supports() {
     with_large_stack(|| {
         for epoch in [0, 4_999_999, 5_000_000, 5_000_001] {
             let mut history = LiveCoreHistory::new();
-            let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+            let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
             let mut core = LiveCore::attach(&mut state, &mut history);
             let mut first = imu(0, 5_000_000);
             first.omega_ib_b = Vector3::new(0.1, 0.2, 0.3);
@@ -1066,7 +1069,7 @@ fn gnss_sample_correlation_uses_first_and_right_owned_supports() {
 fn initialization_sample_cross_rotates_with_navigation_and_clears() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         {
             let mut core = LiveCore::attach(&mut state, &mut history);
             let mut sample = imu(0, 5_000_000);
@@ -1109,7 +1112,7 @@ fn initialization_sample_cross_rotates_with_navigation_and_clears() {
 fn a_measurement_at_gap_start_retains_the_held_sample_correlation() {
     fn run(with_measurement: bool) -> (NavMatrix, GapNavCrossCovariance) {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(config(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(config(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         let mut sample = imu(0, 5_000_000);
         sample.accel_sample_covariance =

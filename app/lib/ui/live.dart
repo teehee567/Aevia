@@ -34,6 +34,11 @@ class _LiveViewState extends State<LiveView> {
           runSpacing: 10,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
+            if (c.device['recording'] == true && c.bluetooth && !c.recording)
+              OutlinedButton(
+                onPressed: c.busy ? null : c.stop,
+                child: const Text('Stop receiver recording'),
+              ),
             Status(
               c.connected
                   ? c.stale
@@ -223,7 +228,7 @@ class _LiveViewState extends State<LiveView> {
                       label: const Text('Create track on map'),
                     ),
                   FilledButton.icon(
-                    onPressed: c.busy || !c.connected
+                    onPressed: c.busy || (!c.connected && !c.recording)
                         ? null
                         : c.recording
                         ? c.stop
@@ -245,7 +250,11 @@ class _LiveViewState extends State<LiveView> {
                 ],
               ),
               const SizedBox(height: 12),
-              if (c.device['display_v1'] == true)
+              if (c.bluetooth)
+                const Text(
+                  'Recording saves full-rate data on the receiver SD card and a 5 Hz session in the app.',
+                )
+              else if (c.device['display_v1'] == true)
                 CheckboxListTile(
                   value: c.recording
                       ? live['full_rate_copy'] == true

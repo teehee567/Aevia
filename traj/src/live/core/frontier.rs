@@ -35,7 +35,7 @@ impl<'a> LiveCore<'a> {
     ) -> Result<DrainReport, LiveCoreError> {
         let mut report = DrainReport::new();
         loop {
-            let scheduler_target = match self.scheduler.target() {
+            let scheduler_target = match self.history.scheduler.target() {
                 Ok(target) => target,
                 Err(SchedulerError::NoTrustedImu) => {
                     report.blocked_on = DrainBlock::AwaitingDelayedFrontier;
@@ -82,12 +82,15 @@ impl<'a> LiveCore<'a> {
             }
 
             let flush_smoothing = (boundary_reachable && self.filter.state.time == target)
-                || (self.scheduler.is_finishing() && self.filter.state.time == scheduler_target);
+                || (self.history.scheduler.is_finishing()
+                    && self.filter.state.time == scheduler_target);
             if self.drain_smoothing(flush_smoothing, quota, &mut report)? {
                 return Ok(report);
             }
 
-            if self.scheduler.processed_frontier().is_none() && self.filter.state.time <= target {
+            if self.history.scheduler.processed_frontier().is_none()
+                && self.filter.state.time <= target
+            {
                 if !quota.take(FRONTIER_COMMIT_CREDITS) {
                     report.blocked_on = DrainBlock::QuotaExhausted;
                     return Ok(report);
@@ -96,7 +99,8 @@ impl<'a> LiveCore<'a> {
                 self.corrected_endpoint.covariance =
                     DenseCovariance::from_navigation(&self.filter.covariance);
                 let frontier = self.filter.state.time;
-                self.scheduler
+                self.history
+                    .scheduler
                     .commit_frontier(frontier)
                     .map_err(LiveCoreError::Scheduler)?;
                 self.history.published_frontier.get_or_insert(frontier);
@@ -119,7 +123,8 @@ impl<'a> LiveCore<'a> {
     }
 
     pub(super) fn next_measurement_time(&self) -> Result<Option<SessionTime>, LiveCoreError> {
-        self.scheduler
+        self.history
+            .scheduler
             .next_measurement()
             .map(|entry| entry.map(|scheduled| scheduled.key.time))
             .map_err(LiveCoreError::Scheduler)
@@ -131,6 +136,7 @@ impl<'a> LiveCore<'a> {
         report: &mut DrainReport,
     ) -> Result<(), LiveCoreError> {
         let scheduled = *self
+            .history
             .scheduler
             .next_measurement()
             .map_err(LiveCoreError::Scheduler)?
@@ -233,6 +239,7 @@ impl<'a> LiveCore<'a> {
             return Err(LiveCoreError::InternalInvariant);
         }
         let popped = self
+            .history
             .scheduler
             .pop_next_measurement()
             .map_err(LiveCoreError::Scheduler)?
@@ -336,7 +343,8 @@ impl<'a> LiveCore<'a> {
 
         self.retain_or_publish_segment(segment)?;
         let frontier = self.filter.state.time;
-        self.scheduler
+        self.history
+            .scheduler
             .commit_frontier(frontier)
             .map_err(LiveCoreError::Scheduler)?;
         if self
@@ -367,10 +375,14 @@ impl<'a> LiveCore<'a> {
     }
 
     pub(super) fn is_drained_internal(&self) -> Result<bool, LiveCoreError> {
-        if !self.scheduler.is_finishing() || self.pending_corrected_segment.is_some() {
+        if !self.history.scheduler.is_finishing() || self.pending_corrected_segment.is_some() {
             return Ok(false);
         }
-        let target = self.scheduler.target().map_err(LiveCoreError::Scheduler)?;
+        let target = self
+            .history
+            .scheduler
+            .target()
+            .map_err(LiveCoreError::Scheduler)?;
         Ok(self.filter.state.time == target
             && self.next_measurement_time()?.is_none()
             && !self.history.smoothing.has_tail())

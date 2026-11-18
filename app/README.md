@@ -31,14 +31,18 @@ cargo test -p rust_lib_app
 ```
 
 The interface adapts to compact windows, with a navigation drawer below 880 px.
-The USB receiver workflow is implemented through the Rust serial-port service.
-Android/iOS USB access and Bluetooth transport are not implemented by this app.
-The presence of Flutter platform scaffolding is not a claim of hardware support
-on those platforms.
+On Windows or iOS, open **Receiver → Connect Bluetooth**, allow Bluetooth
+access, then open **Live**. Keep a single available V2 Mini nearby during
+discovery. Start and stop recording from Live to save a sampled session in
+the app and full-rate data on the receiver SD card. Windows also supports USB
+for detailed diagnostics, full-rate host capture and SD downloads.
 
-For a recording made on the device's SD card, connect the receiver, stop any
-active recording, and open **Receiver → Device recordings → Refresh**. Use
-**Download & analyze** on a saved recording to transfer it into the app library.
+To browse the receiver's SD card, connect over USB, stop recording, and open
+**Board data → Refresh** below Diagnostics. The directory lists the newest
+file IDs first, their committed sizes, and whether each file closed successfully.
+**Preview** reads up to four sectors for the file's recorded metadata, start
+uptime and, when available, duration and SD queue drops at closure.
+**Download & analyze** transfers the selected file into the app library.
 Keep the USB cable connected while the progress indicator is shown. An open
 recording cannot be downloaded while the device is actively recording.
 An interrupted file can be downloaded while stopped; its committed records are
@@ -103,6 +107,9 @@ use full status for preview and their existing raw protocol for host recordings.
 | Full diagnostics and capabilities | Connect, start and stop. Every 5 s on Receiver, about once a second on Diagnostics. Full-rate host capture also samples health about once a second. | Around 4.7 kB in an example status, up to the 8 KiB response buffer before framing |
 | Raw USB copy, when selected | 50 GNSS fixes/s and nominally 737.5 IMU intervals/s | About 110 kB/s in Base64 records before batch envelopes |
 | SD download, on request | Eight 512 B sectors per request, fewer in the final batch | About 5.6 kB exchanged per 4 KiB of file |
+
+Board data checks receiver status every five seconds while visible over USB.
+Reading the directory, previewing a file and downloading it are manual actions.
 
 Display sizes use the encoded one-hour-uptime fixture in the native test suite.
 Integer lengths and absent sensor fields change the actual size. Rates are USB

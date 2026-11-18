@@ -215,7 +215,7 @@ measured vehicle boresight or qualified filter delay. They are not vehicle G.
 `charger_error`/`gauge_error`, charger `faults` and cumulative `errors`.
 `buttons` is a nullable
 four-bit pressed mask. A missing gauge must not be displayed as zero charge.
-`storage:sd-exfat-and-usb-host` and `bluetooth:not-enabled` describe this build's
+`storage:sd-exfat-and-usb-host` and `bluetooth:ble-display-v1` describe this build's
 capabilities. `sd` contains state, error, capacity_bytes, file_id, written_pages,
 dropped, pending, raw_pending, raw_dropped, and closed. Start requires writable
 SD readiness. A later SD fault does not stop the already-running USB stream.
@@ -312,3 +312,16 @@ The reply echoes the file ID and first sector, and contains a `blocks` array
 with one padded Base64 string per consecutive 512-byte sector. Count is 1–8.
 The last request must fit the file. Any failed sector produces an error for the
 whole request. Existing clients can continue using the single-sector `read`.
+
+## Bluetooth LE
+
+The foreground client discovers service `cf2c0001-183e-4cd6-a712-c719ac51bd52`.
+Both characteristics use the same UUID suffix.
+
+| Characteristic UUID prefix | Operation | Payload |
+| --- | --- | --- |
+| `cf2c0002` | Read | Raw postcard `DisplayFrame` from `src/display.rs`. Poll at 5 Hz. Long-read continuations use the same snapshot. |
+| `cf2c0003` | Write with response | One byte. `1` starts SD recording. `0` stops it and waits for the file to close. Invalid commands and failed operations return a GATT error. |
+
+The receiver accepts one client without pairing. A dropped connection leaves SD recording active.
+Full diagnostics, raw sample drains and file downloads use USB.

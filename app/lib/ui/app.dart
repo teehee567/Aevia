@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../controller.dart';
 import 'common.dart';
 import 'diagnostics.dart';
+import 'board_data.dart';
 import 'live.dart';
 import 'sessions.dart';
 import 'analysis.dart';
@@ -59,6 +60,7 @@ class AeviaShell extends StatelessWidget {
     'Receiver',
     'Post-processing',
     'Receiver diagnostics',
+    'Board data',
   ];
   static const labels = [
     'Live',
@@ -69,6 +71,7 @@ class AeviaShell extends StatelessWidget {
     'Receiver',
     'PPK',
     'Diagnostics',
+    'Board data',
   ];
   static const icons = [
     Icons.speed_outlined,
@@ -79,6 +82,7 @@ class AeviaShell extends StatelessWidget {
     Icons.usb_outlined,
     Icons.satellite_alt_outlined,
     Icons.monitor_heart_outlined,
+    Icons.sd_storage_outlined,
   ];
   Widget navigation(BuildContext context, {bool drawer = false}) => Container(
     width: 184,
@@ -152,7 +156,7 @@ class AeviaShell extends StatelessWidget {
             children: [
               Text(
                 controller.connected
-                    ? 'V2 Mini · ${controller.device['port'] ?? 'USB'}'
+                    ? 'V2 Mini · ${controller.bluetooth ? 'Bluetooth' : controller.device['port'] ?? 'USB'}'
                     : 'No receiver connected',
                 style: const TextStyle(fontSize: 12),
               ),
@@ -161,7 +165,9 @@ class AeviaShell extends StatelessWidget {
                 controller.recording
                     ? '● Recording session'
                     : controller.connected
-                    ? 'USB connected'
+                    ? (controller.bluetooth
+                          ? 'Bluetooth connected'
+                          : 'USB connected')
                     : 'Connect in Receiver',
                 style: TextStyle(
                   fontSize: 11,
@@ -186,6 +192,7 @@ class AeviaShell extends StatelessWidget {
       ReceiverView(controller: controller),
       PpkView(controller: controller),
       DiagnosticsView(controller: controller),
+      BoardDataView(controller: controller),
     ];
     return Scaffold(
       drawer: compact
@@ -243,6 +250,8 @@ class AeviaShell extends StatelessWidget {
                                 ? [0, 5, 7].contains(controller.page) &&
                                           controller.stale
                                       ? 'STALE DATA'
+                                      : controller.bluetooth
+                                      ? 'BLUETOOTH CONNECTED'
                                       : 'USB CONNECTED'
                                 : 'OFFLINE',
                             color: controller.connected

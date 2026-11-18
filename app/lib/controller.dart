@@ -16,6 +16,13 @@ class AeviaController extends ChangeNotifier {
   Map<String, dynamic> _state = {};
   Map<String, dynamic> get state => _state;
   set state(Map<String, dynamic> value) {
+    final next = object(value['device']);
+    if (next['connected'] != true ||
+        next['transport'] != 'USB' ||
+        next['port'] != device['port'] ||
+        (device['recording'] == true && next['recording'] == false)) {
+      _clearDirectory();
+    }
     _state = value;
     _snapshotAt = _now;
     _pollFailed = false;
@@ -33,7 +40,8 @@ class AeviaController extends ChangeNotifier {
   Map<String, dynamic> ppkPrepared = {};
   final Map<String, String> ppkDraft = {};
   List<Map<String, dynamic>> devices = [];
-  List<Map<String, dynamic>> deviceSessions = [];
+  List<Map<String, dynamic>>? deviceSessions;
+  Map<String, dynamic>? boardPreview;
   final List<Map<String, dynamic>> recent = [];
   Timer? _timer;
   bool busy = false;
@@ -45,7 +53,24 @@ class AeviaController extends ChangeNotifier {
   int page = 0;
   Map<String, dynamic> get device => object(state['device']);
   Map<String, dynamic> get live => object(state['live']);
+  bool get bluetooth => device['transport'] == 'Bluetooth';
+  bool get bluetoothAvailable =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.windows ||
+          defaultTargetPlatform == TargetPlatform.iOS);
+  bool get usbAvailable => defaultTargetPlatform != TargetPlatform.iOS;
   bool get connected => device['connected'] == true;
+  bool get usbConnected => connected && device['transport'] == 'USB';
+  bool get storageBusy =>
+      recording ||
+      device['recording'] == true ||
+      [
+        'opening',
+        'recording',
+        'stopping',
+      ].contains(object(device['sd'])['state']);
+  bool get canBrowseBoard => usbConnected && !_pollFailed && !storageBusy;
+  static const boardPage = 8;
   bool get recording => live['recording'] == true;
   String? get captureInterruption {
     final value = live['capture_interrupted'];
@@ -164,10 +189,11 @@ class AeviaController extends ChangeNotifier {
     if (!autoPoll || _disposed || !_foreground || _editingTrack || !connected)
       return;
     final livePage = page == 0;
-    if (!livePage && page != 5 && page != 7 && !recording) return;
+    final board = page == boardPage && usbConnected;
+    if (!livePage && page != 5 && page != 7 && !board && !recording) return;
     final interval = livePage
         ? const Duration(milliseconds: 200)
-        : const Duration(seconds: 1);
+        : Duration(seconds: board ? 5 : 1);
     _timer = Timer.periodic(interval, (_) {
       if (_polling && stale) changed();
       unawaited(poll());
@@ -175,7 +201,7 @@ class AeviaController extends ChangeNotifier {
   }
 
   Future<void> poll({bool liveFix = false}) async {
-    if (_polling || _disposed) return;
+    if (_polling || _disposed || (page == boardPage && busy)) return;
     _polling = true;
     try {
       final requestedPage = page;
@@ -185,6 +211,7 @@ class AeviaController extends ChangeNotifier {
               0 => 'live',
               5 => 'receiver',
               7 => 'diagnostics',
+              boardPage when usbConnected => 'board_data',
               _ => 'idle',
             };
       final before = _state;
@@ -207,6 +234,7 @@ class AeviaController extends ChangeNotifier {
       changed();
     } catch (e) {
       _pollFailed = true;
+      if (page == boardPage) _clearDirectory();
       error = cleanError(e);
       changed();
     } finally {
@@ -255,26 +283,58 @@ class AeviaController extends ChangeNotifier {
   Future<void> refreshDevices() => action(() async {
     devices = objects(await request('devices'));
   });
-  Future<void> refreshDeviceSessions() => action(() async {
-    deviceSessions = objects(await request('device_sessions'));
-  }, pending: 'Reading the receiver recording directory…');
-  Future<void> downloadDeviceSession(int id) => action(
+  void _clearDirectory() {
+    deviceSessions = null;
+    boardPreview = null;
+  }
+
+  Future<void> refreshDeviceSessions() async {
+    if (!canBrowseBoard) return;
+    await action(() async {
+      _clearDirectory();
+      final entries = objects(await request('device_sessions'));
+      if (page == boardPage && canBrowseBoard)
+        deviceSessions = entries.reversed.toList();
+    }, pending: 'Reading the receiver recording directory…');
+  }
+
+  Future<void> previewDeviceSession(int id) async {
+    if (!canBrowseBoard) return;
+    await action(() async {
+      boardPreview = null;
+      final preview = object(
+        await request('device_session_preview', {'id': id}),
+      );
+      if (page == boardPage && canBrowseBoard) boardPreview = preview;
+    }, pending: 'Reading recording details…');
+  }
+
+  Future<void> downloadDeviceSession(int id) async {
+    if (!canBrowseBoard) return;
+    await action(
+      () async {
+        session = object(await request('download', {'id': id}));
+        state = object(await request('state'));
+        if (page == boardPage) page = 2;
+      },
+      pending: 'Downloading receiver recording… Keep the USB cable connected.',
+      success:
+          'Receiver recording downloaded and added to the session library.',
+    );
+  }
+
+  Future<void> connect(String port) => action(
     () async {
-      session = object(await request('download', {'id': id}));
-      state = object(await request('state'));
-      page = 2;
+      state = object(await request('connect', {'port': port}));
+      recent.clear();
+      _clearDirectory();
     },
-    pending: 'Downloading receiver recording… Keep the USB cable connected.',
-    success: 'Receiver recording downloaded and added to the session library.',
+    pending: port == 'ble' ? 'Looking for a nearby V2 Mini…' : null,
+    success: 'Receiver connected.',
   );
-  Future<void> connect(String port) => action(() async {
-    state = object(await request('connect', {'port': port}));
-    recent.clear();
-    deviceSessions.clear();
-  }, success: 'Receiver connected.');
   Future<void> disconnect() => action(() async {
     state = object(await request('disconnect'));
-    deviceSessions.clear();
+    _clearDirectory();
   }, success: 'Receiver disconnected.');
   Future<void> start({String? name, String? trackId, bool fullRate = false}) =>
       action(() async {
@@ -286,9 +346,14 @@ class AeviaController extends ChangeNotifier {
           }),
         );
       }, success: 'Recording started.');
-  Future<void> stop() => action(() async {
-    state = object(await request('stop'));
-  }, success: 'Recording saved to the session library.');
+  Future<void> stop() => action(
+    () async {
+      state = object(await request('stop'));
+    },
+    success: recording
+        ? 'Recording saved to the session library.'
+        : 'Receiver recording stopped.',
+  );
   Future<void> openSession(String id) => action(() async {
     session = object(await request('session', {'id': id}));
     page = 2;
@@ -387,9 +452,13 @@ class AeviaController extends ChangeNotifier {
     state = object(await request('state'));
   }, success: 'Session analysis updated.');
   void navigate(int value) {
+    if (page == boardPage && value != boardPage) _clearDirectory();
     page = value;
     _schedulePoll();
-    if (autoPoll && _foreground && connected && [0, 5, 7].contains(page))
+    if (autoPoll &&
+        _foreground &&
+        connected &&
+        ([0, 5, 7].contains(page) || (page == boardPage && usbConnected)))
       unawaited(poll());
     changed();
   }

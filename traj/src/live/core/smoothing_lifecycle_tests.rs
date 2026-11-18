@@ -22,7 +22,8 @@ fn pending_rts_measurement_capture_rotates_and_round_trips_with_reanchor() {
         let mut history = LiveCoreHistory::new();
         let mut initialization = seed();
         initialization.initialization.covariance[(POS, POS)] = 4.0;
-        let mut state = LiveCoreState::new(tuning(), initialization.borrowed(), &history).unwrap();
+        let mut state =
+            LiveCoreState::new(tuning(), initialization.borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         core.ingest_imu(imu(0, 5_000_000)).unwrap();
         core.ingest_imu(imu(5_000_000, 10_000_000)).unwrap();
@@ -67,7 +68,8 @@ fn exact_clock_boundary_flushes_rts_tail_before_consider_transition() {
         initialization.active_consider = 2;
         initialization.consider_covariance[(0, 0)] = 0.04;
         initialization.consider_covariance[(1, 1)] = 0.01;
-        let mut state = LiveCoreState::new(tuning(), initialization.borrowed(), &history).unwrap();
+        let mut state =
+            LiveCoreState::new(tuning(), initialization.borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         for millisecond in 0..40 {
             core.ingest_imu(imu(millisecond * 1_000_000, (millisecond + 1) * 1_000_000))
@@ -108,7 +110,7 @@ fn exact_clock_boundary_flushes_rts_tail_before_consider_transition() {
 fn reset_clears_rts_tail_quality_and_capture_before_workspace_reuse() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(tuning(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(tuning(), seed().borrowed(), &mut history).unwrap();
         {
             let mut core = LiveCore::attach(&mut state, &mut history);
             for millisecond in 0..30 {
@@ -130,7 +132,7 @@ fn reset_clears_rts_tail_quality_and_capture_before_workspace_reuse() {
         assert_eq!(history.endpoint_quality, None);
         assert_eq!(history.published_frontier, None);
         state
-            .initialize(&tuning(), &seed().borrowed(), &history)
+            .initialize(&tuning(), &seed().borrowed(), &mut history)
             .unwrap();
         assert!(state.is_active());
     });
@@ -140,7 +142,7 @@ fn reset_clears_rts_tail_quality_and_capture_before_workspace_reuse() {
 fn excessive_distinct_epoch_burst_reports_rts_capacity_without_publishing_early() {
     with_large_stack(|| {
         let mut history = LiveCoreHistory::new();
-        let mut state = LiveCoreState::new(tuning(), seed().borrowed(), &history).unwrap();
+        let mut state = LiveCoreState::new(tuning(), seed().borrowed(), &mut history).unwrap();
         let mut core = LiveCore::attach(&mut state, &mut history);
         for millisecond in 1..=100 {
             let mut observation = gnss(millisecond * 1_000_000, millisecond as u64, 0.0);

@@ -33,10 +33,6 @@ class _ReceiverViewState extends State<ReceiverView> {
     final profile = object(device['acquisition_profile']);
     final ppk = object(device['ppk']);
     final stale = !c.connected || c.stale;
-    final deviceRecording =
-        c.recording ||
-        device['recording'] == true ||
-        ['recording', 'stopping'].contains(sd['state']);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -49,15 +45,29 @@ class _ReceiverViewState extends State<ReceiverView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Connect the V2 Mini USB data port. Only one application can open the receiver at a time.',
-                style: TextStyle(color: muted),
-              ),
+              if (!c.connected && c.bluetoothAvailable)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FilledButton.icon(
+                    onPressed: c.busy ? null : () => c.connect('ble'),
+                    icon: const Icon(Icons.bluetooth),
+                    label: const Text('Connect Bluetooth'),
+                  ),
+                ),
+              if (c.bluetooth)
+                const Text(
+                  'Bluetooth provides live telemetry and recording controls. Use USB for full diagnostics and SD downloads.',
+                ),
               const SizedBox(height: 16),
               if (c.connected) ...[
                 MetricGrid(
                   children: [
-                    Metric('Port', device['port']?.toString() ?? '—'),
+                    Metric(
+                      'Connection',
+                      c.bluetooth
+                          ? 'Bluetooth'
+                          : device['port']?.toString() ?? '—',
+                    ),
                     Metric('Firmware', device['firmware']?.toString() ?? '—'),
                     Metric(
                       'Battery',
@@ -85,7 +95,7 @@ class _ReceiverViewState extends State<ReceiverView> {
                     ),
                   ),
               ],
-              if (!c.connected) ...[
+              if (!c.connected && c.usbAvailable) ...[
                 for (final d in c.devices)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
@@ -173,135 +183,137 @@ class _ReceiverViewState extends State<ReceiverView> {
           ),
         ),
         const SizedBox(height: 16),
-        Section(
-          title: 'Receiver diagnostics',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MetricGrid(
-                children: [
-                  Metric(
-                    'Fix quality',
-                    device['fix_quality']?.toString() ?? '—',
+        if (!c.bluetooth)
+          Section(
+            title: 'Receiver diagnostics',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MetricGrid(
+                  children: [
+                    Metric(
+                      'Fix quality',
+                      device['fix_quality']?.toString() ?? '—',
+                    ),
+                    Metric('Satellites', '${device['satellites'] ?? '—'}'),
+                    Metric('Data age', number(c.dataAgeMs, 0), unit: 'ms'),
+                    Metric('Sequence', '${c.live['sequence'] ?? '—'}'),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SelectableText(
+                  'Status: ${device['status'] ?? 'No receiver connected'}\nLatitude: ${number(c.live['lat'], 7)}°\nLongitude: ${number(c.live['lon'], 7)}°',
+                  style: const TextStyle(color: muted, height: 1.8),
+                ),
+                if (device['imu_status'] != null)
+                  Text(
+                    'IMU: ${device['imu_status']}',
+                    style: const TextStyle(color: muted),
                   ),
-                  Metric('Satellites', '${device['satellites'] ?? '—'}'),
-                  Metric('Data age', number(c.dataAgeMs, 0), unit: 'ms'),
-                  Metric('Sequence', '${c.live['sequence'] ?? '—'}'),
-                ],
-              ),
-              const SizedBox(height: 12),
-              SelectableText(
-                'Status: ${device['status'] ?? 'No receiver connected'}\nLatitude: ${number(c.live['lat'], 7)}°\nLongitude: ${number(c.live['lon'], 7)}°',
-                style: const TextStyle(color: muted, height: 1.8),
-              ),
-              if (device['imu_status'] != null)
-                Text(
-                  'IMU: ${device['imu_status']}',
-                  style: const TextStyle(color: muted),
-                ),
-              if (!stale && profile.isNotEmpty)
-                Text(
-                  'Acquisition: ${profile['gnss_log'] ?? 'GNSS'} ${profile['gnss_requested_hz'] ?? '—'} Hz requested · IMU ${profile['imu_logging'] ?? 'unknown'} · Navigation averages ${profile['imu_navigation_average'] ?? '—'} IMU intervals',
-                  style: const TextStyle(color: muted),
-                ),
-              if (!stale && ppk.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'PPK raw logging: ${ppk['storage'] ?? 'SD'} · ${ppk['requested_hz'] ?? '—'} Hz requested · ${ppk['observation_frames'] ?? '—'} observation frames',
-                        style: const TextStyle(color: muted),
-                      ),
-                      Text(
-                        'Latest epoch: ${ppk['last_observation_count'] ?? '—'} signal observations · ${ppk['ephemeris_frames'] ?? '—'} ephemeris frames · ${ppk['dropped'] ?? '—'} dropped chunks · ${ppk['crc_failures'] ?? '—'} CRC failures',
-                        style: const TextStyle(color: muted),
-                      ),
-                      if (ppk['last_observation_count'] == 0)
-                        const Text(
-                          'No tracked raw observations yet. Empty observation frames cannot produce a PPK solution.',
-                          style: TextStyle(color: warning),
+                if (!stale && profile.isNotEmpty)
+                  Text(
+                    'Acquisition: ${profile['gnss_log'] ?? 'GNSS'} ${profile['gnss_requested_hz'] ?? '—'} Hz requested · IMU ${profile['imu_logging'] ?? 'unknown'} · Navigation averages ${profile['imu_navigation_average'] ?? '—'} IMU intervals',
+                    style: const TextStyle(color: muted),
+                  ),
+                if (!stale && ppk.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'PPK raw logging: ${ppk['storage'] ?? 'SD'} · ${ppk['requested_hz'] ?? '—'} Hz requested · ${ppk['observation_frames'] ?? '—'} observation frames',
+                          style: const TextStyle(color: muted),
                         ),
-                      Text(
-                        ppk['configured'] != true ||
-                                (numeric(ppk['age_ms']) ?? double.infinity) >
-                                    1500
-                            ? 'Raw observation stream is unavailable or stale.'
-                            : 'Last raw observation epoch: ${number(ppk['age_ms'], 0)} ms ago',
-                        style: TextStyle(
-                          color:
-                              ppk['configured'] != true ||
+                        Text(
+                          'Latest epoch: ${ppk['last_observation_count'] ?? '—'} signal observations · ${ppk['ephemeris_frames'] ?? '—'} ephemeris frames · ${ppk['dropped'] ?? '—'} dropped chunks · ${ppk['crc_failures'] ?? '—'} CRC failures',
+                          style: const TextStyle(color: muted),
+                        ),
+                        if (ppk['last_observation_count'] == 0)
+                          const Text(
+                            'No tracked raw observations yet. Empty observation frames cannot produce a PPK solution.',
+                            style: TextStyle(color: warning),
+                          ),
+                        Text(
+                          ppk['configured'] != true ||
                                   (numeric(ppk['age_ms']) ?? double.infinity) >
                                       1500
-                              ? warning
-                              : muted,
+                              ? 'Raw observation stream is unavailable or stale.'
+                              : 'Last raw observation epoch: ${number(ppk['age_ms'], 0)} ms ago',
+                          style: TextStyle(
+                            color:
+                                ppk['configured'] != true ||
+                                    (numeric(ppk['age_ms']) ??
+                                            double.infinity) >
+                                        1500
+                                ? warning
+                                : muted,
+                          ),
                         ),
-                      ),
-                      TextButton(
-                        onPressed: () => c.navigate(6),
-                        child: const Text('Open PPK workspace'),
-                      ),
-                    ],
+                        TextButton(
+                          onPressed: () => c.navigate(6),
+                          child: const Text('Open PPK workspace'),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              if (gnss.isNotEmpty || imu.isNotEmpty)
-                Text(
-                  stale
-                      ? 'Sensor counters: telemetry unavailable'
-                      : 'Sensor errors since boot: GNSS ${gnss['errors'] ?? '—'} · IMU ${imu['errors'] ?? '—'}',
-                  style: const TextStyle(color: muted),
-                ),
-              if (timing.isNotEmpty)
-                Text(
-                  stale
-                      ? 'Capture timing: telemetry unavailable'
-                      : 'IMU timing rejections: ${timing['imu_timing_rejected'] ?? '—'} · Capture errors: ${timing['capture_errors'] ?? '—'}',
-                  style: const TextStyle(color: muted),
-                ),
-              if (!stale && imuDiagnostics['last_error'] != null)
-                Text(
-                  'Last IMU diagnostic: ${imuDiagnostics['last_error']}',
-                  style: const TextStyle(color: warning),
-                ),
-              if (!stale && gnssUart['last_error'] != null)
-                Text(
-                  'Last GNSS transport diagnostic: ${gnssUart['last_error']}',
-                  style: const TextStyle(color: warning),
-                ),
-              if (device['storage_status'] != null)
-                Text(
-                  'Device storage: ${sd['state'] ?? device['storage_status']}${sd['error'] == null ? '' : ' · ${sd['error']}'}',
-                  style: const TextStyle(color: muted),
-                ),
-              if (battery.isNotEmpty)
-                Text(
-                  stale
-                      ? 'Power: telemetry unavailable'
-                      : 'Power: ${battery['status'] ?? 'unknown'} · ${number(battery['millivolts'], 0)} mV',
-                  style: const TextStyle(color: muted),
-                ),
-              if (device['display'] != null)
-                Text(
-                  'Display: ${device['display']}',
-                  style: const TextStyle(color: muted),
-                ),
-              if (accessories['buttons_fitted'] == false)
-                const Text(
-                  'Extra buttons disabled · use the app controls',
-                  style: TextStyle(color: muted),
-                ),
-              if (c.connected && device['fix_quality'] == 'no fix')
-                const Padding(
-                  padding: EdgeInsets.only(top: 12),
-                  child: Text(
-                    'No GNSS fix. This is expected indoors; sensor health and recording remain available.',
-                    style: TextStyle(color: warning),
+                if (gnss.isNotEmpty || imu.isNotEmpty)
+                  Text(
+                    stale
+                        ? 'Sensor counters: telemetry unavailable'
+                        : 'Sensor errors since boot: GNSS ${gnss['errors'] ?? '—'} · IMU ${imu['errors'] ?? '—'}',
+                    style: const TextStyle(color: muted),
                   ),
-                ),
-            ],
+                if (timing.isNotEmpty)
+                  Text(
+                    stale
+                        ? 'Capture timing: telemetry unavailable'
+                        : 'IMU timing rejections: ${timing['imu_timing_rejected'] ?? '—'} · Capture errors: ${timing['capture_errors'] ?? '—'}',
+                    style: const TextStyle(color: muted),
+                  ),
+                if (!stale && imuDiagnostics['last_error'] != null)
+                  Text(
+                    'Last IMU diagnostic: ${imuDiagnostics['last_error']}',
+                    style: const TextStyle(color: warning),
+                  ),
+                if (!stale && gnssUart['last_error'] != null)
+                  Text(
+                    'Last GNSS transport diagnostic: ${gnssUart['last_error']}',
+                    style: const TextStyle(color: warning),
+                  ),
+                if (device['storage_status'] != null)
+                  Text(
+                    'Device storage: ${sd['state'] ?? device['storage_status']}${sd['error'] == null ? '' : ' · ${sd['error']}'}',
+                    style: const TextStyle(color: muted),
+                  ),
+                if (battery.isNotEmpty)
+                  Text(
+                    stale
+                        ? 'Power: telemetry unavailable'
+                        : 'Power: ${battery['status'] ?? 'unknown'} · ${number(battery['millivolts'], 0)} mV',
+                    style: const TextStyle(color: muted),
+                  ),
+                if (device['display'] != null)
+                  Text(
+                    'Display: ${device['display']}',
+                    style: const TextStyle(color: muted),
+                  ),
+                if (accessories['buttons_fitted'] == false)
+                  const Text(
+                    'Extra buttons disabled · use the app controls',
+                    style: TextStyle(color: muted),
+                  ),
+                if (c.connected && device['fix_quality'] == 'no fix')
+                  const Padding(
+                    padding: EdgeInsets.only(top: 12),
+                    child: Text(
+                      'No GNSS fix. This is expected indoors; sensor health and recording remain available.',
+                      style: TextStyle(color: warning),
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
         if (nav.isNotEmpty) ...[
           const SizedBox(height: 16),
           Section(
@@ -365,97 +377,17 @@ class _ReceiverViewState extends State<ReceiverView> {
             ],
           ),
         ),
-        const SizedBox(height: 16),
-        Section(
-          title: 'Device recordings',
-          trailing: OutlinedButton.icon(
-            onPressed: c.busy || !c.connected || deviceRecording
-                ? null
-                : c.refreshDeviceSessions,
-            icon: const Icon(Icons.refresh, size: 16),
-            label: const Text('Refresh'),
+        if (c.usbConnected) ...[
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              onPressed: () => c.navigate(AeviaController.boardPage),
+              icon: const Icon(Icons.sd_storage_outlined),
+              label: const Text('Browse board data'),
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Download saved SD recordings into the session library. Stop recording before refreshing or downloading.',
-                style: TextStyle(color: muted, fontSize: 12),
-              ),
-              if (c.activity != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: Text(
-                    c.activity!,
-                    style: const TextStyle(color: accent),
-                  ),
-                ),
-              if (c.deviceSessions.isEmpty && c.activity == null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 18),
-                  child: Text(
-                    c.connected
-                        ? 'Refresh to list recordings on the receiver.'
-                        : 'Connect a receiver to view its recordings.',
-                    style: const TextStyle(color: muted),
-                  ),
-                ),
-              for (final recording in c.deviceSessions)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Wrap(
-                    spacing: 16,
-                    runSpacing: 10,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 150,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Recording ${recording['id']}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              '${number((numeric(recording['bytes']) ?? 0) / 1024, 1)} KiB · ${recording['closed'] == true ? 'Saved' : 'Incomplete · recoverable'}',
-                              style: const TextStyle(
-                                color: muted,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      OutlinedButton.icon(
-                        onPressed:
-                            c.busy ||
-                                !c.connected ||
-                                deviceRecording ||
-                                recording['id'] is! num
-                            ? null
-                            : () => c.downloadDeviceSession(
-                                (recording['id'] as num).toInt(),
-                              ),
-                        icon: const Icon(Icons.download_outlined, size: 16),
-                        label: const Text('Download & analyze'),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        const Section(
-          title: 'Bluetooth',
-          child: Text(
-            'Bluetooth transport is not available in this build. USB provides live telemetry and session recording.',
-            style: TextStyle(color: muted),
-          ),
-        ),
+        ],
       ],
     );
   }

@@ -65,9 +65,10 @@ const MAX_PROPAGATION_SLICES: usize = MAX_BATCH_SAMPLES as usize;
 const MIN_PROPAGATION_CREDITS: u16 = IMU_SLICE_CREDITS + FILTER_PROPAGATION_CREDITS;
 
 /// Large, caller-owned buffers. Firmware may place this object in aligned
-/// PSRAM; [`LiveCore`] itself contains the hot covariance and queue state.
+/// PSRAM, including the delayed GNSS measurement queue.
 #[derive(Debug, PartialEq)]
 pub(crate) struct LiveCoreHistory {
+    scheduler: FrontierScheduler<GnssObservation, MEASUREMENT_QUEUE_CAPACITY>,
     imu: FixedRing<ImuInterval, IMU_HISTORY_CAPACITY>,
     corrected: DenseHistory<DENSE_HISTORY_CAPACITY>,
     predicted: DenseHistory<DENSE_HISTORY_CAPACITY>,
@@ -92,6 +93,7 @@ impl LiveCoreHistory {
     pub(crate) const fn new() -> Self {
         Self {
             imu: FixedRing::new(),
+            scheduler: FrontierScheduler::placeholder(),
             corrected: DenseHistory::new(),
             predicted: DenseHistory::new(),
             propagation_scratch: EskfPropagationScratch::new(),
@@ -126,6 +128,7 @@ impl LiveCoreHistory {
     /// Releases a workspace for a later session without constructing or
     /// moving another large history value on the task stack.
     pub(crate) fn clear(&mut self) {
+        self.scheduler.reset();
         while self.imu.pop_front().is_some() {}
         while self.corrected.pop_oldest().is_some() {}
         while self.predicted.pop_oldest().is_some() {}
@@ -380,7 +383,6 @@ struct PropagationPlan {
 /// independently placed PSRAM history for just one engine call.
 #[cfg_attr(test, derive(Debug, PartialEq))]
 pub(crate) struct LiveCoreState {
-    scheduler: FrontierScheduler<GnssObservation, MEASUREMENT_QUEUE_CAPACITY>,
     filter: Eskf,
     /// Persistent transaction candidate. Keeping the second ESKF beside the
     /// committed state prevents a ~7 KiB filter copy from living on the S31
@@ -416,7 +418,6 @@ impl LiveCoreState {
     /// storage for the lifetime of the workspace.
     pub(crate) const fn placeholder() -> Self {
         Self {
-            scheduler: FrontierScheduler::placeholder(),
             filter: Eskf::placeholder(),
             transaction_filter: Eskf::placeholder(),
             predictor: OutputPredictor::placeholder(),
@@ -466,7 +467,6 @@ impl LiveCoreState {
     /// second `LiveCoreState` on the task stack.
     pub(crate) fn reset(&mut self) {
         self.active = false;
-        self.scheduler.reset();
         self.filter.reset();
         self.transaction_filter.reset();
         self.predictor.reset();
@@ -506,7 +506,7 @@ impl LiveCoreState {
         &mut self,
         config: &LiveCoreConfig,
         seed: &LiveCoreSeed<'_>,
-        history: &LiveCoreHistory,
+        history: &mut LiveCoreHistory,
     ) -> Result<(), LiveCoreError> {
         self.reset();
         let result = self.initialize_inner(config, seed, history);
@@ -520,7 +520,7 @@ impl LiveCoreState {
         &mut self,
         config: &LiveCoreConfig,
         seed: &LiveCoreSeed<'_>,
-        history: &LiveCoreHistory,
+        history: &mut LiveCoreHistory,
     ) -> Result<(), LiveCoreError> {
         config.validate()?;
         if seed.active_consider > MAX_CONSIDER || !history.is_empty() {
@@ -529,9 +529,6 @@ impl LiveCoreState {
         let first_deadline =
             checked_time_add(seed.initialization.state.time, config.navigation_period_ns)?;
 
-        self.scheduler
-            .initialize(config.fusion_delay_ns)
-            .map_err(LiveCoreError::Scheduler)?;
         self.filter
             .initialize(
                 seed.initialization.state,
@@ -555,6 +552,10 @@ impl LiveCoreState {
             )
             .map_err(LiveCoreError::Preintegration)?;
 
+        history
+            .scheduler
+            .initialize(config.fusion_delay_ns)
+            .map_err(LiveCoreError::Scheduler)?;
         self.imu_noise = config.imu_noise;
         self.context = config.mechanization;
         self.nis_gate = config.nis_gate;
@@ -581,7 +582,7 @@ impl LiveCoreState {
     pub(crate) fn new(
         config: LiveCoreConfig,
         seed: LiveCoreSeed<'_>,
-        history: &LiveCoreHistory,
+        history: &mut LiveCoreHistory,
     ) -> Result<Self, LiveCoreError> {
         let mut result = Self::placeholder();
         result.initialize(&config, &seed, history)?;
