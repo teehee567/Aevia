@@ -1,0 +1,119 @@
+{
+  "format_version": 1,
+  "pages": 638790,
+  "records": 2156986,
+  "counts": {
+    "recording_identity": 1,
+    "metadata": 4,
+    "reset_evidence": 1,
+    "bootstrap_generation": 1,
+    "health": 2476,
+    "gnss_raw_coverage": 4836,
+    "gnss_tx": 753,
+    "pps": 1531,
+    "gnss_com2": 299628,
+    "imu_configuration": 1,
+    "imu": 1802008,
+    "temperature": 2478,
+    "fault": 40542,
+    "gnss_com1": 2726
+  },
+  "closed": false,
+  "missing_sequences": 0,
+  "trailing_record_bytes": 140,
+  "metadata": [
+    {
+      "type": "session",
+      "firmware": "0.1.0-race",
+      "format": 1,
+      "collection_only": true,
+      "time": "capture_monotonic_ns",
+      "qualified": false
+    },
+    {
+      "type": "imu_profile",
+      "sensor": "SCH16T",
+      "decimation": 5,
+      "nominal_hz": 737.5,
+      "gyro_delay_ns": 1400000,
+      "accel_delay_ns": 1500000,
+      "delay_uncertainty_ns": 1200000,
+      "axes": "native_sensor"
+    },
+    {
+      "type": "gnss_profile",
+      "sensor": "UM980",
+      "uart_baud": 460800,
+      "pvt_hz": 50,
+      "raw_observation_hz": 1,
+      "pps_hz": 1,
+      "raw_stream": "Unicore native",
+      "calibration": "mounting and lever arm unqualified"
+    },
+    {
+      "type": "source_build",
+      "sha256": "dff74044d01e6806834ea326af1534c22588dd16946363a8665af842a94a376d"
+    }
+  ],
+  "end": null,
+  "uart_streams": {
+    "gnss_tx": {
+      "first_offset": 0,
+      "next_offset": 11504,
+      "exported_bytes": 11504,
+      "missing_bytes": 0
+    },
+    "gnss_com2": {
+      "first_offset": 0,
+      "next_offset": 19879702,
+      "exported_bytes": 19879702,
+      "missing_bytes": 0
+    },
+    "gnss_com1": {
+      "first_offset": 0,
+      "next_offset": 113886,
+      "exported_bytes": 113886,
+      "missing_bytes": 0
+    }
+  },
+  "imu_invalid_timing": 3,
+  "imu_invalid_scaled": 7448,
+  "gnss_raw_coverage_initial": {
+    "ephemeris_seen_mask": 0,
+    "bootstrap_generation": 1,
+    "obsvm_frames": 0,
+    "advancing_epochs": 0,
+    "ephemeris_frames": 0,
+    "optional_tx_failures": 0,
+    "last_obsvm_receipt_us": null,
+    "last_gpst_epoch_ms": null
+  },
+  "gnss_raw_coverage_latest": {
+    "ephemeris_seen_mask": 29,
+    "bootstrap_generation": 1,
+    "obsvm_frames": 561,
+    "advancing_epochs": 561,
+    "ephemeris_frames": 278,
+    "optional_tx_failures": 0,
+    "last_obsvm_receipt_us": 1964848093,
+    "last_gpst_epoch_ms": 1478419322000
+  },
+  "expected_bootstrap_generation": 1,
+  "ignored_coverage_records": 6,
+  "recording_identity": {
+    "recording_id": 8,
+    "file_id": 8,
+    "previous_file_id": 0,
+    "source_sequence_base": 0
+  },
+  "close_intent": null,
+  "session": 8,
+  "nonce": 10422476880545584,
+  "file_bytes": 327060480,
+  "sha256": "a27f13505ee6a166cdec5d627ea92da69c4ae1d4a1961b5a5aa4d08f31d1cb35",
+  "last_sequence": 2156985,
+  "sealed_and_contiguous": false,
+  "sensor_errors_reported": null,
+  "continuation_required": null,
+  "whole_recording_in_this_file": false
+}

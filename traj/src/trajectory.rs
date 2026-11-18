@@ -294,7 +294,7 @@ impl Trajectory {
         self.attachment.permits_body_axis_quantities()
     }
 
-    #[cfg(test)]
+    #[cfg(any(test, feature = "offline"))]
     pub(crate) fn push_hermite_segment(
         &mut self,
         start: TrajectoryKnot,

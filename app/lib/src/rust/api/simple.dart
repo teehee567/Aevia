@@ -6,5 +6,7 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-String greet({required String name}) =>
-    RustLib.instance.api.crateApiSimpleGreet(name: name);
+/// Executes a native device, recording, library or analysis operation.
+/// The bridge runs this on its worker pool rather than Flutter's UI thread.
+Future<String> request({required String requestJson}) =>
+    RustLib.instance.api.crateApiSimpleRequest(requestJson: requestJson);

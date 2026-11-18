@@ -164,6 +164,13 @@ fn find_gate_rearm_time(
                 }
             }
         }
+        // Segments are chronological and non-overlapping. Once both sides of
+        // this segment have been checked, no later segment can contain an
+        // earlier rearm. Scanning the entire session tail after every crossing
+        // otherwise consumes quadratic work on long recordings.
+        if earliest.is_some() {
+            return Ok(earliest);
+        }
     }
     Ok(earliest)
 }

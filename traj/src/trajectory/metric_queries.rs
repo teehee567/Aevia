@@ -327,35 +327,36 @@ impl Trajectory {
         value_tolerance: f64,
         budget: &mut NumericalWorkBudget,
     ) -> Result<FixedVec<f64, MAX_SEGMENT_ROOTS>, MetricError> {
-        budget.cap_root_evaluations(self.root_evaluation_budget);
-        let lease = self.segment_lease(index).map_err(query_to_metric)?;
-        let segment = lease.segment();
-        let reference = self.reference_point_for_metric(reference_point)?;
-        let lever = reference.imu_to_point().components_m();
-        let parameter_tolerance = x_tolerance / segment.duration_seconds;
-        let ownership = self.segment_endpoint_ownership(index, 0.0, 1.0);
-        if lever == [0.0; 3] {
-            let roots = isolate_polynomial_coefficients_with_budget(
-                segment.plane_polynomial(center_ecef, normal_ecef),
-                3,
+        budget.with_root_limit(self.root_evaluation_budget, |budget| {
+            let lease = self.segment_lease(index).map_err(query_to_metric)?;
+            let segment = lease.segment();
+            let reference = self.reference_point_for_metric(reference_point)?;
+            let lever = reference.imu_to_point().components_m();
+            let parameter_tolerance = x_tolerance / segment.duration_seconds;
+            let ownership = self.segment_endpoint_ownership(index, 0.0, 1.0);
+            if lever == [0.0; 3] {
+                let roots = isolate_polynomial_coefficients_with_budget(
+                    segment.plane_polynomial(center_ecef, normal_ecef),
+                    3,
+                    0.0,
+                    1.0,
+                    parameter_tolerance,
+                    value_tolerance,
+                    budget,
+                )?;
+                return filter_owned_roots(roots, 0.0, 1.0, parameter_tolerance, ownership);
+            }
+            let expression = RootExpression::new(segment, lever)?;
+            isolate_enclosed_roots_with_budget(
                 0.0,
                 1.0,
                 parameter_tolerance,
                 value_tolerance,
+                ownership,
                 budget,
-            )?;
-            return filter_owned_roots(roots, 0.0, 1.0, parameter_tolerance, ownership);
-        }
-        let expression = RootExpression::new(segment, lever)?;
-        isolate_enclosed_roots_with_budget(
-            0.0,
-            1.0,
-            parameter_tolerance,
-            value_tolerance,
-            ownership,
-            budget,
-            |lower, upper| expression.gate(lower, upper, center_ecef, normal_ecef),
-        )
+                |lower, upper| expression.gate(lower, upper, center_ecef, normal_ecef),
+            )
+        })
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -371,59 +372,61 @@ impl Trajectory {
         value_tolerance: f64,
         budget: &mut NumericalWorkBudget,
     ) -> Result<FixedVec<f64, MAX_SEGMENT_ROOTS>, MetricError> {
-        budget.cap_root_evaluations(self.root_evaluation_budget);
-        let lease = self.segment_lease(index).map_err(query_to_metric)?;
-        let segment = lease.segment();
-        if !self.body_axis_metric_outputs_available()
-            && matches!(
-                quantity,
-                SpeedQuantity::BodyLongitudinalSigned | SpeedQuantity::BodyLongitudinalMagnitude
-            )
-        {
-            return Err(MetricError::Unobservable);
-        }
-        let reference = self.reference_point_for_metric(reference_point)?;
-        let lever = reference.imu_to_point().components_m();
-        let parameter_tolerance = x_tolerance / segment.duration_seconds;
-        let ownership = self.segment_endpoint_ownership(index, lower, upper);
-        if matches!(quantity, SpeedQuantity::Spatial3d) && lever == [0.0; 3] {
-            let roots = isolate_polynomial_coefficients_with_budget(
-                segment.spatial_speed_squared_polynomial(target_mps),
-                4,
+        budget.with_root_limit(self.root_evaluation_budget, |budget| {
+            let lease = self.segment_lease(index).map_err(query_to_metric)?;
+            let segment = lease.segment();
+            if !self.body_axis_metric_outputs_available()
+                && matches!(
+                    quantity,
+                    SpeedQuantity::BodyLongitudinalSigned
+                        | SpeedQuantity::BodyLongitudinalMagnitude
+                )
+            {
+                return Err(MetricError::Unobservable);
+            }
+            let reference = self.reference_point_for_metric(reference_point)?;
+            let lever = reference.imu_to_point().components_m();
+            let parameter_tolerance = x_tolerance / segment.duration_seconds;
+            let ownership = self.segment_endpoint_ownership(index, lower, upper);
+            if matches!(quantity, SpeedQuantity::Spatial3d) && lever == [0.0; 3] {
+                let roots = isolate_polynomial_coefficients_with_budget(
+                    segment.spatial_speed_squared_polynomial(target_mps),
+                    4,
+                    lower,
+                    upper,
+                    parameter_tolerance,
+                    value_tolerance.max(target_mps * value_tolerance),
+                    budget,
+                )?;
+                return filter_owned_roots(roots, lower, upper, parameter_tolerance, ownership);
+            }
+            let expression = RootExpression::new(segment, lever)?;
+            let equation_tolerance = match quantity {
+                SpeedQuantity::BodyLongitudinalSigned => value_tolerance,
+                SpeedQuantity::InstantaneousHorizontal
+                | SpeedQuantity::Spatial3d
+                | SpeedQuantity::BodyLongitudinalMagnitude => {
+                    value_tolerance.max(target_mps.abs() * value_tolerance * 2.0)
+                }
+            };
+            isolate_enclosed_roots_with_budget(
                 lower,
                 upper,
                 parameter_tolerance,
-                value_tolerance.max(target_mps * value_tolerance),
+                equation_tolerance,
+                ownership,
                 budget,
-            )?;
-            return filter_owned_roots(roots, lower, upper, parameter_tolerance, ownership);
-        }
-        let expression = RootExpression::new(segment, lever)?;
-        let equation_tolerance = match quantity {
-            SpeedQuantity::BodyLongitudinalSigned => value_tolerance,
-            SpeedQuantity::InstantaneousHorizontal
-            | SpeedQuantity::Spatial3d
-            | SpeedQuantity::BodyLongitudinalMagnitude => {
-                value_tolerance.max(target_mps.abs() * value_tolerance * 2.0)
-            }
-        };
-        isolate_enclosed_roots_with_budget(
-            lower,
-            upper,
-            parameter_tolerance,
-            equation_tolerance,
-            ownership,
-            budget,
-            |cell_lower, cell_upper| {
-                expression.speed(
-                    cell_lower,
-                    cell_upper,
-                    self.frame.ellipsoid(),
-                    quantity,
-                    Some(target_mps),
-                )
-            },
-        )
+                |cell_lower, cell_upper| {
+                    expression.speed(
+                        cell_lower,
+                        cell_upper,
+                        self.frame.ellipsoid(),
+                        quantity,
+                        Some(target_mps),
+                    )
+                },
+            )
+        })
     }
 
     pub(crate) fn speed_slope_at_parameter(
@@ -464,59 +467,61 @@ impl Trajectory {
         value_tolerance: f64,
         budget: &mut NumericalWorkBudget,
     ) -> Result<FixedVec<f64, MAX_SEGMENT_ROOTS>, MetricError> {
-        budget.cap_root_evaluations(self.root_evaluation_budget);
-        let lease = self.segment_lease(index).map_err(query_to_metric)?;
-        let segment = lease.segment();
-        if !self.body_axis_metric_outputs_available()
-            && matches!(
-                quantity,
-                SpeedQuantity::BodyLongitudinalSigned | SpeedQuantity::BodyLongitudinalMagnitude
-            )
-        {
-            return Err(MetricError::Unobservable);
-        }
-        let reference = self.reference_point_for_metric(reference_point)?;
-        let lever = reference.imu_to_point().components_m();
-        let parameter_tolerance = x_tolerance / segment.duration_seconds;
-        let ownership = self.segment_endpoint_ownership(index, 0.0, 1.0);
-        if matches!(quantity, SpeedQuantity::Spatial3d) && lever == [0.0; 3] {
-            let squared = segment.spatial_speed_squared_polynomial(0.0);
-            let derivative = [
-                squared[1],
-                2.0 * squared[2],
-                3.0 * squared[3],
-                4.0 * squared[4],
-                0.0,
-            ];
-            let roots = isolate_polynomial_coefficients_with_budget(
-                derivative,
-                3,
+        budget.with_root_limit(self.root_evaluation_budget, |budget| {
+            let lease = self.segment_lease(index).map_err(query_to_metric)?;
+            let segment = lease.segment();
+            if !self.body_axis_metric_outputs_available()
+                && matches!(
+                    quantity,
+                    SpeedQuantity::BodyLongitudinalSigned
+                        | SpeedQuantity::BodyLongitudinalMagnitude
+                )
+            {
+                return Err(MetricError::Unobservable);
+            }
+            let reference = self.reference_point_for_metric(reference_point)?;
+            let lever = reference.imu_to_point().components_m();
+            let parameter_tolerance = x_tolerance / segment.duration_seconds;
+            let ownership = self.segment_endpoint_ownership(index, 0.0, 1.0);
+            if matches!(quantity, SpeedQuantity::Spatial3d) && lever == [0.0; 3] {
+                let squared = segment.spatial_speed_squared_polynomial(0.0);
+                let derivative = [
+                    squared[1],
+                    2.0 * squared[2],
+                    3.0 * squared[3],
+                    4.0 * squared[4],
+                    0.0,
+                ];
+                let roots = isolate_polynomial_coefficients_with_budget(
+                    derivative,
+                    3,
+                    0.0,
+                    1.0,
+                    parameter_tolerance,
+                    value_tolerance,
+                    budget,
+                )?;
+                return filter_owned_roots(roots, 0.0, 1.0, parameter_tolerance, ownership);
+            }
+            let expression = RootExpression::new(segment, lever)?;
+            isolate_enclosed_roots_with_budget(
                 0.0,
                 1.0,
                 parameter_tolerance,
                 value_tolerance,
+                ownership,
                 budget,
-            )?;
-            return filter_owned_roots(roots, 0.0, 1.0, parameter_tolerance, ownership);
-        }
-        let expression = RootExpression::new(segment, lever)?;
-        isolate_enclosed_roots_with_budget(
-            0.0,
-            1.0,
-            parameter_tolerance,
-            value_tolerance,
-            ownership,
-            budget,
-            |cell_lower, cell_upper| {
-                expression.speed(
-                    cell_lower,
-                    cell_upper,
-                    self.frame.ellipsoid(),
-                    quantity,
-                    None,
-                )
-            },
-        )
+                |cell_lower, cell_upper| {
+                    expression.speed(
+                        cell_lower,
+                        cell_upper,
+                        self.frame.ellipsoid(),
+                        quantity,
+                        None,
+                    )
+                },
+            )
+        })
     }
 
     pub(super) fn segment_endpoint_ownership(

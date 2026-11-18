@@ -224,6 +224,13 @@ where
         return Err(MetricError::InvalidDefinition);
     }
 
+    // A clipped previous segment can contribute only its excluded upper
+    // endpoint. That empty half-open domain has no root to isolate; the next
+    // segment owns the same timestamp and must evaluate it there.
+    if lower == upper && (!ownership.lower || !ownership.upper) {
+        return Ok(FixedVec::new());
+    }
+
     let lower_value = evaluate_root_oracle(&oracle, lower, lower, budget)?;
     let upper_value = if upper == lower {
         lower_value
@@ -302,6 +309,28 @@ where
             }
             if right.value.contained_in_zero_band(0.0) {
                 push_owned_root(&mut roots, cell.upper, lower, upper, x_tolerance, ownership)?;
+                continue;
+            }
+            // Boundary candidates were already qualified against the value
+            // tolerance above. Outward arithmetic rarely encloses an exact
+            // zero-width value even at an exact sample-boundary crossing.
+            // A strict derivative bound proves any possible zero is within
+            // x_tolerance of that boundary and excludes a second interior
+            // root. Preserve half-open ownership; do not apply this rule to
+            // arbitrary subdivision endpoints or a merely zero midpoint.
+            let minimum_slope = if derivative_sign > 0 {
+                enclosure.derivative.lower
+            } else {
+                -enclosure.derivative.upper
+            };
+            let boundary_resolved = |value: OutwardInterval| {
+                value.contained_in_zero_band(value_tolerance)
+                    && (value.lower.abs().max(value.upper.abs()) / minimum_slope).next_up()
+                        <= x_tolerance
+            };
+            if (cell.lower == lower && boundary_resolved(left.value))
+                || (cell.upper == upper && boundary_resolved(right.value))
+            {
                 continue;
             }
             if left_sign != 0 && right_sign != 0 {

@@ -253,3 +253,95 @@ fn shared_endpoint_is_owned_only_by_right_hand_interval() {
     assert!(left.is_empty());
     assert_eq!(right.as_slice(), &[0.5]);
 }
+
+#[test]
+fn outward_boundary_roundoff_preserves_root_ownership_without_false_ambiguity() {
+    let oracle = |lower: f64, upper: f64| {
+        let x = midpoint(lower, upper);
+        taylor_enclosure(
+            TaylorJet {
+                value: x - 0.5,
+                derivative: 1.0,
+                second_derivative: 0.0,
+                value_roundoff: 1e-14,
+                derivative_roundoff: 1e-14,
+                second_derivative_roundoff: 0.0,
+            },
+            0.0,
+            lower,
+            upper,
+        )
+    };
+    for (lower, upper, own_upper, expected) in [(0.0, 0.5, false, 0), (0.5, 1.0, true, 1)] {
+        let roots = isolate_enclosed_roots(
+            lower,
+            upper,
+            1e-9,
+            1e-12,
+            EndpointOwnership {
+                lower: true,
+                upper: own_upper,
+            },
+            2048,
+            oracle,
+        )
+        .unwrap();
+        assert_eq!(roots.len(), expected);
+        if expected == 1 {
+            assert_eq!(roots[0], 0.5);
+        }
+    }
+}
+
+#[test]
+fn value_tolerance_alone_does_not_resolve_a_wide_boundary_time_uncertainty() {
+    let oracle = |lower: f64, upper: f64| {
+        let x = midpoint(lower, upper);
+        taylor_enclosure(
+            TaylorJet {
+                value: x - 0.5,
+                derivative: 1.0,
+                second_derivative: 0.0,
+                value_roundoff: 1e-4,
+                derivative_roundoff: 0.0,
+                second_derivative_roundoff: 0.0,
+            },
+            0.0,
+            lower,
+            upper,
+        )
+    };
+    assert_eq!(
+        isolate_enclosed_roots(
+            0.0,
+            0.5,
+            1e-9,
+            1e-3,
+            EndpointOwnership {
+                lower: true,
+                upper: true
+            },
+            2048,
+            oracle
+        ),
+        Err(MetricError::AmbiguousRoot)
+    );
+}
+
+#[test]
+fn clipped_unowned_endpoint_is_an_empty_domain() {
+    let roots = isolate_enclosed_roots(
+        0.5,
+        0.5,
+        1e-9,
+        1e-12,
+        EndpointOwnership {
+            lower: true,
+            upper: false,
+        },
+        8,
+        |_, _| panic!("An empty half-open domain must not query the oracle"),
+    )
+    .unwrap();
+    assert!(roots.is_empty());
+}

@@ -240,6 +240,37 @@ impl MetricPlan {
         Ok(results)
     }
 
+    /// Host measurement with an explicit whole-pass numerical work budget.
+    /// This leaves embedded limits and per-segment root isolation unchanged.
+    #[cfg(feature = "offline")]
+    pub fn evaluate_with_limits(
+        &self,
+        trajectory: &Trajectory,
+        limits: super::MetricEvaluationLimits,
+    ) -> Result<MetricResults, MetricError> {
+        if [
+            limits.absolute_root_tolerance_s,
+            limits.value_tolerance,
+            limits.absolute_integration_tolerance,
+            limits.relative_integration_tolerance,
+        ]
+        .iter()
+        .any(|value| !value.is_finite() || *value <= 0.0)
+            || limits.maximum_root_evaluations == 0
+            || limits.maximum_quadrature_evaluations == 0
+        {
+            return Err(MetricError::InvalidDefinition);
+        }
+        let mut results = MetricResults::new();
+        self.evaluate_with_uncertainty_and_limits_into(
+            trajectory,
+            &mut TrajectoryMarginalUncertainty,
+            &mut results,
+            limits,
+        )?;
+        Ok(results)
+    }
+
     /// Evaluates every definition into caller-owned result storage.
     ///
     /// Offline replay can first call [`MetricResults::try_prepare_bounded`]
@@ -277,10 +308,27 @@ impl MetricPlan {
         uncertainty: &mut dyn MetricUncertaintyProvider,
         results: &mut MetricResults,
     ) -> Result<(), MetricError> {
+        self.evaluate_with_uncertainty_and_limits_into(
+            trajectory,
+            uncertainty,
+            results,
+            super::MetricEvaluationLimits::default(),
+        )
+    }
+
+    #[cfg(any(test, feature = "offline"))]
+    fn evaluate_with_uncertainty_and_limits_into(
+        &self,
+        trajectory: &Trajectory,
+        uncertainty: &mut dyn MetricUncertaintyProvider,
+        results: &mut MetricResults,
+        limits: super::MetricEvaluationLimits,
+    ) -> Result<(), MetricError> {
         results.clear();
         let evaluation = (|| {
             let mut evaluator =
                 Evaluator::new(self.run_namespace, trajectory, uncertainty, results);
+            evaluator.set_limits(limits);
             for definition in &self.definitions {
                 if validate_definition(definition).is_err() {
                     evaluator.record_diagnostic(MetricDefinitionDiagnostic {

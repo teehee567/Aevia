@@ -8,6 +8,7 @@ _restore_backup_*/
 
 # Local scratch files and Python package cache
 /tmp/
+/.tmp/
 /.tmp-uv-cache/
 
 debug
@@ -127,3 +128,6 @@ app.*.symbols
 # Firmware is a deployable binary; pin its workspace dependency graph.
 !/Cargo.lock
 !/tools/s31-reset/Cargo.lock
+
+# Local AEV recordings
+/data/*.aev

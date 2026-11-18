@@ -1,0 +1,21 @@
+[package]
+name = "aevia-firmware-host-tests"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[lib]
+path = "../host_tests.rs"
+
+[dependencies]
+heapless = "0.9.3"
+embedded-hal = "1.0.0"
+embassy-futures = "0.1.2"
+embassy-sync = "0.8.0"
+critical-section = { version = "1.2.0", features = ["std"] }
+aevia-trajectory = { path = "../../../traj", features = ["development"] }
+serde = { version = "1.0", features = ["derive"] }
+serde-json-core = "0.6.0"
+libm = "0.2.16"

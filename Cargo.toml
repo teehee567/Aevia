@@ -12,4 +12,4 @@ opt-level = "s"
 [profile.release.package.firmware]
 codegen-units = 1
 debug = 2
-opt-level = "s"
+opt-level = 3

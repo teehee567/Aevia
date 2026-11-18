@@ -2,10 +2,7 @@
 
 Aevia is a DIY, battery powered lap timer and track data logger. The current hardware is the V2 Mini, a compact board that combines multi-band GNSS, a 6-axis IMU, local storage, a display interface, physical controls, and wireless connectivity.
 
-Uses very very high end sensors, UM980, SCH16T-K01
-
 The goal is to build something in the same general space as a Garmin Catalyst, but at a lower cost and with more control over the hardware, raw data, and software. Recorded data should also remain useful outside the device, with export to proper desktop analysis tools.
-
 
 ## V2 Mini hardware
 
@@ -22,13 +19,41 @@ The V2 Mini is built around:
 
 See [v2_mini_design.md](./v2_mini_design.md) for the block diagrams, power tree, fitted parts, and current one-off build estimate.
 
-## Firmware and software plan
+## Firmware and app
+
+The [Aevia application](./app/README.md) now has a Flutter interface for USB
+recording, session import/export, local track replay, lap/sector comparison,
+custom track gates, configurable drag tests and a PPK workspace. Its receiver-only measurement
+path reuses Traj and labels missing or unqualified evidence explicitly.
+
+The application firmware now acquires the UM980 and SCH16T, reports battery and
+peripheral health, supports USB telemetry and exFAT SD recording, and exposes
+recording downloads. See the [application protocol](./firmware/docs/application-protocol.md)
+for controls, recording formats and current hardware limitations. The recovery
+loader remains the upload path. These builds still require verification on the
+fitted board for outdoor accuracy and calibrated timing. The on-device Traj estimator is explicitly a development profile;
+mounting and sensor timing calibration remain unqualified.
 
 The [base firmware](./firmware/README.md) now provides structured hardware
 bring-up and a button-free J6 USB flash runner. From `firmware/`, run
 `cargo run --release --locked` to build, flash and verify the restart.
 
-The immediate work is hardware bring-up and the basic firmware needed to read the GNSS and IMU, store sessions on the microSD card, and exercise the display and controls. The application backlog currently looks like this.
+The current hardware configuration enables battery, GNSS and IMU acquisition.
+Display support is present but disabled until a panel is attached; extra buttons
+are disabled and the app provides recording controls. Four LEDs indicate GNSS,
+IMU, storage/recording and power state. See the
+[20 Hz verification record](./data/aevia-implementation-status.md) for checks and
+outstanding hardware validation.
+
+The higher-rate profile requests 50 Hz native binary standalone GNSS (`SPPNAVB`)
+in UM980 signal group 8
+and records every native SCH16T DEC5 interval (approximately 727 Hz on this
+board). SD recordings also retain 5 Hz raw GNSS observations and ephemerides
+for RINEX export and PPK with a matching base recording. See the
+[higher-rate validation and PPK workflow](./data/highrate-ppk-validation.md)
+for measured rates, evidence retention and qualification limits.
+
+## Roadmap
 
 ### High priority
 
@@ -41,11 +66,11 @@ The immediate work is hardware bring-up and the basic firmware needed to read th
 - [ ] G-G diagram, with filtering suitable for noisy IMU output
 - [ ] Automatic track detection
   - [ ] Track learning mode
-  - [ ] Manual start and finish line setup
+  - [x] Manual start and finish line setup
 - [ ] Smart battery management
-- [ ] Theoretical best lap time
+- [x] Theoretical best lap time
 - [ ] Automatic recording based on acceleration
-- [ ] Sector splits for tracks that support them
+- [x] Sector splits for tracks that support them
 
 ### Low priority
 
@@ -63,7 +88,7 @@ The immediate work is hardware bring-up and the basic firmware needed to read th
 
 ## Why the UM980
 
-Of the modules considered, the UM980 is the best fit I found for raw GNSS quality at this price. It can output at 20 Hz while using multiple GNSS constellations. That matters in a car because an antenna inside the windscreen loses much of its view behind the metal roof. Combining GPS, GLONASS, Galileo, and BeiDou leaves more satellites available for each fix and can improve accuracy when the view of the sky is limited. A receiver advertised as "multi-GNSS" does not necessarily support its maximum update rate while using several constellations at once.
+Of the modules considered, the UM980 is the best fit I found for raw GNSS quality at this price. It can output at 20 Hz with its broader constellation selection; the current 50 Hz standalone profile uses signal group 8 and gives up GLONASS/NavIC. Constellation selection matters in a car because an antenna inside the windscreen loses much of its view behind the metal roof. Combining multiple constellations leaves more satellites available for each fix. A receiver advertised as "multi-GNSS" does not necessarily support its maximum update rate while using every constellation at once.
 
 It also supports multiple frequency bands. A single-band receiver has a harder time separating a direct signal from one reflected by the car or nearby barriers. Comparing L1 with L2 or L5 gives the receiver more information for rejecting poor measurements.
 
@@ -77,7 +102,7 @@ These figures are working notes from the module research and should be checked a
 
 | Receiver | Notes |
 |---|---|
-| Unicore `UM980` | L1, L2/L5, and L6; multi-constellation; full RTK; 20 Hz with full multi-GNSS; about 50 Hz in RTK mode; roughly A$130 |
+| Unicore `UM980` | L1, L2/L5, and L6; multi-constellation; full RTK; 20 Hz with full multi-GNSS; 50 Hz standalone with SG8 and compatible firmware; roughly A$130 |
 | u-blox `NEO-M9N` | L1-only; multi-constellation; 25 Hz with one constellation or 10 Hz with several; roughly A$20 |
 | u-blox `NEO-M10S` | L1-only; multi-constellation; 25 Hz with one constellation or 10 Hz with several; roughly A$20 |
 | u-blox `ZED-F9P` | L1 and L2; multi-constellation; full RTK; about 8 Hz with everything enabled or 20 Hz with a reduced configuration; roughly A$130 |
@@ -107,8 +132,6 @@ And raw GNSS modules specs are in [data/GNSS_research.xlsx](./data/GNSS_research
 I do not recommend this as a first electronics build. Several parts need reflow equipment or a capable hot-air setup, and a one off board involves a fair amount of tooling and rework cost. The V2 Mini estimate is about $500AUD for the PCB, stencil, parts, GNSS receiver, antenna, and battery.
 
 ## V1 archive
-
-archive, old, bad
 
 ![V1 assembled PCB](./data/IMG_4424.jpg)
 

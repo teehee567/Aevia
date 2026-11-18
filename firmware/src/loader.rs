@@ -21,13 +21,16 @@ enum Command<'a> {
     Recover,
     Upload { size: u32, sha256: [u8; 32] },
     Data(#[serde(borrow)] &'a [u8]),
+    App(#[serde(borrow)] &'a str),
 }
 
 #[derive(Serialize)]
-enum Response {
+enum Response<'a> {
     Ready,
     Reboot,
     Error,
+    App(&'a str),
+    Handled,
 }
 
 fn decode(frame: &mut [u8]) -> Result<Command<'_>, ()> {
@@ -45,6 +48,7 @@ fn decode(frame: &mut [u8]) -> Result<Command<'_>, ()> {
         Command::Recover => Ok(command),
         Command::Upload { size, .. } if (288..=APP_SIZE).contains(&size) => Ok(command),
         Command::Data(data) if !data.is_empty() && data.len() <= BLOCK_SIZE => Ok(command),
+        Command::App(text) if !text.is_empty() && text.len() <= 240 => Ok(command),
         _ => Err(()),
     }
 }
@@ -154,10 +158,37 @@ async fn io<T, E>(future: impl Future<Output = Result<T, E>>) -> Option<T> {
     result.ok()
 }
 
-async fn respond(tx: &mut usb::Output, response: Response) -> Option<()> {
-    let mut buffer = [0; 8];
-    let frame = postcard::to_slice_cobs(&response, &mut buffer).ok()?;
-    io(tx.write_packet(frame)).await
+async fn respond(
+    tx: &mut usb::Output,
+    response: Response<'_>,
+    buffer: &mut [u8; crate::app::RESPONSE_SIZE + 64],
+) -> Option<()> {
+    let began = embassy_time::Instant::now();
+    let len = if let Response::App(text) = &response
+        && let Some(len) = crate::response::frame_app_reply(text, buffer)
+    {
+        len
+    } else {
+        postcard::to_slice_cobs(&response, buffer).ok()?.len()
+    };
+    let frame = &buffer[..len];
+    crate::app::wire_serialized(began);
+    for (index, packet) in frame.chunks(usb::PACKET_SIZE).enumerate() {
+        let io_began = embassy_time::Instant::now();
+        io(tx.write_packet(packet)).await?;
+        // Acquisition uses preemptive IRQ executors. Give ordinary consumers a
+        // turn after a bounded 4 KiB group; yielding every packet cost ~1 ms each.
+        let yield_began = embassy_time::Instant::now();
+        if (index + 1).is_multiple_of(8) {
+            embassy_futures::yield_now().await;
+        }
+        crate::app::packet_sent(io_began, yield_began);
+    }
+    if frame.len().is_multiple_of(usb::PACKET_SIZE) {
+        io(tx.write_packet(&[])).await?;
+    }
+    crate::app::wire_sent(began, frame.len());
+    Some(())
 }
 
 fn boot(flash: &mut Flash<'_>, state: BootState, size: u32) -> Option<()> {
@@ -184,7 +215,16 @@ fn boot(flash: &mut Flash<'_>, state: BootState, size: u32) -> Option<()> {
     Some(())
 }
 
-pub async fn run(serial: usb::Serial, mut flash: Flash<'static>, recovery: bool) {
+pub async fn run<const RECOVERY: bool>(serial: usb::Serial, mut flash: Flash<'static>) {
+    // Keep the large response in one static slot. Returning it by value from
+    // app::request created a >12 KiB temporary in the executor's poll frame.
+    static APP_RESPONSE: static_cell::ConstStaticCell<
+        crate::response::Response<{ crate::app::RESPONSE_SIZE }>,
+    > = static_cell::ConstStaticCell::new(crate::response::Response::new());
+    let response = APP_RESPONSE.take();
+    static WIRE_RESPONSE: static_cell::ConstStaticCell<[u8; crate::app::RESPONSE_SIZE + 64]> =
+        static_cell::ConstStaticCell::new([0; crate::app::RESPONSE_SIZE + 64]);
+    let wire_response = WIRE_RESPONSE.take();
     let (mut tx, receiver, control) = serial.split_with_control();
     let mut rx = Reader {
         receiver,
@@ -204,24 +244,29 @@ pub async fn run(serial: usb::Serial, mut flash: Flash<'static>, recovery: bool)
                 control.control_changed().await;
             }
         };
-        let pending_request = request(&mut rx, &mut tx, &mut flash, recovery);
+        let pending_request =
+            request::<RECOVERY>(&mut rx, &mut tx, &mut flash, response, wire_response);
         let result = select(closed, pending_request).await;
 
         match result {
+            Either::Second(Some(Response::Handled)) => continue,
             Either::Second(Some(Response::Reboot)) => {
                 // a committed reboot still needs to happen if the host misses the reply
-                let reply = respond(&mut tx, Response::Reboot);
+                let reply = respond(&mut tx, Response::Reboot, wire_response);
                 let _ = with_timeout(Duration::from_secs(1), reply).await;
                 Timer::after_millis(100).await;
                 return;
             }
             Either::Second(Some(Response::Ready)) => {
-                if respond(&mut tx, Response::Ready).await.is_some() {
+                if respond(&mut tx, Response::Ready, wire_response)
+                    .await
+                    .is_some()
+                {
                     continue;
                 }
             }
             Either::Second(_) => {
-                let _ = respond(&mut tx, Response::Error).await;
+                let _ = respond(&mut tx, Response::Error, wire_response).await;
             }
             Either::First(()) => {}
         }
@@ -234,20 +279,36 @@ pub async fn run(serial: usb::Serial, mut flash: Flash<'static>, recovery: bool)
     }
 }
 
-async fn request(
+async fn request<const RECOVERY: bool>(
     rx: &mut Reader,
     tx: &mut usb::Output,
     flash: &mut Flash<'_>,
-    recovery: bool,
-) -> Option<Response> {
+    response: &mut crate::response::Response<{ crate::app::RESPONSE_SIZE }>,
+    wire_response: &mut [u8; crate::app::RESPONSE_SIZE + 64],
+) -> Option<Response<'static>> {
     let mut frame = [0; FRAME_SIZE];
     let command = rx.command(&mut frame).await.ok()?;
-    validate_layout(flash, recovery)?;
+    // Telemetry must not repeatedly read flash while acquisition is running.
+    if let Command::App(text) = command {
+        if RECOVERY {
+            return None;
+        }
+        let began = embassy_time::Instant::now();
+        crate::app::request(text, response).await;
+        crate::app::response_built(began);
+        respond(tx, Response::App(response.as_str()), wire_response).await?;
+        return Some(Response::Handled);
+    }
+    validate_layout(flash, RECOVERY)?;
 
     let (size, expected_hash) = match command {
         Command::Recover => {
-            if recovery {
+            if RECOVERY {
                 return Some(Response::Ready);
+            }
+
+            if !crate::app::prepare_recovery().await {
+                return None;
             }
 
             boot(flash, BootState::Recovery, 0)?;
@@ -255,14 +316,15 @@ async fn request(
         }
         Command::Upload { size, sha256 } => (size, sha256),
         Command::Data(_) => return None,
+        Command::App(_) => unreachable!(),
     };
 
     boot(flash, BootState::Recovery, 0)?;
-    if !recovery {
+    if !RECOVERY {
         return Some(Response::Reboot);
     }
 
-    respond(tx, Response::Ready).await?;
+    respond(tx, Response::Ready, wire_response).await?;
     let mut hash = Sha256::new();
     let mut buffer = Buffer([0xff; BLOCK_SIZE]);
 
@@ -300,7 +362,7 @@ async fn request(
 
         let next_offset = offset + length as u32;
         if next_offset < size {
-            respond(tx, Response::Ready).await?;
+            respond(tx, Response::Ready, wire_response).await?;
         }
         embassy_futures::yield_now().await;
     }

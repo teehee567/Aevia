@@ -94,6 +94,22 @@ impl NumericalWorkBudget {
         self.root_evaluations_remaining = self.root_evaluations_remaining.min(maximum);
     }
 
+    /// Applies a per-segment ceiling without discarding the whole-pass credits
+    /// reserved for later segments. Failed isolation still consumes its work.
+    pub(crate) fn with_root_limit<T>(
+        &mut self,
+        maximum: u32,
+        work: impl FnOnce(&mut Self) -> Result<T, MetricError>,
+    ) -> Result<T, MetricError> {
+        let mut local = *self;
+        local.cap_root_evaluations(maximum);
+        let before = local.root_evaluations_remaining;
+        let result = work(&mut local);
+        self.root_evaluations_remaining -= before - local.root_evaluations_remaining;
+        self.quadrature_evaluations_remaining = local.quadrature_evaluations_remaining;
+        result
+    }
+
     pub(super) const fn from_work(work: NumericalWork) -> Self {
         Self::new(work.root_evaluations, work.quadrature_evaluations)
     }
@@ -138,6 +154,51 @@ impl NumericalWorkBudget {
             .checked_sub(evaluations)
             .ok_or(MetricError::EvaluationBudgetExceeded)?;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod segment_budget_tests {
+    use super::*;
+
+    #[test]
+    fn segment_limit_preserves_remaining_whole_session_budget() {
+        let mut budget = NumericalWorkBudget::new(10_000, 100);
+        for _ in 0..100 {
+            budget
+                .with_root_limit(20, |local| {
+                    for _ in 0..10 {
+                        local.charge_root_evaluation()?;
+                    }
+                    Ok(())
+                })
+                .unwrap();
+        }
+        assert_eq!(budget.root_evaluations_remaining, 9_000);
+    }
+
+    #[test]
+    fn failing_segment_charges_work_and_cannot_exceed_local_or_global_limit() {
+        let mut budget = NumericalWorkBudget::new(100, 100);
+        assert_eq!(
+            budget.with_root_limit(2, |local| {
+                for _ in 0..3 {
+                    local.charge_root_evaluation()?;
+                }
+                Ok(())
+            }),
+            Err(MetricError::EvaluationBudgetExceeded)
+        );
+        assert_eq!(budget.root_evaluations_remaining, 98);
+        let mut exhausted = NumericalWorkBudget::new(1, 100);
+        assert_eq!(
+            exhausted.with_root_limit(2, |local| {
+                local.charge_root_evaluation()?;
+                local.charge_root_evaluation()
+            }),
+            Err(MetricError::EvaluationBudgetExceeded)
+        );
+        assert_eq!(exhausted.root_evaluations_remaining, 0);
     }
 }
 

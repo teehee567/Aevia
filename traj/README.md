@@ -10,6 +10,18 @@ It has two processing paths:
   `ProcessingLevel::OfflineSmooth` selects fixed-interval smoothing;
   `ProcessingLevel::CapturedReplay` reproduces the captured live processing.
 
+The host-only `receiver::ReceiverTrack` also evaluates existing lap, drag and
+distance definitions on contiguous receiver position/velocity fixes when
+inertial preparation is unavailable. This is an explicitly degraded GNSS-only
+Hermite interpolation path, not fused navigation. It exposes measurements and
+receiver horizontal speed, never a body attitude or synthetic IMU state.
+Statistical measurement uncertainty remains unavailable. Callers must split
+invalid fixes, clock resets, stale intervals and position jumps before passing
+each run to it; `from_fixes` additionally rejects nonadvancing epochs and gaps
+above its declared limit. The app retains raw evidence for later calibrated
+processing. `MetricPlan::evaluate_with_limits` provides an explicit bounded
+whole-session host budget while preserving per-segment root limits.
+
 Offline processing uses `OfflineResourceLimits` and returns an `OfflineRun`
 with an `OfflineRunSummary`.
 

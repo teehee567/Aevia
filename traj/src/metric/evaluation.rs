@@ -54,6 +54,11 @@ pub(super) struct EvaluatorCheckpoint {
 }
 
 impl<'a, 'results> Evaluator<'a, 'results> {
+    #[cfg(any(test, feature = "offline"))]
+    pub(super) fn set_limits(&mut self, limits: MetricEvaluationLimits) {
+        self.limits = limits;
+        self.numerical_budget = NumericalWorkBudget::from_limits(limits);
+    }
     pub(super) fn new(
         run_namespace: u64,
         trajectory: &'a Trajectory,

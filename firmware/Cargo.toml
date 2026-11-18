@@ -22,6 +22,8 @@ test = false
 bench = false
 
 [dependencies]
+aevia-trajectory = { path = "../traj" }
+libm = "0.2.16"
 sha2 = { version = "0.11", default-features = false }
 serde = { version = "1.0.229", default-features = false, features = ["derive"] }
 postcard = { version = "1.1.3", default-features = false }
@@ -45,3 +47,18 @@ embassy-usb = { version = "0.6.0", default-features = false }
 esp-alloc = { version = "0.11.0", features = ["esp32s31"] }
 esp-storage = { version = "0.10.0", features = ["esp32s31"] }
 static_cell = "2.1.1"
+heapless = "0.9.3"
+embassy-sync = "0.8.0"
+embedded-io-async = "0.7.0"
+embedded-hal = "1.0.0"
+critical-section = "1.2.0"
+esp32s31 = "0.3.0"
+serde-json-core = "0.6.0"
+
+[features]
+default = ["development-navigation"]
+development-navigation = ["aevia-trajectory/development"]
+# Temporary boot isolation image; never use this feature for acquisition.
+diagnostic-usb-only = []
+diagnostic-sensors-only = []
+diagnostic-no-navigation = []

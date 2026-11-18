@@ -31,6 +31,8 @@ pub mod observation;
 pub mod offline;
 pub mod provenance;
 pub mod quality;
+#[cfg(feature = "offline")]
+pub mod receiver;
 mod scalar_math;
 pub mod time;
 pub mod trajectory;

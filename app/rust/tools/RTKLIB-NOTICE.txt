@@ -1,0 +1,23 @@
+Aevia optional external PPK tools
+
+RTKLIB Explorer release 2.5.1
+Source commit: 62d4677ed8425a4e2748c6d390b500d1afb493fc
+Source: https://github.com/rtklibexplorer/RTKLIB/tree/62d4677ed8425a4e2748c6d390b500d1afb493fc
+Release: https://github.com/rtklibexplorer/RTKLIB/releases/tag/v2.5.1
+Archive SHA256: 0b20c940b1939b0701f0ee027daf5225221120dbff50c3f563f8705fd0b496f5
+
+The installer copies unchanged convbin.exe and rnx2rtkp.exe from that official
+release. It does not install the accompanying GUI programs or utilities.
+RTKLIB-LICENSE.txt accompanies these executables and must be retained when
+distributing them. Aevia's own source does not incorporate the RTKLIB solver.
+
+RTKLIB copyright (c) 2007-2020, T. Takasu. All rights reserved.
+The Unicore receiver decoder src/rcv/unicore.c additionally identifies:
+Copyright (C) 2024 Avinab Malla. All rights reserved.
+RTKLIB Explorer changes and contributor history remain available in the source
+repository above. The upstream program is provided without warranties.
+
+No base observations or survey coordinates are supplied by this package.
+Processing quality depends on the actual inputs, receiver environment,
+configuration, signal tracking and reference-station metadata. A fixed solution
+status is not an independent measurement of positional accuracy.

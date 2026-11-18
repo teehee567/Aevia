@@ -10,5 +10,5 @@ fn panic(_: &core::panic::PanicInfo) -> ! {
 
 #[esp_rtos::main]
 async fn main(spawner: embassy_executor::Spawner) -> ! {
-    firmware::run(spawner, false).await
+    firmware::run::<false>(spawner).await
 }

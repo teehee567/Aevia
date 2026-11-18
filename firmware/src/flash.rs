@@ -116,6 +116,15 @@ impl<'d> Flash<'d> {
     }
 
     fn with_write(&mut self, operation: impl FnOnce() -> Result<(), i32>) -> Result<(), Error> {
+        // Acquire the cross-core critical section BEFORE parking CPU1, so it
+        // cannot be parked while owning a shared lock needed by this core.
+        critical_section::with(|_| self.with_write_critical(operation))
+    }
+
+    fn with_write_critical(
+        &mut self,
+        operation: impl FnOnce() -> Result<(), i32>,
+    ) -> Result<(), Error> {
         // park the other core only if it is running so stopped cores stay stopped
         let other_core = Cpu::other().find(|&core| is_running(core));
         if let Some(core) = other_core {
