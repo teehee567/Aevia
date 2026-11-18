@@ -137,7 +137,7 @@ class _BoardDataViewState extends State<BoardDataView> {
                       ? null
                       : c.refreshDeviceSessions,
                   icon: const Icon(Icons.refresh, size: 16),
-                  label: const Text('Refresh'),
+                  label: Text(c.readingDirectory ? 'Reading…' : 'Refresh'),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -209,9 +209,12 @@ class _BoardScrollPosition extends ScrollPositionWithSingleContext {
       minScrollExtent,
       maxScrollExtent,
     );
+    // Deliver the leading movement in the input event itself. Only ease the
+    // tail, so a burst of notches cannot keep restarting at a stationary frame.
+    super.pointerScroll((target - pixels) * .6);
     animateTo(
       target,
-      duration: const Duration(milliseconds: 105),
+      duration: const Duration(milliseconds: 55),
       curve: Curves.easeOutCubic,
     );
     wheelActivity = activity;
@@ -251,7 +254,7 @@ class _Recording extends StatelessWidget {
           children: [
             OutlinedButton(
               onPressed: enabled ? () => c.previewDeviceSession(id) : null,
-              child: const Text('Preview'),
+              child: Text(c.readingPreview == id ? 'Reading…' : 'Preview'),
             ),
             OutlinedButton.icon(
               onPressed: enabled ? () => c.downloadDeviceSession(id) : null,

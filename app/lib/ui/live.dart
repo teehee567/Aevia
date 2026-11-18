@@ -144,6 +144,7 @@ class _LiveViewState extends State<LiveView> {
               final meter = LiveGMeter(
                 acceleration: c.imuAccelerationG,
                 connected: c.connected,
+                trail: c.gTrail,
               );
               if (box.maxWidth >= 820) {
                 return Row(
@@ -310,6 +311,7 @@ class _LiveViewState extends State<LiveView> {
               'Receiver battery',
               c.receiverFresh ? number(c.device['battery_percent'], 0) : '—',
               unit: '%',
+              note: _batteryNote(c),
             ),
           ],
         ),
@@ -322,15 +324,11 @@ class _LiveViewState extends State<LiveView> {
                 'km/h · last 300 s maximum',
                 style: TextStyle(color: muted, fontSize: 11),
               ),
-              child: TraceChart(samples: List.of(c.recent), cursor: 1),
+              child: TraceChart(samples: c.recent, cursor: 1),
             );
             final map = Section(
               title: 'Live position',
-              child: TrackMap(
-                samples: List.of(c.recent),
-                cursor: 1,
-                height: 220,
-              ),
+              child: TrackMap(samples: c.recent, cursor: 1, height: 220),
             );
             return box.maxWidth > 950
                 ? Row(
@@ -346,5 +344,26 @@ class _LiveViewState extends State<LiveView> {
         ),
       ],
     );
+  }
+
+  String? _batteryNote(AeviaController c) {
+    if (!c.receiverFresh || numeric(c.device['battery_percent']) == null) {
+      return null;
+    }
+    final remaining = c.batteryTimeLeft;
+    if (remaining != null) {
+      final hours = remaining.inHours;
+      final minutes = remaining.inMinutes.remainder(60);
+      if (hours > 0) return 'About ${hours}h ${minutes}m left';
+      return minutes == 0 ? 'Less than 1m left' : 'About ${minutes}m left';
+    }
+    return switch (c.batteryState) {
+      'charging' => 'Charging',
+      'bypass' => 'USB power',
+      'battery' || 'low' => 'Estimating time left…',
+      null when c.usbConnected => 'USB power',
+      null when c.bluetooth => 'Waiting for discharge trend',
+      _ => 'Time left unavailable',
+    };
   }
 }

@@ -319,7 +319,10 @@ class _AeviaShellState extends State<AeviaShell> {
                       ],
                     ),
                   ),
-                  if (controller.busy)
+                  if (controller.busy &&
+                      (controller.page != AeviaController.boardPage ||
+                          (!controller.readingDirectory &&
+                              controller.readingPreview == null)))
                     const LinearProgressIndicator(minHeight: 2),
                   if (controller.activity != null ||
                       controller.state['processing'] != null)

@@ -23,6 +23,10 @@ class _AnalysisViewState extends State<AnalysisView> {
   String channel = 'speed_mps';
   String? sessionId;
   String? trackId;
+  Object? _sampleSource;
+  List<Map<String, dynamic>> _all = const [];
+  Record? _selectionKey;
+  List<Map<String, dynamic>> _samples = const [], _reference = const [];
   Timer? replay;
   bool get playing => replay?.isActive == true;
   @override
@@ -110,11 +114,25 @@ class _AnalysisViewState extends State<AnalysisView> {
     final laps = objects(analysis['laps']);
     if (lapIndex >= laps.length) lapIndex = -1;
     if (referenceIndex >= laps.length) referenceIndex = -1;
-    final all = objects(session['samples']);
-    final samples = lapSamples(all, laps, lapIndex);
-    final reference = referenceIndex < 0
-        ? <Map<String, dynamic>>[]
-        : lapSamples(all, laps, referenceIndex);
+    final source = session['samples'];
+    if (!identical(source, _sampleSource)) {
+      _sampleSource = source;
+      _all = source is List
+          ? [
+              for (final row in source.whereType<Map>())
+                row is Map<String, dynamic> ? row : object(row),
+            ]
+          : const [];
+    }
+    final selectionKey = (_all, analysis['laps'], lapIndex, referenceIndex);
+    if (_selectionKey != selectionKey) {
+      _selectionKey = selectionKey;
+      _samples = lapSamples(_all, laps, lapIndex);
+      _reference = referenceIndex < 0
+          ? const []
+          : lapSamples(_all, laps, referenceIndex);
+    }
+    final samples = _samples, reference = _reference;
     final start = samples.isEmpty ? 0.0 : numeric(samples.first['time_s']) ?? 0;
     final duration = samples.isEmpty
         ? 0.0
@@ -195,7 +213,7 @@ class _AnalysisViewState extends State<AnalysisView> {
         ),
         const SizedBox(height: 12),
         Text(
-          '${sessionDate(session['created_ms'])}  ·  ${session['sample_count'] ?? all.length} samples  ·  ${analysis['valid_samples'] ?? '—'} valid',
+          '${sessionDate(session['created_ms'])}  ·  ${session['sample_count'] ?? _all.length} samples  ·  ${analysis['valid_samples'] ?? '—'} valid',
           style: const TextStyle(color: muted, fontSize: 12),
         ),
         if (demo)
@@ -375,7 +393,7 @@ class _AnalysisViewState extends State<AnalysisView> {
                     samples: samples,
                     reference: reference,
                     cursor: mapCursor,
-                    track: object(session['track']),
+                    track: session['track'] as Map<String, dynamic>?,
                   );
                   final telemetry = Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

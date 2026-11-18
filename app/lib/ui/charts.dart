@@ -1,8 +1,9 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../controller.dart';
 import 'common.dart';
 
-class TraceChart extends StatelessWidget {
+class TraceChart extends StatefulWidget {
   const TraceChart({
     super.key,
     required this.samples,
@@ -19,47 +20,82 @@ class TraceChart extends StatelessWidget {
   final double factor, cursor, height;
   final ValueChanged<double>? onSeek;
   @override
-  Widget build(BuildContext context) => samples.isEmpty
-      ? const EmptyState(
-          'No trace yet',
-          'Valid samples will appear here as the receiver sends them.',
-        )
-      : LayoutBuilder(
-          builder: (context, box) => GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTapDown: onSeek == null
-                ? null
-                : (event) => onSeek!(
-                    ((event.localPosition.dx - 48) / (box.maxWidth - 62)).clamp(
-                      0,
-                      1,
+  State<TraceChart> createState() => _TraceChartState();
+}
+
+class _TraceChartState extends State<TraceChart> {
+  (double, double)? range() {
+    double low = double.infinity, high = double.negativeInfinity;
+    for (final series in [widget.samples, widget.reference]) {
+      for (final point in series) {
+        final value = numeric(point[widget.channel]);
+        if (point['valid'] == false || value == null) continue;
+        low = math.min(low, value * widget.factor);
+        high = math.max(high, value * widget.factor);
+      }
+    }
+    return low.isFinite ? (low, high) : null;
+  }
+
+  late var limits = range();
+  @override
+  void didUpdateWidget(TraceChart old) {
+    super.didUpdateWidget(old);
+    if (old.samples != widget.samples ||
+        old.reference != widget.reference ||
+        old.channel != widget.channel ||
+        old.factor != widget.factor)
+      limits = range();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final onSeek = widget.onSeek;
+    return widget.samples.isEmpty
+        ? const EmptyState(
+            'No trace yet',
+            'Valid samples will appear here as the receiver sends them.',
+          )
+        : LayoutBuilder(
+            builder: (context, box) => GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTapDown: onSeek == null
+                  ? null
+                  : (event) => onSeek(
+                      ((event.localPosition.dx - 48) / (box.maxWidth - 62))
+                          .clamp(0, 1),
+                    ),
+              onHorizontalDragUpdate: onSeek == null
+                  ? null
+                  : (event) => onSeek(
+                      ((event.localPosition.dx - 48) / (box.maxWidth - 62))
+                          .clamp(0, 1),
+                    ),
+              child: Semantics(
+                label:
+                    '${widget.unit} over elapsed time chart. Drag to move the replay cursor.',
+                child: CustomPaint(
+                  foregroundPainter: limits == null
+                      ? null
+                      : _TraceCursor(widget.cursor),
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      size: Size(box.maxWidth, widget.height),
+                      painter: TracePainter(
+                        widget.samples,
+                        widget.reference,
+                        widget.channel,
+                        widget.unit,
+                        widget.factor,
+                        limits,
+                      ),
                     ),
                   ),
-            onHorizontalDragUpdate: onSeek == null
-                ? null
-                : (event) => onSeek!(
-                    ((event.localPosition.dx - 48) / (box.maxWidth - 62)).clamp(
-                      0,
-                      1,
-                    ),
-                  ),
-            child: Semantics(
-              label:
-                  '$unit over elapsed time chart. Drag to move the replay cursor.',
-              child: CustomPaint(
-                size: Size(box.maxWidth, height),
-                painter: TracePainter(
-                  samples,
-                  reference,
-                  channel,
-                  unit,
-                  factor,
-                  cursor,
                 ),
               ),
             ),
-          ),
-        );
+          );
+  }
 }
 
 void chartText(
@@ -99,26 +135,22 @@ class TracePainter extends CustomPainter {
     this.channel,
     this.unit,
     this.factor,
-    this.cursor,
+    this.limits,
   );
   final List<Map<String, dynamic>> samples, reference;
   final String channel, unit;
-  final double factor, cursor;
+  final double factor;
+  final (double, double)? limits;
   @override
   void paint(Canvas canvas, Size size) {
     final area = Rect.fromLTRB(48, 18, size.width - 14, size.height - 28);
-    final values = [...samples, ...reference]
-        .where((e) => e['valid'] != false)
-        .map((e) => numeric(e[channel]))
-        .whereType<double>()
-        .map((v) => v * factor)
-        .toList();
-    if (values.isEmpty || area.width <= 0) {
+    final values = limits;
+    if (values == null || area.width <= 0) {
       chartText(canvas, 'Channel unavailable', const Offset(48, 70));
       return;
     }
-    double low = math.min(0, values.reduce(math.min));
-    double high = math.max(1, values.reduce(math.max));
+    double low = math.min(0, values.$1);
+    double high = math.max(1, values.$2);
     final margin = (high - low) * .08;
     high += margin;
     if (low < 0) low -= margin;
@@ -202,6 +234,25 @@ class TracePainter extends CustomPainter {
 
     if (reference.isNotEmpty) trace(reference, compareColor, referenceOrigin);
     trace(samples, accent, origin);
+  }
+
+  @override
+  bool shouldRepaint(covariant TracePainter old) =>
+      old.samples != samples ||
+      old.reference != reference ||
+      old.channel != channel ||
+      old.unit != unit ||
+      old.factor != factor ||
+      old.limits != limits;
+}
+
+class _TraceCursor extends CustomPainter {
+  const _TraceCursor(this.cursor);
+  final double cursor;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final area = Rect.fromLTRB(48, 18, size.width - 14, size.height - 28);
+    if (area.isEmpty) return;
     final x = area.left + cursor.clamp(0, 1) * area.width;
     canvas.drawLine(
       Offset(x, area.top),
@@ -213,10 +264,10 @@ class TracePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant TracePainter oldDelegate) => true;
+  bool shouldRepaint(covariant _TraceCursor old) => old.cursor != cursor;
 }
 
-class TrackMap extends StatelessWidget {
+class TrackMap extends StatefulWidget {
   const TrackMap({
     super.key,
     required this.samples,
@@ -230,18 +281,23 @@ class TrackMap extends StatelessWidget {
   final double height;
   final Map<String, dynamic>? track;
   @override
+  State<TrackMap> createState() => _TrackMapState();
+}
+
+class _TrackMapState extends State<TrackMap> {
+  late var bounds = _RouteBounds(widget.samples, widget.reference);
+  @override
+  void didUpdateWidget(TrackMap old) {
+    super.didUpdateWidget(old);
+    if (old.samples != widget.samples || old.reference != widget.reference) {
+      bounds = _RouteBounds(widget.samples, widget.reference);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) => SizedBox(
-    height: height,
-    child:
-        samples
-                .where(
-                  (e) =>
-                      e['valid'] != false &&
-                      numeric(e['lat']) != null &&
-                      numeric(e['lon']) != null,
-                )
-                .length <
-            2
+    height: widget.height,
+    child: !bounds.hasRoute
         ? const EmptyState(
             'No position trace',
             'A position fix is required to draw the recorded racing line.',
@@ -255,8 +311,22 @@ class TrackMap extends StatelessWidget {
                     minScale: 1,
                     maxScale: 8,
                     child: CustomPaint(
-                      painter: MapPainter(samples, reference, cursor, track),
-                      child: const SizedBox.expand(),
+                      foregroundPainter: MapCursorPainter._(
+                        widget.samples,
+                        widget.cursor,
+                        bounds,
+                      ),
+                      child: RepaintBoundary(
+                        child: CustomPaint(
+                          painter: _RoutePainter(
+                            widget.samples,
+                            widget.reference,
+                            widget.track,
+                            bounds,
+                          ),
+                          child: const SizedBox.expand(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -282,43 +352,59 @@ class TrackMap extends StatelessWidget {
   );
 }
 
-class MapPainter extends CustomPainter {
-  MapPainter(this.samples, this.reference, this.cursor, this.track);
+class _RouteBounds {
+  double lat0 = 0, lon0 = 0, lonScale = 0;
+  double minX = 0, maxX = 0, minY = 0, maxY = 0, maxSpeed = 1;
+  bool hasRoute = false;
+
+  _RouteBounds(
+    List<Map<String, dynamic>> samples,
+    List<Map<String, dynamic>> reference,
+  ) {
+    var count = 0;
+    for (final (series, primary) in [(samples, true), (reference, false)]) {
+      for (final p in series) {
+        final lat = numeric(p['lat']), lon = numeric(p['lon']);
+        if (p['valid'] == false || lat == null || lon == null) continue;
+        if (count == 0) {
+          lat0 = lat;
+          lon0 = lon;
+          lonScale = 111320 * math.cos(lat0 * math.pi / 180);
+        }
+        final point = meters(lat, lon);
+        minX = math.min(minX, point.dx);
+        maxX = math.max(maxX, point.dx);
+        minY = math.min(minY, point.dy);
+        maxY = math.max(maxY, point.dy);
+        maxSpeed = math.max(maxSpeed, numeric(p['speed_mps']) ?? 0);
+        count++;
+      }
+      if (primary) hasRoute = count >= 2;
+    }
+  }
+
+  Offset meters(double lat, double lon) =>
+      Offset((lon - lon0) * lonScale, -(lat - lat0) * 111320);
+  double scale(Size size) => math.min(
+    (size.width - 70) / math.max(20, maxX - minX),
+    (size.height - 70) / math.max(20, maxY - minY),
+  );
+  Offset project(Offset p, Size size, double scale) => Offset(
+    size.width / 2 + (p.dx - (minX + maxX) / 2) * scale,
+    size.height / 2 + (p.dy - (minY + maxY) / 2) * scale,
+  );
+}
+
+class _RoutePainter extends CustomPainter {
+  _RoutePainter(this.samples, this.reference, this.track, this.bounds);
   final List<Map<String, dynamic>> samples, reference;
-  final double? cursor;
   final Map<String, dynamic>? track;
+  final _RouteBounds bounds;
   @override
   void paint(Canvas canvas, Size size) {
-    final valid = [...samples, ...reference]
-        .where(
-          (s) =>
-              s['valid'] != false &&
-              numeric(s['lat']) != null &&
-              numeric(s['lon']) != null,
-        )
-        .toList();
-    if (valid.length < 2) return;
-    final lat0 = numeric(valid.first['lat'])!;
-    final lon0 = numeric(valid.first['lon'])!;
-    Offset meters(Map<String, dynamic> p) => Offset(
-      ((numeric(p['lon']) ?? lon0) - lon0) *
-          111320 *
-          math.cos(lat0 * math.pi / 180),
-      -((numeric(p['lat']) ?? lat0) - lat0) * 111320,
-    );
-    final positions = valid.map(meters).toList();
-    final minX = positions.map((e) => e.dx).reduce(math.min),
-        maxX = positions.map((e) => e.dx).reduce(math.max);
-    final minY = positions.map((e) => e.dy).reduce(math.min),
-        maxY = positions.map((e) => e.dy).reduce(math.max);
-    final scale = math.min(
-      (size.width - 70) / math.max(20, maxX - minX),
-      (size.height - 70) / math.max(20, maxY - minY),
-    );
-    Offset project(Offset p) => Offset(
-      size.width / 2 + (p.dx - (minX + maxX) / 2) * scale,
-      size.height / 2 + (p.dy - (minY + maxY) / 2) * scale,
-    );
+    final scale = bounds.scale(size);
+    if (scale <= 0) return;
+    Offset project(Offset point) => bounds.project(point, size, scale);
     final grid = Paint()..color = line.withValues(alpha: .4);
     for (double x = 0; x < size.width; x += 40) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), grid);
@@ -326,11 +412,10 @@ class MapPainter extends CustomPainter {
     for (double y = 0; y < size.height; y += 40) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
     }
-    final maxSpeed = math.max(
-      1.0,
-      valid.map((e) => numeric(e['speed_mps']) ?? 0).reduce(math.max),
-    );
     void route(List<Map<String, dynamic>> points, bool isReference) {
+      final stroke = Paint()
+        ..strokeWidth = isReference ? 2 : 3
+        ..strokeCap = StrokeCap.round;
       Offset? previous;
       double? previousTime;
       for (final p in points) {
@@ -340,7 +425,9 @@ class MapPainter extends CustomPainter {
           previous = null;
           continue;
         }
-        final next = project(meters(p));
+        final next = project(
+          bounds.meters(numeric(p['lat'])!, numeric(p['lon'])!),
+        );
         final time = numeric(p['time_s']);
         if (previous != null &&
             (time == null ||
@@ -351,16 +438,9 @@ class MapPainter extends CustomPainter {
               : Color.lerp(
                   const Color(0xff4588ac),
                   accent,
-                  (numeric(p['speed_mps']) ?? 0) / maxSpeed,
+                  (numeric(p['speed_mps']) ?? 0) / bounds.maxSpeed,
                 )!;
-          canvas.drawLine(
-            previous,
-            next,
-            Paint()
-              ..color = color
-              ..strokeWidth = isReference ? 2 : 3
-              ..strokeCap = StrokeCap.round,
-          );
+          canvas.drawLine(previous, next, stroke..color = color);
         }
         previous = next;
         previousTime = time;
@@ -369,20 +449,9 @@ class MapPainter extends CustomPainter {
 
     route(reference, true);
     route(samples, false);
-    final index = cursor == null
-        ? null
-        : ((samples.length - 1) * cursor!.clamp(0, 1)).round();
-    if (index != null &&
-        samples.isNotEmpty &&
-        numeric(samples[index]['lat']) != null &&
-        samples[index]['valid'] != false) {
-      final p = project(meters(samples[index]));
-      canvas.drawCircle(p, 6, Paint()..color = ink);
-      canvas.drawCircle(p, 3, Paint()..color = panel);
-    }
     void gate(Map<String, dynamic> gate, String label) {
       if (numeric(gate['lat']) == null || numeric(gate['lon']) == null) return;
-      final p = meters(gate);
+      final p = bounds.meters(numeric(gate['lat'])!, numeric(gate['lon'])!);
       final heading = (numeric(gate['heading_deg']) ?? 0) * math.pi / 180;
       final half = (numeric(gate['width_m']) ?? 20) / 2;
       final direction = Offset(
@@ -420,7 +489,34 @@ class MapPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant MapPainter oldDelegate) => true;
+  bool shouldRepaint(covariant _RoutePainter old) =>
+      old.bounds != bounds || old.track != track;
+}
+
+class MapCursorPainter extends CustomPainter {
+  MapCursorPainter._(this.samples, this.cursor, this._bounds);
+  final List<Map<String, dynamic>> samples;
+  final double? cursor;
+  final _RouteBounds _bounds;
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (cursor == null || samples.isEmpty) return;
+    final sample =
+        samples[((samples.length - 1) * cursor!.clamp(0, 1)).round()];
+    final lat = numeric(sample['lat']), lon = numeric(sample['lon']);
+    if (sample['valid'] == false || lat == null || lon == null) return;
+    final p = _bounds.project(
+      _bounds.meters(lat, lon),
+      size,
+      _bounds.scale(size),
+    );
+    canvas.drawCircle(p, 6, Paint()..color = ink);
+    canvas.drawCircle(p, 3, Paint()..color = panel);
+  }
+
+  @override
+  bool shouldRepaint(covariant MapCursorPainter old) =>
+      old._bounds != _bounds || old.cursor != cursor;
 }
 
 class LiveGMeter extends StatelessWidget {
@@ -428,10 +524,12 @@ class LiveGMeter extends StatelessWidget {
     super.key,
     required this.acceleration,
     required this.connected,
+    this.trail = const [],
   });
 
   final ({double x, double y, double z})? acceleration;
   final bool connected;
+  final List<GTrailPoint> trail;
 
   @override
   Widget build(BuildContext context) {
@@ -469,6 +567,7 @@ class LiveGMeter extends StatelessWidget {
                   child: CustomPaint(
                     painter: _LiveGMeterPainter(
                       reading == null ? null : Offset(reading.x, -reading.y),
+                      trail,
                     ),
                   ),
                 ),
@@ -510,9 +609,10 @@ class LiveGMeter extends StatelessWidget {
 }
 
 class _LiveGMeterPainter extends CustomPainter {
-  const _LiveGMeterPainter(this.point);
+  const _LiveGMeterPainter(this.point, this.trail);
 
   final Offset? point;
+  final List<GTrailPoint> trail;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -520,8 +620,16 @@ class _LiveGMeterPainter extends CustomPainter {
     final radius = size.shortestSide / 2 - 4;
     _drawGGrid(canvas, center, radius);
     if (point case final reading?) {
-      final scale = math.max(2.0, reading.distance);
-      final dot = center + reading / scale * radius;
+      Offset project(Offset g) =>
+          center + g / math.max(2.0, g.distance) * radius;
+      final paint = Paint();
+      for (var i = 0; i + 1 < trail.length; i++) {
+        final p = trail[i];
+        final age = (trail.last.tUs - p.tUs) / AeviaController.gTrailDurationUs;
+        paint.color = accent.withValues(alpha: .22 * (1 - age).clamp(0, 1));
+        canvas.drawCircle(project(Offset(p.x, -p.y)), 2.5, paint);
+      }
+      final dot = project(reading);
       canvas.drawCircle(dot, 8, Paint()..color = accent.withValues(alpha: .18));
       canvas.drawCircle(dot, 4, Paint()..color = accent);
     }
@@ -529,7 +637,7 @@ class _LiveGMeterPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _LiveGMeterPainter oldDelegate) =>
-      point != oldDelegate.point;
+      point != oldDelegate.point || trail != oldDelegate.trail;
 }
 
 void _drawGGrid(Canvas canvas, Offset center, double radius) {
@@ -548,9 +656,11 @@ class GGPlot extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox(
     height: 240,
-    child: CustomPaint(
-      painter: GGPainter(samples),
-      child: const SizedBox.expand(),
+    child: RepaintBoundary(
+      child: CustomPaint(
+        painter: GGPainter(samples),
+        child: const SizedBox.expand(),
+      ),
     ),
   );
 }
@@ -622,5 +732,5 @@ class GGPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant GGPainter oldDelegate) => true;
+  bool shouldRepaint(covariant GGPainter old) => old.samples != samples;
 }

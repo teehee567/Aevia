@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'ui/common.dart';
 
 typedef RequestTransport = Future<String> Function(String request);
+typedef GTrailPoint = ({int tUs, double x, double y});
+
+Map<String, dynamic> _decodeReply(String text) => object(jsonDecode(text));
 
 class AeviaController extends ChangeNotifier {
   AeviaController(this.transport, {this.autoPoll = true, this.monotonicNow});
@@ -17,15 +20,39 @@ class AeviaController extends ChangeNotifier {
   Map<String, dynamic> get state => _state;
   set state(Map<String, dynamic> value) {
     final next = object(value['device']);
+    final nextTime = numeric(object(value['live'])['time_s']);
+    final previousTime = numeric(live['time_s']);
+    if (!receiverFresh ||
+        next['port'] != device['port'] ||
+        next['transport'] != device['transport'] ||
+        (nextTime != null && previousTime != null && nextTime < previousTime)) {
+      _gTrail = const [];
+      _batteryDrops.clear();
+      _previousPercent = null;
+    }
+    final sd = object(next['sd']);
+    final card = sd.isEmpty
+        ? null
+        : (
+            sd['capacity_bytes'],
+            sd['file_id'],
+            sd['closed'],
+            sd['written_pages'],
+          );
     if (next['connected'] != true ||
         next['transport'] != 'USB' ||
         next['port'] != device['port'] ||
+        sd['state'] == 'fault' ||
+        (card != null && _lastCard != null && card != _lastCard) ||
         (device['recording'] == true && next['recording'] == false)) {
       _clearDirectory();
     }
+    if (card != null) _lastCard = card;
     _state = value;
     _snapshotAt = _now;
     _pollFailed = false;
+    _updateBatteryTrend();
+    _updateGTrail();
   }
 
   Duration get _now => monotonicNow?.call() ?? _freshnessClock.elapsed;
@@ -42,7 +69,15 @@ class AeviaController extends ChangeNotifier {
   List<Map<String, dynamic>> devices = [];
   List<Map<String, dynamic>>? deviceSessions;
   Map<String, dynamic>? boardPreview;
-  final List<Map<String, dynamic>> recent = [];
+  Record? _lastCard;
+  final _previews = <int, Map<String, dynamic>>{};
+  int _directoryGeneration = 0;
+  bool readingDirectory = false;
+  int? readingPreview;
+  final List<Map<String, dynamic>> _recent = [];
+  List<Map<String, dynamic>>? _recentSnapshot;
+  List<Map<String, dynamic>> get recent =>
+      _recentSnapshot ??= List.unmodifiable(_recent);
   Timer? _timer;
   bool busy = false;
   bool _polling = false;
@@ -124,6 +159,87 @@ class AeviaController extends ChangeNotifier {
       (sensorAgeMs(sensor) ?? double.infinity) <
           (sensor == 'gnss' ? 1000 : 1500);
 
+  // Store whole-percent crossings. The first reading can be anywhere within
+  // its one-percent band, so only transitions provide comparable endpoints.
+  final _batteryDrops = <({Duration at, int percent})>[];
+  int? _previousPercent;
+
+  String? get batteryState =>
+      diagnosticsFresh ? object(device['battery'])['status']?.toString() : null;
+
+  bool get _canEstimateDischarge => switch (batteryState) {
+    'battery' || 'low' => true,
+    null => bluetooth, // Display frames carry only the gauge percentage.
+    _ => false,
+  };
+
+  void _updateBatteryTrend() {
+    final value = numeric(device['battery_percent']);
+    if (!receiverFresh ||
+        !_canEstimateDischarge ||
+        value == null ||
+        value < 0 ||
+        value > 100) {
+      _batteryDrops.clear();
+      _previousPercent = null;
+      return;
+    }
+    final percent = value.toInt();
+    final previous = _previousPercent;
+    _previousPercent = percent;
+    if (previous == null || previous == percent) return;
+    if (previous - percent != 1) {
+      _batteryDrops.clear();
+      return;
+    }
+    if (_batteryDrops.length >= 2 && _dischargeTrendExpired) {
+      _batteryDrops.clear();
+    }
+    _batteryDrops.add((at: _snapshotAt!, percent: percent));
+    if (_batteryDrops.length > 5) _batteryDrops.removeAt(0);
+  }
+
+  double get _msPerPercent {
+    final first = _batteryDrops.first, last = _batteryDrops.last;
+    return (last.at - first.at).inMilliseconds / (first.percent - last.percent);
+  }
+
+  // A flat gauge can mean the receiver has been plugged in over Bluetooth.
+  bool get _dischargeTrendExpired =>
+      (_now - _batteryDrops.last.at).inMilliseconds > 2 * _msPerPercent;
+
+  Duration? get batteryTimeLeft {
+    if (!receiverFresh || _batteryDrops.length < 2) return null;
+    final first = _batteryDrops.first, last = _batteryDrops.last;
+    if (last.at - first.at < const Duration(minutes: 1) ||
+        _dischargeTrendExpired) {
+      return null;
+    }
+    return Duration(minutes: (_msPerPercent * last.percent / 60000).round());
+  }
+
+  List<GTrailPoint> _gTrail = const [];
+  List<GTrailPoint> get gTrail => _gTrail;
+  static const gTrailDurationUs = 3000000;
+
+  void _updateGTrail() {
+    final reading = imuAccelerationG;
+    final tUs = object(object(device['imu'])['latest'])['t_us'];
+    if (reading == null || tUs is! int) {
+      _gTrail = const [];
+      return;
+    }
+    final previous = _gTrail.lastOrNull;
+    if (previous?.tUs == tUs) return;
+    _gTrail = List.unmodifiable([
+      if (previous != null && previous.tUs < tUs)
+        ..._gTrail
+            .skip(_gTrail.length > 15 ? _gTrail.length - 15 : 0)
+            .where((p) => tUs - p.tUs < gTrailDurationUs),
+      (tUs: tUs, x: reading.x, y: reading.y),
+    ]);
+  }
+
   ({double x, double y, double z})? get imuAccelerationG {
     if (!sensorFresh('imu')) return null;
     final sample = object(object(device['imu'])['latest']);
@@ -154,9 +270,16 @@ class AeviaController extends ChangeNotifier {
     String op, [
     Map<String, dynamic> params = const {},
   ]) async {
-    final decoded = object(
-      jsonDecode(await transport(jsonEncode({'op': op, ...params}))),
-    );
+    final response = await transport(jsonEncode({'op': op, ...params}));
+    // Session replies can contain megabytes of samples. Keep small live
+    // snapshots on the fast path without starting a worker for each poll.
+    final decoded = response.length < 64 * 1024
+        ? _decodeReply(response)
+        : await compute(
+            _decodeReply,
+            response,
+            debugLabel: 'Decode receiver data',
+          );
     if (decoded['ok'] != true)
       throw StateError(
         decoded['error']?.toString() ?? 'The request could not be completed.',
@@ -220,21 +343,22 @@ class AeviaController extends ChangeNotifier {
         return;
       state = {...state, ...update};
       if (!connected && !recording) _timer?.cancel();
-      if (valid && recent.lastOrNull?['time_s'] != live['time_s']) {
-        recent.add({
+      if (valid && _recent.lastOrNull?['time_s'] != live['time_s']) {
+        _recentSnapshot = null;
+        _recent.add({
           for (final key in ['time_s', 'speed_mps', 'lat', 'lon', 'valid'])
             key: live[key],
         });
         final cutoff = (numeric(live['time_s']) ?? 0) - 300;
-        while (recent.length > 1500 ||
-            (numeric(recent.first['time_s']) ?? 0) < cutoff) {
-          recent.removeAt(0);
+        while (_recent.length > 1500 ||
+            (numeric(_recent.first['time_s']) ?? 0) < cutoff) {
+          _recent.removeAt(0);
         }
       }
       changed();
     } catch (e) {
       _pollFailed = true;
-      if (page == boardPage) _clearDirectory();
+      if (usbConnected) _clearDirectory();
       error = cleanError(e);
       changed();
     } finally {
@@ -284,29 +408,59 @@ class AeviaController extends ChangeNotifier {
     devices = objects(await request('devices'));
   });
   void _clearDirectory() {
+    _directoryGeneration++;
+    _lastCard = null;
+    _previews.clear();
     deviceSessions = null;
     boardPreview = null;
   }
 
   Future<void> refreshDeviceSessions() async {
-    if (!canBrowseBoard) return;
+    if (!canBrowseBoard || busy) return;
+    readingDirectory = true;
     await action(() async {
-      _clearDirectory();
-      final entries = objects(await request('device_sessions'));
-      if (page == boardPage && canBrowseBoard)
-        deviceSessions = entries.reversed.toList();
-    }, pending: 'Reading the receiver recording directory…');
+      final generation = _directoryGeneration;
+      try {
+        final entries = objects(await request('device_sessions'));
+        if (generation == _directoryGeneration && canBrowseBoard) {
+          deviceSessions = entries.reversed.toList();
+          _previews.clear();
+          boardPreview = null;
+        }
+      } catch (_) {
+        _clearDirectory();
+        rethrow;
+      } finally {
+        readingDirectory = false;
+      }
+    });
   }
 
   Future<void> previewDeviceSession(int id) async {
-    if (!canBrowseBoard) return;
+    if (!canBrowseBoard || busy) return;
+    final cached = _previews[id];
+    if (cached != null) {
+      error = null;
+      notice = null;
+      boardPreview = cached;
+      changed();
+      return;
+    }
+    readingPreview = id;
     await action(() async {
-      boardPreview = null;
-      final preview = object(
-        await request('device_session_preview', {'id': id}),
-      );
-      if (page == boardPage && canBrowseBoard) boardPreview = preview;
-    }, pending: 'Reading recording details…');
+      final generation = _directoryGeneration;
+      try {
+        final preview = object(
+          await request('device_session_preview', {'id': id}),
+        );
+        if (generation == _directoryGeneration && canBrowseBoard) {
+          _previews[id] = preview;
+          boardPreview = preview;
+        }
+      } finally {
+        readingPreview = null;
+      }
+    });
   }
 
   Future<void> downloadDeviceSession(int id) async {
@@ -325,9 +479,11 @@ class AeviaController extends ChangeNotifier {
 
   Future<void> connect(String port) => action(
     () async {
-      state = object(await request('connect', {'port': port}));
-      recent.clear();
+      final connectedState = object(await request('connect', {'port': port}));
       _clearDirectory();
+      state = connectedState;
+      _recent.clear();
+      _recentSnapshot = null;
     },
     pending: port == 'ble' ? 'Looking for a nearby V2 Mini…' : null,
     success: 'Receiver connected.',
@@ -452,7 +608,6 @@ class AeviaController extends ChangeNotifier {
     state = object(await request('state'));
   }, success: 'Session analysis updated.');
   void navigate(int value) {
-    if (page == boardPage && value != boardPage) _clearDirectory();
     page = value;
     _schedulePoll();
     if (autoPoll &&

@@ -11,11 +11,12 @@ From `app/`, with Flutter, Rust and the Windows C++ desktop build tools installe
 
 ```powershell
 flutter pub get
-flutter run -d windows
+flutter run -d windows --release
 flutter build windows --release
 ```
 
-The existing Cargokit integration builds the Rust library. If the Rust bridge
+For development with hot reload, use `flutter run -d windows`. The existing
+Cargokit integration builds the Rust library. If the Rust bridge
 API changes, regenerate its Dart and Rust bindings before building:
 
 ```powershell
@@ -40,6 +41,8 @@ for detailed diagnostics, full-rate host capture and SD downloads.
 To browse the receiver's SD card, connect over USB, stop recording, and open
 **Board data → Refresh** below Diagnostics. The directory lists the newest
 file IDs first, their committed sizes, and whether each file closed successfully.
+Returning to Board data reuses the directory and previews for the current USB
+connection. Select **Refresh** to reread the card.
 **Preview** reads up to four sectors for the file's recorded metadata, start
 uptime and, when available, duration and SD queue drops at closure.
 **Download & analyze** transfers the selected file into the app library.

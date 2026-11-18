@@ -641,13 +641,20 @@ void main() {
           .widgetList<Metric>(find.byType(Metric))
           .firstWhere((m) => m.label == label)
           .value;
-      MapPainter map() => tester
+      MapCursorPainter map() => tester
+          .widgetList<CustomPaint>(find.byType(CustomPaint))
+          .map((w) => w.foregroundPainter)
+          .whereType<MapCursorPainter>()
+          .first;
+      TracePainter trace() => tester
           .widgetList<CustomPaint>(find.byType(CustomPaint))
           .map((w) => w.painter)
-          .whereType<MapPainter>()
-          .first;
+          .whereType<TracePainter>()
+          .single;
+      final beforeSeek = trace();
       seek(0.5);
       await tester.pumpAndSettle();
+      expect(trace().shouldRepaint(beforeSeek), isFalse);
       expect(find.text('SIGNAL GAP'), findsOneWidget);
       expect(metric('Speed'), '—');
       expect(metric('Longitudinal'), '—');
@@ -773,12 +780,61 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  test(
+    'battery runtime uses observed discharge and expires on flat or external power',
+    () {
+      var now = Duration.zero;
+      final controller = AeviaController(
+        FakeBackend().request,
+        autoPoll: false,
+        monotonicNow: () => now,
+      );
+      void sample(int percent, {String? power}) {
+        controller.state = {
+          'device': {
+            'connected': true,
+            'transport': 'Bluetooth',
+            'battery_percent': percent,
+            if (power != null) 'battery': {'status': power},
+          },
+          'live': {'valid': false},
+        };
+        now += const Duration(seconds: 1);
+      }
+
+      sample(86);
+      for (var i = 0; i < 60; i++) {
+        sample(85);
+      }
+      expect(controller.batteryTimeLeft, isNull);
+      sample(84);
+      expect(controller.batteryTimeLeft, const Duration(minutes: 84));
+      for (var i = 0; i < 121; i++) {
+        sample(84);
+      }
+      expect(controller.batteryTimeLeft, isNull);
+      sample(83);
+      expect(controller.batteryTimeLeft, isNull);
+      for (var i = 0; i < 59; i++) {
+        sample(83);
+      }
+      sample(82);
+      expect(controller.batteryTimeLeft, const Duration(minutes: 82));
+      sample(82, power: 'charging');
+      expect(controller.batteryTimeLeft, isNull);
+      sample(83);
+      expect(controller.batteryTimeLeft, isNull);
+      controller.dispose();
+    },
+  );
+
   testWidgets('live G-meter reads the receiver on a desk without a GNSS fix', (
     tester,
   ) async {
     final backend = FakeBackend();
     final sample = <String, dynamic>{
       'valid': true,
+      't_us': 1000000,
       'accel': [0, 0, 9.80665],
     };
     final imu = <String, dynamic>{'age_us': 3000, 'latest': sample};
@@ -796,16 +852,24 @@ void main() {
     expect(find.text('Z  1.00 g'), findsOneWidget);
 
     sample['accel'] = [4.903325, -2.4516625, 8.5];
+    sample['t_us'] = 1200000;
     await controller.poll();
     await tester.pump();
     expect(find.text('X  0.50 g'), findsOneWidget);
     expect(find.text('Y  -0.25 g'), findsOneWidget);
+    expect(tester.widget<LiveGMeter>(find.byType(LiveGMeter)).trail.length, 2);
+    await controller.poll();
+    expect(controller.gTrail.length, 2);
+    sample['t_us'] = 4300000;
+    await controller.poll();
+    expect(controller.gTrail.length, 1);
 
     imu['age_us'] = 1500000;
     await controller.poll();
     await tester.pump();
     expect(find.text('X  0.50 g'), findsNothing);
     expect(find.text('Waiting for fresh accelerometer data'), findsOneWidget);
+    expect(controller.gTrail, isEmpty);
     expect(tester.takeException(), isNull);
   });
 
@@ -1147,6 +1211,54 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets(
+    'board history reuses reads for the same card and discards them on a card change',
+    (tester) async {
+      final backend = FakeBackend();
+      backend.state['device'] = {
+        'connected': true,
+        'transport': 'USB',
+        'port': 'COM1',
+        'sd': {
+          'state': 'ready',
+          'capacity_bytes': 100000,
+          'file_id': 2,
+          'closed': true,
+        },
+      };
+      backend.deviceSessions = [
+        {'id': 1, 'bytes': 512, 'closed': true},
+      ];
+      final c = await mount(tester, backend);
+      c.navigate(AeviaController.boardPage);
+      await c.refreshDeviceSessions();
+      await c.previewDeviceSession(1);
+      c.navigate(1);
+      c.navigate(AeviaController.boardPage);
+      await tester.pumpAndSettle();
+      expect(find.text('Recording 1'), findsOneWidget);
+      await c.previewDeviceSession(1);
+      expect(
+        backend.calls.where((q) => q['op'] == 'device_sessions'),
+        hasLength(1),
+      );
+      expect(
+        backend.calls.where((q) => q['op'] == 'device_session_preview'),
+        hasLength(1),
+      );
+      await c.refreshDeviceSessions();
+      await c.previewDeviceSession(1);
+      expect(
+        backend.calls.where((q) => q['op'] == 'device_session_preview'),
+        hasLength(2),
+      );
+      (backend.state['device'] as Map)['sd']['file_id'] = 3;
+      await c.poll();
+      await tester.pumpAndSettle();
+      expect(find.text('Recording 1'), findsNothing);
+      expect(c.boardPreview, isNull);
+    },
+  );
   testWidgets('board directory is on demand and unavailable after losing USB', (
     tester,
   ) async {
@@ -1237,6 +1349,7 @@ void main() {
         ),
       );
       await wheel(120);
+      expect(list.pixels, closeTo(72, .01));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 20));
       expect(list.pixels, inExclusiveRange(0, 120));
