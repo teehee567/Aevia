@@ -372,6 +372,8 @@ struct State {
     recording: crate::recording::Recording,
     starting: bool,
     session: u32,
+    rejected_fix_count: u32,
+    queue_enabled: bool,
     queue: crate::preview_queue::PreviewQueue,
     gnss: Health,
     imu: Health,
@@ -382,6 +384,8 @@ static STATE: Mutex<CriticalSectionRawMutex, RefCell<State>> = Mutex::new(RefCel
     recording: crate::recording::Recording::new(),
     starting: false,
     session: 0,
+    rejected_fix_count: 0,
+    queue_enabled: true,
     queue: crate::preview_queue::PreviewQueue::new(),
     gnss: Health::new(),
     imu: Health::new(),
@@ -395,6 +399,17 @@ fn enqueue(sample: Sample) {
     complete_recording_start();
     let capture = STATE.lock(|cell| {
         let s = &mut *cell.borrow_mut();
+        if let Sample::Gnss {
+            valid,
+            latency_ms,
+            hacc_m,
+            ..
+        } = sample
+        {
+            if !valid || latency_ms != 0 || !(0.0..=25.0).contains(&hacc_m) {
+                s.rejected_fix_count = s.rejected_fix_count.wrapping_add(1);
+            }
+        }
         let (health, latest, t_us) = match sample {
             Sample::Gnss { t_us, .. } => (&mut s.gnss, &mut s.last_gnss, t_us),
             Sample::Imu { t_us, .. } => (&mut s.imu, &mut s.last_imu, t_us),
@@ -411,9 +426,10 @@ fn enqueue(sample: Sample) {
             } => captured_ns.saturating_sub(u64::from(interval_ns)) / 1000,
             _ => t_us,
         };
-        if s.recording
-            .started_at_us
-            .is_none_or(|start| support_start_us >= start)
+        if s.queue_enabled
+            && s.recording
+                .started_at_us
+                .is_none_or(|start| support_start_us >= start)
             && s.queue.push_back(sample).is_err()
         {
             s.recording.note_overflow(t_us);
@@ -545,6 +561,7 @@ struct Request<'a> {
     after: Option<u32>,
     id: Option<u32>,
     sector: Option<u32>,
+    count: Option<u8>,
 }
 fn json<T: Serialize>(out: &mut Response<RESPONSE_SIZE>, value: &T) -> Result<(), ()> {
     out.serialize(value).map_err(|_| ())
@@ -559,11 +576,23 @@ pub async fn request(text: &str, out: &mut Response<RESPONSE_SIZE>) {
             return;
         }
     };
-    if request.op == "start"
+    if request.op == "read_blocks" {
+        if read_blocks(&request, out).await.is_err() {
+            out.clear();
+            let _ = out.push_str(r#"{"ok":false,"error":"sector read failed"}"#);
+        }
+        return;
+    }
+    if request.count.is_some() {
+        let _ = out.push_str(INVALID_REQUEST);
+        return;
+    }
+    if matches!(request.op, "start" | "start_display")
         && request.after.is_none()
         && request.id.is_none()
         && request.sector.is_none()
     {
+        update(|s| s.queue_enabled = request.op == "start");
         if begin_recording_start().is_err() {
             let _ = out.push_str("{\"ok\":false,\"error\":\"previous recording still closing\"}");
             return;
@@ -636,15 +665,134 @@ pub async fn request(text: &str, out: &mut Response<RESPONSE_SIZE>) {
         }
     }
 }
+async fn read_blocks(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
+    let (Some(id), Some(first), Some(count @ 1..=8), None) =
+        (request.id, request.sector, request.count, request.after)
+    else {
+        return Err(());
+    };
+    let end = first.checked_add(u32::from(count)).ok_or(())?;
+    write!(out, r#"{{"ok":true,"id":{id},"sector":{first},"blocks":["#).map_err(|_| ())?;
+    for sector in first..end {
+        let crate::storage::Answer::Data(bytes) =
+            crate::storage::query(crate::storage::Query::Read { id, sector }).await
+        else {
+            return Err(());
+        };
+        if sector != first {
+            out.push(',').map_err(|_| ())?;
+        }
+        out.push('"').map_err(|_| ())?;
+        out.push_base64(&bytes).map_err(|_| ())?;
+        out.push('"').map_err(|_| ())?;
+    }
+    out.push_str("]}").map_err(|_| ())
+}
+
+fn display_response(out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
+    use crate::display::{DisplayAcceleration, DisplayFix, DisplayFrame};
+    let (session, recording, count, rejected_fix_count, gnss, imu) = STATE.lock(|cell| {
+        let mut s = cell.borrow_mut();
+        if s.queue_enabled {
+            s.queue_enabled = false;
+            s.queue.clear();
+        }
+        (
+            s.session,
+            s.recording,
+            s.gnss.samples,
+            s.rejected_fix_count,
+            s.last_gnss,
+            s.last_imu,
+        )
+    });
+    let fix = match gnss {
+        Some(Sample::Gnss {
+            t_us,
+            gps_week,
+            gps_tow_ms,
+            lat,
+            lon,
+            alt_m,
+            speed_mps,
+            heading_deg,
+            vertical_mps,
+            hacc_m,
+            latency_ms,
+            satellites,
+            valid,
+            ..
+        }) => Some(DisplayFix {
+            t_us,
+            gps_week,
+            gps_tow_ms,
+            lat,
+            lon,
+            altitude_m: alt_m as f32,
+            speed_mps: speed_mps as f32,
+            heading_deg: heading_deg as f32,
+            vertical_mps: vertical_mps as f32,
+            hacc_m: hacc_m as f32,
+            latency_ms,
+            satellites,
+            valid,
+        }),
+        _ => None,
+    };
+    let imu = match imu {
+        Some(Sample::Imu {
+            t_us, accel, valid, ..
+        }) => Some(DisplayAcceleration {
+            t_us,
+            accel: accel.map(|v| v as f32),
+            valid,
+        }),
+        _ => None,
+    };
+    let frame = DisplayFrame {
+        uptime_us: Instant::now().as_micros(),
+        session,
+        recording: recording.active,
+        stopped_at_us: recording.stopped_at_us,
+        battery_percent: crate::tasks::power::snapshot().percent,
+        gnss_count: count,
+        rejected_fix_count,
+        fix,
+        imu,
+    };
+    let mut buf = [0; 160];
+    let data = postcard::to_slice(&frame, &mut buf).map_err(|_| ())?;
+    out.push_str(r#"{"ok":true,"d":""#).map_err(|_| ())?;
+    out.push_base64(data).map_err(|_| ())?;
+    out.push_str(r#""}"#).map_err(|_| ())
+}
+
 async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
     if !matches!(
         request.op,
-        "status" | "start" | "stop" | "poll" | "drain" | "drain_binary" | "drain_base64"
+        "status"
+            | "start"
+            | "start_display"
+            | "display"
+            | "stop"
+            | "poll"
+            | "drain"
+            | "drain_binary"
+            | "drain_base64"
     ) || request.after.is_some()
         || request.id.is_some()
         || request.sector.is_some()
     {
         return Err(());
+    }
+    if request.op == "display" {
+        return display_response(out);
+    }
+    if matches!(
+        request.op,
+        "poll" | "drain" | "drain_binary" | "drain_base64"
+    ) {
+        update(|s| s.queue_enabled = true);
     }
     if matches!(request.op, "drain" | "drain_binary" | "drain_base64") {
         let encoding = match request.op {
@@ -654,7 +802,9 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
         };
         return make_compact_response(out, encoding).await;
     }
-    if request.op == "start" && !STATE.lock(|s| s.borrow().recording.active) {
+    if matches!(request.op, "start" | "start_display")
+        && !STATE.lock(|s| s.borrow().recording.active)
+    {
         return Err(());
     }
     let (recording, started_at_us, stopped_at_us, session, gnss, imu, last_gnss, last_imu) = STATE
@@ -680,7 +830,7 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
             )
         });
     let now = Instant::now().as_micros();
-    write!(out, "{{\"ok\":true,\"protocol\":1,\"compact_poll\":true,\"binary_poll\":true,\"base64_poll\":true,\"device\":\"Aevia V2 Mini\",\"firmware\":\"0.3.0\",\"recording\":{recording},\"session\":{session},\"stopped_at_us\":").map_err(|_| ())?;
+    write!(out, "{{\"ok\":true,\"protocol\":1,\"display_v1\":true,\"read_blocks\":8,\"compact_poll\":true,\"binary_poll\":true,\"base64_poll\":true,\"device\":\"Aevia V2 Mini\",\"firmware\":\"0.3.0\",\"recording\":{recording},\"session\":{session},\"stopped_at_us\":").map_err(|_| ())?;
     json(out, &stopped_at_us)?;
     out.push_str(",\"started_at_us\":").map_err(|_| ())?;
     json(out, &started_at_us)?;

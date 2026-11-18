@@ -3,7 +3,8 @@
 The application requests CRC-checked native UM980 SPPNAVB at 50 Hz in SIGNALGROUP 8
 and records every validated SCH16T DEC5 native interval: nominally 737.5 Hz,
 about 727 Hz on the connected sensor. Navigation separately averages four native
-intervals; USB and SD retain the native rate. Sensor work runs independently
+intervals. SD recording and optional raw USB capture retain the native rate.
+The app driving display requests compact snapshots at 5 Hz. Sensor work runs independently
 of USB. It monitors the charger/fuel gauge and drives four functional RGB LEDs.
 The connected board has no display and its extra buttons are unavailable, so
 `src/configuration.rs` disables both. Their absence is reported as optional;

@@ -31,7 +31,7 @@ the recording-to-stopped transition, before waiting for that flush. It remains
 unchanged across repeated stops and is cleared by the next new start. Hosts
 must use this boundary to exclude preview samples produced during the flush;
 response `uptime_us` is the later response time. `poll` drains at most 8 entries. Poll again
-immediately while `pending` is nonzero. Samples are queued during preview too;
+immediately while `pending` is nonzero. In raw USB mode, preview samples are queued too;
 SD receives a separate queue of admitted recording-window samples. Responses are bounded
 to 8,192 JSON bytes plus framing. `ok:false` includes a human-readable `error`.
 USB uses 4,096 PSRAM samples after successful startup/promotion, with an explicit
@@ -289,3 +289,26 @@ IDs are OBSVM 12 and ephemerides 106–110, 112 and 2999. A converter's support 
 each constellation/message must be checked; preserving 2999 does not imply that
 a particular RTKLIB build decodes it. PPK also requires suitable base observations,
 navigation data and satellite reception; indoor empty frames cannot produce a solution.
+
+## Display snapshots and batched file reads
+
+A full status advertises `display_v1: true`. The `display` command returns
+`{"ok":true,"d":"<base64>"}`. Decode the field using standard padded Base64
+and deserialize a Postcard `DisplayFrame`. The shared schema in
+[`display.rs`](../src/display.rs) defines field order, units and optional values.
+Sensor timestamps are receipt/capture times in microseconds on the device clock.
+The app checks individual observation ages. A change in the rejected-fix
+counter breaks interpolation across omitted invalid GNSS epochs.
+
+Display mode takes the latest GNSS fix and accelerometer reading directly from
+acquisition. It disables the raw USB queue and clears its backlog. SD writes
+and the onboard estimator continue independently. `start_display` starts an SD
+recording with this transport. `start`, `poll` and the raw drain commands
+enable raw USB queuing again. Use a single transport owner per receiver.
+
+A receiver advertising `read_blocks: 8` accepts
+`{"op":"read_blocks","id":12,"sector":0,"count":8}` for a closed file.
+The reply echoes the file ID and first sector, and contains a `blocks` array
+with one padded Base64 string per consecutive 512-byte sector. Count is 1–8.
+The last request must fit the file. Any failed sector produces an error for the
+whole request. Existing clients can continue using the single-sector `read`.

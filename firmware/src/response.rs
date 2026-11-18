@@ -222,6 +222,15 @@ impl<const N: usize> Response<N> {
         Ok(())
     }
 
+    pub fn push_base64(&mut self, bytes: &[u8]) -> fmt::Result {
+        if bytes.len().div_ceil(3) * 4 > N - self.len {
+            return Err(fmt::Error);
+        }
+        let mut encoder = Base64Records::new();
+        self.base64_bytes(&mut encoder, bytes);
+        self.finish_base64(&mut encoder)
+    }
+
     /// Called only after the entire record and final padding have passed the
     /// fit check, so no partially written quartet can escape on an error.
     fn base64_bytes(&mut self, encoder: &mut Base64Records, mut bytes: &[u8]) {
@@ -498,19 +507,15 @@ mod tests {
         let saved = encoder;
         let before = response.as_str().to_owned();
         for (payload, reserved) in [(&[2; 5][..], 4), (&[][..], usize::MAX)] {
-            assert!(
-                response
-                    .record_base64(&mut encoder, 24, payload, reserved)
-                    .is_err()
-            );
+            assert!(response
+                .record_base64(&mut encoder, 24, payload, reserved)
+                .is_err());
             assert_eq!(response.as_str(), before);
             assert_eq!(encoder, saved);
         }
-        assert!(
-            response
-                .record_base64(&mut encoder, 24, &std::vec![0; 65536], 0)
-                .is_err()
-        );
+        assert!(response
+            .record_base64(&mut encoder, 24, &std::vec![0; 65536], 0)
+            .is_err());
         assert_eq!(response.as_str(), before);
         assert_eq!(encoder, saved);
         response.record_base64(&mut encoder, 24, &[], 4).unwrap();
@@ -619,12 +624,10 @@ mod tests {
         response.finish_compact(3, 4, || clock.get()).unwrap();
         let (batch, _) = serde_json_core::from_str::<Batch>(response.as_str()).unwrap();
         assert_eq!(batch.uptime_us, 50);
-        assert!(
-            batch
-                .samples
-                .iter()
-                .all(|sample| sample.t_us <= batch.uptime_us)
-        );
+        assert!(batch
+            .samples
+            .iter()
+            .all(|sample| sample.t_us <= batch.uptime_us));
         assert_eq!(response.as_str().matches("\"uptime_us\":").count(), 1);
     }
 
@@ -643,11 +646,9 @@ mod tests {
         response.serialize_separated_reserved("", &12, 1).unwrap();
         assert!(response.serialize_separated_reserved(",", &999, 1).is_err());
         assert_eq!(response.as_str(), "[12");
-        assert!(
-            response
-                .serialize_separated_reserved(",", &0, usize::MAX)
-                .is_err()
-        );
+        assert!(response
+            .serialize_separated_reserved(",", &0, usize::MAX)
+            .is_err());
         assert_eq!(response.as_str(), "[12");
         response.push(']').unwrap();
         assert_eq!(response.as_str(), "[12]");
