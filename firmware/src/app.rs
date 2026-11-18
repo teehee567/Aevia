@@ -219,6 +219,9 @@ fn stop_pending() -> bool {
         || STORAGE_STOP_PENDING.lock(|pending| *pending.borrow())
 }
 fn maybe_close_storage() {
+    if !STORAGE_STOP_PENDING.lock(|pending| *pending.borrow()) {
+        return;
+    }
     let observations_pending = GNSS_OBSERVATION_DRAIN.lock(|drain| {
         let mut drain = drain.borrow_mut();
         drain.finish_if_drained();
@@ -400,9 +403,9 @@ fn update(f: impl FnOnce(&mut State)) {
     STATE.lock(|s| f(&mut s.borrow_mut()));
 }
 fn enqueue(sample: Sample) {
-    complete_recording_start();
     let capture = STATE.lock(|cell| {
         let s = &mut *cell.borrow_mut();
+        complete_recording_start(s);
         if let Sample::Gnss {
             valid,
             latency_ms,
@@ -492,11 +495,15 @@ pub(crate) async fn start_recording(raw_usb: bool) -> Result<(), &'static str> {
     }
     let deadline = Instant::now() + Duration::from_secs(10);
     loop {
-        complete_recording_start();
-        if STATE.lock(|s| s.borrow().recording.active) {
+        let (active, starting) = STATE.lock(|cell| {
+            let mut s = cell.borrow_mut();
+            complete_recording_start(&mut s);
+            (s.recording.active, s.starting)
+        });
+        if active {
             break;
         }
-        if !STATE.lock(|s| s.borrow().starting) {
+        if !starting {
             return Err("recording start cancelled");
         }
         let sd = crate::storage::snapshot();
@@ -523,17 +530,14 @@ pub(crate) fn stop_recording() {
     });
 }
 
-fn complete_recording_start() {
-    STATE.lock(|cell| {
-        let mut s = cell.borrow_mut();
-        if s.starting && crate::storage::snapshot().state == "recording" {
-            s.starting = false;
-            s.recording.start(Instant::now().as_micros());
-            s.session = s.session.wrapping_add(1);
-            s.queue.clear();
-            PPK_EPHEMERIDES.lock(|request| *request.borrow_mut() = true);
-        }
-    });
+fn complete_recording_start(s: &mut State) {
+    if s.starting && crate::storage::snapshot().state == "recording" {
+        s.starting = false;
+        s.recording.start(Instant::now().as_micros());
+        s.session = s.session.wrapping_add(1);
+        s.queue.clear();
+        PPK_EPHEMERIDES.lock(|request| *request.borrow_mut() = true);
+    }
 }
 pub fn dashboard() -> (Option<u16>, bool, bool) {
     STATE.lock(|cell| {

@@ -39,6 +39,34 @@ const PROFILE: &[(u8, u16)] = &[
 
 use crate::imu::*;
 
+#[derive(Clone, Copy)]
+struct Request {
+    address: u8,
+    wire: [u8; 6],
+}
+
+impl Request {
+    const fn new(address: u8, write: Option<u16>) -> Self {
+        let [_, _, a, b, c, d, e, f] = request_frame(address, write).to_be_bytes();
+        Self {
+            address,
+            wire: [a, b, c, d, e, f],
+        }
+    }
+}
+
+// Fixed transmit frames, including their CRCs. The seventh request clocks
+// out the last axis and leaves a FREQ_CNTR reply for the next burst.
+const NATIVE_READS: [Request; 7] = [
+    Request::new(0x0a, None),
+    Request::new(0x0b, None),
+    Request::new(0x0c, None),
+    Request::new(0x0d, None),
+    Request::new(0x0e, None),
+    Request::new(0x0f, None),
+    Request::new(FREQ_CNTR, None),
+];
+
 struct NativeSample {
     rates: [i32; 3],
     accelerations: [i32; 3],
@@ -335,16 +363,11 @@ impl<'d> Imu<'d> {
 
     fn read_native(&mut self) -> Result<NativeSample, ImuError> {
         let mut frames = [0_u64; 6];
-        let mut error = self.exchange(0x0a, None).err();
+        let mut error = self.transfer(NATIVE_READS[0]).err();
         // Pipeline all six decimated-axis reads and consume every response,
         // even if one is invalid, so DRY can rearm for the next complete set.
-        for (index, frame) in frames.iter_mut().enumerate() {
-            let next_address = if index == 5 {
-                FREQ_CNTR
-            } else {
-                0x0b + index as u8
-            };
-            match self.exchange(next_address, None) {
+        for (frame, &request) in frames.iter_mut().zip(&NATIVE_READS[1..]) {
+            match self.transfer(request) {
                 Ok(Some(value)) => *frame = value,
                 Ok(None) => {
                     error.get_or_insert(ImuError::Spi);
@@ -380,9 +403,11 @@ impl<'d> Imu<'d> {
     }
 
     fn exchange(&mut self, address: u8, write: Option<u16>) -> Result<Option<u64>, ImuError> {
-        let request = request_frame(address, write);
-        let bytes = request.to_be_bytes();
-        let mut wire = [bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], bytes[7]];
+        self.transfer(Request::new(address, write))
+    }
+
+    fn transfer(&mut self, request: Request) -> Result<Option<u64>, ImuError> {
+        let Request { address, mut wire } = request;
         // Datasheet minima are sub-microsecond; 1 us before/after each CS edge
         // covers both setup/hold and inter-frame spacing without an async yield.
         let delay = Delay::new();

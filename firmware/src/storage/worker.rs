@@ -11,14 +11,21 @@ use embassy_sync::{
 };
 use esp_hal::{
     Blocking,
-    delay::Delay,
     sdmmc::Slot,
     time::{Duration, Instant},
 };
 use esp_rtos::CurrentThreadHandle;
 use heapless::Deque;
 use serde::Serialize;
-type Card = SdCard<Esp32SdHost<'static, 'static, 0>, Delay>;
+// The SD protocol waits a millisecond between ready polls. Let CPU1 idle
+// during that interval, retaining the driver's polling and error checks.
+struct SdPollDelay;
+impl embedded_hal::delay::DelayNs for SdPollDelay {
+    fn delay_ns(&mut self, ns: u32) {
+        CurrentThreadHandle::get().delay(Duration::from_micros(u64::from(ns.div_ceil(1000))));
+    }
+}
+type Card = SdCard<Esp32SdHost<'static, 'static, 0>, SdPollDelay>;
 const FILE_SECTORS: u32 = 128 * 1024 * 1024 / 512;
 static SCRATCH: static_cell::StaticCell<DmaScratch> = static_cell::StaticCell::new();
 
@@ -355,15 +362,14 @@ impl Writer {
         let a = self.active.as_mut().ok_or("not-recording")?;
         let record = Record::new(kind, a.sequence, at_ns, payload).ok_or("record-too-large")?;
         a.sequence += 1;
-        let mut encoded = [0; format::RECORD_BYTES];
-        let len = record.encode(&mut encoded);
-        let mut rest = &encoded[..len];
-        while !rest.is_empty() {
-            let a = self.active.as_mut().unwrap();
-            let n = a.page.append(rest);
-            rest = &rest[n..];
-            if a.page.is_full() {
-                self.flush(false)?;
+        for mut part in record.parts() {
+            while !part.is_empty() {
+                let a = self.active.as_mut().unwrap();
+                let n = a.page.append(part);
+                part = &part[n..];
+                if a.page.is_full() {
+                    self.flush(false)?;
+                }
             }
         }
         Ok(())
@@ -572,7 +578,7 @@ pub fn run(slot: Slot<'static, 0, Blocking>) -> ! {
     let mut writer = Writer {
         card: SdCard::new(
             Esp32SdHost::new(slot, SCRATCH.init(DmaScratch::new())),
-            Delay::new(),
+            SdPollDelay,
         ),
         fs: None,
         active: None,

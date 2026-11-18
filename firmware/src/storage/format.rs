@@ -8,6 +8,10 @@ pub const RECORD_BYTES: usize = RECORD_HEADER + RECORD_PAYLOAD + 4;
 pub const MAGIC: &[u8; 8] = b"AEVLOG1\0";
 
 pub fn crc32(data: &[u8]) -> u32 {
+    !update_crc32(!0, data)
+}
+
+fn update_crc32(mut value: u32, data: &[u8]) -> u32 {
     const TABLE: [u32; 256] = {
         let mut table = [0; 256];
         let mut i = 0;
@@ -23,56 +27,46 @@ pub fn crc32(data: &[u8]) -> u32 {
         }
         table
     };
-    let mut value = !0_u32;
     for &byte in data {
         value = (value >> 8) ^ TABLE[usize::from((value as u8) ^ byte)];
     }
-    !value
+    value
 }
 
 #[derive(Clone, Copy)]
-pub struct Record {
-    pub kind: u8,
-    pub len: u16,
-    pub sequence: u64,
-    pub at_ns: u64,
-    pub payload: [u8; RECORD_PAYLOAD],
+pub struct Record<'a> {
+    header: [u8; RECORD_HEADER],
+    payload: &'a [u8],
+    checksum: [u8; 4],
 }
-impl Record {
-    pub const EMPTY: Self = Self {
-        kind: 0,
-        len: 0,
-        sequence: 0,
-        at_ns: 0,
-        payload: [0; RECORD_PAYLOAD],
-    };
-    pub fn new(kind: u8, sequence: u64, at_ns: u64, payload: &[u8]) -> Option<Self> {
+impl<'a> Record<'a> {
+    pub fn new(kind: u8, sequence: u64, at_ns: u64, payload: &'a [u8]) -> Option<Self> {
         if payload.len() > RECORD_PAYLOAD {
             return None;
         }
-        let mut result = Self {
-            kind,
-            len: payload.len() as u16,
-            sequence,
-            at_ns,
-            ..Self::EMPTY
-        };
-        result.payload[..payload.len()].copy_from_slice(payload);
-        Some(result)
+        let mut header = [0; RECORD_HEADER];
+        header[0] = kind;
+        header[1] = 1;
+        header[2..4].copy_from_slice(&(payload.len() as u16).to_le_bytes());
+        header[4..12].copy_from_slice(&sequence.to_le_bytes());
+        header[12..20].copy_from_slice(&at_ns.to_le_bytes());
+        let crc = !update_crc32(update_crc32(!0, &header), payload);
+        Some(Self {
+            header,
+            payload,
+            checksum: crc.to_le_bytes(),
+        })
+    }
+    pub fn parts(&self) -> [&[u8]; 3] {
+        [&self.header, self.payload, &self.checksum]
     }
     pub fn encode(&self, out: &mut [u8; RECORD_BYTES]) -> usize {
-        let len = usize::from(self.len);
-        out[..RECORD_HEADER].fill(0);
-        out[0] = self.kind;
-        out[1] = 1;
-        out[2..4].copy_from_slice(&self.len.to_le_bytes());
-        out[4..12].copy_from_slice(&self.sequence.to_le_bytes());
-        out[12..20].copy_from_slice(&self.at_ns.to_le_bytes());
-        out[RECORD_HEADER..RECORD_HEADER + len].copy_from_slice(&self.payload[..len]);
-        let end = RECORD_HEADER + len;
-        let crc = crc32(&out[..end]);
-        out[end..end + 4].copy_from_slice(&crc.to_le_bytes());
-        end + 4
+        let mut used = 0;
+        for part in self.parts() {
+            out[used..used + part.len()].copy_from_slice(part);
+            used += part.len();
+        }
+        used
     }
 }
 
@@ -153,12 +147,14 @@ impl PageBuilder {
         self.bytes[16..18].copy_from_slice(&(self.used as u16).to_le_bytes());
         self.bytes[18..20].copy_from_slice(&u16::from(closed).to_le_bytes());
         self.bytes[20..28].copy_from_slice(&nonce.to_le_bytes());
+        // Full pages have no padding. Only a partial flush can expose bytes
+        // from the previous page in the reused payload area.
+        self.bytes[28 + self.used..508].fill(0);
         let crc = crc32(&self.bytes[..508]);
         self.bytes[508..].copy_from_slice(&crc.to_le_bytes());
         &self.bytes
     }
     pub fn clear(&mut self) {
-        self.bytes.fill(0);
         self.used = 0;
     }
 }
@@ -231,28 +227,35 @@ mod tests {
     }
     #[test]
     fn records_span_pages_without_padding_in_stream() {
-        let a = Record::new(2, 1, 2, &[7; 256]).unwrap();
-        let mut raw = [0; RECORD_BYTES];
-        let n = a.encode(&mut raw);
-        let mut original = std::vec::Vec::new();
-        for _ in 0..5 {
-            original.extend_from_slice(&raw[..n]);
-        }
-        let mut result = std::vec::Vec::new();
-        let mut builder = PageBuilder::new();
-        let mut source = original.as_slice();
-        let mut index = 0;
-        while !source.is_empty() {
-            let n = builder.append(source);
-            source = &source[n..];
-            if builder.is_full() || source.is_empty() {
-                let page = builder.finish(1, index, 99, source.is_empty());
-                let info = inspect(page).unwrap();
-                result.extend_from_slice(&page[28..28 + usize::from(info.payload_len)]);
-                builder.clear();
-                index += 1;
+        let record = Record::new(2, 1, 2, &[7; 256]).unwrap();
+        let mut encoded = [0; RECORD_BYTES];
+        let n = record.encode(&mut encoded);
+        // Cross the boundary at every byte of the header, payload and CRC,
+        // including a record that ends on a full page and an empty close.
+        for free in 1..=n {
+            let prefix = [0xa5; PAGE_PAYLOAD];
+            let prefix = &prefix[..PAGE_PAYLOAD - free];
+            let mut builder = PageBuilder::new();
+            builder.append(prefix);
+            let mut stream = std::vec::Vec::new();
+            for mut part in record.parts() {
+                while !part.is_empty() {
+                    let copied = builder.append(part);
+                    part = &part[copied..];
+                    if builder.is_full() {
+                        let page = builder.finish(1, 0, 99, false);
+                        assert_eq!(inspect(page).unwrap().payload_len, PAGE_PAYLOAD as u16);
+                        stream.extend_from_slice(&page[28..508]);
+                        builder.clear();
+                    }
+                }
             }
+            let page = builder.finish(1, 1, 99, true);
+            let info = inspect(page).unwrap();
+            assert!(info.closed);
+            stream.extend_from_slice(&page[28..28 + usize::from(info.payload_len)]);
+            assert_eq!(&stream[..prefix.len()], prefix);
+            assert_eq!(&stream[prefix.len()..], &encoded[..n]);
         }
-        assert_eq!(result, original);
     }
 }

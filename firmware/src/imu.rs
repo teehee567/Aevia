@@ -271,12 +271,12 @@ pub enum ImuError {
     AcquisitionQueueOverflow,
 }
 
-pub fn request_frame(address: u8, write: Option<u16>) -> u64 {
-    let mut frame = (u64::from(address) << 38) | (1 << 35); // FT=1, 48-bit.
+pub const fn request_frame(address: u8, write: Option<u16>) -> u64 {
+    let mut frame = ((address as u64) << 38) | (1 << 35); // FT=1, 48-bit.
     if let Some(value) = write {
-        frame |= (1 << 37) | (u64::from(value) << 8);
+        frame |= (1 << 37) | ((value as u64) << 8);
     }
-    frame | u64::from(crc8(frame))
+    frame | crc8(frame) as u64
 }
 
 pub fn counters_are_consecutive(previous: [u8; 6], current: [u8; 6]) -> bool {
@@ -332,13 +332,15 @@ const CRC8_SHIFT8: [u8; 256] = {
 // Each input byte enters the low eight bits during those eight shifts, so an
 // augmented byte step is table[crc] XOR byte (not table[crc XOR byte]). Process
 // the 40 message bits, then the mandatory eight zero bits replacing the CRC.
-pub fn crc8(frame: u64) -> u8 {
+pub const fn crc8(frame: u64) -> u8 {
     let bytes = frame.to_be_bytes();
     let mut crc = 0xff_u8;
-    for byte in &bytes[2..7] {
-        crc = CRC8_SHIFT8[usize::from(crc)] ^ byte;
+    let mut i = 2;
+    while i < 7 {
+        crc = CRC8_SHIFT8[crc as usize] ^ bytes[i];
+        i += 1;
     }
-    CRC8_SHIFT8[usize::from(crc)]
+    CRC8_SHIFT8[crc as usize]
 }
 
 #[cfg(test)]
