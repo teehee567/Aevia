@@ -51,14 +51,17 @@ imported with an incomplete-recording warning.
    explicitly and cannot be selected for recording; install application firmware
    using the firmware uploader first. Close other serial monitors before opening
    the port.
-2. In **Tracks**, create a track if lap timing is needed. Enter the start/finish
-   gate center, gate width and direction of travel across it. Heading is clockwise
-   from north: 0° north, 90° east. The gate extends across the travel direction.
-   Add sector gates in driving order. The editor can copy the current valid live
-   position, or a recorded position selected in analysis, into the start gate.
+2. In **Tracks**, select **Create track** for lap timing. Search for a circuit,
+   address or latitude and longitude, then drag to pan and pinch or scroll to
+   zoom. Select **Draw start / finish** and mark the two edges of the track.
+   Check the travel arrow and use **Reverse direction** if needed. Add sector
+   gates in driving order. **Gate coordinates** lets you enter exact values,
+   and the editor can copy a live fix or a recorded position from analysis.
 3. In **Live**, choose a track and optional session name, then start recording.
-   Speed is hidden when the fix is invalid or stale. Missing sensor channels stay
-   unavailable. Stop and save to create a session in the library.
+   The G-meter shows the receiver's accelerometer axes with gravity included.
+   Tilt the receiver to test it over USB without a GNSS fix or recording. Speed
+   is hidden when the fix is invalid or stale. Stop and save to create a session
+   in the library.
 4. Open a session from **Sessions**. Replay its recorded position, inspect speed,
    acceleration or altitude, compare laps and review sector and drag results.
    The slider and chart share a replay cursor. Drag the chart to seek; scroll or
@@ -67,10 +70,50 @@ imported with an incomplete-recording warning.
    This also applies the current drag configuration. It updates that session's
    track/drag analysis while retaining its captured evidence.
 
+Place-name search uses [Photon](https://github.com/komoot/photon). The map uses
+[EOX satellite imagery](https://maps.eox.at/) worldwide and
+[NSW Spatial Services aerial imagery](https://data.nsw.gov.au/data/dataset/nsw-imagery)
+for close views in NSW. Where satellite imagery lacks road detail, switch to
+the street map. Map imagery and place-name search require internet access.
+Coordinates can also be entered directly into the gate fields while offline.
+To use a licensed high-resolution satellite provider for another area, build
+with `--dart-define=AEVIA_SATELLITE_TILES=<XYZ template>` and
+`--dart-define=AEVIA_SATELLITE_ATTRIBUTION=<provider credit>`. The template uses
+`{z}`, `{x}` and `{y}` with Web Mercator tiles through native zoom 19.
+
 The reference overlay aligns laps by elapsed time from the start of the lap. It
 does not represent distance-aligned delta or certify a common racing-line
-position. The map is a local coordinate view and does not require map tiles or
-an internet connection.
+position. The replay map uses local coordinates and works offline.
+
+## Driving display traffic
+
+With matching app and receiver firmware, Live requests one snapshot every 200 ms.
+Starting a recording saves display fixes to the host library and full-rate evidence
+to the receiver SD card. Select **Copy full-rate raw data over USB** before
+starting if you also need the full sensor stream on the computer. Older receivers
+use full status for preview and their existing raw protocol for host recordings.
+
+| On the link | When | Example size |
+| --- | --- | ---: |
+| GNSS position, altitude, speed, heading, vertical velocity, horizontal accuracy, satellites, validity, latency and receiver/device timestamps | Each display snapshot | 52 B |
+| Accelerometer XYZ, observation timestamp and validity for the G-meter | Each display snapshot | 19 B |
+| Device clock, session number, recording/stop state, battery percentage and GNSS total/rejected-fix counters | Each display snapshot | 14 B |
+| Entire framed exchange, including the request, Base64, JSON and serial framing | 5 exchanges/s | 159 B each, 795 B/s, 2.86 MB/hour |
+| Traj lap count, current/last/best lap, session distance and average speed | Computed on the host from receiver fixes during a session | 0 additional receiver bytes |
+| Full diagnostics and capabilities | Connect, start and stop. Every 5 s on Receiver, about once a second on Diagnostics. Full-rate host capture also samples health about once a second. | Around 4.7 kB in an example status, up to the 8 KiB response buffer before framing |
+| Raw USB copy, when selected | 50 GNSS fixes/s and nominally 737.5 IMU intervals/s | About 110 kB/s in Base64 records before batch envelopes |
+| SD download, on request | Eight 512 B sectors per request, fewer in the final batch | About 5.6 kB exchanged per 4 KiB of file |
+
+Display sizes use the encoded one-hour-uptime fixture in the native test suite.
+Integer lengths and absent sensor fields change the actual size. Rates are USB
+application traffic, including framing where indicated. Bluetooth throughput and
+energy use require measurement on hardware.
+
+Browsing saved sessions or hiding the app stops preview requests. During an
+active host recording the native collector continues at the selected rate.
+The live speed, position and heading come from GNSS. The G-meter uses sensor
+axes including gravity. Traj evaluates the sampled fixes for session metrics.
+Download the SD recording for full-rate timing analysis of short events.
 
 ## Drag testing
 
@@ -103,7 +146,7 @@ Long imports and reanalysis keep receiver status polling available. Use
 Stopping a host recording saves the received samples before analysis, so a
 cancelled final analysis can be retried from the library.
 
-Firmware advertising `base64_poll` uses strict padded RFC 4648 base64 batches
+Full-rate host capture on firmware advertising `base64_poll` uses strict padded RFC 4648 base64 batches
 (`drain_base64`, up to 48 records) carrying exact kind-23/24 sensor payloads.
 The host falls back to `binary_poll` hex batches (up to 32 records), compact JSON,
 then the older full JSON poll when those are the available capabilities. During recording the host streams them into a checksummed `.raw.aev`

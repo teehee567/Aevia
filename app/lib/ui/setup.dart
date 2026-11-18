@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../controller.dart';
 import 'common.dart';
+import 'track_editor.dart';
 
 class ReceiverView extends StatefulWidget {
   const ReceiverView({super.key, required this.controller});
@@ -702,21 +703,13 @@ class TracksView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            FilledButton.icon(
-              onPressed: c.busy ? null : () => editTrack(context, c),
-              icon: const Icon(Icons.add, size: 18),
-              label: const Text('Create track'),
-            ),
-            const Text(
-              'Finite gates · directional crossings · ordered sectors',
-              style: TextStyle(color: muted),
-            ),
-          ],
+        Align(
+          alignment: Alignment.centerLeft,
+          child: FilledButton.icon(
+            onPressed: c.busy ? null : () => editTrack(context, c),
+            icon: const Icon(Icons.add_location_alt_outlined, size: 18),
+            label: const Text('Create track'),
+          ),
         ),
         const SizedBox(height: 20),
         if (c.tracks.isEmpty)
@@ -724,7 +717,7 @@ class TracksView extends StatelessWidget {
             title: 'Track library',
             child: EmptyState(
               'Add your first circuit',
-              'Define a start/finish gate and optional sector gates. Select the track before recording to enable lap timing.',
+              'Draw your start/finish and sector gates on the map, then select the track in Live to time laps.',
               icon: Icons.route,
             ),
           ),
@@ -793,223 +786,4 @@ class TracksView extends StatelessWidget {
       ],
     );
   }
-}
-
-Future<void> editTrack(
-  BuildContext context,
-  AeviaController c, {
-  Map<String, dynamic>? track,
-  Map<String, dynamic>? position,
-}) async {
-  final result = await showDialog<Map<String, dynamic>>(
-    context: context,
-    builder: (context) => TrackEditor(
-      track: track,
-      position: position ?? (c.valid ? c.live : null),
-    ),
-  );
-  if (result != null) await c.saveTrack(result);
-}
-
-class GateFields {
-  GateFields(Map<String, dynamic> values)
-    : lat = TextEditingController(text: values['lat']?.toString() ?? ''),
-      lon = TextEditingController(text: values['lon']?.toString() ?? ''),
-      heading = TextEditingController(
-        text: values['heading_deg']?.toString() ?? '0',
-      ),
-      width = TextEditingController(
-        text: values['width_m']?.toString() ?? '20',
-      );
-  final TextEditingController lat, lon, heading, width;
-  void dispose() {
-    lat.dispose();
-    lon.dispose();
-    heading.dispose();
-    width.dispose();
-  }
-
-  Map<String, dynamic> value() => {
-    'lat': double.parse(lat.text),
-    'lon': double.parse(lon.text),
-    'heading_deg': double.parse(heading.text),
-    'width_m': double.parse(width.text),
-  };
-}
-
-class TrackEditor extends StatefulWidget {
-  const TrackEditor({super.key, this.track, this.position});
-  final Map<String, dynamic>? track, position;
-  @override
-  State<TrackEditor> createState() => _TrackEditorState();
-}
-
-class _TrackEditorState extends State<TrackEditor> {
-  final form = GlobalKey<FormState>();
-  late final TextEditingController name;
-  late final GateFields start;
-  late final List<GateFields> sectors;
-  @override
-  void initState() {
-    super.initState();
-    name = TextEditingController(text: widget.track?['name']?.toString() ?? '');
-    start = GateFields(object(widget.track?['start']));
-    sectors = objects(widget.track?['sectors']).map(GateFields.new).toList();
-  }
-
-  @override
-  void dispose() {
-    name.dispose();
-    start.dispose();
-    for (final sector in sectors) {
-      sector.dispose();
-    }
-    super.dispose();
-  }
-
-  Widget gateFields(GateFields gate, String title, {VoidCallback? remove}) =>
-      Padding(
-        padding: const EdgeInsets.only(top: 18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                if (remove != null)
-                  IconButton(
-                    tooltip: 'Remove $title',
-                    onPressed: remove,
-                    icon: const Icon(Icons.close, size: 17),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 14,
-              children: [
-                field(gate.lat, 'Latitude', -90, 90, '°'),
-                field(gate.lon, 'Longitude', -180, 180, '°'),
-                field(gate.heading, 'Travel heading', 0, 360, '°'),
-                field(gate.width, 'Gate width', 1, 500, 'm'),
-              ],
-            ),
-          ],
-        ),
-      );
-  Widget field(
-    TextEditingController controller,
-    String label,
-    double low,
-    double high,
-    String unit,
-  ) => SizedBox(
-    width: 155,
-    child: TextFormField(
-      controller: controller,
-      keyboardType: const TextInputType.numberWithOptions(
-        decimal: true,
-        signed: true,
-      ),
-      decoration: InputDecoration(labelText: label, suffixText: unit),
-      validator: (value) {
-        final v = double.tryParse(value ?? '');
-        return v == null || !v.isFinite || v < low || v > high
-            ? '$low to $high required'
-            : null;
-      },
-    ),
-  );
-  @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(widget.track == null ? 'Create track' : 'Edit track'),
-    content: SizedBox(
-      width: 690,
-      child: SingleChildScrollView(
-        child: Form(
-          key: form,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: name,
-                maxLength: 128,
-                decoration: const InputDecoration(labelText: 'Track name'),
-                validator: (v) =>
-                    v == null || v.trim().isEmpty ? 'Enter a track name' : null,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Travel heading is the direction of the car as it crosses the gate (0° north, 90° east). The gate extends across that direction. Add sector gates in driving order.',
-                style: TextStyle(color: muted, fontSize: 12),
-              ),
-              if (widget.position != null)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    onPressed: () => setState(() {
-                      start.lat.text =
-                          widget.position!['lat']?.toString() ?? '';
-                      start.lon.text =
-                          widget.position!['lon']?.toString() ?? '';
-                      start.heading.text =
-                          widget.position!['heading_deg']?.toString() ?? '0';
-                    }),
-                    icon: const Icon(Icons.my_location, size: 16),
-                    label: const Text('Use current position for start/finish'),
-                  ),
-                ),
-              gateFields(start, 'Start / finish'),
-              for (int i = 0; i < sectors.length; i++)
-                gateFields(
-                  sectors[i],
-                  'Sector gate ${i + 1}',
-                  remove: () => setState(() {
-                    sectors.removeAt(i).dispose();
-                  }),
-                ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: OutlinedButton.icon(
-                  onPressed: sectors.length >= 15
-                      ? null
-                      : () => setState(() => sectors.add(GateFields({}))),
-                  icon: const Icon(Icons.add, size: 16),
-                  label: const Text('Add sector gate'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
-      ),
-      FilledButton(
-        onPressed: () {
-          if (form.currentState!.validate())
-            Navigator.pop(context, {
-              'id':
-                  widget.track?['id'] ??
-                  'track-${DateTime.now().millisecondsSinceEpoch}',
-              'name': name.text.trim(),
-              'start': start.value(),
-              'sectors': sectors.map((s) => s.value()).toList(),
-            });
-        },
-        child: const Text('Save track'),
-      ),
-    ],
-  );
 }

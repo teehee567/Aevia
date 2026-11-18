@@ -6,7 +6,7 @@ import 'common.dart';
 import 'charts.dart';
 import 'replay.dart';
 import 'sessions.dart';
-import 'setup.dart';
+import 'track_editor.dart';
 
 class AnalysisView extends StatefulWidget {
   const AnalysisView({super.key, required this.controller});

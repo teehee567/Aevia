@@ -6,6 +6,7 @@ mod board;
 pub mod buttons;
 pub mod capture;
 mod configuration;
+mod display;
 mod drivers;
 mod flash;
 pub mod gnss;

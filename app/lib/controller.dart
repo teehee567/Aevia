@@ -76,6 +76,51 @@ class AeviaController extends ChangeNotifier {
         'unknown',
       ].contains(device['fix_quality']?.toString().toLowerCase()) &&
       numeric(live['speed_mps']) != null;
+
+  bool get receiverFresh =>
+      connected &&
+      !_pollFailed &&
+      live['stale'] != true &&
+      _snapshotAgeMs < 1500;
+
+  bool get diagnosticsFresh =>
+      receiverFresh &&
+      device['diagnostics_stale'] != true &&
+      (numeric(device['diagnostics_age_ms']) ?? 0) + _snapshotAgeMs <=
+          (numeric(device['diagnostics_ttl_ms']) ?? 2000);
+
+  double? sensorAgeMs(String sensor) {
+    final ageUs = numeric(object(device[sensor])['age_us']);
+    return ageUs == null || ageUs < 0 ? null : ageUs / 1000 + _snapshotAgeMs;
+  }
+
+  bool sensorFresh(String sensor) =>
+      receiverFresh &&
+      (sensorAgeMs(sensor) ?? double.infinity) <
+          (sensor == 'gnss' ? 1000 : 1500);
+
+  ({double x, double y, double z})? get imuAccelerationG {
+    if (!sensorFresh('imu')) return null;
+    final sample = object(object(device['imu'])['latest']);
+    final acceleration = sample['accel'];
+    if (sample['valid'] != true ||
+        acceleration is! List ||
+        acceleration.length != 3) {
+      return null;
+    }
+    final x = numeric(acceleration[0]);
+    final y = numeric(acceleration[1]);
+    final z = numeric(acceleration[2]);
+    if (x == null || y == null || z == null) return null;
+
+    const standardGravity = 9.80665;
+    return (
+      x: x / standardGravity,
+      y: y / standardGravity,
+      z: z / standardGravity,
+    );
+  }
+
   void changed() {
     if (!_disposed) notifyListeners();
   }
@@ -99,22 +144,65 @@ class AeviaController extends ChangeNotifier {
       state = object(await request('state'));
       devices = objects(await request('devices'));
     });
-    if (autoPoll && !_disposed)
-      _timer = Timer.periodic(const Duration(milliseconds: 500), (_) {
-        // A blocked native request must not freeze a previously valid value.
-        changed();
-        unawaited(poll());
-      });
   }
 
-  Future<void> poll() async {
+  bool _foreground = true;
+  bool _editingTrack = false;
+
+  void setEditingTrack(bool value) {
+    _editingTrack = value;
+    _schedulePoll();
+  }
+
+  void setForeground(bool value) {
+    _foreground = value;
+    _schedulePoll();
+  }
+
+  void _schedulePoll() {
+    _timer?.cancel();
+    if (!autoPoll || _disposed || !_foreground || _editingTrack || !connected)
+      return;
+    final livePage = page == 0;
+    if (!livePage && page != 5 && page != 7 && !recording) return;
+    final interval = livePage
+        ? const Duration(milliseconds: 200)
+        : const Duration(seconds: 1);
+    _timer = Timer.periodic(interval, (_) {
+      if (_polling && stale) changed();
+      unawaited(poll());
+    });
+  }
+
+  Future<void> poll({bool liveFix = false}) async {
     if (_polling || _disposed) return;
     _polling = true;
     try {
-      state = object(await request('poll'));
+      final requestedPage = page;
+      final view = liveFix
+          ? 'live'
+          : switch (page) {
+              0 => 'live',
+              5 => 'receiver',
+              7 => 'diagnostics',
+              _ => 'idle',
+            };
+      final before = _state;
+      final update = object(await request('poll', {'view': view}));
+      if (_disposed || page != requestedPage || !identical(before, _state))
+        return;
+      state = {...state, ...update};
+      if (!connected && !recording) _timer?.cancel();
       if (valid && recent.lastOrNull?['time_s'] != live['time_s']) {
-        recent.add(Map<String, dynamic>.from(live));
-        if (recent.length > 600) recent.removeAt(0);
+        recent.add({
+          for (final key in ['time_s', 'speed_mps', 'lat', 'lon', 'valid'])
+            key: live[key],
+        });
+        final cutoff = (numeric(live['time_s']) ?? 0) - 300;
+        while (recent.length > 1500 ||
+            (numeric(recent.first['time_s']) ?? 0) < cutoff) {
+          recent.removeAt(0);
+        }
       }
       changed();
     } catch (e) {
@@ -145,6 +233,7 @@ class AeviaController extends ChangeNotifier {
     } finally {
       busy = false;
       activity = null;
+      _schedulePoll();
       changed();
     }
   }
@@ -179,23 +268,26 @@ class AeviaController extends ChangeNotifier {
     success: 'Receiver recording downloaded and added to the session library.',
   );
   Future<void> connect(String port) => action(() async {
-    await request('connect', {'port': port});
-    state = object(await request('state'));
+    state = object(await request('connect', {'port': port}));
     recent.clear();
     deviceSessions.clear();
   }, success: 'Receiver connected.');
   Future<void> disconnect() => action(() async {
-    await request('disconnect');
-    state = object(await request('state'));
+    state = object(await request('disconnect'));
     deviceSessions.clear();
   }, success: 'Receiver disconnected.');
-  Future<void> start({String? name, String? trackId}) => action(() async {
-    await request('start', {'name': name, 'track_id': trackId});
-    state = object(await request('state'));
-  }, success: 'Recording started.');
+  Future<void> start({String? name, String? trackId, bool fullRate = false}) =>
+      action(() async {
+        state = object(
+          await request('start', {
+            'name': name,
+            'track_id': trackId,
+            'display_only': !fullRate,
+          }),
+        );
+      }, success: 'Recording started.');
   Future<void> stop() => action(() async {
-    await request('stop');
-    state = object(await request('state'));
+    state = object(await request('stop'));
   }, success: 'Recording saved to the session library.');
   Future<void> openSession(String id) => action(() async {
     session = object(await request('session', {'id': id}));
@@ -267,10 +359,16 @@ class AeviaController extends ChangeNotifier {
     state = object(await request('state'));
     page = 2;
   }, success: 'Opened a synthetic demonstration session.');
-  Future<void> saveTrack(Map<String, dynamic> track) => action(() async {
-    await request('save_track', {'track': track});
-    state = object(await request('state'));
-  }, success: 'Track saved.');
+  Future<bool> saveTrack(Map<String, dynamic> track) async {
+    var saved = false;
+    await action(() async {
+      await request('save_track', {'track': track});
+      state = object(await request('state'));
+      saved = true;
+    }, success: 'Track saved.');
+    return saved;
+  }
+
   Future<void> deleteTrack(String id) => action(() async {
     await request('delete_track', {'id': id});
     state = object(await request('state'));
@@ -290,6 +388,9 @@ class AeviaController extends ChangeNotifier {
   }, success: 'Session analysis updated.');
   void navigate(int value) {
     page = value;
+    _schedulePoll();
+    if (autoPoll && _foreground && connected && [0, 5, 7].contains(page))
+      unawaited(poll());
     changed();
   }
 

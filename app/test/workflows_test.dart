@@ -1,7 +1,12 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:app/controller.dart';
 import 'package:app/ui/app.dart';
 import 'package:app/ui/common.dart';
@@ -144,6 +149,14 @@ class FakeBackend {
       case 'set_drag':
         state['drag'] = q['config'];
         result = state;
+      case 'save_track':
+        final track = q['track'] as Map<String, dynamic>;
+        final tracks = objects(state['tracks']);
+        state['tracks'] = [
+          ...tracks.where((item) => item['id'] != track['id']),
+          track,
+        ];
+        result = state;
       default:
         result = state;
     }
@@ -167,6 +180,199 @@ Future<AeviaController> mount(
 }
 
 void main() {
+  testWidgets('automatic preview only polls while a receiver view is visible', (
+    tester,
+  ) async {
+    final backend = FakeBackend();
+    final c = AeviaController(backend.request);
+    await c.initialize();
+    int polls() => backend.calls.where((q) => q['op'] == 'poll').length;
+    await tester.pump(const Duration(seconds: 1));
+    expect(polls(), 0);
+    await c.connect('test');
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(polls(), 1);
+    c.navigate(1);
+    await tester.pump(const Duration(seconds: 5));
+    expect(polls(), 1);
+    c.navigate(0);
+    await tester.pump();
+    final before = polls();
+    c.setForeground(false);
+    await tester.pump(const Duration(seconds: 5));
+    expect(polls(), before);
+    c.setForeground(true);
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(polls(), before + 1);
+    c.dispose();
+  });
+
+  for (final phone in [false, true]) {
+    testWidgets(
+      'creates a track with map gates on ${phone ? 'phone' : 'desktop'}',
+      (tester) async {
+        final backend = FakeBackend();
+        var namedSearch = false;
+        await http.runWithClient(
+          () async {
+            final controller = await mount(
+              tester,
+              backend,
+              size: phone ? const Size(390, 844) : const Size(1280, 800),
+            );
+            if (phone) controller.navigate(4);
+            await tester.pumpAndSettle();
+            await tester.tap(
+              find.text(phone ? 'Create track' : 'Create track on map'),
+            );
+            await tester.pumpAndSettle();
+
+            final map = find.byType(FlutterMap);
+            final camera = tester.widget<FlutterMap>(map).mapController!;
+            final search = find.widgetWithText(
+              TextField,
+              'Search circuit, address or lat, lon',
+            );
+            await tester.enterText(
+              search,
+              phone ? 'Mount Panorama' : '-33.4389, 149.5540',
+            );
+            await tester.tap(find.byTooltip('Search location'));
+            await tester.pumpAndSettle();
+            if (phone) {
+              await tester.tap(find.text('Mount Panorama, Bathurst'));
+              await tester.pumpAndSettle();
+            }
+            expect(namedSearch, phone);
+            expect(camera.camera.center.latitude, closeTo(-33.4389, .0001));
+            expect(camera.camera.center.longitude, closeTo(149.5540, .0001));
+
+            final center = tester.getCenter(map);
+            final beforeZoom = camera.camera.zoom;
+            if (phone) {
+              final left = await tester.startGesture(
+                center - const Offset(25, 0),
+                pointer: 1,
+              );
+              final right = await tester.startGesture(
+                center + const Offset(25, 0),
+                pointer: 2,
+              );
+              await left.moveBy(const Offset(-55, 0));
+              await right.moveBy(const Offset(55, 0));
+              await left.up();
+              await right.up();
+            } else {
+              await tester.sendEventToBinding(
+                PointerScrollEvent(
+                  kind: PointerDeviceKind.mouse,
+                  position: center,
+                  scrollDelta: const Offset(0, -175),
+                ),
+              );
+            }
+            await tester.pumpAndSettle();
+            expect(camera.camera.zoom, greaterThan(beforeZoom));
+
+            final kind = phone
+                ? PointerDeviceKind.touch
+                : PointerDeviceKind.mouse;
+            final beforePan = camera.camera.center;
+            await tester.dragFrom(center, const Offset(36, 20), kind: kind);
+            await tester.pumpAndSettle();
+            expect(camera.camera.center, isNot(beforePan));
+
+            final name = find.widgetWithText(TextField, 'Track name');
+            await tester.ensureVisible(name);
+            await tester.enterText(name, 'Test circuit');
+            await tester.testTextInput.receiveAction(TextInputAction.done);
+            final addSector = find.widgetWithText(TextButton, 'Add sector');
+            await tester.ensureVisible(addSector);
+            await tester.pumpAndSettle();
+
+            await tester.tap(find.text('Draw start / finish'));
+            await tester.pumpAndSettle();
+            expect(find.text('Mark one edge of the track'), findsOneWidget);
+            await tester.tapAt(center - const Offset(16, 0), kind: kind);
+            await tester.pump(const Duration(milliseconds: 350));
+            await tester.pumpAndSettle();
+            expect(find.text('Mark the opposite edge'), findsOneWidget);
+            await tester.tapAt(center + const Offset(16, 0), kind: kind);
+            await tester.pump(const Duration(milliseconds: 350));
+            await tester.pumpAndSettle();
+            expect(find.text('S/F'), findsOneWidget);
+
+            final reverse = find.widgetWithText(
+              TextButton,
+              'Reverse direction',
+            );
+            await tester.ensureVisible(reverse);
+            await tester.tap(reverse);
+            await tester.pumpAndSettle();
+            await tester.ensureVisible(addSector);
+            await tester.tap(addSector);
+            await tester.pumpAndSettle();
+            await tester.tapAt(center + const Offset(-13, -46), kind: kind);
+            await tester.pump(const Duration(milliseconds: 350));
+            await tester.pumpAndSettle();
+            await tester.tapAt(center + const Offset(13, -46), kind: kind);
+            await tester.pump(const Duration(milliseconds: 350));
+            await tester.pumpAndSettle();
+            expect(find.text('S1'), findsOneWidget);
+
+            await tester.tap(find.text('Save track'));
+            await tester.pumpAndSettle();
+            expect(find.byType(FlutterMap), findsNothing);
+            expect(find.text('Test circuit'), findsOneWidget);
+            final track = object(
+              backend.calls.singleWhere(
+                (call) => call['op'] == 'save_track',
+              )['track'],
+            );
+            final start = object(track['start']);
+            final sector = objects(track['sectors']).single;
+            expect(start['heading_deg'], closeTo(180, .01));
+            expect(
+              ((sector['heading_deg'] as num) + 180) % 360 - 180,
+              closeTo(0, .01),
+            );
+            expect(start['width_m'], inInclusiveRange(1, 500));
+            expect(sector['width_m'], inInclusiveRange(1, 500));
+            expect(sector['lat'], greaterThan(start['lat'] as num));
+            expect(tester.takeException(), isNull);
+          },
+          () => MockClient((request) async {
+            if (request.url.host == 'photon.komoot.io') {
+              if (!kIsWeb &&
+                  request.headers['User-Agent']?.startsWith('Aevia/') != true) {
+                return http.Response('Forbidden', 403);
+              }
+              namedSearch =
+                  request.url.queryParameters['q'] == 'Mount Panorama';
+              return http.Response(
+                jsonEncode({
+                  'features': [
+                    {
+                      'geometry': {
+                        'coordinates': [149.5540, -33.4389],
+                      },
+                      'properties': {
+                        'name': 'Mount Panorama',
+                        'city': 'Bathurst',
+                      },
+                    },
+                  ],
+                }),
+                200,
+              );
+            }
+            return http.Response.bytes(TileProvider.transparentImage, 200);
+          }),
+        );
+      },
+    );
+  }
+
   testWidgets(
     'changing PPK source clears generated rover files from the old source',
     (tester) async {
@@ -560,6 +766,43 @@ void main() {
     expect(record.onPressed, isNull);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('live G-meter reads the receiver on a desk without a GNSS fix', (
+    tester,
+  ) async {
+    final backend = FakeBackend();
+    final sample = <String, dynamic>{
+      'valid': true,
+      'accel': [0, 0, 9.80665],
+    };
+    final imu = <String, dynamic>{'age_us': 3000, 'latest': sample};
+    backend.state['device'] = {
+      'connected': true,
+      'fix_quality': 'no fix',
+      'imu': imu,
+    };
+    backend.state['live'] = {'valid': false, 'age_ms': 6000, 'stale': false};
+    final controller = await mount(tester, backend, size: const Size(390, 844));
+
+    expect(controller.valid, isFalse);
+    expect(find.text('G-meter'), findsOneWidget);
+    expect(find.text('X  0.00 g'), findsOneWidget);
+    expect(find.text('Z  1.00 g'), findsOneWidget);
+
+    sample['accel'] = [4.903325, -2.4516625, 8.5];
+    await controller.poll();
+    await tester.pump();
+    expect(find.text('X  0.50 g'), findsOneWidget);
+    expect(find.text('Y  -0.25 g'), findsOneWidget);
+
+    imu['age_us'] = 1500000;
+    await controller.poll();
+    await tester.pump();
+    expect(find.text('X  0.50 g'), findsNothing);
+    expect(find.text('Waiting for fresh accelerometer data'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('stale fix hides numerical speed and recovery cannot connect', (
     tester,
   ) async {
@@ -655,6 +898,94 @@ void main() {
       expect(backend.calls.any((q) => q['op'] == 'demo'), isTrue);
     },
   );
+  testWidgets('Diagnostics shows independent power, IMU and GNSS readings', (
+    tester,
+  ) async {
+    final backend = FakeBackend();
+    final fix = {
+      'valid': true,
+      'lat': -33.456789,
+      'speed_mps': 10.0,
+      'satellites': 18,
+    };
+    final device = {
+      'connected': true,
+      'fix_quality': 'valid',
+      'diagnostics_stale': false,
+      'battery': {
+        'millivolts': 3891,
+        'percent': null,
+        'gauge_error': 'soc-out-of-range',
+      },
+      'gnss': {'age_us': 3000, 'latest': fix},
+      'imu': {
+        'age_us': 1000,
+        'errors': 12,
+        'latest': {
+          'valid': true,
+          'accel': [1.25, -2, 9.81],
+          'gyro': [0.019, 2, 3],
+        },
+      },
+      'imu_diagnostics': {'last_error': 'CaptureTiming'},
+    };
+    backend.state['device'] = device;
+    final analysis = <String, double?>{'max_speed_mps': 25.0};
+    backend.state['live'] = {
+      'valid': true,
+      'speed_mps': 10.0,
+      'recording': true,
+      'analysis': analysis,
+    };
+    final c = await mount(tester, backend);
+    await tester.tap(find.text('Diagnostics'));
+    await tester.pumpAndSettle();
+    expect(find.text('3.891 V'), findsOneWidget);
+    expect(find.text('soc-out-of-range'), findsOneWidget);
+    expect(find.text('CaptureTiming'), findsOneWidget);
+    expect(find.text('1.250'), findsOneWidget);
+    expect(find.text('0.019'), findsOneWidget);
+    expect(find.text('-33.4567890 °'), findsOneWidget);
+    expect(find.text('36.0 km/h'), findsOneWidget);
+    expect(find.text('90.0'), findsOneWidget);
+    analysis['max_speed_mps'] = null;
+    await c.poll();
+    await tester.pump();
+    expect(find.text('90.0'), findsNothing);
+    expect(
+      tester
+          .widget<Metric>(find.widgetWithText(Metric, 'Recording maximum'))
+          .value,
+      '—',
+    );
+    analysis['max_speed_mps'] = 25.0;
+
+    fix['valid'] = false;
+    await c.poll();
+    await tester.pump();
+    expect(find.text('NO FIX'), findsOneWidget);
+    expect(find.text('-33.4567890 °'), findsNothing);
+    expect(find.text('18'), findsOneWidget);
+    expect(find.text('90.0'), findsOneWidget);
+    expect(find.text('0.019'), findsOneWidget);
+
+    device['diagnostics_stale'] = true;
+    (device['imu'] as Map)['age_us'] = 2000000;
+    await c.poll();
+    await tester.pump();
+    expect(find.text('3.891 V'), findsNothing);
+    expect(find.text('0.019'), findsNothing);
+    expect(find.text('18'), findsOneWidget);
+
+    device['connected'] = false;
+    await c.poll();
+    await tester.pump();
+    expect(find.text('Connect receiver'), findsOneWidget);
+    expect(find.text('90.0'), findsNothing);
+    await tester.tap(find.text('Connect receiver'));
+    await tester.pumpAndSettle();
+    expect(find.text('V2 Mini connection'), findsOneWidget);
+  });
   testWidgets('all workspaces fit a narrow viewport without layout errors', (
     tester,
   ) async {
@@ -681,7 +1012,7 @@ void main() {
       'accessories': {'buttons_fitted': false},
     };
     final controller = await mount(tester, backend, size: const Size(390, 844));
-    for (final page in [0, 1, 3, 4, 6, 5]) {
+    for (final page in [0, 1, 3, 4, 6, 7, 5]) {
       controller.navigate(page);
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull, reason: 'page $page');

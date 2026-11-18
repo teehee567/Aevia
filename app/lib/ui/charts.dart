@@ -423,6 +423,125 @@ class MapPainter extends CustomPainter {
   bool shouldRepaint(covariant MapPainter oldDelegate) => true;
 }
 
+class LiveGMeter extends StatelessWidget {
+  const LiveGMeter({
+    super.key,
+    required this.acceleration,
+    required this.connected,
+  });
+
+  final ({double x, double y, double z})? acceleration;
+  final bool connected;
+
+  @override
+  Widget build(BuildContext context) {
+    final reading = acceleration;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        border: Border.all(color: line),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'G-meter',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                const Text(
+                  '2 g scale',
+                  style: TextStyle(color: muted, fontSize: 11),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                SizedBox.square(
+                  dimension: 96,
+                  child: CustomPaint(
+                    painter: _LiveGMeterPainter(
+                      reading == null ? null : Offset(reading.x, -reading.y),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _axisValue('X', reading?.x),
+                      _axisValue('Y', reading?.y),
+                      _axisValue('Z', reading?.z),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              reading != null
+                  ? 'Receiver axes · gravity included'
+                  : connected
+                  ? 'Waiting for fresh accelerometer data'
+                  : 'Connect the receiver to see G-force',
+              style: const TextStyle(color: muted, fontSize: 11),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _axisValue(String axis, double? value) => Text(
+    '$axis  ${number(value, 2)} g',
+    style: const TextStyle(
+      fontSize: 14,
+      fontFeatures: [FontFeature.tabularFigures()],
+    ),
+  );
+}
+
+class _LiveGMeterPainter extends CustomPainter {
+  const _LiveGMeterPainter(this.point);
+
+  final Offset? point;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = size.center(Offset.zero);
+    final radius = size.shortestSide / 2 - 4;
+    _drawGGrid(canvas, center, radius);
+    if (point case final reading?) {
+      final scale = math.max(2.0, reading.distance);
+      final dot = center + reading / scale * radius;
+      canvas.drawCircle(dot, 8, Paint()..color = accent.withValues(alpha: .18));
+      canvas.drawCircle(dot, 4, Paint()..color = accent);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _LiveGMeterPainter oldDelegate) =>
+      point != oldDelegate.point;
+}
+
+void _drawGGrid(Canvas canvas, Offset center, double radius) {
+  final grid = Paint()
+    ..color = line
+    ..style = PaintingStyle.stroke;
+  canvas.drawCircle(center, radius, grid);
+  canvas.drawCircle(center, radius / 2, grid);
+  canvas.drawLine(center - Offset(radius, 0), center + Offset(radius, 0), grid);
+  canvas.drawLine(center - Offset(0, radius), center + Offset(0, radius), grid);
+}
+
 class GGPlot extends StatelessWidget {
   const GGPlot({super.key, required this.samples});
   final List<Map<String, dynamic>> samples;
@@ -463,21 +582,7 @@ class GGPainter extends CustomPainter {
           ),
         )
         .ceilToDouble();
-    final grid = Paint()
-      ..color = line
-      ..style = PaintingStyle.stroke;
-    canvas.drawCircle(center, radius, grid);
-    canvas.drawCircle(center, radius / 2, grid);
-    canvas.drawLine(
-      center - Offset(radius, 0),
-      center + Offset(radius, 0),
-      grid,
-    );
-    canvas.drawLine(
-      center - Offset(0, radius),
-      center + Offset(0, radius),
-      grid,
-    );
+    _drawGGrid(canvas, center, radius);
     chartText(
       canvas,
       '+${number(extent, 1)} g acceleration',

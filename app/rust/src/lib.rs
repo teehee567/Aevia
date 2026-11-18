@@ -1,5 +1,7 @@
 pub mod api;
 mod binary;
+#[path = "../../../firmware/src/display.rs"]
+mod display;
 mod evidence;
 mod frb_generated;
 mod legacy;

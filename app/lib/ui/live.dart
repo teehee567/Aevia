@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../controller.dart';
 import 'common.dart';
 import 'charts.dart';
+import 'track_editor.dart';
 
 class LiveView extends StatefulWidget {
   const LiveView({super.key, required this.controller});
@@ -12,6 +13,7 @@ class LiveView extends StatefulWidget {
 
 class _LiveViewState extends State<LiveView> {
   String? trackId;
+  bool fullRate = false;
   final name = TextEditingController();
   @override
   void dispose() {
@@ -88,47 +90,71 @@ class _LiveViewState extends State<LiveView> {
               fontSize: 11,
             ),
           ),
-          child: MetricGrid(
-            minimumWidth: 200,
-            children: [
-              Metric(
-                'Speed',
-                good ? number((numeric(live['speed_mps']) ?? 0) * 3.6, 0) : '—',
-                unit: 'km/h',
-                large: true,
-                note: good
-                    ? 'GNSS speed'
-                    : !c.connected
-                    ? 'Waiting for receiver'
-                    : c.stale
-                    ? 'Last fix is stale'
-                    : 'Waiting for a valid fix',
-              ),
-              Metric(
-                'Current lap',
-                elapsed(c.stale ? null : live['current_lap_s']),
-                large: true,
-                note: 'Lap ${live['lap'] ?? '—'}',
-              ),
-              Metric(
-                'Delta to best',
-                delta == null
-                    ? '—'
-                    : '${delta >= 0 ? '+' : ''}${number(delta, 3)}',
-                unit: 's',
-                large: true,
-                color: delta == null
-                    ? ink
-                    : delta <= 0
-                    ? accent
-                    : warning,
-                note: delta == null
-                    ? 'Predictive timing unavailable'
-                    : delta <= 0
-                    ? 'Ahead of reference'
-                    : 'Behind reference',
-              ),
-            ],
+          child: LayoutBuilder(
+            builder: (context, box) {
+              final metrics = MetricGrid(
+                minimumWidth: 185,
+                children: [
+                  Metric(
+                    'Speed',
+                    good
+                        ? number((numeric(live['speed_mps']) ?? 0) * 3.6, 0)
+                        : '—',
+                    unit: 'km/h',
+                    large: true,
+                    note: good
+                        ? 'GNSS speed'
+                        : !c.connected
+                        ? 'Waiting for receiver'
+                        : c.stale
+                        ? 'Last fix is stale'
+                        : 'Waiting for a valid fix',
+                  ),
+                  Metric(
+                    'Current lap',
+                    elapsed(c.stale ? null : live['current_lap_s']),
+                    large: true,
+                    note: 'Lap ${live['lap'] ?? '—'}',
+                  ),
+                  Metric(
+                    'Delta to best',
+                    delta == null
+                        ? '—'
+                        : '${delta >= 0 ? '+' : ''}${number(delta, 3)}',
+                    unit: 's',
+                    large: true,
+                    color: delta == null
+                        ? ink
+                        : delta <= 0
+                        ? accent
+                        : warning,
+                    note: delta == null
+                        ? 'Predictive timing unavailable'
+                        : delta <= 0
+                        ? 'Ahead of reference'
+                        : 'Behind reference',
+                  ),
+                ],
+              );
+              final meter = LiveGMeter(
+                acceleration: c.imuAccelerationG,
+                connected: c.connected,
+              );
+              if (box.maxWidth >= 820) {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: metrics),
+                    const SizedBox(width: 16),
+                    SizedBox(width: 236, child: meter),
+                  ],
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [metrics, const SizedBox(height: 12), meter],
+              );
+            },
           ),
         ),
         const SizedBox(height: 16),
@@ -156,6 +182,7 @@ class _LiveViewState extends State<LiveView> {
                   SizedBox(
                     width: 250,
                     child: DropdownButtonFormField<String>(
+                      key: ValueKey(trackId),
                       initialValue: trackId,
                       isExpanded: true,
                       decoration: const InputDecoration(labelText: 'Track'),
@@ -179,6 +206,22 @@ class _LiveViewState extends State<LiveView> {
                           : (value) => setState(() => trackId = value),
                     ),
                   ),
+                  if (!c.recording)
+                    OutlinedButton.icon(
+                      onPressed: c.busy
+                          ? null
+                          : () async {
+                              final id = await editTrack(context, c);
+                              if (mounted && id != null) {
+                                setState(() => trackId = id);
+                              }
+                            },
+                      icon: const Icon(
+                        Icons.add_location_alt_outlined,
+                        size: 18,
+                      ),
+                      label: const Text('Create track on map'),
+                    ),
                   FilledButton.icon(
                     onPressed: c.busy || !c.connected
                         ? null
@@ -189,6 +232,7 @@ class _LiveViewState extends State<LiveView> {
                                 ? null
                                 : name.text.trim(),
                             trackId: trackId?.isEmpty == true ? null : trackId,
+                            fullRate: fullRate,
                           ),
                     icon: Icon(
                       c.recording ? Icons.stop : Icons.fiber_manual_record,
@@ -201,10 +245,24 @@ class _LiveViewState extends State<LiveView> {
                 ],
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Recording keeps raw receiver evidence. A saved track enables lap and sector timing.',
-                style: TextStyle(color: muted, fontSize: 12),
-              ),
+              if (c.device['display_v1'] == true)
+                CheckboxListTile(
+                  value: c.recording
+                      ? live['full_rate_copy'] == true
+                      : fullRate,
+                  onChanged: c.recording || c.busy
+                      ? null
+                      : (v) => setState(() => fullRate = v == true),
+                  title: const Text('Copy full-rate raw data over USB'),
+                  subtitle: const Text(
+                    'The receiver records full-rate data to SD. By default the app saves a 5 Hz session for live timing and replay.',
+                  ),
+                )
+              else
+                const Text(
+                  'Recording keeps raw receiver evidence. A saved track enables lap and sector timing.',
+                  style: TextStyle(color: muted, fontSize: 12),
+                ),
             ],
           ),
         ),
@@ -213,15 +271,21 @@ class _LiveViewState extends State<LiveView> {
           minimumWidth: 150,
           children: [
             Metric('Best lap', elapsed(live['best_lap_s'])),
+            Metric('Last lap', elapsed(live['last_lap_s'])),
             Metric(
-              'Longitudinal',
-              good ? number(live['accel_long_g'], 2) : '—',
-              unit: 'g',
+              'Session distance',
+              number(live['distance_m'], 0),
+              unit: 'm',
             ),
             Metric(
-              'Lateral',
-              good ? number(live['accel_lat_g'], 2) : '—',
-              unit: 'g',
+              'Average speed',
+              number(
+                numeric(live['average_speed_mps']) == null
+                    ? null
+                    : numeric(live['average_speed_mps'])! * 3.6,
+                1,
+              ),
+              unit: 'km/h',
             ),
             Metric(
               'Altitude',
@@ -235,7 +299,7 @@ class _LiveViewState extends State<LiveView> {
             ),
             Metric(
               'Receiver battery',
-              c.stale ? '—' : number(c.device['battery_percent'], 0),
+              c.receiverFresh ? number(c.device['battery_percent'], 0) : '—',
               unit: '%',
             ),
           ],

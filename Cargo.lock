@@ -2139,6 +2139,7 @@ dependencies = [
  "aevia-trajectory",
  "cobs",
  "flutter_rust_bridge",
+ "postcard",
  "serde",
  "serde-json-core",
  "serde_json",

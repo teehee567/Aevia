@@ -22,6 +22,10 @@ const COLLECT_TURN_BUDGET: Duration = Duration::from_millis(125);
 const MAX_CAPTURE_BYTES: u64 = 8 * 1024 * 1024 * 1024;
 const MAX_SAMPLES: usize = 2_000_000;
 static SERVICE: OnceLock<Mutex<Service>> = OnceLock::new();
+static COLLECTOR: OnceLock<std::thread::Thread> = OnceLock::new();
+static METRICS: OnceLock<std::thread::Thread> = OnceLock::new();
+const DISPLAY_INTERVAL: Duration = Duration::from_millis(200);
+const DIAGNOSTICS_INTERVAL: Duration = Duration::from_secs(5);
 static CANCEL_PROCESSING: AtomicBool = AtomicBool::new(false);
 static PROCESSING_ACTIVE: AtomicBool = AtomicBool::new(false);
 pub(crate) fn processing_cancelled() -> bool {
@@ -29,6 +33,9 @@ pub(crate) fn processing_cancelled() -> bool {
 }
 
 struct Capture {
+    display_only: bool,
+    last_display_fix_us: Option<u64>,
+    rejected_fix_count: Option<u64>,
     session: Session,
     journal: File,
     journal_line: Vec<u8>,
@@ -86,34 +93,38 @@ pub fn request(input: String) -> String {
         }
         let mutex = SERVICE.get_or_init(|| {
             let service = Service::new();
-            std::thread::Builder::new()
+            let collector = std::thread::Builder::new()
                 .name("aevia-acquisition".into())
                 .stack_size(32 * 1024 * 1024)
-                .spawn(|| {
-                    let mut delay = Duration::from_millis(40);
-                    loop {
-                        // The state lock from the preceding turn is gone before
-                        // pacing. Backlogged receivers need another bounded turn
-                        // promptly; idle/error paths retain the normal cadence.
-                        std::thread::sleep(delay);
-                        delay = Duration::from_millis(40);
-                        if let Some(mutex) = SERVICE.get() {
-                            if let Ok(mut service) = mutex.lock() {
-                                let before = service.sequence;
-                                service.collect();
-                                delay = service.next_collection_delay(
-                                    service.port.is_some() && service.sequence != before,
-                                );
-                            }
+                .spawn(|| loop {
+                    let delay = SERVICE.get().and_then(|m| {
+                        let mut service = m.lock().ok()?;
+                        let capture = service.capture.as_ref()?;
+                        if capture.interrupted || service.port.is_none() {
+                            return None;
                         }
+                        let display_only = capture.display_only;
+                        let before = service.sequence;
+                        service.collect_for(COLLECT_TURN_BUDGET);
+                        Some(if display_only {
+                            DISPLAY_INTERVAL
+                        } else {
+                            service.next_collection_delay(service.sequence != before)
+                        })
+                    });
+                    match delay {
+                        Some(wait) => std::thread::park_timeout(wait),
+                        None => std::thread::park(),
                     }
                 })
                 .expect("acquisition worker");
-            std::thread::Builder::new()
+            let _ = COLLECTOR.set(collector.thread().clone());
+            let metrics = std::thread::Builder::new()
                 .name("aevia-live-metrics".into())
                 .stack_size(32 * 1024 * 1024)
                 .spawn(live_metrics_worker)
                 .expect("live metrics worker");
+            let _ = METRICS.set(metrics.thread().clone());
             Mutex::new(service)
         });
         let mut service = mutex
@@ -216,6 +227,13 @@ fn now_ms() -> u64 {
 
 fn live_metrics_worker() {
     loop {
+        if SERVICE
+            .get()
+            .is_none_or(|m| m.lock().is_ok_and(|s| s.capture.is_none()))
+        {
+            std::thread::park();
+            continue;
+        }
         std::thread::sleep(Duration::from_secs(1));
         let snapshot = SERVICE.get().and_then(|mutex| {
             mutex.lock().ok().and_then(|service| {
@@ -365,7 +383,16 @@ impl Service {
             return Err("Stop recording before importing, processing or exporting sessions".into());
         }
         match text(q, "op")? {
-            "state" | "poll" => Ok(self.state()),
+            "state" => Ok(self.state()),
+            "poll" => {
+                let view = q["view"].as_str().unwrap_or("live");
+                self.poll_view(view)?;
+                Ok(if q["view"].is_string() {
+                    self.snapshot(view)
+                } else {
+                    self.state()
+                })
+            }
             "devices" => devices(),
             "device_sessions" => self.device_sessions(),
             "download" => self.download(q),
@@ -403,6 +430,11 @@ impl Service {
                 }
                 self.port = Some(port);
                 self.port_name = Some(name.into());
+                self.latest = Value::Null;
+                self.rate_sample = None;
+                self.gnss_rate = None;
+                self.imu_rate_sample = None;
+                self.imu_rate = None;
                 self.merge_device_reply(status);
                 self.status = "Connected via USB".into();
                 Ok(self.state())
@@ -514,7 +546,57 @@ impl Service {
             _ => Err("Unknown operation".into()),
         }
     }
+    fn poll_view(&mut self, view: &str) -> Result<(), String> {
+        let Some(port) = self.port.as_mut() else {
+            return Ok(());
+        };
+        if view == "idle" {
+            return Ok(());
+        }
+        let diagnostics = matches!(view, "diagnostics" | "receiver");
+        let compact = self.latest["display_v1"] == true;
+        let interval = if compact && view == "receiver" {
+            DIAGNOSTICS_INTERVAL
+        } else {
+            Duration::from_secs(1)
+        };
+        let full_due = self
+            .last_full_status
+            .is_none_or(|t| t.elapsed() >= interval);
+        let op = if self.last_full_status.is_none()
+            || view == "diagnostics"
+            || (diagnostics && full_due)
+        {
+            "status"
+        } else if self.capture.is_some() {
+            return Ok(());
+        } else if compact {
+            "display"
+        } else if full_due {
+            "status"
+        } else {
+            return Ok(());
+        };
+        match transact(port.as_mut(), op) {
+            Ok(value) => {
+                self.merge_device_reply(value);
+                self.sequence += 1;
+                Ok(())
+            }
+            Err(error) => {
+                self.port = None;
+                self.status = format!("Connection lost: {error}");
+                if let Some(capture) = self.capture.as_mut() {
+                    interrupt_capture(capture, &self.status);
+                }
+                Err(self.status.clone())
+            }
+        }
+    }
     fn next_collection_query(&self) -> Value {
+        if self.capture.as_ref().is_some_and(|c| c.display_only) {
+            return json!({"op":"display"});
+        }
         if self.latest["base64_poll"] == true
             || self.latest["compact_poll"] == true
             || self.latest["binary_poll"] == true
@@ -678,39 +760,25 @@ impl Service {
         })
     }
     fn state(&self) -> Value {
-        let mut gnss_health = self.latest["gnss"].clone();
-        let mut imu_health = self.latest["imu"].clone();
-        if gnss_health.is_object() {
-            gnss_health["age_us"] = json!(self.sensor_age_us("gnss"));
-        }
-        if imu_health.is_object() {
-            imu_health["age_us"] = json!(self.sensor_age_us("imu"));
-        }
-        let mut ppk_health = self.latest["ppk"].clone();
-        if ppk_health.is_object() {
-            let age = self.latest["uptime_us"]
-                .as_u64()
-                .zip(ppk_health["last_observation_us"].as_u64())
-                .and_then(|(now, at)| now.checked_sub(at))
-                .map(|age| {
-                    age.saturating_add(
-                        self.last_seen
-                            .map(|t| t.elapsed().as_micros().min(u128::from(u64::MAX)) as u64)
-                            .unwrap_or(0),
-                    ) / 1000
-                });
-            ppk_health["age_ms"] = json!(age);
-        }
-        let gnss_health = &gnss_health;
-        let gnss = gnss_health.get("latest").unwrap_or(gnss_health);
+        self.snapshot("all")
+    }
+    fn snapshot(&self, view: &str) -> Value {
+        let gnss = self.latest["gnss"]
+            .get("latest")
+            .unwrap_or(&self.latest["gnss"]);
         let stale = self.port.is_none()
             || self
                 .last_seen
                 .is_none_or(|t| t.elapsed() > Duration::from_secs(2));
         let age_us = self.sensor_age_us("gnss").unwrap_or(u64::MAX);
+        let diagnostics_ttl = if self.latest["display_v1"] == true {
+            DIAGNOSTICS_INTERVAL + Duration::from_secs(2)
+        } else {
+            Duration::from_secs(2)
+        };
         let diagnostics_stale = self
             .last_full_status
-            .is_none_or(|t| t.elapsed() > Duration::from_secs(2));
+            .is_none_or(|t| t.elapsed() > diagnostics_ttl);
         let valid = !stale
             && age_us < 1_000_000
             && gnss.get("valid").and_then(Value::as_bool) == Some(true);
@@ -728,31 +796,74 @@ impl Service {
             .as_ref()
             .and_then(|c| c.session.samples.last())
             .map(|s| s.time_s);
-        json!({"device":{"connected":self.port.is_some(),"port":self.port_name,"status":self.status,
-            "recording":self.latest.get("recording"),
-            "firmware":self.latest.get("firmware").or_else(||self.latest.get("protocol")),"battery_percent":if stale||diagnostics_stale{None}else{self.latest["battery"].get("percent")},
-            "diagnostics_stale":diagnostics_stale,"diagnostics_age_ms":self.last_full_status.map(|t|t.elapsed().as_millis() as u64),
-            "gnss_hz":if stale||diagnostics_stale{None}else{self.gnss_rate},"imu_hz":if stale||diagnostics_stale{None}else{self.imu_rate},
-            "acquisition_profile":self.latest.get("acquisition_profile"),"ppk":ppk_health,"satellites":gnss.get("satellites"),
-            "fix_quality":if stale {"stale"} else if valid {"valid"} else {"no fix"},
-            "dropped":self.latest.get("dropped"),"usb_queue":self.latest.get("usb_queue"),"imu":imu_health,"gnss":gnss_health,"gnss_uart":self.latest.get("gnss_uart"),"gnss_byte_queue":self.latest.get("gnss_byte_queue"),
+        let mut device = json!({"connected":self.port.is_some(),"port":self.port_name,"status":self.status,
+            "display_v1":self.latest["display_v1"],"recording":self.latest.get("recording"),
+            "satellites":gnss.get("satellites"),"fix_quality":if stale {"stale"} else if valid {"valid"} else {"no fix"},
+            "battery_percent":if stale {None} else if let Some(p)=self.latest.get("display_battery"){Some(p)}else if !diagnostics_stale {self.latest["battery"].get("percent")} else {None},
+            "gnss_hz":if stale||(diagnostics_stale && self.latest.get("display_battery").is_none()){None}else{self.gnss_rate},
+            "imu":{"age_us":self.sensor_age_us("imu"),"latest":self.latest["imu"].get("latest")}});
+        if matches!(view, "all" | "receiver" | "diagnostics") {
+            let mut gnss_health = self.latest["gnss"].clone();
+            if gnss_health.is_object() {
+                gnss_health["age_us"] = json!(self.sensor_age_us("gnss"));
+            }
+            let mut ppk_health = self.latest["ppk"].clone();
+            if ppk_health.is_object() {
+                let age = self.latest["uptime_us"]
+                    .as_u64()
+                    .zip(ppk_health["last_observation_us"].as_u64())
+                    .and_then(|(now, at)| now.checked_sub(at))
+                    .map(|age| {
+                        age.saturating_add(
+                            self.last_seen
+                                .map(|t| t.elapsed().as_micros().min(u128::from(u64::MAX)) as u64)
+                                .unwrap_or(0),
+                        ) / 1000
+                    });
+                ppk_health["age_ms"] = json!(age);
+            }
+            let mut imu = self.latest["imu"].clone();
+            if imu.is_object() {
+                imu["age_us"] = json!(self.sensor_age_us("imu"));
+            }
+            let details = json!({"firmware":self.latest.get("firmware").or_else(||self.latest.get("protocol")),
+                "diagnostics_stale":diagnostics_stale,"diagnostics_ttl_ms":diagnostics_ttl.as_millis() as u64,"diagnostics_age_ms":self.last_full_status.map(|t|t.elapsed().as_millis() as u64),
+                "imu_hz":if stale||diagnostics_stale{None}else{self.imu_rate},
+                "acquisition_profile":self.latest.get("acquisition_profile"),"ppk":ppk_health,"imu":imu,
+                "dropped":self.latest.get("dropped"),"usb_queue":self.latest.get("usb_queue"),"gnss":gnss_health,"gnss_uart":self.latest.get("gnss_uart"),"gnss_byte_queue":self.latest.get("gnss_byte_queue"),
             "imu_status":self.latest["imu"].get("status"),"storage":self.latest.get("storage"),
             "storage_status":self.latest.get("storage"),"sd":self.latest.get("sd"),"battery":self.latest.get("battery"),"bluetooth":"unavailable",
             "navigation":self.latest.get("navigation"),"installation":self.latest.get("installation"),"capture_timing":self.latest.get("capture_timing"),
             "imu_diagnostics":self.latest.get("imu_diagnostics"),
-            "led":self.latest.get("led"),"display":self.latest.get("display"),"buttons":self.latest.get("buttons"),"accessories":self.latest.get("accessories")},
+            "led":self.latest.get("led"),"display":self.latest.get("display"),"buttons":self.latest.get("buttons"),"accessories":self.latest.get("accessories")});
+            if let Value::Object(fields) = details {
+                device.as_object_mut().unwrap().extend(fields);
+            }
+        }
+        let analyzed = analysis.filter(|a| a.valid_samples >= 2);
+        let mut result = json!({"device":device,
             "live":{"time_s":number(&self.latest,"uptime_us").map(|v|v/1e6),
                 "speed_mps":if valid {number(gnss,"speed_mps")}else{None},
                 "lat":if valid{number(gnss,"lat")}else{None},"lon":if valid{number(gnss,"lon")}else{None},
                 "altitude_m":if valid{number(gnss,"alt_m")}else{None},"heading_deg":if valid{number(gnss,"heading_deg")}else{None},
-                "accel_long_g":null,"accel_lat_g":null,"recording":self.capture.is_some(),"elapsed_s":elapsed,
+                "accel_long_g":null,"accel_lat_g":null,"recording":self.capture.is_some(),"full_rate_copy":self.capture.as_ref().map(|c|!c.display_only),"elapsed_s":elapsed,
                 "capture_interrupted":self.capture.as_ref().is_some_and(|c|c.interrupted),
                 "capture_error":self.capture.as_ref().and_then(|c|c.session.incomplete_reason.as_ref()),
                 "lap":completed,"current_lap_s":last_crossing.zip(metric_elapsed).map(|(t,now)|(now-t).max(0.0)),"best_lap_s":best,"delta_s":null,"valid":valid,"stale":stale,
-                "analysis":analysis,"analysis_samples":self.capture.as_ref().map(|c|c.analyzed_samples),
+                "last_lap_s":analysis.and_then(|a|a.laps.last()).filter(|l|l.valid).map(|l|l.duration_s),
+                "average_speed_mps":analyzed.and_then(|a|a.average_speed_mps),
+                "distance_m":analyzed.filter(|a| a.average_speed_mps.is_some()).map(|a|a.distance_m),
+                "analysis":analysis.map(|a|json!({"max_speed_mps":a.max_speed_mps})),"analysis_samples":self.capture.as_ref().map(|c|c.analyzed_samples),
                 "age_ms":if age_us==u64::MAX{None}else{Some(age_us/1000)},"sequence":self.sequence},
-            "sessions":self.sessions,"tracks":self.preferences.tracks,"drag":self.preferences.drag,
-            "storage_path":self.root.to_string_lossy(),"processing":self.processing})
+            "processing":self.processing});
+        if view == "all" {
+            result["live"]["analysis"] = json!(analysis);
+            result["sessions"] = json!(self.sessions);
+            result["tracks"] = json!(self.preferences.tracks);
+            result["drag"] = json!(self.preferences.drag);
+            result["storage_path"] = json!(self.root.to_string_lossy());
+        }
+        result
     }
     fn start(&mut self, q: &Value) -> Result<(), String> {
         if self.capture.is_some() {
@@ -793,7 +904,16 @@ impl Service {
             drag: self.preferences.drag.clone(),
             analysis: Analysis::default(),
         };
-        let evidence = if self.latest["base64_poll"] == true || self.latest["binary_poll"] == true {
+        let display_only = self.latest["display_v1"] == true && q["display_only"] == true;
+        if display_only {
+            session.source = "V2 Mini display snapshots".into();
+            session.provenance = json!({"kind":"display_v1","nominal_hz":5,"warnings":[
+                "Traj used sampled display fixes. Download the receiver SD recording for full-rate analysis and raw IMU/GNSS evidence."
+            ]});
+        }
+        let evidence = if !display_only
+            && (self.latest["base64_poll"] == true || self.latest["binary_poll"] == true)
+        {
             let path = self.root.join(format!("{id}.raw.aev"));
             let writer = crate::evidence::Writer::create(&path, now_ms(), MAX_CAPTURE_BYTES)?;
             session.raw_records.push(json!({"kind":"raw_capture_file","path":path.to_string_lossy(),"format":"AEVLOG1","source":"usb-binary"}));
@@ -808,9 +928,19 @@ impl Service {
             .map_err(io_error)?;
         writeln!(journal, "{}", json!({"session":session})).map_err(io_error)?;
         journal.sync_data().map_err(io_error)?;
-        let response = transact(port.as_mut(), "start")?;
+        let response = transact(
+            port.as_mut(),
+            if display_only {
+                "start_display"
+            } else {
+                "start"
+            },
+        )?;
         self.merge_device_reply(response);
         self.capture = Some(Capture {
+            display_only,
+            last_display_fix_us: None,
+            rejected_fix_count: None,
             session,
             journal,
             journal_line: Vec::new(),
@@ -855,7 +985,15 @@ impl Service {
             }
             capture.session.raw_records.push(start);
         }
-        self.status = "Recording to computer".into();
+        for worker in [COLLECTOR.get(), METRICS.get()].into_iter().flatten() {
+            worker.unpark();
+        }
+        self.status = if display_only {
+            "Recording on SD with display snapshots"
+        } else {
+            "Recording to computer"
+        }
+        .into();
         Ok(())
     }
     fn stop(&mut self) -> Result<(), String> {
@@ -872,7 +1010,11 @@ impl Service {
             let pending_tail;
             match transact(port.as_mut(), "stop") {
                 Ok(value) => {
-                    pending_tail = value.get("pending").and_then(Value::as_u64);
+                    pending_tail = if self.capture.as_ref().is_some_and(|c| c.display_only) {
+                        None
+                    } else {
+                        value.get("pending").and_then(Value::as_u64)
+                    };
                     if let Some(c) = self.capture.as_mut() {
                         if c.stop_at_us.is_none() {
                             observe_capture_health(c, &value);
@@ -893,7 +1035,9 @@ impl Service {
             // The stop fence has queued every pre-stop publication. Drain that
             // fixed FIFO tail, not an ever-refilling live preview queue. Older
             // replies without pending retain the bounded empty-queue fallback.
-            if !self.collect_for_tail(Duration::from_secs(12), pending_tail) {
+            if !self.capture.as_ref().is_some_and(|c| c.display_only)
+                && !self.collect_for_tail(Duration::from_secs(12), pending_tail)
+            {
                 if let Some(capture) = self.capture.as_mut() {
                     interrupt_capture(capture, "The stopped USB queue could not be fully drained; received evidence and the recovery journal are retained");
                 }
@@ -949,9 +1093,6 @@ impl Service {
             "Disconnected; recording saved".into()
         };
         result
-    }
-    fn collect(&mut self) {
-        self.collect_for(COLLECT_TURN_BUDGET);
     }
     fn next_collection_delay(&self, received_successfully: bool) -> Duration {
         if received_successfully
@@ -1009,8 +1150,53 @@ impl Service {
             let result = poll(self);
             match result {
                 Ok(value) => {
+                    if let Some(capture) = self.capture.as_mut().filter(|c| c.display_only) {
+                        let session_changed = value["session"]
+                            .as_u64()
+                            .zip(capture.health_start["device_session"].as_u64())
+                            .is_some_and(|(now, start)| now != start);
+                        let clock_reset = value["uptime_us"]
+                            .as_u64()
+                            .zip(capture.health_start["started_at_us"].as_u64())
+                            .is_some_and(|(now, start)| now < start);
+                        if session_changed || clock_reset {
+                            // Saving this capture must never send Stop to a new receiver session.
+                            self.port = None;
+                            self.status =
+                                "Receiver session changed. Save the received display recording."
+                                    .into();
+                            interrupt_capture(capture, &self.status);
+                            return false;
+                        }
+                    }
                     let pending = value.get("pending").and_then(Value::as_u64).unwrap_or(0);
-                    let records = self.merge_device_reply(value);
+                    let display_fix =
+                        self.capture
+                            .as_mut()
+                            .filter(|c| c.display_only)
+                            .and_then(|c| {
+                                let fix = value["gnss"].get("latest")?;
+                                let timestamp = fix["t_us"].as_u64()?;
+                                if c.last_display_fix_us == Some(timestamp)
+                                    || before_capture_start(c, fix)
+                                {
+                                    return None;
+                                }
+                                c.last_display_fix_us = Some(timestamp);
+                                let mut record = fix.clone();
+                                let rejected = value["rejected_fix_count"].as_u64();
+                                if c.rejected_fix_count
+                                    .zip(rejected)
+                                    .is_some_and(|(a, b)| a != b)
+                                {
+                                    // Break host interpolation across a rejected fix between snapshots.
+                                    record["valid"] = json!(false);
+                                }
+                                c.rejected_fix_count = rejected;
+                                Some(record)
+                            });
+                    let mut records = self.merge_device_reply(value);
+                    records.extend(display_fix);
                     if let Some(remaining) = &mut remaining_tail {
                         let received = (*remaining).min(records.len() as u64);
                         *remaining -= received;
@@ -1366,11 +1552,16 @@ impl Service {
             .get("id")
             .and_then(Value::as_u64)
             .ok_or("Missing numeric device file id")?;
-        let list = self.device_sessions()?;
-        let entry = list
-            .as_array()
-            .and_then(|a| a.iter().find(|f| f["id"].as_u64() == Some(id)))
-            .ok_or("Device session not found")?;
+        let batch = self.latest["read_blocks"].as_u64().unwrap_or(0).min(8);
+        let port = self.port.as_mut().ok_or("Connect a V2 Mini first")?;
+        let entry = transact_query(
+            port.as_mut(),
+            &json!({"op":"files","after":id.checked_sub(1).ok_or("Invalid file id")?}),
+        )?;
+        let entry = &entry["file"];
+        if entry["id"].as_u64() != Some(id) {
+            return Err("Device session not found".into());
+        }
         let bytes = entry["bytes"].as_u64().ok_or("Missing device file size")?;
         if bytes == 0 || bytes % 512 != 0 || bytes > MAX_CAPTURE_BYTES {
             return Err("Invalid or oversized device recording".into());
@@ -1381,30 +1572,19 @@ impl Service {
             .write(true)
             .open(&path)
             .map_err(io_error)?;
-        let port = self.port.as_mut().ok_or("Device disconnected")?;
-        for sector in 0..bytes / 512 {
-            let response =
-                transact_query(port.as_mut(), &json!({"op":"read","id":id,"sector":sector}))?;
-            if response["id"].as_u64() != Some(id) || response["sector"].as_u64() != Some(sector) {
-                return Err("Device returned a different file or sector".into());
-            }
-            let hex = response["hex"].as_str().ok_or("Missing sector bytes")?;
-            if hex.len() != 1024 {
-                return Err("Device sector has an invalid length".into());
-            }
-            let mut sector_bytes = [0u8; 512];
-            for (i, pair) in hex.as_bytes().as_chunks::<2>().0.iter().enumerate() {
-                let nibble = |b: u8| -> Result<u8, String> {
-                    match b {
-                        b'0'..=b'9' => Ok(b - b'0'),
-                        b'a'..=b'f' => Ok(b - b'a' + 10),
-                        b'A'..=b'F' => Ok(b - b'A' + 10),
-                        _ => Err("Device sent non-hex data".into()),
-                    }
-                };
-                sector_bytes[i] = (nibble(pair[0])? << 4) | nibble(pair[1])?;
-            }
-            file.write_all(&sector_bytes).map_err(io_error)?;
+        let sectors = bytes / 512;
+        let mut sector = 0;
+        while sector < sectors {
+            let count = (sectors - sector).min(batch.max(1));
+            let query = if batch > 0 {
+                json!({"op":"read_blocks","id":id,"sector":sector,"count":count})
+            } else {
+                json!({"op":"read","id":id,"sector":sector})
+            };
+            let response = transact_query(port.as_mut(), &query)?;
+            let chunk = download_chunk(&response, id, sector, count, batch > 0)?;
+            file.write_all(&chunk).map_err(io_error)?;
+            sector += count;
         }
         file.sync_all().map_err(io_error)?;
         drop(file);
@@ -1412,6 +1592,38 @@ impl Service {
         let _ = fs::remove_file(path);
         Ok(json!(session))
     }
+}
+
+fn download_chunk(
+    reply: &Value,
+    id: u64,
+    sector: u64,
+    count: u64,
+    batched: bool,
+) -> Result<Vec<u8>, String> {
+    if reply["id"].as_u64() != Some(id) || reply["sector"].as_u64() != Some(sector) {
+        return Err("Device returned a different file or sector".into());
+    }
+    if !batched {
+        let hex = reply["hex"]
+            .as_str()
+            .filter(|s| s.len() == 1024)
+            .ok_or("Invalid sector data")?;
+        return crate::binary::from_hex(hex);
+    }
+    let blocks = reply["blocks"]
+        .as_array()
+        .filter(|a| a.len() == count as usize)
+        .ok_or("Invalid block count")?;
+    let mut bytes = Vec::with_capacity(blocks.len() * 512);
+    for block in blocks {
+        let part = crate::binary::from_base64(block.as_str().ok_or("Missing block")?)?;
+        if part.len() != 512 {
+            return Err("Invalid block length".into());
+        }
+        bytes.extend_from_slice(&part);
+    }
+    Ok(bytes)
 }
 
 fn copy_evidence(source: &Path, destination: &Path) -> Result<(), String> {
@@ -2041,6 +2253,30 @@ fn decode_reply(frame: &[u8]) -> Result<Value, String> {
             .unwrap_or("Device rejected request")
             .into());
     }
+    if let Some(payload) = value.get("d") {
+        let bytes = crate::binary::from_base64(payload.as_str().ok_or("Invalid display payload")?)?;
+        let (frame, rest) =
+            postcard::take_from_bytes::<crate::display::DisplayFrame>(&bytes).map_err(io_error)?;
+        if !rest.is_empty() {
+            return Err("Trailing display bytes".into());
+        }
+        let fix = frame.fix.map(|f| {
+            json!({"kind":"gnss","t_us":f.t_us,
+            "gps_week":f.gps_week,"gps_tow_ms":f.gps_tow_ms,"lat":f.lat,"lon":f.lon,
+            "alt_m":f.altitude_m,"speed_mps":f.speed_mps,"heading_deg":f.heading_deg,
+            "vertical_mps":f.vertical_mps,"hacc_m":f.hacc_m,"latency_ms":f.latency_ms,
+            "satellites":f.satellites,"valid":f.valid})
+        });
+        let imu = frame
+            .imu
+            .map(|i| json!({"kind":"imu","t_us":i.t_us,"valid":i.valid,"accel":i.accel}));
+        return Ok(
+            json!({"compact":true,"display_v1":true,"uptime_us":frame.uptime_us,
+            "display_battery":frame.battery_percent,"session":frame.session,"recording":frame.recording,
+            "stopped_at_us":frame.stopped_at_us,"rejected_fix_count":frame.rejected_fix_count,"gnss":{"count":frame.gnss_count,"latest":fix},
+            "imu":{"latest":imu},"pending":0}),
+        );
+    }
     if value["binary"] == true {
         if value.get("samples").is_some_and(|samples| {
             !samples.is_null() && !samples.as_array().is_some_and(Vec::is_empty)
@@ -2067,7 +2303,10 @@ fn transact(port: &mut dyn SerialPort, op: &str) -> Result<Value, String> {
 }
 fn transact_query(port: &mut dyn SerialPort, query: &Value) -> Result<Value, String> {
     let operation = query["op"].as_str().unwrap_or("");
-    let timeout = if matches!(operation, "start" | "stop" | "files" | "read") {
+    let timeout = if matches!(
+        operation,
+        "start" | "start_display" | "stop" | "files" | "read" | "read_blocks"
+    ) {
         Duration::from_secs(12)
     } else {
         Duration::from_millis(800)
@@ -2386,6 +2625,9 @@ mod tests {
             let mut journal = File::create(self.0.join("session-test.capture.jsonl")).unwrap();
             writeln!(journal, "{}", json!({"session":session})).unwrap();
             Capture {
+                display_only: false,
+                last_display_fix_us: None,
+                rejected_fix_count: None,
                 session,
                 journal,
                 journal_line: Vec::new(),
@@ -2419,6 +2661,117 @@ mod tests {
             let _ = fs::remove_dir_all(&self.0);
         }
     }
+    #[test]
+    fn sd_download_validates_all_sectors_including_the_short_final_batch() {
+        let mut block = crate::firmware_response::Response::<684>::new();
+        block.push_base64(&[0x5a; 512]).unwrap();
+        for count in [1, 3, 8] {
+            let mut reply = json!({"id":2,"sector":9,"blocks":vec![block.as_str();count]});
+            assert_eq!(
+                download_chunk(&reply, 2, 9, count as u64, true).unwrap(),
+                vec![0x5a; 512 * count]
+            );
+            assert!(download_chunk(&reply, 2, 8, count as u64, true).is_err());
+            assert!(download_chunk(&reply, 2, 9, count as u64 + 1, true).is_err());
+            reply["blocks"][count - 1] = json!("AAAA");
+            assert!(download_chunk(&reply, 2, 9, count as u64, true).is_err());
+        }
+        let legacy = json!({"id":2,"sector":9,"hex":"ab".repeat(512)});
+        assert_eq!(
+            download_chunk(&legacy, 2, 9, 1, false).unwrap(),
+            vec![0xab; 512]
+        );
+    }
+
+    #[test]
+    fn display_frame_budget_freshness_and_sampled_recording() {
+        use crate::display::{DisplayAcceleration, DisplayFix, DisplayFrame};
+        use crate::firmware_response::{frame_app_reply, Response};
+        let frame = DisplayFrame {
+            uptime_us: 3_600_000_000,
+            session: 7,
+            recording: true,
+            stopped_at_us: None,
+            battery_percent: Some(80),
+            gnss_count: 180_000,
+            rejected_fix_count: 0,
+            fix: Some(DisplayFix {
+                t_us: 3_599_990_000,
+                gps_week: 2400,
+                gps_tow_ms: 300_000_000,
+                lat: -33.4,
+                lon: 151.2,
+                altitude_m: 100.,
+                speed_mps: 27.5,
+                heading_deg: 91.,
+                vertical_mps: 0.,
+                hacc_m: 0.8,
+                latency_ms: 0,
+                satellites: 20,
+                valid: true,
+            }),
+            imu: Some(DisplayAcceleration {
+                t_us: 3_599_999_500,
+                accel: [1., 2., 9.81],
+                valid: true,
+            }),
+        };
+        let mut buffer = [0; 160];
+        let payload = postcard::to_slice(&frame, &mut buffer).unwrap();
+        let mut response = Response::<256>::new();
+        response.push_str(r#"{"ok":true,"d":""#).unwrap();
+        response.push_base64(payload).unwrap();
+        response.push_str(r#""}"#).unwrap();
+        let mut framed = [0; 256];
+        let size = frame_app_reply(response.as_str(), &mut framed).unwrap();
+        let request = encode_request("display");
+        println!(
+            "display bytes: payload {}, request {}, reply {}",
+            payload.len(),
+            request.len(),
+            size
+        );
+        assert!(size + request.len() <= 180);
+        let reply = decode_reply(&framed[..size - 1]).unwrap();
+        let storage = TestStorage::new();
+        let mut service = storage.service();
+        let mut capture = storage.capture();
+        capture.display_only = true;
+        capture.session.samples.clear();
+        service.capture = Some(capture);
+        assert_eq!(service.next_collection_query(), json!({"op":"display"}));
+        for _ in 0..2 {
+            assert!(service.collect_with(Duration::from_millis(1), |_| Ok(reply.clone())));
+        }
+        assert_eq!(service.capture.as_ref().unwrap().session.samples.len(), 1);
+        let mut later = reply.clone();
+        later["uptime_us"] = json!(3_600_200_000u64);
+        later["gnss"]["latest"]["t_us"] = json!(3_600_190_000u64);
+        later["gnss"]["latest"]["gps_tow_ms"] = json!(300_000_200);
+        later["imu"]["latest"]["t_us"] = json!(3_600_199_500u64);
+        later["rejected_fix_count"] = json!(1);
+        assert!(service.collect_with(Duration::from_millis(1), |_| Ok(later.clone())));
+        assert!(
+            !service
+                .capture
+                .as_ref()
+                .unwrap()
+                .session
+                .samples
+                .last()
+                .unwrap()
+                .valid
+        );
+        assert_eq!(service.latest["gnss"]["age_us"], 10000);
+        assert_eq!(service.latest["imu"]["age_us"], 500);
+        assert_eq!(service.latest["display_battery"], 80);
+        assert!(service.last_full_status.is_none());
+        let ui = service.snapshot("live");
+        assert!(ui.get("tracks").is_none() && ui.get("sessions").is_none());
+        assert!(ui["device"].get("imu_diagnostics").is_none());
+        assert!(ui["live"]["analysis"].get("laps").is_none());
+    }
+
     #[test]
     fn binary_imu_evidence_stays_bounded_and_reimports_exact_support() {
         let storage = TestStorage::new();

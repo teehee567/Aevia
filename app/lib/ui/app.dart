@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../controller.dart';
 import 'common.dart';
+import 'diagnostics.dart';
 import 'live.dart';
 import 'sessions.dart';
 import 'analysis.dart';
@@ -14,15 +15,22 @@ class AeviaApp extends StatefulWidget {
   State<AeviaApp> createState() => _AeviaAppState();
 }
 
-class _AeviaAppState extends State<AeviaApp> {
+class _AeviaAppState extends State<AeviaApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     widget.controller.initialize();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    widget.controller.setForeground(state == AppLifecycleState.resumed);
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     widget.controller.dispose();
     super.dispose();
   }
@@ -50,6 +58,7 @@ class AeviaShell extends StatelessWidget {
     'Tracks',
     'Receiver',
     'Post-processing',
+    'Receiver diagnostics',
   ];
   static const labels = [
     'Live',
@@ -59,6 +68,7 @@ class AeviaShell extends StatelessWidget {
     'Tracks',
     'Receiver',
     'PPK',
+    'Diagnostics',
   ];
   static const icons = [
     Icons.speed_outlined,
@@ -68,6 +78,7 @@ class AeviaShell extends StatelessWidget {
     Icons.route_outlined,
     Icons.usb_outlined,
     Icons.satellite_alt_outlined,
+    Icons.monitor_heart_outlined,
   ];
   Widget navigation(BuildContext context, {bool drawer = false}) => Container(
     width: 184,
@@ -96,31 +107,43 @@ class AeviaShell extends StatelessWidget {
             style: TextStyle(fontSize: 8, letterSpacing: 1.1, color: muted),
           ),
         ),
-        for (int i = 0; i < labels.length; i++)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-            child: Material(
-              color: controller.page == i
-                  ? accent.withValues(alpha: .09)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(4),
-              child: ListTile(
-                dense: true,
-                selected: controller.page == i,
-                selectedColor: accent,
-                leading: Icon(icons[i], size: 19),
-                title: Text(labels[i], style: const TextStyle(fontSize: 13)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
+        Expanded(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              for (int i = 0; i < labels.length; i++)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 2,
+                  ),
+                  child: Material(
+                    color: controller.page == i
+                        ? accent.withValues(alpha: .09)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(4),
+                    child: ListTile(
+                      dense: true,
+                      selected: controller.page == i,
+                      selectedColor: accent,
+                      leading: Icon(icons[i], size: 19),
+                      title: Text(
+                        labels[i],
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      onTap: () {
+                        controller.navigate(i);
+                        if (drawer) Navigator.pop(context);
+                      },
+                    ),
+                  ),
                 ),
-                onTap: () {
-                  controller.navigate(i);
-                  if (drawer) Navigator.pop(context);
-                },
-              ),
-            ),
+            ],
           ),
-        const Spacer(),
+        ),
         const Divider(),
         Padding(
           padding: const EdgeInsets.all(18),
@@ -162,6 +185,7 @@ class AeviaShell extends StatelessWidget {
       TracksView(controller: controller),
       ReceiverView(controller: controller),
       PpkView(controller: controller),
+      DiagnosticsView(controller: controller),
     ];
     return Scaffold(
       drawer: compact
@@ -216,12 +240,14 @@ class AeviaShell extends StatelessWidget {
                           const SizedBox(width: 12),
                           Status(
                             controller.connected
-                                ? controller.stale
+                                ? [0, 5, 7].contains(controller.page) &&
+                                          controller.stale
                                       ? 'STALE DATA'
                                       : 'USB CONNECTED'
                                 : 'OFFLINE',
                             color: controller.connected
-                                ? controller.stale
+                                ? [0, 5, 7].contains(controller.page) &&
+                                          controller.stale
                                       ? warning
                                       : accent
                                 : muted,
