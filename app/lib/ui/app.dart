@@ -41,14 +41,11 @@ class _AeviaAppState extends State<AeviaApp> with WidgetsBindingObserver {
     debugShowCheckedModeBanner: false,
     title: 'Aevia',
     theme: aeviaTheme(),
-    home: AnimatedBuilder(
-      animation: widget.controller,
-      builder: (context, _) => AeviaShell(controller: widget.controller),
-    ),
+    home: AeviaShell(controller: widget.controller),
   );
 }
 
-class AeviaShell extends StatelessWidget {
+class AeviaShell extends StatefulWidget {
   const AeviaShell({super.key, required this.controller});
   final AeviaController controller;
   static const titles = [
@@ -84,6 +81,74 @@ class AeviaShell extends StatelessWidget {
     Icons.monitor_heart_outlined,
     Icons.sd_storage_outlined,
   ];
+  @override
+  State<AeviaShell> createState() => _AeviaShellState();
+}
+
+class _AeviaShellState extends State<AeviaShell> {
+  AeviaController get controller => widget.controller;
+  // The active workspace listens to all data changes. Navigation and window
+  // layout only depend on this small set of visible connection and task states.
+  Record get chrome => (
+    controller.page,
+    controller.connected,
+    controller.bluetooth,
+    controller.device['port'],
+    controller.recording,
+    controller.captureInterruption,
+    [0, 5, 7].contains(controller.page) && controller.stale,
+    controller.busy,
+    controller.activity,
+    controller.state['processing'],
+    controller.error,
+    controller.notice,
+    boardStatus,
+  );
+  Record? get boardStatus {
+    if (controller.page != AeviaController.boardPage) return null;
+    final sd = object(controller.device['sd']);
+    return (
+      controller.usbConnected,
+      controller.storageBusy,
+      controller.canBrowseBoard,
+      sd['state'],
+      sd['capacity_bytes'],
+      sd['error'],
+      controller.deviceSessions,
+      controller.boardPreview,
+    );
+  }
+
+  late Record lastChrome;
+
+  @override
+  void initState() {
+    super.initState();
+    lastChrome = chrome;
+    controller.addListener(updateChrome);
+  }
+
+  @override
+  void didUpdateWidget(AeviaShell oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != controller) {
+      oldWidget.controller.removeListener(updateChrome);
+      controller.addListener(updateChrome);
+      lastChrome = chrome;
+    }
+  }
+
+  void updateChrome() {
+    final next = chrome;
+    if (lastChrome != next) setState(() => lastChrome = next);
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(updateChrome);
+    super.dispose();
+  }
+
   Widget navigation(BuildContext context, {bool drawer = false}) => Container(
     width: 184,
     decoration: const BoxDecoration(
@@ -115,7 +180,7 @@ class AeviaShell extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              for (int i = 0; i < labels.length; i++)
+              for (int i = 0; i < AeviaShell.labels.length; i++)
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -130,9 +195,9 @@ class AeviaShell extends StatelessWidget {
                       dense: true,
                       selected: controller.page == i,
                       selectedColor: accent,
-                      leading: Icon(icons[i], size: 19),
+                      leading: Icon(AeviaShell.icons[i], size: 19),
                       title: Text(
-                        labels[i],
+                        AeviaShell.labels[i],
                         style: const TextStyle(fontSize: 13),
                       ),
                       shape: RoundedRectangleBorder(
@@ -183,17 +248,6 @@ class AeviaShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final compact = MediaQuery.sizeOf(context).width < 880;
-    final pages = [
-      LiveView(controller: controller),
-      SessionsView(controller: controller),
-      AnalysisView(controller: controller),
-      DragView(controller: controller),
-      TracksView(controller: controller),
-      ReceiverView(controller: controller),
-      PpkView(controller: controller),
-      DiagnosticsView(controller: controller),
-      BoardDataView(controller: controller),
-    ];
     return Scaffold(
       drawer: compact
           ? Drawer(
@@ -230,7 +284,7 @@ class AeviaShell extends StatelessWidget {
                           ),
                         Expanded(
                           child: Text(
-                            titles[controller.page],
+                            AeviaShell.titles[controller.page],
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ),
@@ -322,11 +376,36 @@ class AeviaShell extends StatelessWidget {
                       ),
                     ),
                   Expanded(
-                    child: SingleChildScrollView(
-                      key: PageStorageKey('workspace-${controller.page}'),
-                      padding: EdgeInsets.all(compact ? 16 : 26),
-                      child: pages[controller.page],
-                    ),
+                    child: controller.page == AeviaController.boardPage
+                        ? BoardDataView(
+                            key: const PageStorageKey('workspace-8'),
+                            controller: controller,
+                            padding: EdgeInsets.all(compact ? 16 : 26),
+                          )
+                        : ListenableBuilder(
+                            listenable: controller,
+                            builder: (context, _) {
+                              final key = PageStorageKey(
+                                'workspace-${controller.page}',
+                              );
+                              final padding = EdgeInsets.all(compact ? 16 : 26);
+                              return SingleChildScrollView(
+                                key: key,
+                                padding: padding,
+                                child: switch (controller.page) {
+                                  0 => LiveView(controller: controller),
+                                  1 => SessionsView(controller: controller),
+                                  2 => AnalysisView(controller: controller),
+                                  3 => DragView(controller: controller),
+                                  4 => TracksView(controller: controller),
+                                  5 => ReceiverView(controller: controller),
+                                  6 => PpkView(controller: controller),
+                                  7 => DiagnosticsView(controller: controller),
+                                  _ => throw StateError('Unknown workspace'),
+                                },
+                              );
+                            },
+                          ),
                   ),
                 ],
               ),

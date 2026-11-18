@@ -1185,4 +1185,82 @@ void main() {
       expect(backend.calls.length, before);
     }
   });
+
+  testWidgets(
+    'large board directories build only visible recording rows',
+    (tester) async {
+      final backend = FakeBackend();
+      backend.state['device'] = {
+        'connected': true,
+        'transport': 'USB',
+        'port': 'COM1',
+      };
+      backend.deviceSessions = [
+        for (var id = 1; id <= 250; id++)
+          {'id': id, 'bytes': 512, 'closed': true},
+      ];
+      final c = await mount(tester, backend);
+      c.navigate(AeviaController.boardPage);
+      await tester.pumpAndSettle();
+      await c.refreshDeviceSessions();
+      await tester.pumpAndSettle();
+      final rows = find
+          .text('Download & analyze', skipOffstage: false)
+          .evaluate()
+          .length;
+      expect(rows, lessThan(25));
+      final list = tester
+          .state<ScrollableState>(
+            find
+                .descendant(
+                  of: find.byKey(const PageStorageKey('workspace-8')),
+                  matching: find.byType(Scrollable),
+                )
+                .first,
+          )
+          .position;
+      final refresh = tester.widget(
+        find.widgetWithText(OutlinedButton, 'Refresh'),
+      );
+      await c.poll();
+      await tester.pump();
+      expect(
+        tester.widget(find.widgetWithText(OutlinedButton, 'Refresh')),
+        same(refresh),
+      );
+      final overList = tester.getCenter(find.text('Recording 250'));
+      Future<void> wheel(double dy) => tester.sendEventToBinding(
+        PointerScrollEvent(
+          position: overList,
+          kind: PointerDeviceKind.mouse,
+          scrollDelta: Offset(0, dy),
+        ),
+      );
+      await wheel(120);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 20));
+      expect(list.pixels, inExclusiveRange(0, 120));
+      await wheel(120);
+      await tester.pumpAndSettle();
+      expect(list.pixels, closeTo(240, 0.01));
+      await wheel(5);
+      expect(list.pixels, closeTo(245, 0.01));
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+      await tester.pump();
+      await wheel(120);
+      expect(list.pixels, closeTo(365, 0.01));
+      list.jumpTo(list.maxScrollExtent);
+      await tester.pumpAndSettle();
+      expect(find.text('Recording 1'), findsOneWidget);
+      expect(
+        backend.calls.where((q) => q['op'] == 'device_sessions'),
+        hasLength(1),
+      );
+    },
+    variant: TargetPlatformVariant.only(TargetPlatform.windows),
+  );
 }

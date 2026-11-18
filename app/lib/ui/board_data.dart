@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../controller.dart';
 import 'common.dart';
@@ -11,22 +12,45 @@ String _size(dynamic bytes) {
   return '${number(bytes / (1024 * 1024 * 1024), 2)} GiB';
 }
 
-class BoardDataView extends StatelessWidget {
-  const BoardDataView({super.key, required this.controller});
+class BoardDataView extends StatefulWidget {
+  const BoardDataView({
+    super.key,
+    required this.controller,
+    required this.padding,
+  });
   final AeviaController controller;
+  final EdgeInsets padding;
+  @override
+  State<BoardDataView> createState() => _BoardDataViewState();
+}
+
+class _BoardDataViewState extends State<BoardDataView> {
+  final scroll = _BoardScrollController();
+
+  @override
+  void dispose() {
+    scroll.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final c = controller;
+    final c = widget.controller;
+    final padding = widget.padding;
     if (!c.usbConnected) {
-      return EmptyState(
-        'Board data requires USB',
-        'Connect the V2 Mini to the app by USB to browse its SD card.',
-        icon: Icons.usb_outlined,
-        action: OutlinedButton(
-          onPressed: () => c.navigate(5),
-          child: const Text('Open Receiver'),
-        ),
+      return ListView(
+        padding: padding,
+        children: [
+          EmptyState(
+            'Board data requires USB',
+            'Connect the V2 Mini to the app by USB to browse its SD card.',
+            icon: Icons.usb_outlined,
+            action: OutlinedButton(
+              onPressed: () => c.navigate(5),
+              child: const Text('Open Receiver'),
+            ),
+          ),
+        ],
       );
     }
     final sd = object(c.device['sd']);
@@ -35,69 +59,162 @@ class BoardDataView extends StatelessWidget {
     final total = sizes != null && sizes.length == files!.length
         ? sizes.fold<int>(0, (a, b) => a + b)
         : null;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Section(
-          title: 'Receiver SD card',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MetricGrid(
+    final animateWheel =
+        Theme.of(context).platform == TargetPlatform.windows &&
+        !MediaQuery.disableAnimationsOf(context);
+    return Listener(
+      onPointerSignal: (event) {
+        // Scrollable resolves the pointer signal after hit testing. Let precise
+        // deltas and trackpad gestures retain their native movement.
+        scroll.animateWheel =
+            animateWheel &&
+            event is PointerScrollEvent &&
+            event.kind == PointerDeviceKind.mouse &&
+            event.scrollDelta.dy.abs() >= 32;
+      },
+      child: ListView.builder(
+        controller: scroll,
+        padding: padding,
+        itemCount: 1 + (files?.length ?? 0),
+        itemBuilder: (context, index) {
+          if (index > 0) {
+            final file = files![index - 1];
+            return Material(
+              key: ValueKey(file['id']),
+              color: panel,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Metric('Card state', sd['state']?.toString() ?? '—'),
-                  Metric(
-                    'Card capacity',
-                    (numeric(sd['capacity_bytes']) ?? 0) > 0
-                        ? _size(sd['capacity_bytes'])
-                        : '—',
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 14,
+                    ),
+                    child: _Recording(file: file, controller: c),
                   ),
-                  Metric('Recording files', files?.length.toString() ?? '—'),
-                  Metric('Committed data', _size(total)),
                 ],
               ),
-              if (sd['error'] != null)
-                Text('${sd['error']}', style: const TextStyle(color: warning)),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        Section(
-          title: 'Recording history',
-          trailing: OutlinedButton.icon(
-            onPressed: c.busy || !c.canBrowseBoard
-                ? null
-                : c.refreshDeviceSessions,
-            icon: const Icon(Icons.refresh, size: 16),
-            label: const Text('Refresh'),
-          ),
-          child: Column(
+            );
+          }
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (c.storageBusy)
-                const Text(
-                  'Stop recording and wait for the SD card to finish saving to browse its files.',
-                )
-              else if (files == null)
-                const Text('Refresh to read the recording directory over USB.')
-              else if (files.isEmpty)
-                const Text('No recordings on this SD card.')
-              else
-                const Text(
-                  'Preview file details or download a recording to open it in Analysis.',
-                  style: TextStyle(color: muted),
+              Section(
+                title: 'Receiver SD card',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MetricGrid(
+                      children: [
+                        Metric('Card state', sd['state']?.toString() ?? '—'),
+                        Metric(
+                          'Card capacity',
+                          (numeric(sd['capacity_bytes']) ?? 0) > 0
+                              ? _size(sd['capacity_bytes'])
+                              : '—',
+                        ),
+                        Metric(
+                          'Recording files',
+                          files?.length.toString() ?? '—',
+                        ),
+                        Metric('Committed data', _size(total)),
+                      ],
+                    ),
+                    if (sd['error'] != null)
+                      Text(
+                        '${sd['error']}',
+                        style: const TextStyle(color: warning),
+                      ),
+                  ],
                 ),
-              for (final file in files ?? <Map<String, dynamic>>[]) ...[
-                const SizedBox(height: 14),
-                const Divider(),
-                const SizedBox(height: 12),
-                _Recording(file: file, controller: c),
-              ],
+              ),
+              const SizedBox(height: 16),
+              Section(
+                title: 'Recording history',
+                trailing: OutlinedButton.icon(
+                  onPressed: c.busy || !c.canBrowseBoard
+                      ? null
+                      : c.refreshDeviceSessions,
+                  icon: const Icon(Icons.refresh, size: 16),
+                  label: const Text('Refresh'),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (c.storageBusy)
+                      const Text(
+                        'Stop recording and wait for the SD card to finish saving to browse its files.',
+                      )
+                    else if (files == null)
+                      const Text(
+                        'Refresh to read the recording directory over USB.',
+                      )
+                    else if (files.isEmpty)
+                      const Text('No recordings on this SD card.')
+                    else
+                      const Text(
+                        'Preview file details or download a recording to open it in Analysis.',
+                        style: TextStyle(color: muted),
+                      ),
+                  ],
+                ),
+              ),
             ],
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
+  }
+}
+
+class _BoardScrollController extends ScrollController {
+  bool animateWheel = false;
+  @override
+  ScrollPosition createScrollPosition(
+    ScrollPhysics physics,
+    ScrollContext context,
+    ScrollPosition? oldPosition,
+  ) => _BoardScrollPosition(
+    physics: physics,
+    context: context,
+    oldPosition: oldPosition,
+    controller: this,
+  );
+}
+
+class _BoardScrollPosition extends ScrollPositionWithSingleContext {
+  _BoardScrollPosition({
+    required super.physics,
+    required super.context,
+    super.oldPosition,
+    required this.controller,
+  });
+  final _BoardScrollController controller;
+  ScrollActivity? wheelActivity;
+  double target = 0;
+
+  @override
+  void pointerScroll(double delta) {
+    if (!controller.animateWheel || delta == 0) {
+      super.pointerScroll(delta);
+      return;
+    }
+    // Consecutive notches accumulate. Reversing or taking over a drag starts
+    // at the visible offset so the list responds immediately.
+    final continuing =
+        identical(activity, wheelActivity) &&
+        (target - pixels).sign == delta.sign;
+    target = ((continuing ? target : pixels) + delta).clamp(
+      minScrollExtent,
+      maxScrollExtent,
+    );
+    animateTo(
+      target,
+      duration: const Duration(milliseconds: 105),
+      curve: Curves.easeOutCubic,
+    );
+    wheelActivity = activity;
   }
 }
 
