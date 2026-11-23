@@ -58,6 +58,12 @@ The MAX16169 runs from the raw rail and controls the TPS63802 enable input. SW7 
 
 The board expects a 1-cell battery with the matching 2-pin Hirose DF58 connection for J4. The PCB-side connector is `DF58-2P-1.2V(21)`.
 
+For charging with the receiver off, stop any recording, leave USB-C connected,
+and hold the SW7 power button until the receiver switches off (nominally eight
+seconds). A short press turns it back on. SW7 switches the downstream 3.3 V
+regulator, so USB can still supply the charger while the receiver is off. The
+charger senses the board-mounted thermistor TH1. [MAX16169 pushbutton timing](https://www.analog.com/media/en/technical-documentation/data-sheets/max16169.pdf)
+
 ## Main fitted parts
 
 The part numbers below come from the production BOM rather than the shortened values shown on some schematic symbols.

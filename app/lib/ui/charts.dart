@@ -527,7 +527,7 @@ class LiveGMeter extends StatelessWidget {
     this.trail = const [],
   });
 
-  final ({double x, double y, double z})? acceleration;
+  final ({double lateral, double longitudinal})? acceleration;
   final bool connected;
   final List<GTrailPoint> trail;
 
@@ -566,7 +566,9 @@ class LiveGMeter extends StatelessWidget {
                   dimension: 96,
                   child: CustomPaint(
                     painter: _LiveGMeterPainter(
-                      reading == null ? null : Offset(reading.x, -reading.y),
+                      reading == null
+                          ? null
+                          : Offset(-reading.lateral, -reading.longitudinal),
                       trail,
                     ),
                   ),
@@ -576,9 +578,8 @@ class LiveGMeter extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _axisValue('X', reading?.x),
-                      _axisValue('Y', reading?.y),
-                      _axisValue('Z', reading?.z),
+                      _axisValue('Lateral', reading?.lateral),
+                      _axisValue('Longitudinal', reading?.longitudinal),
                     ],
                   ),
                 ),
@@ -587,9 +588,9 @@ class LiveGMeter extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               reading != null
-                  ? 'Receiver axes · gravity included'
+                  ? 'Positive left and forward'
                   : connected
-                  ? 'Waiting for fresh accelerometer data'
+                  ? 'Waiting for vehicle alignment'
                   : 'Connect the receiver to see G-force',
               style: const TextStyle(color: muted, fontSize: 11),
             ),

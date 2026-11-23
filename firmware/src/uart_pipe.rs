@@ -7,7 +7,7 @@
 //! that port's stream. Consumers must also observe `generations()` when empty:
 //! a loss or explicit reset may occur without another successful publication.
 
-pub const CAPACITY_BYTES: usize = 8192;
+pub const CAPACITY_BYTES: usize = 16_384;
 pub const MAX_READ_BYTES: usize = 128;
 const HEADER_BYTES: usize = 31;
 
@@ -252,34 +252,51 @@ mod tests {
     #[test]
     fn fills_exactly_without_overwriting_and_marks_only_lost_port() {
         let mut queue = Ring::new();
-        for i in 0..51 {
+        // Fill the ring exactly, including two partial reads at the end.
+        let full = (CAPACITY_BYTES - 2 * HEADER_BYTES) / (MAX_READ_BYTES + HEADER_BYTES);
+        let tail = CAPACITY_BYTES - full * (MAX_READ_BYTES + HEADER_BYTES) - 2 * HEADER_BYTES;
+        let chunks = [tail / 2, tail - tail / 2];
+        for i in 0..full as u64 {
             assert_eq!(
-                queue.try_push(Port::Data, i, None, &[i as u8; 128]),
+                queue.try_push(Port::Data, i, None, &[i as u8; MAX_READ_BYTES]),
                 Ok(i + 1)
             );
         }
-        // 51*159 + 31+52 = 8192; the final read fits exactly.
-        assert_eq!(queue.try_push(Port::Command, 51, None, &[0x55; 52]), Ok(52));
+        for (index, length) in chunks.into_iter().enumerate() {
+            let seq = (full + index + 1) as u64;
+            assert_eq!(
+                queue.try_push(Port::Command, seq, None, &[0x55; MAX_READ_BYTES][..length]),
+                Ok(seq)
+            );
+        }
         assert_eq!(queue.status().queued_bytes, CAPACITY_BYTES);
-        assert_eq!(queue.try_push(Port::Command, 55, None, &[0xff; 3]), Err(()));
+        let last = (full + 2) as u64;
+        assert_eq!(
+            queue.try_push(Port::Command, last + 1, None, &[0xff; 3]),
+            Err(())
+        );
         let status = queue.status();
-        assert_eq!(status.published_sequence, 52);
+        assert_eq!(status.published_sequence, last);
         assert_eq!(status.data.dropped_reads, 0);
         assert_eq!(status.command.dropped_reads, 1);
         assert_eq!(status.command.dropped_bytes, 3);
         assert_eq!(queue.generations(), [0, 1]);
-        for i in 0..51 {
+        for i in 0..full as u64 {
             let batch = queue.pop().unwrap();
             assert_eq!(batch.sequence, i + 1);
-            assert_eq!(batch.as_bytes(), &[i as u8; 128]);
+            assert_eq!(batch.as_bytes(), &[i as u8; MAX_READ_BYTES]);
         }
-        let old_command = queue.pop().unwrap();
-        assert_eq!(old_command.generation, 0);
-        assert_eq!(old_command.as_bytes(), &[0x55; 52]);
-        // Even with no further data the generation reveals the missing read.
+        for length in chunks {
+            let batch = queue.pop().unwrap();
+            assert_eq!(batch.generation, 0);
+            assert_eq!(batch.as_bytes(), &[0x55; MAX_READ_BYTES][..length]);
+        }
         assert!(queue.pop().is_none());
         assert_eq!(queue.generations(), [0, 1]);
-        assert_eq!(queue.try_push(Port::Command, 60, None, &[1, 2]), Ok(53));
+        assert_eq!(
+            queue.try_push(Port::Command, last + 2, None, &[1, 2]),
+            Ok(last + 1)
+        );
         assert_eq!(queue.pop().unwrap().generation, 1);
     }
 

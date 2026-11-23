@@ -275,8 +275,8 @@ class _TrackEditorState extends State<_TrackEditor> {
     setState(() {
       draft.lat.text = position.latitude.toString();
       draft.lon.text = position.longitude.toString();
-      draft.heading.text = (numeric(widget.position?['heading_deg']) ?? 0)
-          .toString();
+      final course = numeric(widget.position?['course_deg']);
+      if (course != null) draft.heading.text = course.toString();
     });
     map.move(mapPosition(position), 19);
   }

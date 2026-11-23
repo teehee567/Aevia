@@ -89,6 +89,7 @@ struct Service {
     status: String,
     latest: Value,
     last_seen: Option<Instant>,
+    last_driving_frame: Option<Instant>,
     last_full_status: Option<Instant>,
     sequence: u64,
     gnss_rate: Option<f64>,
@@ -261,7 +262,8 @@ fn live_metrics_worker() {
                     .capture
                     .as_ref()
                     .filter(|c| {
-                        c.session.samples.len() >= 2
+                        c.session.provenance["kind"] != "display_v2"
+                            && c.session.samples.len() >= 2
                             && c.session.samples.len() != c.analyzed_samples
                     })
                     .map(|c| {
@@ -358,6 +360,7 @@ impl Service {
             status: "Disconnected".into(),
             latest: Value::Null,
             last_seen: None,
+            last_driving_frame: None,
             last_full_status: None,
             sequence: 0,
             gnss_rate: None,
@@ -388,6 +391,7 @@ impl Service {
             status: "Offline processing".into(),
             latest: Value::Null,
             last_seen: None,
+            last_driving_frame: None,
             last_full_status: None,
             sequence: 0,
             gnss_rate: None,
@@ -439,6 +443,18 @@ impl Service {
                     "receiver_timed":valid.iter().filter(|s|s.receiver_timed).count(),"legacy":session.raw_records.iter().find(|r|r["kind"]=="legacy_capture")}),
                 )
             }
+            "mount" => {
+                let confirmed = q["confirmed"]
+                    .as_bool()
+                    .ok_or("Missing mount confirmation")?;
+                let port = self.port.as_mut().ok_or("Connect the V2 Mini first")?;
+                transact_query(
+                    port,
+                    &json!({"op":"configure_drive","drive":crate::display::Configure::Mount{confirmed}}),
+                )?;
+                self.latest["mounted"] = json!(confirmed);
+                Ok(self.state())
+            }
             "connect" => {
                 if self.capture.is_some() {
                     return Err("Stop recording before changing devices".into());
@@ -458,6 +474,7 @@ impl Service {
                 }
                 self.status = format!("Connected via {}", port.name());
                 self.last_full_status = None;
+                self.last_driving_frame = None;
                 self.port = Some(port);
                 self.port_name = Some(name.into());
                 self.latest = Value::Null;
@@ -570,11 +587,12 @@ impl Service {
             }
             "reanalyze" => {
                 let mut s = self.load(text(q, "id")?)?;
-                s.track = q
-                    .get("track_id")
-                    .and_then(Value::as_str)
-                    .and_then(|id| self.preferences.tracks.iter().find(|t| t.id == id).cloned());
-                s.drag = self.preferences.drag.clone();
+                if s.provenance["kind"] != "display_v2" {
+                    s.track = q.get("track_id").and_then(Value::as_str).and_then(|id| {
+                        self.preferences.tracks.iter().find(|t| t.id == id).cloned()
+                    });
+                    s.drag = self.preferences.drag.clone();
+                }
                 self.analyze(&mut s)?;
                 self.save(&s)?;
                 Ok(json!(s))
@@ -590,8 +608,8 @@ impl Service {
             return Ok(());
         }
         let diagnostics = matches!(view, "diagnostics" | "receiver");
-        let compact = self.latest["display_v1"] == true;
-        let interval = if compact && view == "receiver" {
+        let compact = self.latest["display_v1"] == true || self.latest["display_v2"] == true;
+        let interval = if compact && matches!(view, "receiver" | "live") {
             DIAGNOSTICS_INTERVAL
         } else {
             Duration::from_secs(1)
@@ -607,6 +625,7 @@ impl Service {
         } else if self.last_full_status.is_none()
             || matches!(view, "diagnostics" | "board_data")
             || (diagnostics && full_due)
+            || (view == "live" && full_due && self.latest["battery"].get("charge_stage").is_some())
         {
             "status"
         } else if self.capture.is_some() {
@@ -636,6 +655,23 @@ impl Service {
     }
     fn next_collection_query(&self) -> Value {
         if self.capture.as_ref().is_some_and(|c| c.display_only) {
+            if self.port.as_ref().is_some_and(|port| port.name() == "USB")
+                && self.latest["battery"].get("charge_stage").is_some()
+                && self.last_full_status.is_none_or(|t| t.elapsed() >= DIAGNOSTICS_INTERVAL)
+            {
+                return json!({"op":"status"});
+            }
+            return json!({"op":"display"});
+        }
+        if self.latest["display_v2"] == true
+            && self
+                .capture
+                .as_ref()
+                .is_some_and(|c| c.stop_at_us.is_none())
+            && self
+                .last_driving_frame
+                .is_none_or(|t| t.elapsed() >= DISPLAY_INTERVAL)
+        {
             return json!({"op":"display"});
         }
         if self.latest["base64_poll"] == true
@@ -657,6 +693,14 @@ impl Service {
     }
     fn merge_device_reply(&mut self, mut reply: Value) -> Vec<Value> {
         let now = Instant::now();
+        if reply["display_v2"] == true && reply["navigation"].is_object() {
+            reply["motion"] = reply["navigation"]["motion"].clone();
+            reply["motion_source"] = reply["navigation"]["motion_source"].clone();
+            reply["timing_results"] = reply["navigation"]["driving"].clone();
+        }
+        if reply.get("motion").is_some() {
+            self.last_driving_frame = Some(now);
+        }
         let compact = reply["compact"] == true;
         let fresh_gnss_count = reply["gnss"]["count"].as_u64();
         let fresh_imu_count = reply["imu"]["count"].as_u64();
@@ -678,6 +722,7 @@ impl Service {
         if clock_reset {
             self.latest = Value::Null;
             self.last_full_status = None;
+            self.last_driving_frame = None;
             self.rate_sample = None;
             self.gnss_rate = None;
             self.imu_rate = None;
@@ -812,14 +857,22 @@ impl Service {
                 .last_seen
                 .is_none_or(|t| t.elapsed() > Duration::from_secs(2));
         let age_us = self.sensor_age_us("gnss").unwrap_or(u64::MAX);
-        let diagnostics_ttl = if self.latest["display_v1"] == true {
-            DIAGNOSTICS_INTERVAL + Duration::from_secs(2)
-        } else {
-            Duration::from_secs(2)
-        };
+        let diagnostics_ttl =
+            if self.latest["display_v1"] == true || self.latest["display_v2"] == true {
+                DIAGNOSTICS_INTERVAL + Duration::from_secs(2)
+            } else {
+                Duration::from_secs(2)
+            };
         let diagnostics_stale = self
             .last_full_status
             .is_none_or(|t| t.elapsed() > diagnostics_ttl);
+        let battery_age_ms = if let Some(age) = self.latest.get("battery_age_ms") {
+            age.as_u64().map(|age| age.saturating_add(
+                self.last_seen.map_or(0, |t| t.elapsed().as_millis() as u64)
+            ))
+        } else {
+            self.last_full_status.map(|t| t.elapsed().as_millis() as u64)
+        };
         let valid = !stale
             && age_us < 1_000_000
             && gnss.get("valid").and_then(Value::as_bool) == Some(true);
@@ -828,19 +881,13 @@ impl Service {
             .as_ref()
             .map(|c| c.started.elapsed().as_secs_f64())
             .unwrap_or(0.0);
-        let analysis = self.capture.as_ref().map(|c| &c.session.analysis);
-        let completed = analysis.map(|a| a.laps.len()).unwrap_or(0);
-        let last_crossing = analysis.and_then(|a| a.laps.last()).map(|lap| lap.end_s);
-        let best = analysis.and_then(|a| a.best_lap_s);
-        let metric_elapsed = self
-            .capture
-            .as_ref()
-            .and_then(|c| c.session.samples.last())
-            .map(|s| s.time_s);
         let mut device = json!({"connected":self.port.is_some(),"port":self.port_name,"transport":self.port.as_ref().map(Receiver::name),"status":self.status,
-            "display_v1":self.latest["display_v1"],"recording":self.latest.get("recording"),
-            "satellites":gnss.get("satellites"),"fix_quality":if stale {"stale"} else if valid {"valid"} else {"no fix"},
+            "display_v1":self.latest["display_v1"],"display_v2":self.latest["display_v2"],"mounted":self.latest["mounted"],"recording":self.latest.get("recording"),
+            "satellites":self.latest.get("satellites").or_else(||gnss.get("satellites")),"fix_quality":if stale {"stale"} else if self.latest["gnss_fix_valid"].as_bool().unwrap_or(valid) {"valid"} else {"no fix"},
             "battery_percent":if stale {None} else if let Some(p)=self.latest.get("display_battery"){Some(p)}else if !diagnostics_stale {self.latest["battery"].get("percent")} else {None},
+            "battery":if !stale && battery_age_ms.is_some_and(|ms| ms <= diagnostics_ttl.as_millis() as u64) { self.latest.get("battery") } else {None},
+            "battery_age_ms":battery_age_ms,"battery_ttl_ms":diagnostics_ttl.as_millis() as u64,
+            "battery_detail_supported":self.latest.get("battery_age_ms").is_some() || self.latest["battery"].get("charge_stage").is_some(),
             "gnss_hz":if stale||(diagnostics_stale && self.latest.get("display_battery").is_none()){None}else{self.gnss_rate},
             "imu":{"age_us":self.sensor_age_us("imu"),"latest":self.latest["imu"].get("latest")}});
         if view == "board_data" && self.port.as_ref().is_some_and(|p| p.name() == "USB") {
@@ -872,11 +919,11 @@ impl Service {
             }
             let details = json!({"firmware":self.latest.get("firmware").or_else(||self.latest.get("protocol")),
                 "diagnostics_stale":diagnostics_stale,"diagnostics_ttl_ms":diagnostics_ttl.as_millis() as u64,"diagnostics_age_ms":self.last_full_status.map(|t|t.elapsed().as_millis() as u64),
-                "imu_hz":if stale||diagnostics_stale{None}else{self.imu_rate},
+                "imu_hz":if stale||(diagnostics_stale && self.latest["display_v2"] != true){None}else{self.imu_rate},
                 "acquisition_profile":self.latest.get("acquisition_profile"),"ppk":ppk_health,"imu":imu,
                 "dropped":self.latest.get("dropped"),"usb_queue":self.latest.get("usb_queue"),"gnss":gnss_health,"gnss_uart":self.latest.get("gnss_uart"),"gnss_byte_queue":self.latest.get("gnss_byte_queue"),
             "imu_status":self.latest["imu"].get("status"),"storage":self.latest.get("storage"),
-            "storage_status":self.latest.get("storage"),"sd":self.latest.get("sd"),"battery":self.latest.get("battery"),"bluetooth":self.latest.get("bluetooth"),
+            "storage_status":self.latest.get("storage"),"sd":self.latest.get("sd"),"bluetooth":self.latest.get("bluetooth"),
             "navigation":self.latest.get("navigation"),"installation":self.latest.get("installation"),"capture_timing":self.latest.get("capture_timing"),
             "imu_diagnostics":self.latest.get("imu_diagnostics"),
             "led":self.latest.get("led"),"display":self.latest.get("display"),"buttons":self.latest.get("buttons"),"accessories":self.latest.get("accessories")});
@@ -884,24 +931,44 @@ impl Service {
                 device.as_object_mut().unwrap().extend(fields);
             }
         }
-        let analyzed = analysis.filter(|a| a.valid_samples >= 2);
-        let mut result = json!({"device":device,
-            "live":{"time_s":number(&self.latest,"uptime_us").map(|v|v/1e6),
-                "speed_mps":if valid {number(gnss,"speed_mps")}else{None},
-                "lat":if valid{number(gnss,"lat")}else{None},"lon":if valid{number(gnss,"lon")}else{None},
-                "altitude_m":if valid{number(gnss,"alt_m")}else{None},"heading_deg":if valid{number(gnss,"heading_deg")}else{None},
-                "accel_long_g":null,"accel_lat_g":null,"recording":self.capture.is_some(),"full_rate_copy":self.capture.as_ref().map(|c|!c.display_only),"elapsed_s":elapsed,
-                "capture_interrupted":self.capture.as_ref().is_some_and(|c|c.interrupted),
-                "capture_error":self.capture.as_ref().and_then(|c|c.session.incomplete_reason.as_ref()),
-                "lap":completed,"current_lap_s":last_crossing.zip(metric_elapsed).map(|(t,now)|(now-t).max(0.0)),"best_lap_s":best,"delta_s":null,"valid":valid,"stale":stale,
-                "last_lap_s":analysis.and_then(|a|a.laps.last()).filter(|l|l.valid).map(|l|l.duration_s),
-                "average_speed_mps":analyzed.and_then(|a|a.average_speed_mps),
-                "distance_m":analyzed.filter(|a| a.average_speed_mps.is_some()).map(|a|a.distance_m),
-                "analysis":analysis.map(|a|json!({"max_speed_mps":a.max_speed_mps})),"analysis_samples":self.capture.as_ref().map(|c|c.analyzed_samples),
-                "age_ms":if age_us==u64::MAX{None}else{Some(age_us/1000)},"sequence":self.sequence},
-            "processing":self.processing});
+        let m = &self.latest["motion"];
+        let timing = &self.latest["timing_results"];
+        let age = self.latest["uptime_us"]
+            .as_u64()
+            .zip(m["t_us"].as_u64())
+            .and_then(|(n, t)| n.checked_sub(t))
+            .map(|us| {
+                us.saturating_add(
+                    self.last_seen
+                        .map_or(0, |at| at.elapsed().as_micros() as u64),
+                )
+            });
+        let valid = !stale && age.is_some_and(|us| us < 1_000_000) && m["speed_mps"].is_number();
+        let motion = if valid { m } else { &Value::Null };
+        let current = if self.latest["recording"] == true && valid {
+            motion["t_us"]
+                .as_u64()
+                .zip(timing["lap_start_us"].as_u64())
+                .and_then(|(n, s)| n.checked_sub(s))
+                .map(|us| us as f64 * 1e-6)
+        } else {
+            None
+        };
+        let mut result = json!({"device":device,"live":{
+            "time_s":m["t_us"].as_u64().map(|us|us as f64*1e-6),"epoch_us":motion["t_us"],
+            "lat":motion["lat"],"lon":motion["lon"],"speed_mps":motion["speed_mps"],"altitude_m":motion["alt_m"],
+            "course_deg":motion["course_deg"],"heading_deg":motion["heading_deg"],"accel_long_g":motion["vehicle_g"][0],"accel_lat_g":motion["vehicle_g"][1],
+            "degraded":motion["degraded"],"motion_source":self.latest["motion_source"],"imu_clipping":self.latest["imu_clipping"],"valid":valid,"stale":stale,"age_ms":age.map(|us|us/1000),
+            "recording":self.capture.is_some(),"full_rate_copy":self.capture.as_ref().map(|c|!c.display_only),"elapsed_s":elapsed,
+            "capture_interrupted":self.capture.as_ref().is_some_and(|c|c.interrupted),
+            "capture_error":self.capture.as_ref().and_then(|c|c.session.incomplete_reason.as_ref()),"sequence":self.sequence,
+            "current_lap_s":current,"lap":timing["laps"],"last_lap_s":timing["last_lap_s"],"best_lap_s":timing["best_lap_s"],
+            "last_sector_s":timing["last_sector_s"],"sector":timing["sector"],"delta_s":timing["last_lap_s"].as_f64().zip(timing["best_lap_s"].as_f64()).map(|(l,b)|l-b),
+            "distance_m":timing["distance_m"],"average_speed_mps":timing["average_mps"],"max_speed_mps":timing["peak_mps"],
+            "drag_config": self.capture.as_ref().map(|c| &c.session.drag),
+            "drag_speed_s":timing["speed_time_s"],"drag_distance_s":timing["distance_time_s"],
+            "analysis":{"max_speed_mps":timing["peak_mps"]}},"processing":self.processing});
         if view == "all" {
-            result["live"]["analysis"] = json!(analysis);
             result["sessions"] = json!(self.sessions);
             result["tracks"] = json!(self.preferences.tracks);
             result["drag"] = json!(self.preferences.drag);
@@ -949,8 +1016,18 @@ impl Service {
             analysis: Analysis::default(),
         };
         let display_only = port.name() == "Bluetooth"
-            || (self.latest["display_v1"] == true && q["display_only"] == true);
-        if display_only {
+            || ((self.latest["display_v1"] == true || self.latest["display_v2"] == true)
+                && q["display_only"] == true);
+        if self.latest["display_v2"] == true {
+            let mounted = self.latest["mounted"].as_bool().unwrap_or(false);
+            session.source = "V2 Mini · fused Traj snapshots".into();
+            session.provenance = json!({"kind":"display_v2","nominal_hz":5,"mount_confirmed":mounted,"warnings":["Development estimates from corrected GNSS/IMU trajectory. The SD recording retains native observations."]});
+            for command in
+                crate::driving::configuration(&session.drag, session.track.as_ref(), mounted)
+            {
+                transact_query(port, &json!({"op":"configure_drive","drive":command}))?;
+            }
+        } else if display_only {
             session.source = "V2 Mini display snapshots".into();
             session.provenance = json!({"kind":"display_v1","nominal_hz":5,"warnings":[
                 "Traj used sampled display fixes. Download the receiver SD recording for full-rate analysis and raw IMU/GNSS evidence."
@@ -1069,6 +1146,16 @@ impl Service {
                         c.stop_tail_pending = pending_tail;
                     }
                     self.merge_device_reply(value);
+                    if let Some((capture, stop)) = self
+                        .capture
+                        .as_mut()
+                        .filter(|c| c.session.provenance["kind"] == "display_v2")
+                        .and_then(|c| c.stop_at_us.map(|stop| (c, stop)))
+                    {
+                        let summary = json!({"kind":"fused_summary","t_us":stop,
+                            "started_at_us":self.latest["started_at_us"],"timing":self.latest["timing_results"]});
+                        append_record(capture, summary)?;
+                    }
                 }
                 Err(e) => {
                     self.status = format!(
@@ -1215,11 +1302,15 @@ impl Service {
                         }
                     }
                     let pending = value.get("pending").and_then(Value::as_u64).unwrap_or(0);
+                    let fused = crate::driving::capture_record(&value);
                     let display_fix =
                         self.capture
                             .as_mut()
                             .filter(|c| c.display_only)
                             .and_then(|c| {
+                                if c.session.provenance["kind"] == "display_v2" {
+                                    return None;
+                                }
                                 let fix = value["gnss"].get("latest")?;
                                 let timestamp = fix["t_us"].as_u64()?;
                                 if c.last_display_fix_us == Some(timestamp)
@@ -1247,6 +1338,15 @@ impl Service {
                         *remaining -= received;
                         if let Some(capture) = self.capture.as_mut() {
                             capture.stop_tail_received += received;
+                        }
+                    }
+                    if let Some(capture) = self.capture.as_mut() {
+                        if let Some(record) = fused.filter(|r| {
+                            capture.session.provenance["kind"] == "display_v2"
+                                && r["t_us"].as_u64() > capture.last_display_fix_us
+                        }) {
+                            capture.last_display_fix_us = record["t_us"].as_u64();
+                            records.push(record);
                         }
                     }
                     self.sequence += 1;
@@ -1334,7 +1434,9 @@ impl Service {
         if processing_cancelled() {
             return Err("Analysis cancelled".into());
         }
-        s.analysis = if s.provenance["kind"] == "ppk" {
+        s.analysis = if s.provenance["kind"] == "display_v2" {
+            crate::driving::analysis(s)
+        } else if s.provenance["kind"] == "ppk" {
             Analysis {
                 engine: "RTKLIB ? corrected positions".into(),
                 valid_samples: s.samples.iter().filter(|sample| sample.valid).count(),
@@ -1621,7 +1723,9 @@ impl Service {
         if bytes == 0 || bytes % 512 != 0 || bytes > MAX_CAPTURE_BYTES {
             return Err("Invalid or oversized device recording".into());
         }
-        let closed = entry["closed"].as_bool().ok_or("Missing device file state")?;
+        let closed = entry["closed"]
+            .as_bool()
+            .ok_or("Missing device file state")?;
         Ok((id, bytes, closed))
     }
     fn device_session_preview(&mut self, q: &Value) -> Result<Value, String> {
@@ -2228,7 +2332,15 @@ fn append_record_with_limit(
     let sample = if before_capture_start(c, &record) {
         None
     } else {
-        c.clock.sample(&record)?
+        if c.session.provenance["kind"] == "display_v2" {
+            if record["kind"] == "fused_display" {
+                crate::driving::sample(&record)
+            } else {
+                None
+            }
+        } else {
+            c.clock.sample(&record)?
+        }
     };
     let sample_bytes = sample
         .as_ref()
@@ -2351,6 +2463,14 @@ fn decode_reply(frame: &[u8]) -> Result<Value, String> {
             .unwrap_or("Device rejected request")
             .into());
     }
+    if let Some(payload) = value.get("d2") {
+        let mut frame = crate::driving::decode(&crate::binary::from_base64(
+            payload.as_str().ok_or("Invalid driving payload")?,
+        )?)?;
+        frame["motion_source"] = value["motion_source"].clone();
+        frame["imu_clipping"] = value["imu_clipping"].clone();
+        return Ok(frame);
+    }
     if let Some(payload) = value.get("d") {
         let bytes = crate::binary::from_base64(payload.as_str().ok_or("Invalid display payload")?)?;
         return decode_display(&bytes);
@@ -2410,12 +2530,17 @@ fn transact_query(port: &mut Receiver, query: &Value) -> Result<Value, String> {
         #[cfg(any(windows, target_os = "ios"))]
         Receiver::Bluetooth(link) => {
             match query["op"].as_str() {
+                Some("configure_drive") => {
+                    let cmd = serde_json::from_value(query["drive"].clone()).map_err(io_error)?;
+                    link.configure(&cmd)?;
+                    return Ok(json!({"ok":true}));
+                }
                 Some("status" | "display") => {}
                 Some("start_display") => link.record(true)?,
                 Some("stop") => link.record(false)?,
                 _ => return Err("Connect via USB for this operation".into()),
             }
-            decode_display(&link.read()?)
+            link.read()
         }
     }
 }
@@ -2630,7 +2755,14 @@ fn recover_journal(content: &str) -> Result<Session, String> {
             Err(_) if index + 1 == records.len() => break,
             Err(e) => return Err(format!("Corrupt journal record {}: {e}", index + 2)),
         };
-        match clock.sample(&record) {
+        let sample = if session.provenance["kind"] == "display_v2" {
+            Ok((record["kind"] == "fused_display")
+                .then(|| crate::driving::sample(&record))
+                .flatten())
+        } else {
+            clock.sample(&record)
+        };
+        match sample {
             Ok(Some(sample)) => session.samples.push(sample),
             Ok(None) => {}
             // A receiver clock reset terminates the recovered span. Raw
@@ -2729,6 +2861,7 @@ mod tests {
                 status: String::new(),
                 latest: Value::Null,
                 last_seen: None,
+                last_driving_frame: None,
                 last_full_status: None,
                 sequence: 0,
                 gnss_rate: None,
@@ -2781,6 +2914,53 @@ mod tests {
             let _ = fs::remove_dir_all(&self.0);
         }
     }
+    #[test]
+    fn fused_capture_uses_board_epochs_and_results_even_with_raw_usb_copy() {
+        let storage = TestStorage::new();
+        let mut service = storage.service();
+        let mut capture = storage.capture();
+        capture.session.provenance = json!({"kind":"display_v2"});
+        service.capture = Some(capture);
+        let mut frame = json!({"display_v2":true, "compact":true, "recording":true,
+            "uptime_us":500000,"started_at_us":100000,"gnss":{"latest":{"kind":"gnss","speed_mps":99,"valid":true}},
+            "motion":{"t_us":300000,"speed_mps":12,"vehicle_g":[0.25,-0.5,0]},
+            "timing_results":{"distance_m":3,"peak_mps":13}});
+        for _ in 0..2 {
+            assert!(service.collect_with(Duration::from_millis(1), |_| Ok(frame.clone())));
+        }
+        frame["motion"] = Value::Null;
+        assert!(service.collect_with(Duration::from_millis(1), |_| Ok(frame.clone())));
+        let capture = service.capture.as_ref().unwrap();
+        assert_eq!(capture.session.samples.len(), 2);
+        let first = &capture.session.samples[0];
+        assert_eq!(first.speed_mps, Some(12.));
+        assert_eq!(first.accel_lat_g, Some(-0.5));
+        assert!(
+            !capture.session.samples[1].valid && capture.session.samples[1].speed_mps.is_none()
+        );
+        let analysis = crate::driving::analysis(&capture.session);
+        assert_eq!(analysis.max_speed_mps, Some(13.));
+        assert_eq!(analysis.distance_m, 3.);
+    }
+
+    #[test]
+    fn fused_lap_statistics_require_all_reported_laps() {
+        let storage = TestStorage::new();
+        let mut session = storage.capture().session;
+        let lap = |number, end, seconds| {
+            json!({"kind":"fused_display","started_at_us":0,
+            "timing":{"laps":number,"last_lap_end_us":end,"last_lap_s":seconds,"best_lap_s":9.0}})
+        };
+        session.raw_records = vec![lap(1, 10_000_000, 9.), lap(2, 21_000_000, 11.)];
+        let all = crate::driving::analysis(&session);
+        assert_eq!(all.average_lap_s, Some(10.));
+        assert_eq!(all.median_lap_s, Some(10.));
+        session.raw_records.remove(0);
+        let partial = crate::driving::analysis(&session);
+        assert_eq!(partial.average_lap_s, None);
+        assert_eq!(partial.best_lap_s, Some(9.));
+    }
+
     #[test]
     fn sd_download_validates_all_sectors_including_the_short_final_batch() {
         let mut block = crate::firmware_response::Response::<684>::new();
@@ -3117,6 +3297,44 @@ mod tests {
         let paired = Path::new(imported.raw_records[0]["path"].as_str().unwrap());
         assert_eq!(fs::read(paired).unwrap(), b"exact raw evidence");
         assert!(target.load(&imported.id).is_ok());
+    }
+    #[test]
+    fn native_driving_import_and_reanalysis_report_sd_queue_drops_once() {
+        let storage = TestStorage::new();
+        let service = storage.service();
+        let path = storage.0.join("driving.aev");
+        let mut writer = crate::evidence::Writer::create(&path, 1, 4096).unwrap();
+        let setup = crate::display::Configure::Begin {
+            start_centi_kph: 0,
+            end_centi_kph: 10000,
+            distance_mm: 402336,
+            rollout: false,
+            mounted: false,
+            gates: 0,
+        };
+        let mut buf = [0; 32];
+        writer
+            .append(27, 1, postcard::to_slice(&setup, &mut buf).unwrap())
+            .unwrap();
+        writer.close(2, 1994).unwrap();
+        let mut session = crate::legacy::import(&path).unwrap();
+        let drops = |s: &Session| {
+            s.analysis
+                .warnings
+                .iter()
+                .filter(|w| w.contains("SD recording queue dropped 1994"))
+                .count()
+        };
+        assert_eq!(drops(&session), 1);
+        service.analyze(&mut session).unwrap();
+        service.analyze(&mut session).unwrap();
+        assert_eq!(drops(&session), 1);
+
+        let mut usb = blank_session("USB display capture");
+        usb.provenance = json!({"kind":"display_v2"});
+        usb.raw_records.push(json!({"kind":"health","dropped":1994}));
+        service.analyze(&mut usb).unwrap();
+        assert_eq!(drops(&usb), 0);
     }
     #[test]
     fn ppk_reanalysis_retains_quality_and_never_generates_receiver_metrics() {

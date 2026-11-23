@@ -114,7 +114,7 @@ static GNSS_NATIVE: Mutex<CriticalSectionRawMutex, RefCell<Option<GnssNativeStat
 static GNSS_OBSERVATIONS: embassy_sync::channel::Channel<
     CriticalSectionRawMutex,
     GnssObservation,
-    4,
+    24,
 > = embassy_sync::channel::Channel::new();
 static GNSS_OBSERVATION_DRAIN: Mutex<
     CriticalSectionRawMutex,
@@ -137,6 +137,7 @@ struct ImuDiagnostics {
     asic_id: u16,
     last_error: Option<crate::imu::ImuError>,
     last_error_us: Option<u64>,
+    last_clipping_us: Option<u64>,
     acquisition: crate::imu::AcquisitionTiming,
     raw_queue_dropped: u32,
 }
@@ -146,6 +147,7 @@ static IMU_DIAGNOSTICS: Mutex<CriticalSectionRawMutex, RefCell<ImuDiagnostics>> 
         asic_id: 0,
         last_error: None,
         last_error_us: None,
+        last_clipping_us: None,
         acquisition: crate::imu::AcquisitionTiming::new(),
         raw_queue_dropped: 0,
     }));
@@ -156,10 +158,23 @@ fn imu_diagnostics(sensor: &crate::drivers::sch16t::Imu<'_>, error: Option<crate
         diagnostics.asic_id = sensor.asic_id;
         diagnostics.acquisition = sensor.acquisition_timing;
         if let Some(error) = error {
+            let now = Instant::now().as_micros();
             diagnostics.last_error = Some(error);
-            diagnostics.last_error_us = Some(Instant::now().as_micros());
+            diagnostics.last_error_us = Some(now);
+            if error.is_clipping() {
+                diagnostics.last_clipping_us = Some(now);
+            }
         }
     });
+}
+pub(crate) fn imu_clipping(now_us: u64) -> bool {
+    IMU_DIAGNOSTICS.lock(|diagnostics| {
+        diagnostics
+            .borrow()
+            .last_clipping_us
+            .and_then(|time| now_us.checked_sub(time))
+            .is_some_and(|age| age < 2_000_000)
+    })
 }
 enum AcquisitionMessage {
     Interval(crate::imu::NativeInterval),
@@ -168,7 +183,7 @@ enum AcquisitionMessage {
 static IMU_INTERVALS: embassy_sync::channel::Channel<
     CriticalSectionRawMutex,
     AcquisitionMessage,
-    32,
+    256,
 > = embassy_sync::channel::Channel::new();
 static STOP_FENCE: Mutex<CriticalSectionRawMutex, RefCell<crate::recording::StopFence>> =
     Mutex::new(RefCell::new(crate::recording::StopFence::new()));
@@ -186,6 +201,37 @@ pub(crate) async fn wait_for_sd_close() -> bool {
         Timer::after_millis(10).await;
     }
     !stop_pending() && crate::storage::snapshot().closed
+}
+
+/// Keep the previous session visible until each Stop handler takes its reply.
+pub(crate) struct StopReply;
+
+impl Drop for StopReply {
+    fn drop(&mut self) {
+        update(|s| s.stop_replies -= 1);
+    }
+}
+
+pub(crate) async fn finish_recording() -> Result<StopReply, &'static str> {
+    update(|s| s.stop_replies += 1);
+    let reply = StopReply;
+    stop_recording();
+    if !wait_for_sd_close().await {
+        return Err("SD stop flush timeout");
+    }
+    if let Some(error) = crate::storage::snapshot().error {
+        return Err(error);
+    }
+    if let Some(stop) = recording_window().1 {
+        let deadline = Instant::now() + Duration::from_millis(600);
+        while Instant::now() < deadline {
+            if !crate::navigation::awaiting_stop(stop) {
+                break;
+            }
+            Timer::after_millis(20).await;
+        }
+    }
+    Ok(reply)
 }
 
 pub async fn prepare_recovery() -> bool {
@@ -378,6 +424,7 @@ impl Health {
 struct State {
     recording: crate::recording::Recording,
     starting: bool,
+    stop_replies: u8,
     session: u32,
     rejected_fix_count: u32,
     queue_enabled: bool,
@@ -390,9 +437,10 @@ struct State {
 static STATE: Mutex<CriticalSectionRawMutex, RefCell<State>> = Mutex::new(RefCell::new(State {
     recording: crate::recording::Recording::new(),
     starting: false,
+    stop_replies: 0,
     session: 0,
     rejected_fix_count: 0,
-    queue_enabled: true,
+    queue_enabled: false,
     queue: crate::preview_queue::PreviewQueue::new(),
     gnss: Health::new(),
     imu: Health::new(),
@@ -463,34 +511,33 @@ pub fn toggle_recording() {
     }) {
         stop_recording();
     } else {
-        let _ = begin_recording_start();
+        let _ = begin_recording_start(None);
     }
 }
-fn begin_recording_start() -> Result<(), ()> {
+fn begin_recording_start(raw_usb: Option<bool>) -> Result<(), ()> {
     STATE.lock(|cell| {
         let mut s = cell.borrow_mut();
         if s.recording.active || s.starting {
+            // A second display client must not disable an active USB raw capture.
+            if raw_usb == Some(true) {
+                s.queue_enabled = true;
+            }
             return Ok(());
         }
-        if stop_pending() || !crate::storage::snapshot().closed {
+        if s.stop_replies != 0 || stop_pending() || !crate::storage::snapshot().closed {
             return Err(());
         }
-        // Opening an SD extent and rearming navigation can take hundreds of ms.
-        // Prepare both before admitting samples into the new recording window.
+        // Open the SD extent before admitting samples into the recording window.
         s.starting = true;
-        crate::navigation::request_reset();
+        if let Some(raw) = raw_usb {
+            s.queue_enabled = raw;
+        }
         crate::storage::request_start();
         Ok(())
     })
 }
 pub(crate) async fn start_recording(raw_usb: bool) -> Result<(), &'static str> {
-    // A second display client must not disable an active USB raw capture.
-    update(|s| {
-        if raw_usb || (!s.recording.active && !s.starting) {
-            s.queue_enabled = raw_usb;
-        }
-    });
-    if begin_recording_start().is_err() {
+    if begin_recording_start(Some(raw_usb)).is_err() {
         return Err("previous recording still closing");
     }
     let deadline = Instant::now() + Duration::from_secs(10);
@@ -539,25 +586,23 @@ fn complete_recording_start(s: &mut State) {
         PPK_EPHEMERIDES.lock(|request| *request.borrow_mut() = true);
     }
 }
+pub fn recording_window() -> (Option<u64>, Option<u64>) {
+    STATE.lock(|c| {
+        let s = c.borrow();
+        (s.recording.started_at_us, s.recording.stopped_at_us)
+    })
+}
 pub fn dashboard() -> (Option<u16>, bool, bool) {
+    let speed = crate::navigation::snapshot()
+        .motion
+        .map(|m| (m.speed_mps * 3.6).clamp(0., 999.) as u16);
     STATE.lock(|cell| {
         let s = cell.borrow();
-        let now = Instant::now().as_micros();
-        let speed = match s.last_gnss {
-            Some(Sample::Gnss {
-                speed_mps,
-                t_us,
-                valid: true,
-                ..
-            }) if now.saturating_sub(t_us) < 1_000_000 => {
-                Some((speed_mps * 3.6).clamp(0.0, 999.0) as u16)
-            }
-            _ => None,
-        };
         (
             speed,
             s.recording.active,
-            s.imu.status == "ready" && now.saturating_sub(s.imu.last_us) < 100_000,
+            s.imu.status == "ready"
+                && Instant::now().as_micros().saturating_sub(s.imu.last_us) < 100000,
         )
     })
 }
@@ -607,6 +652,7 @@ struct Request<'a> {
     id: Option<u32>,
     sector: Option<u32>,
     count: Option<u8>,
+    drive: Option<crate::display::Configure>,
 }
 fn json<T: Serialize>(out: &mut Response<RESPONSE_SIZE>, value: &T) -> Result<(), ()> {
     out.serialize(value).map_err(|_| ())
@@ -621,6 +667,36 @@ pub async fn request(text: &str, out: &mut Response<RESPONSE_SIZE>) {
             return;
         }
     };
+    if let Some(command) = request.drive {
+        let ok = request.op == "configure_drive" && configure_drive(command).is_ok();
+        let _ = out.push_str(if ok {
+            r#"{"ok":true}"#
+        } else {
+            INVALID_REQUEST
+        });
+        return;
+    }
+    if matches!(request.op, "power" | "power_sample") {
+        if request.after.is_some()
+            || request.id.is_some()
+            || request.sector.is_some()
+            || request.count.is_some()
+        {
+            let _ = out.push_str(INVALID_REQUEST);
+            return;
+        }
+        match crate::tasks::power::measure(request.op == "power_sample").await {
+            Ok(measurement) => {
+                let _ = out.push_str(r#"{"ok":true,"measurement":"#);
+                let _ = json(out, &measurement);
+                let _ = out.push('}');
+            }
+            Err(error) => {
+                let _ = write!(out, "{{\"ok\":false,\"error\":\"{error}\"}}");
+            }
+        }
+        return;
+    }
     if request.op == "read_blocks" {
         if read_blocks(&request, out).await.is_err() {
             out.clear();
@@ -675,18 +751,24 @@ pub async fn request(text: &str, out: &mut Response<RESPONSE_SIZE>) {
         }
         return;
     }
+    let _stop_reply = if request.op == "stop"
+        && request.after.is_none()
+        && request.id.is_none()
+        && request.sector.is_none()
+    {
+        match finish_recording().await {
+            Ok(reply) => Some(reply),
+            Err(error) => {
+                let _ = write!(out, "{{\"ok\":false,\"error\":\"{error}\"}}");
+                return;
+            }
+        }
+    } else {
+        None
+    };
     if make_response(&request, out).await.is_err() {
         out.clear();
         let _ = out.push_str(INVALID_REQUEST);
-    } else if request.op == "stop" {
-        // A successful stop response confirms queued SD writes and the final
-        // committed page reached the card's ready/flush barrier.
-        out.clear();
-        if !wait_for_sd_close().await {
-            let _ = out.push_str("{\"ok\":false,\"error\":\"SD stop flush timeout\"}");
-        } else {
-            let _ = make_response(&request, out).await;
-        }
     }
 }
 async fn read_blocks(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
@@ -713,88 +795,102 @@ async fn read_blocks(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>) -
     out.push_str("]}").map_err(|_| ())
 }
 
-pub(crate) fn display_frame() -> crate::display::DisplayFrame {
-    use crate::display::{DisplayAcceleration, DisplayFix, DisplayFrame};
-    let (session, recording, count, rejected_fix_count, gnss, imu) = STATE.lock(|cell| {
-        let s = cell.borrow();
-        (
-            s.session,
-            s.recording,
-            s.gnss.samples,
-            s.rejected_fix_count,
-            s.last_gnss,
-            s.last_imu,
-        )
-    });
-    let fix = match gnss {
-        Some(Sample::Gnss {
-            t_us,
-            gps_week,
-            gps_tow_ms,
-            lat,
-            lon,
-            alt_m,
-            speed_mps,
-            heading_deg,
-            vertical_mps,
-            hacc_m,
-            latency_ms,
-            satellites,
-            valid,
-            ..
-        }) => Some(DisplayFix {
-            t_us,
-            gps_week,
-            gps_tow_ms,
-            lat,
-            lon,
-            altitude_m: alt_m as f32,
-            speed_mps: speed_mps as f32,
-            heading_deg: heading_deg as f32,
-            vertical_mps: vertical_mps as f32,
-            hacc_m: hacc_m as f32,
-            latency_ms,
-            satellites,
-            valid,
-        }),
-        _ => None,
+pub(crate) fn latest_gnss_preview(now: u64) -> Option<crate::display::Motion> {
+    let sample = STATE.lock(|c| c.borrow().last_gnss);
+    let Sample::Gnss {
+        t_us,
+        lat,
+        lon,
+        alt_m,
+        speed_mps,
+        heading_deg,
+        sacc_mps,
+        valid: true,
+        ..
+    } = sample?
+    else {
+        return None;
     };
-    let imu = match imu {
-        Some(Sample::Imu {
-            t_us, accel, valid, ..
-        }) => Some(DisplayAcceleration {
-            t_us,
-            accel: accel.map(|v| v as f32),
-            valid,
-        }),
-        _ => None,
-    };
-    DisplayFrame {
-        uptime_us: Instant::now().as_micros(),
-        session,
-        recording: recording.active,
-        stopped_at_us: recording.stopped_at_us,
-        battery_percent: crate::tasks::power::snapshot().percent,
-        gnss_count: count,
-        rejected_fix_count,
-        fix,
-        imu,
+    if now.checked_sub(t_us)? >= 1_000_000
+        || !(0.0..=150.0).contains(&speed_mps)
+        || !(0.0..=3.0).contains(&sacc_mps)
+    {
+        return None;
     }
+    Some(crate::display::Motion {
+        t_us,
+        lat,
+        lon,
+        alt_m: alt_m as f32,
+        speed_mps: speed_mps as f32,
+        course_deg: (speed_mps > (3. * sacc_mps).max(1.)).then_some(heading_deg as f32),
+        heading_deg: None,
+        vehicle_g: None,
+        degraded: true,
+    })
 }
 
-fn display_response(out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
-    update(|s| {
-        if s.queue_enabled {
-            s.queue_enabled = false;
-            s.queue.clear();
+pub(crate) fn display_frame(
+    live: bool,
+) -> (crate::display::DrivingFrame, crate::display::MotionSource) {
+    use crate::display::MotionSource::{Fused, PositionDegraded};
+    let nav = crate::navigation::snapshot();
+    let frame = STATE.lock(|c| {
+        let s = c.borrow();
+        let now = Instant::now().as_micros();
+        let (satellites, fix_valid) = match s.last_gnss {
+            Some(Sample::Gnss {
+                satellites,
+                valid,
+                t_us,
+                ..
+            }) if now.saturating_sub(t_us) < 1000000 => (Some(satellites), valid),
+            _ => (None, false),
+        };
+        crate::display::DrivingFrame {
+            uptime_us: now,
+            session: s.session,
+            recording: s.recording.active,
+            started_at_us: s.recording.started_at_us,
+            stopped_at_us: s.recording.stopped_at_us,
+            battery_percent: crate::tasks::power::snapshot().percent,
+            gnss_count: s.gnss.samples,
+            imu_count: s.imu.samples,
+            satellites,
+            fix_valid,
+            mounted: crate::navigation::race::mounted(),
+            motion: nav
+                .motion
+                .filter(|_| live || matches!(nav.motion_source, Fused | PositionDegraded)),
+            timing: nav.driving,
         }
     });
-    let frame = display_frame();
-    let mut buf = [0; 160];
+    (frame, nav.motion_source)
+}
+pub(crate) fn configure_drive(command: crate::display::Configure) -> Result<(), ()> {
+    STATE.lock(|c| {
+        let s = c.borrow();
+        if s.starting
+            || s.recording.active
+            || s.stop_replies != 0
+            || !crate::storage::snapshot().closed
+        {
+            return Err(());
+        }
+        crate::navigation::race::configure(command)
+    })
+}
+fn display_response(out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
+    let (frame, source) = display_frame(true);
+    let mut buf = [0; crate::display::MAX_DRIVING_FRAME_BYTES];
     let data = postcard::to_slice(&frame, &mut buf).map_err(|_| ())?;
-    out.push_str(r#"{"ok":true,"d":""#).map_err(|_| ())?;
+    out.push_str(r#"{"ok":true,"d2":""#).map_err(|_| ())?;
     out.push_base64(data).map_err(|_| ())?;
-    out.push_str(r#""}"#).map_err(|_| ())
+    out.push_str(r#"","motion_source":"#).map_err(|_| ())?;
+    json(out, &source)?;
+    out.push_str(r#","imu_clipping":"#).map_err(|_| ())?;
+    json(out, &imu_clipping(frame.uptime_us))?;
+    out.push('}').map_err(|_| ())
 }
 
 async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>) -> Result<(), ()> {
@@ -837,9 +933,6 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
     {
         return Err(());
     }
-    if request.op == "stop" {
-        stop_recording();
-    }
     let (recording, started_at_us, stopped_at_us, session, gnss, imu, last_gnss, last_imu) = STATE
         .lock(|cell| {
             let s = cell.borrow();
@@ -855,10 +948,12 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
             )
         });
     let now = Instant::now().as_micros();
-    write!(out, "{{\"ok\":true,\"protocol\":1,\"display_v1\":true,\"read_blocks\":8,\"compact_poll\":true,\"binary_poll\":true,\"base64_poll\":true,\"device\":\"Aevia V2 Mini\",\"firmware\":\"0.3.0\",\"recording\":{recording},\"session\":{session},\"stopped_at_us\":").map_err(|_| ())?;
+    write!(out, "{{\"ok\":true,\"protocol\":1,\"display_v2\":true,\"read_blocks\":8,\"compact_poll\":true,\"binary_poll\":true,\"base64_poll\":true,\"device\":\"Aevia V2 Mini\",\"firmware\":\"0.3.0\",\"recording\":{recording},\"session\":{session},\"stopped_at_us\":").map_err(|_| ())?;
     json(out, &stopped_at_us)?;
     out.push_str(",\"started_at_us\":").map_err(|_| ())?;
     json(out, &started_at_us)?;
+    out.push_str(",\"mounted\":").map_err(|_| ())?;
+    json(out, &crate::navigation::race::mounted())?;
     out.push_str(",\"usb_queue\":").map_err(|_| ())?;
     json(out, &STATE.lock(|state| state.borrow().queue.status()))?;
     out.push_str(",\"acquisition_profile\":{\"gnss_log\":\"SPPNAVB\",\"gnss_wire\":\"unicore-binary\",\"imu_wire\":\"safespi-48\",\"gnss_requested_hz\":50,\"signalgroup\":8,\"data_baud\":460800,\"raw_baud\":460800,\"imu_logging\":\"native-dec5\",\"imu_nominal_hz\":737.5,\"imu_navigation_average\":4,\"usb_decimation\":1}").map_err(|_| ())?;
@@ -897,6 +992,8 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
     out.push_str(",\"imu\":").map_err(|_| ())?;
     let began = Instant::now();
     health_json(out, imu, last_imu, now)?;
+    out.push_str(",\"imu_clipping\":").map_err(|_| ())?;
+    json(out, &imu_clipping(now))?;
     serialized(1, began);
     embassy_futures::yield_now().await;
     let mut began = Instant::now();
@@ -915,6 +1012,20 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
     json(out, &battery.percent)?;
     out.push_str(",\"millivolts\":").map_err(|_| ())?;
     json(out, &battery.millivolts)?;
+    out.push_str(",\"power_source\":").map_err(|_| ())?;
+    json(out, &battery.power_source)?;
+    out.push_str(",\"charge_stage\":").map_err(|_| ())?;
+    json(out, &battery.charge_stage)?;
+    out.push_str(",\"rate_percent_per_hour\":")
+        .map_err(|_| ())?;
+    json(out, &battery.rate_percent_per_hour)?;
+    out.push_str(",\"temperature_zone\":").map_err(|_| ())?;
+    json(out, &battery.temperature_zone())?;
+    out.push_str(",\"temperatures_c\":").map_err(|_| ())?;
+    json(
+        out,
+        &crate::tasks::thermal::packed().map(crate::display::unpack_temperature),
+    )?;
     out.push_str(",\"charger_error\":").map_err(|_| ())?;
     json(out, &battery.charger_error)?;
     out.push_str(",\"gauge_error\":").map_err(|_| ())?;
@@ -956,7 +1067,7 @@ async fn make_response(request: &Request<'_>, out: &mut Response<RESPONSE_SIZE>)
         crate::configuration::BUTTONS_FITTED
     )
     .map_err(|_| ())?;
-    write!(out, ",\"led\":\"{}\",\"display\":\"{}\",\"storage\":\"sd-exfat-and-usb-host\",\"bluetooth\":\"ble-display-v1\",\"timing\":\"hardware-capture-with-unqualified-delay-model\",\"samples\":[", crate::drivers::lp5813::status(), crate::tasks::display::status()).map_err(|_| ())?;
+    write!(out, ",\"led\":\"{}\",\"display\":\"{}\",\"storage\":\"sd-exfat-and-usb-host\",\"bluetooth\":\"ble-display-v2\",\"timing\":\"hardware-capture-with-unqualified-delay-model\",\"samples\":[", crate::drivers::lp5813::status(), crate::tasks::display::status()).map_err(|_| ())?;
     serialized(2, began);
     embassy_futures::yield_now().await;
     for i in 0..if request.op == "poll" { 8 } else { 0 } {
@@ -1125,6 +1236,7 @@ pub async fn imu_acquire(mut sensor: crate::drivers::sch16t::Imu<'static>) {
     let mut generation = 0_u32;
     loop {
         generation = generation.wrapping_add(1);
+        crate::tasks::thermal::set_imu(None);
         update(|s| s.imu.status = "initializing");
         if let Err(error) = sensor.initialize().await {
             imu_diagnostics(&sensor, Some(error));
@@ -1139,6 +1251,7 @@ pub async fn imu_acquire(mut sensor: crate::drivers::sch16t::Imu<'static>) {
         imu_diagnostics(&sensor, None);
         fence_after(Instant::now().as_micros());
         let mut failures = 0;
+        let mut next_temperature_us = 0;
         loop {
             match sensor.next_native().await {
                 Ok(mut interval) => {
@@ -1171,6 +1284,12 @@ pub async fn imu_acquire(mut sensor: crate::drivers::sch16t::Imu<'static>) {
                         });
                     }
                     fence_after(observed_us);
+                    // Stay on the SPI owner's executor and read only after
+                    // an entire inertial burst has been handed off.
+                    if observed_us >= next_temperature_us {
+                        next_temperature_us = observed_us + 10_000_000;
+                        crate::tasks::thermal::set_imu(sensor.temperature_c());
+                    }
                 }
                 Err(error) => {
                     generation = generation.wrapping_add(1);
@@ -1205,18 +1324,7 @@ pub async fn imu() {
         };
         let processing_began = Instant::now();
         let aligned = interval.align();
-        if let Some(sample) = averager.push_aligned(aligned)
-            && STATE.lock(|s| {
-                let s = s.borrow();
-                !s.starting
-                    && s.recording.started_at_us.is_none_or(|start| {
-                        sample
-                            .captured_ns
-                            .saturating_sub(u64::from(sample.interval_ns))
-                            >= start.saturating_mul(1000)
-                    })
-            })
-        {
+        if let Some(sample) = averager.push_aligned(aligned) {
             crate::navigation::capture_imu(sample);
         }
         let Some(aligned) = aligned else {

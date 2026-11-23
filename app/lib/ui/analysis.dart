@@ -150,6 +150,7 @@ class _AnalysisViewState extends State<AnalysisView> {
         : samples.length < 2
         ? 0.0
         : selection.index! / (samples.length - 1);
+    final boardTiming = object(session['provenance'])['kind'] == 'display_v2';
     final demo =
         session['source']?.toString().toLowerCase().contains('demo') == true;
     final warnings = analysis['warnings'] is List
@@ -455,7 +456,7 @@ class _AnalysisViewState extends State<AnalysisView> {
                         ),
                       const SizedBox(height: 14),
                       Text(
-                        'Position  ${number(current['lat'], 6)}°, ${number(current['lon'], 6)}°\nAltitude  ${number(current['altitude_m'])} m\nHeading  ${number(current['heading_deg'], 0)}°',
+                        'Position  ${number(current['lat'], 6)}°, ${number(current['lon'], 6)}°\nAltitude  ${number(current['altitude_m'])} m\n${boardTiming ? 'Course over ground' : 'Heading'}  ${number(current[boardTiming ? 'course_deg' : 'heading_deg'], 0)}°',
                         style: const TextStyle(
                           color: muted,
                           fontSize: 12,
@@ -467,7 +468,15 @@ class _AnalysisViewState extends State<AnalysisView> {
                         onPressed:
                             current['valid'] == true &&
                                 numeric(current['lat']) != null
-                            ? () => editTrack(context, c, position: current)
+                            ? () => editTrack(
+                                context,
+                                c,
+                                position: {
+                                  ...current,
+                                  if (!boardTiming)
+                                    'course_deg': current['heading_deg'],
+                                },
+                              )
                             : null,
                         icon: const Icon(
                           Icons.add_location_alt_outlined,
@@ -578,50 +587,57 @@ class _AnalysisViewState extends State<AnalysisView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 280,
-                    child: DropdownButtonFormField<String>(
-                      isExpanded: true,
-                      key: ValueKey('track-$sessionId-$trackId'),
-                      initialValue: c.tracks.any((t) => t['id'] == trackId)
-                          ? trackId
-                          : '',
-                      decoration: const InputDecoration(
-                        labelText: 'Track definition',
-                      ),
-                      items: [
-                        const DropdownMenuItem(
-                          value: '',
-                          child: Text('No track'),
+              if (boardTiming)
+                Text(
+                  'On-device timing · ${object(session['track'])['name'] ?? 'No track selected'}',
+                )
+              else
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 280,
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        key: ValueKey('track-$sessionId-$trackId'),
+                        initialValue: c.tracks.any((t) => t['id'] == trackId)
+                            ? trackId
+                            : '',
+                        decoration: const InputDecoration(
+                          labelText: 'Track definition',
                         ),
-                        ...c.tracks.map(
-                          (t) => DropdownMenuItem(
-                            value: t['id']?.toString(),
-                            child: Text(t['name']?.toString() ?? ''),
+                        items: [
+                          const DropdownMenuItem(
+                            value: '',
+                            child: Text('No track'),
                           ),
-                        ),
-                      ],
-                      onChanged: (value) => setState(() => trackId = value),
+                          ...c.tracks.map(
+                            (t) => DropdownMenuItem(
+                              value: t['id']?.toString(),
+                              child: Text(t['name']?.toString() ?? ''),
+                            ),
+                          ),
+                        ],
+                        onChanged: (value) => setState(() => trackId = value),
+                      ),
                     ),
-                  ),
-                  OutlinedButton(
-                    onPressed: c.busy
-                        ? null
-                        : () => c.reanalyze(sessionId!, trackId),
-                    child: const Text('Apply track & reanalyze'),
-                  ),
-                ],
-              ),
+                    OutlinedButton(
+                      onPressed: c.busy
+                          ? null
+                          : () => c.reanalyze(sessionId!, trackId),
+                      child: const Text('Apply track & reanalyze'),
+                    ),
+                  ],
+                ),
               const SizedBox(height: 16),
               if (laps.isEmpty)
-                const EmptyState(
+                EmptyState(
                   'No complete laps',
-                  'Select a track with a start/finish gate and reanalyze. Two valid crossings are required for a complete lap.',
+                  boardTiming
+                      ? 'This recording contains no completed lap report.'
+                      : 'Select a track with a start/finish gate and reanalyze. Two valid crossings are required for a complete lap.',
                   icon: Icons.flag_outlined,
                 )
               else

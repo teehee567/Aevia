@@ -95,6 +95,11 @@ fn parse_with_records(
     let mut last_kind = 0;
     let mut missing = 0u64;
     let mut record_count = 0u64;
+    let mut uses_driving_estimates = false;
+    let mut setup_gates = None;
+    let mut mounted = None;
+    let mut display_duration = None;
+
     let mut origin_at = None;
     let mut duration_s = 0.0f64;
     let mut decoders = [BinaryDecoder::<16384>::new(), BinaryDecoder::<16384>::new()];
@@ -175,6 +180,94 @@ fn parse_with_records(
             let payload = &pending[24..24 + n];
             visitor(kind, at_ns, payload)?;
             match kind {
+                27 => {
+                    use crate::display::Configure;
+                    let (command, tail) = postcard::take_from_bytes::<Configure>(payload)
+                        .map_err(|e| e.to_string())?;
+                    if !tail.is_empty() {
+                        return Err("Trailing driving configuration bytes".into());
+                    }
+                    match command {
+                        Configure::Begin {
+                            start_centi_kph,
+                            end_centi_kph,
+                            distance_mm,
+                            rollout,
+                            mounted: confirmed,
+                            gates,
+                        } if setup_gates.is_none() && gates <= 16 => {
+                            uses_driving_estimates = true;
+                            session.samples.clear();
+                            setup_gates = Some(usize::from(gates));
+                            mounted = Some(confirmed);
+                            session.drag = crate::model::DragConfig {
+                                start_kph: f64::from(start_centi_kph) / 100.,
+                                end_kph: f64::from(end_centi_kph) / 100.,
+                                distance_m: f64::from(distance_mm) / 1000.,
+                                rollout,
+                            };
+                        }
+                        Configure::Gate { index, gate }
+                            if setup_gates.is_some_and(|count| usize::from(index) < count)
+                                && usize::from(index)
+                                    == session
+                                        .track
+                                        .as_ref()
+                                        .map_or(0, |t| 1 + t.sectors.len()) =>
+                        {
+                            let g = crate::model::Gate {
+                                lat: f64::from(gate.lat_e7) / 1e7,
+                                lon: f64::from(gate.lon_e7) / 1e7,
+                                heading_deg: f64::from(gate.heading_cdeg) / 100.,
+                                width_m: f64::from(gate.width_cm) / 100.,
+                            };
+                            if let Some(t) = &mut session.track {
+                                t.sectors.push(g);
+                            } else {
+                                session.track = Some(crate::model::Track {
+                                    id: "recorded-track".into(),
+                                    name: "Recorded gates".into(),
+                                    start: g,
+                                    sectors: Vec::new(),
+                                });
+                            }
+                        }
+                        _ => return Err("Invalid driving configuration sequence".into()),
+                    }
+                }
+                26 => {
+                    let value = crate::driving::decode(payload)?;
+                    if value["uptime_us"].as_u64() != Some(at_ns / 1000) {
+                        return Err(
+                            "Driving snapshot timestamp disagrees with record header".into()
+                        );
+                    }
+                    if !uses_driving_estimates {
+                        session.samples.clear();
+                        uses_driving_estimates = true;
+                    }
+                    let mut record = crate::driving::capture_record(&value)
+                        .ok_or("Missing driving snapshot fields")?;
+                    if value["recording"] == false {
+                        record["kind"] = json!("fused_summary");
+                        display_duration = value["stopped_at_us"]
+                            .as_u64()
+                            .zip(value["started_at_us"].as_u64())
+                            .and_then(|(stop, start)| stop.checked_sub(start))
+                            .map(|us| us as f64 * 1e-6);
+                    } else if let Some(sample) = crate::driving::sample(&record) {
+                        // A repeated display read can refer to the same underlying
+                        // measurement. Preserve the frame and publish its epoch once.
+                        if session
+                            .samples
+                            .last()
+                            .is_none_or(|last| sample.time_s > last.time_s)
+                        {
+                            session.samples.push(sample);
+                        }
+                    }
+                    session.raw_records.push(record);
+                }
                 25 => {
                     ppk.push(at_ns, payload, &mut std::io::sink())?;
                 }
@@ -219,7 +312,8 @@ fn parse_with_records(
                     } else {
                         mapped_gnss_count += 1;
                     }
-                    if let Some(sample) = clock.sample(&record)? {
+                    if let Some(sample) = clock.sample(&record)?.filter(|_| !uses_driving_estimates)
+                    {
                         session.samples.push(sample);
                     }
                 }
@@ -233,7 +327,8 @@ fn parse_with_records(
                 }
                 20 => {
                     let record = gnss_record(payload)?;
-                    if let Some(sample) = clock.sample(&record)? {
+                    if let Some(sample) = clock.sample(&record)?.filter(|_| !uses_driving_estimates)
+                    {
                         session.samples.push(sample);
                     }
                 }
@@ -281,7 +376,9 @@ fn parse_with_records(
                                     format!("Malformed historical BESTNAVXYZ: {e:?}")
                                 })?;
                                 let record = nav_record(nav, receipt);
-                                if let Some(sample) = clock.sample(&record)? {
+                                if let Some(sample) =
+                                    clock.sample(&record)?.filter(|_| !uses_driving_estimates)
+                                {
                                     session.samples.push(sample);
                                 }
                             }
@@ -323,6 +420,18 @@ fn parse_with_records(
     session.sample_count = session.samples.len();
     session.duration_s = duration_s.max(session.samples.last().map(|s| s.time_s).unwrap_or(0.0));
     session.source = "Imported AEVLOG1 receiver observations; original raw capture retained".into();
+    if closed
+        && setup_gates.is_some_and(|expected| {
+            expected != session.track.as_ref().map_or(0, |t| 1 + t.sectors.len())
+        })
+    {
+        return Err("Incomplete driving gate configuration".into());
+    }
+    if uses_driving_estimates {
+        session.duration_s = display_duration.unwrap_or(session.duration_s);
+        session.provenance = json!({"kind":"display_v2","estimator":"DrivingEstimator","nominal_hz":5,"native_capture":true,"mount_confirmed":mounted,"warnings":["On-device driving estimates use development timing and installation calibration."]});
+        session.analysis = crate::driving::analysis(&session);
+    }
     add_timing_warnings(&session.raw_records, &mut session.analysis.warnings);
     let transport = transport_loss_summary(&session.raw_records)?;
     add_transport_warnings(&transport, &mut session.analysis.warnings);
@@ -901,6 +1010,76 @@ mod tests {
             .iter()
             .any(|r| r["kind"] == "capture_timing_summary"));
     }
+    #[test]
+    fn native_log_uses_fused_motion_and_preserves_the_configured_drag_target() {
+        use crate::display::{Configure, DrivingFrame, Motion, Timing};
+        let mut buf = [0; 208];
+        let setup = Configure::Begin {
+            start_centi_kph: 0,
+            end_centi_kph: 6000,
+            distance_mm: 100000,
+            rollout: true,
+            mounted: true,
+            gates: 0,
+        };
+        let mut records = vec![
+            record(27, 0, postcard::to_slice(&setup, &mut buf).unwrap()),
+            record(20, 1, &fix(1000)),
+        ];
+        let short = page(&[
+            records[0].clone(),
+            records[1].clone(),
+            record(22, 2, &[0; 4]),
+        ]);
+        let short = parse(std::io::Cursor::new(short), 512, "no motion yet").unwrap();
+        assert!(short.samples.is_empty() && short.provenance["kind"] == "display_v2");
+        let mut frame = DrivingFrame {
+            uptime_us: 1_200_000,
+            session: 1,
+            recording: true,
+            started_at_us: Some(1_000_000),
+            stopped_at_us: None,
+            battery_percent: None,
+            gnss_count: 10,
+            imu_count: 40,
+            satellites: None,
+            fix_valid: true,
+            mounted: true,
+            motion: Some(Motion {
+                t_us: 1_190_000,
+                speed_mps: 2.,
+                ..Motion::default()
+            }),
+            timing: Timing::default(),
+        };
+        for i in 0..3 {
+            records.push(record_at(
+                26,
+                2 + i,
+                frame.uptime_us * 1000,
+                postcard::to_slice(&frame, &mut buf).unwrap(),
+            ));
+            frame.uptime_us += 200_000;
+            frame.motion = None;
+            if i == 1 {
+                frame.recording = false;
+                frame.stopped_at_us = Some(frame.uptime_us);
+                frame.timing.distance_m = 1.25;
+            }
+        }
+        records.push(record(22, 5, &[0; 4]));
+        let pages = page(&records);
+        let s = parse(std::io::Cursor::new(pages), 512, "driving").unwrap();
+        assert_eq!(s.provenance["estimator"], "DrivingEstimator");
+        assert_eq!(s.drag.end_kph, 60.);
+        assert!(s.drag.rollout);
+        assert_eq!(s.samples.len(), 2);
+        assert_eq!(s.samples[0].speed_mps, Some(2.));
+        assert!(!s.samples[1].valid && s.samples[1].speed_mps.is_none());
+        assert!((s.duration_s - 0.6).abs() < 1e-8);
+        assert_eq!(s.analysis.distance_m, 1.25);
+    }
+
     #[test]
     fn new_sd_schema_imports_receiver_epochs_and_closed_health() {
         let p = page(&[

@@ -271,6 +271,17 @@ pub enum ImuError {
     AcquisitionQueueOverflow,
 }
 
+impl ImuError {
+    /// SafeSPI S[1:0] = 10 means saturation, with IDS clear.
+    pub fn is_clipping(self) -> bool {
+        match self {
+            Self::OutsideCalibratedRange => true,
+            Self::Status(frame) => frame & ((1 << 36) | (3 << 33)) == 2 << 33,
+            _ => false,
+        }
+    }
+}
+
 pub const fn request_frame(address: u8, write: Option<u16>) -> u64 {
     let mut frame = ((address as u64) << 38) | (1 << 35); // FT=1, 48-bit.
     if let Some(value) = write {
@@ -291,6 +302,7 @@ pub fn signed_sensor(frame: u64) -> i32 {
     (((frame >> 8) as u32 & 0x000f_ffff) << 12) as i32 >> 12
 }
 
+#[cfg_attr(target_arch = "riscv32", esp_hal::ram)]
 pub fn validate_response(frame: u64, expected: u8, strict_status: bool) -> Result<(), ImuError> {
     if frame == 0 || frame == 0xffff_ffff_ffff || frame as u8 != crc8(frame) {
         return Err(ImuError::Crc(frame));
@@ -557,6 +569,19 @@ mod tests {
         assert_eq!(signed_sensor(0x7ffff << 8), 524287);
         assert_eq!(signed_sensor(0x80000 << 8), -524288);
         assert_eq!(signed_sensor(0xfffff << 8), -1);
+    }
+
+    #[test]
+    fn clipping_uses_sensor_saturation_or_the_calibrated_range_check() {
+        let captured_saturation = 0x0264_0007_3bbe;
+        assert_eq!(
+            validate_response(captured_saturation, 0x13, true),
+            Err(ImuError::Status(captured_saturation))
+        );
+        assert!(ImuError::Status(captured_saturation).is_clipping());
+        assert!(ImuError::OutsideCalibratedRange.is_clipping());
+        assert!(!ImuError::Status(captured_saturation | (1 << 36)).is_clipping());
+        assert!(!ImuError::CaptureTiming.is_clipping());
     }
 
     #[test]

@@ -134,6 +134,8 @@ pub async fn gnss_acquire(command: Uart<'static, Blocking>, data: Uart<'static, 
         let mut last_short_command_read = None;
         let mut prefer_data = true;
         let mut outgoing = um980::PPK_OBSERVATIONS;
+        let mut next_ephemeris = um980::PPK_EPHEMERIDES.len();
+        let mut ephemeris_due = Instant::now();
         let mut restoring = false;
         let mut restore_done = None;
         PPK_EPHEMERIDES.lock(|request| *request.borrow_mut() = true);
@@ -158,7 +160,19 @@ pub async fn gnss_acquire(command: Uart<'static, Blocking>, data: Uart<'static, 
                 && PPK_EPHEMERIDES
                     .lock(|request| core::mem::replace(&mut *request.borrow_mut(), false))
             {
-                outgoing = um980::PPK_EPHEMERIDES;
+                next_ephemeris = 0;
+                ephemeris_due = Instant::now();
+            }
+            // A simultaneous dump of every constellation can occupy COM1 long
+            // enough to starve publication of native IMU intervals at Start.
+            if outgoing.is_empty()
+                && !restoring
+                && Instant::now() >= ephemeris_due
+                && let Some(pair) = um980::PPK_EPHEMERIDES.get(next_ephemeris)
+            {
+                outgoing = pair;
+                next_ephemeris += 1;
+                ephemeris_due = Instant::now() + Duration::from_millis(800);
             }
             if !outgoing.is_empty() && command.write_ready() {
                 match command.write(outgoing) {
@@ -452,7 +466,8 @@ impl Decoder {
             }
             if line.starts_with(b"$command,") {
                 for expected in um980::PPK_EPHEMERIDES
-                    .split(|b| *b == b'\n')
+                    .iter()
+                    .flat_map(|pair| pair.split(|b| *b == b'\n'))
                     .chain(core::iter::once(um980::PPK_OBSERVATIONS))
                 {
                     let expected = expected.strip_suffix(b"\n").unwrap_or(expected);
@@ -538,15 +553,12 @@ fn publish(observation: GnssObservation) {
     if let Some(owned) = measurement
         .as_ref()
         .and_then(|value| value.navigation(&native))
-        && STATE.lock(|s| {
-            let s = s.borrow();
-            !s.starting
-                && s.recording
-                    .started_at_us
-                    .is_none_or(|start| observation.received_us >= start)
-        })
     {
-        crate::navigation::capture_gnss(owned, observation.received_us);
+        crate::navigation::capture_gnss(
+            owned,
+            observation.received_us,
+            observation.mapping.map(|e| e.time_ns / 1000),
+        );
     }
     let nav = measurement.as_ref();
     let mapping = observation.mapping;

@@ -65,15 +65,15 @@ imported with an incomplete-recording warning.
    gates in driving order. **Gate coordinates** lets you enter exact values,
    and the editor can copy a live fix or a recorded position from analysis.
 3. In **Live**, choose a track and optional session name, then start recording.
-   The G-meter shows the receiver's accelerometer axes with gravity included.
-   Tilt the receiver to test it over USB without a GNSS fix or recording. Speed
-   is hidden when the fix is invalid or stale. Stop and save to create a session
-   in the library.
+   Confirm **Vehicle axes aligned** when the receiver is rigidly mounted in
+   the configured forward/left/up orientation. The G-meter shows gravity-removed
+   vehicle acceleration from traj. Live speed requires a fresh fused solution.
+   Stop and save to create a session in the library.
 4. Open a session from **Sessions**. Replay its recorded position, inspect speed,
    acceleration or altitude, compare laps and review sector and drag results.
    The slider and chart share a replay cursor. Drag the chart to seek; scroll or
    pinch the local track view to zoom and drag it to pan.
-5. Select a saved track and use **Apply track & reanalyze** to recompute results.
+5. For receiver-only imports, select a saved track and use **Apply track & reanalyze** to recompute results.
    This also applies the current drag configuration. It updates that session's
    track/drag analysis while retaining its captured evidence.
 
@@ -95,35 +95,30 @@ position. The replay map uses local coordinates and works offline.
 ## Driving display traffic
 
 With matching app and receiver firmware, Live requests one snapshot every 200 ms.
-Starting a recording saves display fixes to the host library and full-rate evidence
-to the receiver SD card. Select **Copy full-rate raw data over USB** before
-starting if you also need the full sensor stream on the computer. Older receivers
-use full status for preview and their existing raw protocol for host recordings.
+Starting a recording saves fused snapshots and on-device timing reports to
+the app library. The receiver writes the native IMU, GNSS and available raw
+GNSS evidence to SD independently, including while the phone is disconnected.
+Select **Copy full-rate raw data over USB** to keep a raw sidecar on the host.
 
-| On the link | When | Example size |
-| --- | --- | ---: |
-| GNSS position, altitude, speed, heading, vertical velocity, horizontal accuracy, satellites, validity, latency and receiver/device timestamps | Each display snapshot | 52 B |
-| Accelerometer XYZ, observation timestamp and validity for the G-meter | Each display snapshot | 19 B |
-| Device clock, session number, recording/stop state, battery percentage and GNSS total/rejected-fix counters | Each display snapshot | 14 B |
-| Entire framed exchange, including the request, Base64, JSON and serial framing | 5 exchanges/s | 159 B each, 795 B/s, 2.86 MB/hour |
-| Traj lap count, current/last/best lap, session distance and average speed | Computed on the host from receiver fixes during a session | 0 additional receiver bytes |
-| Full diagnostics and capabilities | Connect, start and stop. Every 5 s on Receiver, about once a second on Diagnostics. Full-rate host capture also samples health about once a second. | Around 4.7 kB in an example status, up to the 8 KiB response buffer before framing |
-| Raw USB copy, when selected | 50 GNSS fixes/s and nominally 737.5 IMU intervals/s | About 110 kB/s in Base64 records before batch envelopes |
-| SD download, on request | Eight 512 B sectors per request, fewer in the final batch | About 5.6 kB exchanged per 4 KiB of file |
+Each foreground Bluetooth read carries the device/session clock, recording
+state, battery, sensor counters, GNSS status, optional fused motion and
+preliminary timing results. Traj computes the crossings on the board at
+corrected knot times. The app displays the reported times and retains them
+with the track and drag targets used for the recording. Full diagnostics,
+raw USB copy and SD downloads remain available over USB. The encoded size
+depends on the available fields.
 
-Board data checks receiver status every five seconds while visible over USB.
-Reading the directory, previewing a file and downloading it are manual actions.
-
-Display sizes use the encoded one-hour-uptime fixture in the native test suite.
-Integer lengths and absent sensor fields change the actual size. Rates are USB
-application traffic, including framing where indicated. Bluetooth throughput and
-energy use require measurement on hardware.
-
-Browsing saved sessions or hiding the app stops preview requests. During an
-active host recording the native collector continues at the selected rate.
-The live speed, position and heading come from GNSS. The G-meter uses sensor
-axes including gravity. Traj evaluates the sampled fixes for session metrics.
-Download the SD recording for full-rate timing analysis of short events.
+Live and Diagnostics show estimated battery runtime while discharging and
+estimated time to full while charging in the normal temperature zone. Both
+use the fuel gauge’s recent change in percentage per hour and can shift when
+recording starts or charging tapers. Diagnostics also shows voltage, power
+source, charge stage and charger temperature zone when available. Bluetooth
+receives these details every five seconds on receivers that support them.
+Diagnostics also shows the latest IMU and processor temperatures. Charger
+die temperature appears for 30 seconds after a successful bench conversion
+on USB. The explicit `python3 firmware/tools/telemetry.py --power-sample`
+command requests a conversion. See the charger watchdog notes in the
+[firmware protocol](../firmware/docs/application-protocol.md).
 
 ## Drag testing
 
@@ -134,10 +129,10 @@ distance time, end speed, slope and validity when those measurements are
 available. The displayed end speed is not an independently measured averaged
 trap speed.
 
-Standing-start timing uses the engine's sustained-motion detection after a
-stationary period. Its exact threshold and limitations are shown with the
-analysis. It is not an extrapolated true-zero launch. Signal gaps are not bridged
-for lap or drag measurements.
+For a standing start, onboard timing arms after 0.5 s below 0.5 m/s and
+confirms a launch after 0.2 s of sustained motion. The clock starts at the
+interpolated threshold crossing, or at 0.3048 m of travel when one-foot
+rollout is enabled. Gaps in usable corrected data interrupt the attempt.
 
 ## Files and exports
 
@@ -277,13 +272,13 @@ the converter and processor checks and links their software references.
 
 ## Measurement limits
 
-The app's performance analysis uses Traj receiver interpolation. Statistical
-timing uncertainty and live predictive delta are not enabled by the app.
-The Receiver view separately reports the device's development IMU/GNSS estimator
-and its unqualified status. Raw sensor records are retained for later calibrated processing. Mounting
-calibration, receiver/IMU clock alignment and interval support must be established
-before presenting fused results. Displayed milliseconds are formatting, not a
-claim of millisecond accuracy.
+Live fused sessions carry preliminary timing estimates from the board. The
+receiver's development profile still needs installation and clock calibration
+before timing accuracy can be qualified. The SD importer restores on-device fused
+snapshots, drag targets, gate geometry and final timing from current firmware,
+and retains the native capture alongside the session. Imported receiver-only sessions
+use traj receiver interpolation. Native SD evidence is available for later
+calibrated processing.
 
 Receiver-only interpolation also requires agreement between consecutive GNSS
 positions and velocities. The adapter bounds the extra velocity introduced by

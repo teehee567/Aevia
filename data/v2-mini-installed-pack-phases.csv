@@ -1,0 +1,7 @@
+utc,phase,uptime_s,state,pct,gauge_mv,charge_stage,rate_pct_h,temperature_zone,faults,source,vbus_mv,ibus_ma,vbat_mv,ibat_ma,charge_voltage_setpoint_mv,warm_voltage_reduction_mv,ts_bias_percent,die_temp_c,error
+2026-11-21T12:02:45+00:00,reduced-load,26.8,charging,69,3991,constant_current,11.856,,6,external,5221,220,4002,80,4200,200,46.4163,39.5,
+2026-11-21T12:03:15+00:00,reduced-load,56.8,charging,69,3991,constant_current,16.224,,6,external,5225,218,4002,80,4200,200,47.2812,38.5,
+2026-11-21T12:03:45+00:00,reduced-load,86.8,charging,69,3993,constant_current,12.272,,6,external,5221,218,4002,80,4200,200,48.050003,38.0,
+2026-11-21T12:04:15+00:00,reduced-load,116.8,charging,70,3998,constant_current,12.4800005,,6,external,5221,218,4002,80,4200,200,48.626602,37.5,
+2026-11-21T12:04:45+00:00,reduced-load,146.8,charging,70,3998,constant_current,16.848,,6,external,5221,218,4004,80,4200,200,49.011,37.0,
+2026-11-21T12:05:15+00:00,reduced-load,176.9,charging,70,3996,constant_current,12.688001,,6,external,5225,218,4002,80,4200,200,49.2993,36.5,

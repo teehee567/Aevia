@@ -68,7 +68,44 @@ pub(super) fn coupled_payload_bytes(dimension: usize) -> Result<u64, ValidationE
 pub(super) type SegmentStorage = std::vec::Vec<DenseSegment>;
 
 #[cfg(not(feature = "offline"))]
-pub(super) type SegmentStorage = FixedVec<DenseSegment, MAX_EMBEDDED_TRAJECTORY_SEGMENTS>;
+#[derive(Clone, Debug)]
+pub(super) struct SegmentStorage {
+    entries: FixedVec<DenseSegment, MAX_EMBEDDED_TRAJECTORY_SEGMENTS>,
+    first: usize,
+}
+
+#[cfg(not(feature = "offline"))]
+impl SegmentStorage {
+    pub(super) fn clear(&mut self) {
+        self.entries.clear();
+        self.first = 0;
+    }
+
+    pub(super) fn len(&self) -> usize {
+        self.entries.len()
+    }
+
+    pub(super) fn get(&self, index: usize) -> Option<&DenseSegment> {
+        if index >= self.len() {
+            return None;
+        }
+        self.entries
+            .get((self.first + index) % MAX_EMBEDDED_TRAJECTORY_SEGMENTS)
+    }
+
+    pub(super) fn first(&self) -> Option<&DenseSegment> {
+        self.get(0)
+    }
+
+    pub(super) fn last(&self) -> Option<&DenseSegment> {
+        self.len().checked_sub(1).and_then(|index| self.get(index))
+    }
+
+    pub(super) fn replace_oldest(&mut self, segment: DenseSegment) {
+        self.entries[self.first] = segment;
+        self.first = (self.first + 1) % MAX_EMBEDDED_TRAJECTORY_SEGMENTS;
+    }
+}
 
 #[cfg(feature = "offline")]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -227,7 +264,10 @@ pub(super) const fn new_segment_storage() -> SegmentStorage {
 
 #[cfg(not(feature = "offline"))]
 pub(super) const fn new_segment_storage() -> SegmentStorage {
-    FixedVec::new()
+    SegmentStorage {
+        entries: FixedVec::new(),
+        first: 0,
+    }
 }
 
 #[cfg(feature = "offline")]
@@ -245,6 +285,7 @@ pub(super) fn push_segment(
     segment: DenseSegment,
 ) -> Result<(), ValidationError> {
     storage
+        .entries
         .push(segment)
         .map_err(|_| ValidationError::CapacityExceeded)
 }

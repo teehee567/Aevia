@@ -10,6 +10,13 @@ It has two processing paths:
   `ProcessingLevel::OfflineSmooth` selects fixed-interval smoothing;
   `ProcessingLevel::CapturedReplay` reproduces the captured live processing.
 
+`Trajectory::driving_estimate` queries fused speed, geodetic position and
+observable course at the corrected epoch. At the IMU sensing center it also
+returns signed forward, left and up acceleration for a confirmed rigid mount
+with sufficiently constrained tilt. `trajectory::driving::DrivingRun` consumes
+corrected intervals for preliminary lap, sector and drag reports. Invalid
+support breaks a timing attempt. The display rate is independent of this calculation.
+
 The host-only `receiver::ReceiverTrack` also evaluates existing lap, drag and
 distance definitions on contiguous receiver position/velocity fixes when
 inertial preparation is unavailable. This is an explicitly degraded GNSS-only
@@ -125,7 +132,7 @@ direct field access now uses `survey_uncertainty: GateSurveyUncertainty`.
 The private offline trajectory record format is version 4 to retain the full
 coupled process; resource preflight includes its larger records and bounded cache.
 
-Live navigation uses the ESKF forward estimate plus an extended RTS backward
+The full live engine uses the ESKF forward estimate plus an extended RTS backward
 pass over a fixed 64-node window. Set `NavigationProfileSpec.smoothing_lag` to a
 nonzero duration up to 100 ms to enable smoothing; zero retains the forward
 comparison path. The lag is additional to `fusion_delay`. Present projections
@@ -143,9 +150,15 @@ extrapolated receiver epochs do not count as another fix. A supplied heading
 remains optional; course over ground is not treated as body heading.
 The existing stationary alignment path remains available.
 
-The release firmware target is the `ESP32-S31-WROOM-3-N16R16V`. It runs the
-bounded, fixed-capacity live ESKF/RTS and incremental metric path. Full-session
-`f64` smoothing runs on a phone or workstation. `AdvancedGraph` and `RawTight`
+The ESP32-S31 V2 Mini uses `engine::driving::DrivingEstimator` for live
+driving telemetry. It aligns tilt and gyro bias at rest, integrates inertial
+velocity between fixes, and uses a 96-epoch history for delayed GNSS velocity
+corrections. Vehicle heading becomes available after the IMU and GNSS observe
+a common horizontal change in velocity. Mount confirmation enables signed,
+gravity-compensated G in vehicle axes. `DrivingRun` interpolates gate and
+drag crossings at the estimator rate. The firmware saves and transmits
+preliminary snapshots at 5 Hz. The full ESKF and offline reconstruction
+remain available as separate engine paths. `AdvancedGraph` and `RawTight`
 remain reserved processing levels and return `CapabilityUnavailable`.
 The `gtsam-system`, `gtsam-vendored`, and `raw-tight` Cargo features remain for
 compatibility and enable `offline`; they do not provide a backend. The unused

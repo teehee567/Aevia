@@ -249,6 +249,20 @@ impl<'d> Imu<'d> {
         Ok(((frame >> 8) & 0xffff) as u16)
     }
 
+    /// Read TEMP in the current 48-bit mode. SafeSPI validates the response
+    /// before extracting the signed 16-bit value left-aligned in the payload.
+    pub fn temperature_c(&mut self) -> Option<i16> {
+        self.exchange(0x10, None).ok()?;
+        let frame = self.exchange(FREQ_CNTR, None).ok()??;
+        if frame >> 47 != 1 {
+            return None;
+        }
+        let centi_c = signed_sensor(frame) >> 4;
+        (-5000..=13500)
+            .contains(&centi_c)
+            .then(|| ((centi_c + centi_c.signum() * 50) / 100) as i16)
+    }
+
     fn write_register(&mut self, address: u8, value: u16) -> Result<(), ImuError> {
         self.exchange(address, Some(value))?;
         self.exchange(FREQ_CNTR, None)?;
@@ -361,6 +375,9 @@ impl<'d> Imu<'d> {
         }
     }
 
+    // The data-ready window is too short for flash-backed SPI code when
+    // PSRAM is enabled on S31. Keep the burst and its checks in internal RAM.
+    #[esp_hal::ram]
     fn read_native(&mut self) -> Result<NativeSample, ImuError> {
         let mut frames = [0_u64; 6];
         let mut error = self.transfer(NATIVE_READS[0]).err();
@@ -406,6 +423,7 @@ impl<'d> Imu<'d> {
         self.transfer(Request::new(address, write))
     }
 
+    #[esp_hal::ram]
     fn transfer(&mut self, request: Request) -> Result<Option<u64>, ImuError> {
         let Request { address, mut wire } = request;
         // Datasheet minima are sub-microsecond; 1 us before/after each CS edge

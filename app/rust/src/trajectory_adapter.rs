@@ -172,6 +172,13 @@ pub fn analyze(
     if total_time > 0.0 {
         out.average_speed_mps = Some(out.distance_m / total_time);
     }
+    summarize_laps(&mut out);
+    out.warnings.sort();
+    out.warnings.dedup();
+    out
+}
+
+pub(crate) fn summarize_laps(out: &mut Analysis) {
     let mut durations: Vec<_> = out
         .laps
         .iter()
@@ -179,7 +186,7 @@ pub fn analyze(
         .map(|l| l.duration_s)
         .collect();
     durations.sort_by(f64::total_cmp);
-    out.best_lap_s = durations.first().copied();
+    out.best_lap_s = out.best_lap_s.or_else(|| durations.first().copied());
     if !durations.is_empty() {
         let n = durations.len();
         out.average_lap_s = Some(durations.iter().sum::<f64>() / n as f64);
@@ -205,9 +212,6 @@ pub fn analyze(
             out.theoretical_best_s = Some(total);
         }
     }
-    out.warnings.sort();
-    out.warnings.dedup();
-    out
 }
 
 fn receiver_fix(s: &Sample) -> Option<ReceiverFix> {

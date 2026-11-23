@@ -9,7 +9,7 @@ of USB. It monitors the charger/fuel gauge and drives four functional RGB LEDs.
 The connected board has no display and its extra buttons are unavailable, so
 `src/configuration.rs` disables both. Their absence is reported as optional;
 it does not cause a system fault. When explicitly enabled for fitted hardware,
-the ST7789 shows speed/fix/recording status and button 1 toggles recording.
+the ST7789 shows fused speed, sensor and recording status and button 1 toggles recording.
 
 Sessions persist independently on an existing exFAT microSD volume and can also
 be captured by the USB host through the Aevia app. CPU1 owns native four-bit SD
@@ -19,8 +19,8 @@ USB starts with an internal 128-sample queue and promotes to a 4,096-sample queu
 in an exclusively reserved PSRAM tail after its startup test and CPU0 protection
 checks. `usb_queue` reports actual backing, capacity and any fallback error.
 Recording files reserve up to 128 MiB contiguous extents, rotate when full, and retain CRC-protected committed
-pages after interrupted recording. Start opens the SD extent and rearms navigation
-before setting the recording boundary; a failure within ten seconds returns an
+pages after interrupted recording. Start opens the SD extent before setting
+the recording boundary. A failure within ten seconds returns an
 error without starting later. Stop drains the SD queue and flushes a final
 closed page. The recorder never formats the card or deletes existing files;
 FAT32/GPT volumes are currently unsupported, and dirty exFAT volumes permit only
@@ -37,43 +37,52 @@ effective support and 1.2 ms delay uncertainty are retained in USB and SD data.
 GNSS retains receive time, GPS epoch, velocity latency and optional mapped
 epoch/uncertainty/generation. An indoor no-fix result is normal and remains invalid.
 
-CPU1 runs the actual Traj live navigation engine with an explicitly unqualified
-development profile. Hot estimator state remains in internal SRAM; cold state
-and metric storage use the first 15 MiB of fitted PSRAM; the final MiB belongs to
-CPU0's USB queue. Startup tests all 16 MiB before either owner uses it.
+CPU1 runs Traj's `engine::driving::DrivingEstimator` for the live dashboard.
+It uses a fixed-size internal SRAM history of 96 IMU estimates to correct
+velocity at the GNSS measurement epoch. The processor, including race state,
+occupies 5,280 bytes in the V2 Mini release link map. The sensor handoff queues
+and worker stack use additional internal RAM. CPU0 can use the final MiB of
+fitted PSRAM for raw USB preview after the startup memory test.
 See the [hardware validation record](../data/highrate-ppk-validation.md)
 for measured sample rates, USB and SD comparisons, and the validated firmware
 images. The [20 Hz baseline](../data/aevia-implementation-status.md) records
 the earlier firmware and app checks.
 
-The current profile supports fused navigation diagnostics; on-device horizontal drag/lap
-metrics remain unavailable because their root qualification evidence is absent.
-The application provides its own explicitly degraded measurement analysis.
-Production `--no-default-features` builds retain strict preflight and reject this
-unqualified profile. No calibration or accuracy qualification is implied.
+Traj integrates the gyro and gravity-compensated specific force between GNSS
+fixes. Start with a valid fix and hold still for at least half a second to
+initialize tilt and gyro bias. A horizontal change in velocity establishes yaw,
+including on a reversing launch. Confirm the rigid forward/left/up mounting
+to display signed vehicle G. Recording uses the roughly 182 Hz estimator path
+for preliminary gate and drag timing. SD also stores the committed run setup,
+5 Hz driving snapshots, final totals and native observations.
 
-Installation inputs are in `src/navigation/settings.rs` and exposed in status:
-sensor-to-body scalar-first quaternion, IMU-to-antenna lever arm, and nonzero
-timing uncertainty. Identity mounting and zero lever arm are bench assumptions,
-with nonzero uncertainty in the profile. Replace them with measured installation
-values before interpreting vehicle-axis acceleration or precision results.
-A new recording rearms navigation. Its first valid fix selects PPS timing if
-available, otherwise arrival-only development timing; it never silently switches
-latency models mid-session. Lost PPS mapping suspends GNSS fusion, while inertial
-propagation continues; start a new session to select a recovered clock generation.
+Short IMU gaps of at most 12 ms use the neighboring measurements to approximate
+the missing impulse. The navigation status counts these intervals. Longer gaps
+interrupt the attempt and require fresh at-rest alignment. A GNSS outage over
+one second suppresses displayed motion. The production build without the
+development feature withholds these preliminary estimates. The compact filter
+assumes colocated IMU and antenna. Its build-time sensor-to-body quaternion
+and timing uncertainty are exposed in status.
+Starting a recording resets driving metrics and keeps the live estimator warm.
+The receiver time of week advances the local GNSS measurement clock. A PPS map
+captured with the observation disciplines its offset. During PPS outages the
+estimator uses the last measured transport delay and the receipt clock. Offset
+corrections are bounded so the time base stays continuous through PPS generation
+changes. A discrepancy greater than 300 ms interrupts the run and realigns.
+The SD record preserves the original timing evidence for each fix.
+With continuous IMU support, a GNSS outage during launch preserves tilt.
+Fresh fixes restore speed output, and subsequent acceleration can establish yaw.
 
-The engine preflight declares 28,608 bytes of hot SRAM, a 32 KiB stack contract,
-and 2,242,672 bytes of PSRAM. Firmware reserves a physical 64 KiB worker stack
-because historical hardware preflight exceeded 32 KiB. This allocation is not a
-measured high-water bound. This RTOS does not save floating-point task context:
-CPU1 has one floating-point worker and integer-only idle/storage/interrupt paths.
+Firmware reserves a 64 KiB CPU1 worker stack shared by storage and navigation.
+This RTOS does not save floating-point task context. CPU1 has one floating-point
+worker, and the idle and interrupt paths use integer operations.
 CPU0 acquires and validates native IMU intervals in a priority-2 interrupt
 executor, using 8 MHz SafeSPI and a table implementation of the same CRC8.
 GNSS UART/configuration, integer SPP/PPS decoding and bounded raw-byte copies run
 at priority 1; GPIO wakes IMU
 acquisition at priority 3. These paths are integer-only: the SDK interrupt entry
-does not preserve floating-point registers. Bounded channels hold 32 IMU
-intervals, four parsed SPP observations, and 8,192 packed COM1 bytes including
+does not preserve floating-point registers. Bounded channels hold 256 IMU
+intervals, 24 parsed SPP observations, and 16,384 packed COM1 bytes including
 per-read metadata. Ordinary context decodes PPK, scales samples and publishes
 them. Raw reads retain their original MCU receipt timestamps; SPP/PPS timing is
 captured in the integer receiver. Losses reset the affected stream's decoder
@@ -91,7 +100,8 @@ deadline and retains the hardware bus timeout.
 
 The PPK stream uses native Unicore OBSVMB at a requested 5 Hz plus GPS, GLONASS,
 BeiDou, Galileo, QZSS and NavIC ephemerides on change. Start explicitly requests
-one-shot cached ephemerides before restoring change subscriptions; simply
+one-shot cached ephemerides and restores change subscriptions one constellation
+at a time, spaced 800 ms apart. Simply
 re-registering ONCHANGED did not replay the cache in the indoor bench test.
 Raw bytes are preserved in
 SD kind-25 fragments, including receiver header/epoch and CRC; they are retrieved
@@ -139,8 +149,21 @@ ESP32-S31 BLE controller. During two sets of 25 Bluetooth reads on the bench,
 the IMU ran at 733–735 Hz and GNSS at about 50 Hz. The receiver reported one
 IMU error and zero SD queue drops. The 18 November revision missed IMU capture
 deadlines with PSRAM active. The controller uses an additional 80 KiB internal
-heap. The delayed GNSS measurement queue shares the PSRAM history workspace at its
-original capacity. [Pinned S31 driver](https://github.com/esp-rs/esp-hal/tree/b46965413093d7b91a35ddcb5579b4579af9d624/esp-radio/src/ble/btdm2)
+heap. [Pinned S31 driver](https://github.com/esp-rs/esp-hal/tree/b46965413093d7b91a35ddcb5579b4579af9d624/esp-radio/src/ble/btdm2)
+
+On 21 November 2026 a stationary V2 Mini supplied 300 fused BLE reads in
+59.74 seconds while recording. Its IMU ran at 727.0 Hz and GNSS at 50.0 Hz.
+The 60.08-second SD file contained 43,679 native IMU intervals with continuous
+support, 3,004 GNSS records and 299 periodic snapshots plus a terminal summary.
+The first SD snapshot preceded the first in-window motion estimate. The
+navigation and SD queues reported zero drops. The separate raw PPK/command
+port reported 12 UART errors. Thirteen successful charger readings averaged
+1.59 W at the USB input during recording, with seven failed power polls.
+[Plugged-in power measurements](../data/v2-mini-driving-estimator-power-2026-11-21.csv)
+
+The [subsequent validation record](../data/v2-mini-driving-readiness-2026-11-21.md)
+covers the release image, stationary recordings, raw SD losses, power measurements
+and moving estimator replays.
 
 The app reads a display snapshot at 5 Hz and can start or stop an SD recording.
 A lost Bluetooth connection leaves the receiver recording and available for

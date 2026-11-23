@@ -25,15 +25,16 @@ pub(super) fn trajectory_knot(
     observability: ObservabilityReport,
 ) -> Result<TrajectoryKnot, StepError> {
     let projection = project_nav_state(endpoint.state, anchor, quality, observability)?;
+    let specific_force_b = endpoint.specific_force_b - endpoint.state.accel_bias_b;
     Ok(TrajectoryKnot {
         time: endpoint.state.time,
         position_ecef: projection.position,
         velocity_ecef: projection.velocity,
         orientation_ecef_from_body: projection.orientation_ecef_from_body,
         specific_force_body: BodyVector::from_components([
-            endpoint.specific_force_b.x as f64,
-            endpoint.specific_force_b.y as f64,
-            endpoint.specific_force_b.z as f64,
+            specific_force_b.x as f64,
+            specific_force_b.y as f64,
+            specific_force_b.z as f64,
         ])
         .map_err(StepError::InvalidObservation)?,
         covariance: kinematic_covariance(endpoint.covariance, anchor)?,

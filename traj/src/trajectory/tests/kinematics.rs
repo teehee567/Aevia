@@ -357,3 +357,23 @@ fn unavailable_angular_acceleration_is_never_published_as_numeric_zero() {
         FieldValue::Unavailable(UnavailableReason::UnsupportedAtProcessingLevel)
     );
 }
+
+#[test]
+fn driving_window_clips_corrected_segments_and_projects_horizontal_speed() {
+    use crate::trajectory::driving::DrivingRun;
+    let path = trajectory();
+    let t = SessionTime::from_ns(500_000_000);
+    let state = path
+        .driving_estimate(t, ReferencePointId::new(1), false)
+        .unwrap();
+    assert!((state.speed_mps - 10.).abs() < 1e-8);
+    assert!((state.course_deg.unwrap() - 90.).abs() < 1e-6);
+    assert!(state.heading_deg.is_none() && state.vehicle_g.is_none());
+    let mut run = DrivingRun::new(0., 30., 400., false);
+    run.advance(
+        &path,
+        crate::time::TimeSpan::new(SessionTime::from_ns(200_000_000), t).unwrap(),
+    )
+    .unwrap();
+    assert!((run.totals.distance_m - 3.).abs() < 1e-8);
+}

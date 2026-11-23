@@ -544,9 +544,43 @@ void main() {
     expect(find.text('108'), findsNothing);
     pending.complete(jsonEncode({'ok': true, 'data': fresh}));
     await tester.pumpAndSettle();
-    expect(find.text('LIVE · VALID FIX'), findsOneWidget);
+    expect(find.text('LIVE · FUSED'), findsOneWidget);
     expect(find.text('108'), findsOneWidget);
     await tester.pumpWidget(const SizedBox.shrink());
+  });
+  testWidgets('live speed remains visible through limited motion sources', (
+    tester,
+  ) async {
+    final backend = FakeBackend();
+    final live = {
+      'valid': true,
+      'stale': false,
+      'age_ms': 40,
+      'speed_mps': 15,
+      'degraded': true,
+      'motion_source': 'gnss',
+      'imu_clipping': true,
+    };
+    backend.state['device'] = {'connected': true};
+    backend.state['live'] = live;
+    final c = await mount(tester, backend);
+    expect(find.text('LIVE · GPS ONLY'), findsOneWidget);
+    expect(find.text('IMU CLIPPING'), findsOneWidget);
+    expect(find.text('54'), findsOneWidget);
+    live['imu_clipping'] = false;
+    for (final (mode, label) in [
+      ('inertial', 'LIVE · IMU COASTING'),
+      ('held', 'LIVE · LAST READING'),
+      ('fused', 'LIVE · FUSED'),
+    ]) {
+      live['motion_source'] = mode;
+      live['degraded'] = mode != 'fused';
+      await c.poll();
+      await tester.pump();
+      expect(find.text(label), findsOneWidget);
+      expect(find.text('54'), findsOneWidget);
+      expect(find.text('IMU CLIPPING'), findsNothing);
+    }
   });
   test(
     'failed polling invalidates cached values until a fresh response',
@@ -828,50 +862,159 @@ void main() {
     },
   );
 
-  testWidgets('live G-meter reads the receiver on a desk without a GNSS fix', (
-    tester,
-  ) async {
-    final backend = FakeBackend();
-    final sample = <String, dynamic>{
-      'valid': true,
-      't_us': 1000000,
-      'accel': [0, 0, 9.80665],
-    };
-    final imu = <String, dynamic>{'age_us': 3000, 'latest': sample};
-    backend.state['device'] = {
-      'connected': true,
-      'fix_quality': 'no fix',
-      'imu': imu,
-    };
-    backend.state['live'] = {'valid': false, 'age_ms': 6000, 'stale': false};
-    final controller = await mount(tester, backend, size: const Size(390, 844));
+  testWidgets(
+    'Bluetooth battery rate, ETA and charging limits reach Live and Diagnostics',
+    (tester) async {
+      final backend = FakeBackend();
+      final battery = <String, dynamic>{
+        'percent': 80,
+        'status': 'charging',
+        'rate_percent_per_hour': 10.0,
+        'power_source': 'external',
+        'charge_stage': 'constant_current',
+        'temperature_zone': 'normal',
+        'millivolts': 3970,
+        'temperatures_c': [39, -4, 48],
+      };
+      final device = <String, dynamic>{
+        'connected': true,
+        'transport': 'Bluetooth',
+        'battery_percent': 80,
+        'diagnostics_stale': true,
+        'battery_age_ms': 250,
+        'battery_detail_supported': true,
+        'battery_ttl_ms': 7000,
+        'battery': battery,
+      };
+      backend.state['device'] = device;
+      final c = await mount(tester, backend);
+      expect(
+        find.text('Charging · +10.0 %/h · ≈2h 0m to full at this rate'),
+        findsOneWidget,
+      );
+      expect(c.batteryTimeLeft, isNull);
 
-    expect(controller.valid, isFalse);
-    expect(find.text('G-meter'), findsOneWidget);
-    expect(find.text('X  0.00 g'), findsOneWidget);
-    expect(find.text('Z  1.00 g'), findsOneWidget);
+      battery['temperature_zone'] = 'warm';
+      await c.poll();
+      await tester.pump();
+      expect(c.batteryTimeToFull, isNull);
+      expect(
+        find.textContaining('Warm · full-charge ETA unavailable'),
+        findsOneWidget,
+      );
 
-    sample['accel'] = [4.903325, -2.4516625, 8.5];
-    sample['t_us'] = 1200000;
-    await controller.poll();
-    await tester.pump();
-    expect(find.text('X  0.50 g'), findsOneWidget);
-    expect(find.text('Y  -0.25 g'), findsOneWidget);
-    expect(tester.widget<LiveGMeter>(find.byType(LiveGMeter)).trail.length, 2);
-    await controller.poll();
-    expect(controller.gTrail.length, 2);
-    sample['t_us'] = 4300000;
-    await controller.poll();
-    expect(controller.gTrail.length, 1);
+      battery.addAll({
+        'status': 'battery',
+        'power_source': 'battery',
+        'charge_stage': 'not_charging',
+        'rate_percent_per_hour': -20.0,
+      });
+      await c.poll();
+      await tester.pump();
+      expect(c.batteryTimeLeft, const Duration(hours: 4));
+      await tester.tap(find.text('Diagnostics'));
+      await tester.pumpAndSettle();
+      expect(find.text('3.970 V'), findsOneWidget);
+      expect(find.text('39 °C'), findsOneWidget);
+      expect(find.text('-4 °C'), findsOneWidget);
+      expect(find.text('48 °C'), findsOneWidget);
+      expect(find.text('-20.0 %/h'), findsOneWidget);
+      expect(find.text('≈4h 0m'), findsOneWidget);
+      device['battery_age_ms'] = 8000;
+      await c.poll();
+      await tester.pump();
+      expect(find.text('-20.0 %/h'), findsNothing);
+      expect(find.text('48 °C'), findsNothing);
+      expect(c.batteryTimeLeft, isNull);
+    },
+  );
+  test(
+    'charge-time forecast requires a rising gauge, active charger, and headroom',
+    () {
+      final c = AeviaController(FakeBackend().request, autoPoll: false);
+      void sample(int percent, double rate, String stage) {
+        c.state = {
+          'device': {
+            'connected': true,
+            'transport': 'USB',
+            'battery_percent': percent,
+            'battery': {
+              'rate_percent_per_hour': rate,
+              'status': 'charging',
+              'power_source': 'external',
+              'temperature_zone': 'normal',
+              'charge_stage': stage,
+            },
+          },
+          'live': {'stale': false},
+        };
+      }
 
-    imu['age_us'] = 1500000;
-    await controller.poll();
-    await tester.pump();
-    expect(find.text('X  0.50 g'), findsNothing);
-    expect(find.text('Waiting for fresh accelerometer data'), findsOneWidget);
-    expect(controller.gTrail, isEmpty);
-    expect(tester.takeException(), isNull);
-  });
+      sample(90, 5, 'taper');
+      expect(c.batteryTimeToFull, const Duration(hours: 2));
+      sample(100, 5, 'top_off');
+      expect(c.batteryTimeToFull, isNull);
+      sample(90, 0, 'taper');
+      expect(c.batteryTimeToFull, isNull);
+      sample(90, -5, 'taper');
+      expect(c.batteryTimeToFull, isNull);
+      expect(c.batteryTimeLeft, isNull);
+      sample(90, 5, 'not_charging');
+      expect(c.batteryTimeToFull, isNull);
+      c.dispose();
+    },
+  );
+  testWidgets(
+    'G-meter requires fresh fused vehicle axes even with raw IMU data',
+    (tester) async {
+      final backend = FakeBackend();
+      backend.state['device'] = {
+        'connected': true,
+        'fix_quality': 'no fix',
+        'imu': {
+          'age_us': 3000,
+          'latest': {
+            'valid': true,
+            't_us': 1000000,
+            'accel': [5, -3, 9.81],
+          },
+        },
+      };
+      final live = <String, dynamic>{
+        'valid': false,
+        'age_ms': 50,
+        'stale': false,
+      };
+      backend.state['live'] = live;
+      final controller = await mount(
+        tester,
+        backend,
+        size: const Size(390, 844),
+      );
+      expect(find.text('Waiting for vehicle alignment'), findsOneWidget);
+      expect(controller.gTrail, isEmpty);
+      live.addAll({
+        'valid': true,
+        'speed_mps': 12.0,
+        'epoch_us': 1200000,
+        'accel_long_g': 0.5,
+        'accel_lat_g': -0.25,
+      });
+      await controller.poll();
+      await tester.pump();
+      expect(find.text('Longitudinal  0.50 g'), findsOneWidget);
+      expect(find.text('Lateral  -0.25 g'), findsOneWidget);
+      expect(controller.gTrail.single.x, 0.25);
+      await controller.poll();
+      expect(controller.gTrail.length, 1);
+      live['stale'] = true;
+      await controller.poll();
+      await tester.pump();
+      expect(controller.gTrail, isEmpty);
+      expect(find.text('Lateral  -0.25 g'), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('stale fix hides numerical speed and recovery cannot connect', (
     tester,
@@ -1298,82 +1441,78 @@ void main() {
     }
   });
 
-  testWidgets(
-    'large board directories build only visible recording rows',
-    (tester) async {
-      final backend = FakeBackend();
-      backend.state['device'] = {
-        'connected': true,
-        'transport': 'USB',
-        'port': 'COM1',
-      };
-      backend.deviceSessions = [
-        for (var id = 1; id <= 250; id++)
-          {'id': id, 'bytes': 512, 'closed': true},
-      ];
-      final c = await mount(tester, backend);
-      c.navigate(AeviaController.boardPage);
-      await tester.pumpAndSettle();
-      await c.refreshDeviceSessions();
-      await tester.pumpAndSettle();
-      final rows = find
-          .text('Download & analyze', skipOffstage: false)
-          .evaluate()
-          .length;
-      expect(rows, lessThan(25));
-      final list = tester
-          .state<ScrollableState>(
-            find
-                .descendant(
-                  of: find.byKey(const PageStorageKey('workspace-8')),
-                  matching: find.byType(Scrollable),
-                )
-                .first,
-          )
-          .position;
-      final refresh = tester.widget(
-        find.widgetWithText(OutlinedButton, 'Refresh'),
-      );
-      await c.poll();
-      await tester.pump();
-      expect(
-        tester.widget(find.widgetWithText(OutlinedButton, 'Refresh')),
-        same(refresh),
-      );
-      final overList = tester.getCenter(find.text('Recording 250'));
-      Future<void> wheel(double dy) => tester.sendEventToBinding(
-        PointerScrollEvent(
-          position: overList,
-          kind: PointerDeviceKind.mouse,
-          scrollDelta: Offset(0, dy),
-        ),
-      );
-      await wheel(120);
-      expect(list.pixels, closeTo(72, .01));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 20));
-      expect(list.pixels, inExclusiveRange(0, 120));
-      await wheel(120);
-      await tester.pumpAndSettle();
-      expect(list.pixels, closeTo(240, 0.01));
-      await wheel(5);
-      expect(list.pixels, closeTo(245, 0.01));
-      tester.platformDispatcher.accessibilityFeaturesTestValue =
-          const FakeAccessibilityFeatures(disableAnimations: true);
-      addTearDown(
-        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
-      );
-      await tester.pump();
-      await wheel(120);
-      expect(list.pixels, closeTo(365, 0.01));
-      list.jumpTo(list.maxScrollExtent);
-      await tester.pumpAndSettle();
-      expect(find.text('Recording 1'), findsOneWidget);
-      expect(
-        backend.calls.where((q) => q['op'] == 'device_sessions'),
-        hasLength(1),
-      );
-    },
-    variant: TargetPlatformVariant.only(TargetPlatform.windows),
-  );
+  testWidgets('large board directories build only visible recording rows', (
+    tester,
+  ) async {
+    final backend = FakeBackend();
+    backend.state['device'] = {
+      'connected': true,
+      'transport': 'USB',
+      'port': 'COM1',
+    };
+    backend.deviceSessions = [
+      for (var id = 1; id <= 250; id++)
+        {'id': id, 'bytes': 512, 'closed': true},
+    ];
+    final c = await mount(tester, backend);
+    c.navigate(AeviaController.boardPage);
+    await tester.pumpAndSettle();
+    await c.refreshDeviceSessions();
+    await tester.pumpAndSettle();
+    final rows = find
+        .text('Download & analyze', skipOffstage: false)
+        .evaluate()
+        .length;
+    expect(rows, lessThan(25));
+    final list = tester
+        .state<ScrollableState>(
+          find
+              .descendant(
+                of: find.byKey(const PageStorageKey('workspace-8')),
+                matching: find.byType(Scrollable),
+              )
+              .first,
+        )
+        .position;
+    final refresh = tester.widget(
+      find.widgetWithText(OutlinedButton, 'Refresh'),
+    );
+    await c.poll();
+    await tester.pump();
+    expect(
+      tester.widget(find.widgetWithText(OutlinedButton, 'Refresh')),
+      same(refresh),
+    );
+    final overList = tester.getCenter(find.text('Recording 250'));
+    Future<void> wheel(double dy) => tester.sendEventToBinding(
+      PointerScrollEvent(
+        position: overList,
+        kind: PointerDeviceKind.mouse,
+        scrollDelta: Offset(0, dy),
+      ),
+    );
+    await wheel(120);
+    expect(list.pixels, closeTo(72, .01));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 20));
+    expect(list.pixels, inExclusiveRange(0, 120));
+    await wheel(120);
+    await tester.pumpAndSettle();
+    expect(list.pixels, closeTo(240, 0.01));
+    await wheel(5);
+    expect(list.pixels, closeTo(245, 0.01));
+    tester.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
+    await tester.pump();
+    await wheel(120);
+    expect(list.pixels, closeTo(365, 0.01));
+    list.jumpTo(list.maxScrollExtent);
+    await tester.pumpAndSettle();
+    expect(find.text('Recording 1'), findsOneWidget);
+    expect(
+      backend.calls.where((q) => q['op'] == 'device_sessions'),
+      hasLength(1),
+    );
+  }, variant: TargetPlatformVariant.only(TargetPlatform.windows));
 }

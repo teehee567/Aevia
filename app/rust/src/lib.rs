@@ -1,10 +1,11 @@
 pub mod api;
 mod binary;
-mod board_recording;
 #[cfg(any(windows, target_os = "ios"))]
 mod ble;
+mod board_recording;
 #[path = "../../../firmware/src/display.rs"]
 mod display;
+mod driving;
 mod evidence;
 mod frb_generated;
 mod legacy;

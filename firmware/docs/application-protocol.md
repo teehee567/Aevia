@@ -18,15 +18,15 @@ Requests are at most 240 UTF-8 bytes; ordinary control requests have one `op` fi
 {"op":"stop"}
 ```
 
-`start` is idempotent while recording. It first opens the SD file and rearms
-navigation, with a ten-second deadline, then admits the recording. Allow twelve
+`start` is idempotent while recording. It first opens the SD file, with a ten-second deadline, then admits the recording. Allow twelve
 seconds for Start and Stop replies. A failed preparation cancels admission; it
 cannot start later after reporting failure. A new recording clears queued preview
 samples, resets the overflow count and increments the session number. Nullable
 `started_at_us` records that transition and survives idempotent starts and stops;
 it changes only on a new recording. `stop`
-does not clear queued USB samples and waits for the SD queue and final page to
-flush, or returns a timeout. Nullable `stopped_at_us` records the MCU time of
+preserves queued USB samples and reports success after the SD queue drains and
+the final page flushes. A storage fault or timeout returns an error. Nullable
+`stopped_at_us` records the MCU time of
 the recording-to-stopped transition, before waiting for that flush. It remains
 unchanged across repeated stops and is cleared by the next new start. Hosts
 must use this boundary to exclude preview samples produced during the flush;
@@ -37,8 +37,7 @@ to 8,192 JSON bytes plus framing. `ok:false` includes a human-readable `error`.
 USB uses 4,096 PSRAM samples after successful startup/promotion, with an explicit
 128-sample internal fallback. `usb_queue` reports `backing`, `capacity`, `pending`,
 `psram_tested` and nullable `error`. SD queues 384 sensor samples and 32 raw chunks.
-A new recording also rearms the
-development navigation session and selects timing from its first valid fix.
+Starting a recording resets its driving metrics. Navigation stays warm across recording boundaries. The driving estimator uses advancing receiver epochs and bounds time corrections across PPS outages and reacquisition. Status reports PPS, holdover, or arrival-based development timing.
 
 Full responses advertise `compact_poll:true`. Supported hosts should use `drain`
 for streaming and request full `status` about once per second. `drain` returns
@@ -128,7 +127,7 @@ transmission yields after eight 512-byte packets;
 sensor interrupt executors remain preemptive during these bounded groups.
 `gnss_uart` reports counted UART read errors and last error/port/time. Its
 `queue_dropped` counts complete parsed SPP observations lost between integer
-acquisition and ordinary publication. `gnss_byte_queue` reports `capacity_bytes:8192`,
+acquisition and ordinary publication. `gnss_byte_queue` reports `capacity_bytes:16384`,
 `queued_bytes` (including packed headers), `queued_reads`, `published_sequence`,
 and per-port `data`/`command` objects with `generation`, `dropped_reads` and
 `dropped_bytes`. Only COM1 command/raw reads use this queue; COM2 SPP/PPS is
@@ -213,9 +212,48 @@ measured vehicle boresight or qualified filter delay. They are not vehicle G.
 
 `battery` reports status plus nullable percent/millivolts, nullable
 `charger_error`/`gauge_error`, charger `faults` and cumulative `errors`.
+`rate_percent_per_hour` is the signed average rate of change of SOC reported by
+the MAX17048. Positive values indicate rising SOC. A usable rate requires a settled
+gauge with valid SOC. `power_source` is `external` or `battery` when the charger's
+VBUS status agrees with its power-good pin. `charge_stage` is `not_charging`,
+`constant_current`, `taper` or `top_off`. Constant current includes trickle,
+precharge and fast charge. The charger combines idle and terminated in
+`not_charging`. `temperature_zone` decodes the charger's TS thermistor
+status. It can report warm, cool, or a sensor fault without measuring a
+temperature in degrees. `battery.temperatures_c` is an array of whole-degree
+Celsius readings in charger die, IMU, then processor order. The IMU and
+processor take a single sample each every ten seconds. Unavailable readings
+are null. A fresh charger ADC conversion also reports `charger_temperature_c`
+in its response and makes that reading available in status for up to 30
+seconds on external power.
+`{"op":"power"}` returns `measurement.at_us` on the board clock, the raw
+`charger_part`, and a `configuration` object read from the identified charger.
+Its fields are `charge_current_limit_ma`, `termination_current_ma`,
+`termination_enabled`, `regulation_voltage_mv`, `watchdog_seconds` (0 means
+disabled) and `mode` (`host` or `default` before any ADC conversion).
+The voltage and current limits are the configured values before thermal or
+input regulation.
+
+With an enabled charger watchdog, `power` performs only register reads and
+returns `adc:null` with `adc_unavailable_reason:"watchdog-enabled"`. With
+external power and a disabled watchdog it takes one fresh ADC sample. Without
+external power the reason is `external-power-unavailable`.
+
+`{"op":"power_sample"}` explicitly requests a fresh conversion on external
+power even with the watchdog enabled. Use this for bench diagnostics. The ADC
+control write can start host mode. An enabled watchdog subsequently expiring
+halves the programmed charge current, even after ADC control is restored.
+Repeated bench samples across expiry cycles can reduce the current to its
+minimum. [TI charger watchdog behavior, section 8.4.1](https://www.ti.com/lit/ds/symlink/bq25622e.pdf#page=30)
+
+A successful conversion returns `adc_unavailable_reason:null` and
+`measurement.adc` with `input_mv`, `input_ma`, `battery_mv` and
+`battery_ma`. Positive battery current indicates charging. Battery current
+is nullable if its direction changes during conversion. Input voltage times
+current includes power used for charging.
 `buttons` is a nullable
 four-bit pressed mask. A missing gauge must not be displayed as zero charge.
-`storage:sd-exfat-and-usb-host` and `bluetooth:ble-display-v1` describe this build's
+`storage:sd-exfat-and-usb-host` and `bluetooth:ble-display-v2` describe this build's
 capabilities. `sd` contains state, error, capacity_bytes, file_id, written_pages,
 dropped, pending, raw_pending, raw_dropped, and closed. Start requires writable
 SD readiness. A later SD fault does not stop the already-running USB stream.
@@ -225,8 +263,9 @@ the reason; USB and sensor acquisition remain available.
 false for the connected hardware. `navigation.qualified` is always false for
 this profile. `phase`, `timing`, nullable `speed_mps`/`position_ecef_m`, epoch,
 accepted/fused/rejected counts, queue drops and maximum step duration report the
-actual worker. `metrics:unavailable-unqualified-root-profile` and null `drag`
-entries mean device metric qualification is unavailable. `installation` exposes
+actual worker. `imu_bridged` counts short IMU gaps interpolated by the current
+driving estimator. `metrics:preliminary-driving` identifies the driving timings
+in `navigation.driving`. The qualified `drag` entries remain null. `installation` exposes
 the build's quaternion, lever arm and timing prior. `capture_timing` reports
 verified PPS configuration, lock/age/residual/generation and rejection counts.
 
@@ -292,19 +331,44 @@ navigation data and satellite reception; indoor empty frames cannot produce a so
 
 ## Display snapshots and batched file reads
 
-A full status advertises `display_v1: true`. The `display` command returns
-`{"ok":true,"d":"<base64>"}`. Decode the field using standard padded Base64
-and deserialize a Postcard `DisplayFrame`. The shared schema in
-[`display.rs`](../src/display.rs) defines field order, units and optional values.
-Sensor timestamps are receipt/capture times in microseconds on the device clock.
-The app checks individual observation ages. A change in the rejected-fix
-counter breaks interpolation across omitted invalid GNSS epochs.
+A full status advertises `display_v2: true`. The `display` command returns
+`{"ok":true,"d2":"<base64>"}`. Decode the padded Base64 field as the shared
+Postcard `DrivingFrame`. Its motion epoch is the corrected trajectory time in
+microseconds on the board clock. Speed is fused horizontal speed at the IMU.
+Vehicle G is signed forward, left and up, with gravity removed. It requires
+confirmed rigid mounting and observable tilt. Body heading and course over
+ground have independent availability. Missing estimates are encoded as absent.
+[Wire schema](../src/display.rs)
 
-Display mode takes the latest GNSS fix and accelerometer reading directly from
-acquisition. It disables the raw USB queue and clears its backlog. SD writes
-and the onboard estimator continue independently. `start_display` starts an SD
-recording with this transport. `start`, `poll` and the raw drain commands
-enable raw USB queuing again. Use a single transport owner per receiver.
+When GNSS position uncertainty exceeds the driving estimator's threshold,
+valid Doppler and IMU samples can still supply live fused speed. The frame
+sets `motion.degraded` for this interval. The estimator propagates position
+until a usable fix returns and interrupts lap and drag timing across the gap.
+The live preview can also coast on the IMU for up to two seconds from the
+last accepted Doppler epoch, show a fresh GNSS-only reading while IMU fusion
+recovers, or hold the last reading for up to 500 ms from its original
+epoch. These sources are excluded from on-device timing and from the SD
+driving snapshots. USB status labels them in `navigation.motion_source`.
+The USB `display` response carries the same source alongside `d2`.
+
+The frame contains the current device/session clock, recording state, battery,
+GNSS and IMU counters, satellite/fix diagnostics and preliminary timing results.
+Traj computes gate and drag crossings between corrected knots on the device.
+A display read leaves the raw USB queue alone. `start_display` records native
+evidence to SD. Each SD part starts with kind 27 records containing the committed
+Postcard `Configure::Begin` and its `Gate` entries. Kind 26 stores the same
+Postcard `DrivingFrame` as the display, at roughly 5 Hz. Its header epoch equals
+`uptime_us` in nanoseconds. An unaligned frame carries absent motion. The last
+part includes a terminal frame at the stop epoch with final timings and absent
+motion, followed by the normal close record. `start` also enables raw USB preview.
+
+Send `{"op":"configure_drive","drive":{"Mount":{"confirmed":true}}}` to
+confirm alignment while idle. Before a run send a `Begin` with speed targets
+in hundredths of km/h, distance in mm, rollout, mounting and gate count.
+Send `Gate` entries in order, starting at index zero. Coordinates are in
+1e-7 degrees, bearing in hundredths of a degree and width in cm. Gate zero
+is start/finish. The final gate commits the configuration. Settings last
+until reconfiguration or power off.
 
 A receiver advertising `read_blocks: 8` accepts
 `{"op":"read_blocks","id":12,"sector":0,"count":8}` for a closed file.
@@ -316,12 +380,38 @@ whole request. Existing clients can continue using the single-sector `read`.
 ## Bluetooth LE
 
 The foreground client discovers service `cf2c0001-183e-4cd6-a712-c719ac51bd52`.
-Both characteristics use the same UUID suffix.
+The characteristics use the same UUID suffix.
 
 | Characteristic UUID prefix | Operation | Payload |
 | --- | --- | --- |
-| `cf2c0002` | Read | Raw postcard `DisplayFrame` from `src/display.rs`. Poll at 5 Hz. Long-read continuations use the same snapshot. |
+| `cf2c0004` | Read | Postcard `DrivingFrame` from `src/display.rs`. Poll at 5 Hz. Long-read continuations use the same snapshot. |
 | `cf2c0003` | Write with response | One byte. `1` starts SD recording. `0` stops it and waits for the file to close. Invalid commands and failed operations return a GATT error. |
+| `cf2c0005` | Write with response | Postcard `Configure` command while idle, or four ASCII bytes `BAT1`, `BAT2`, or `BAT3` to opt into extended live details for this connection. |
+
+A successful `BAT1` write enables a battery trailer on the next initial display
+read and the first initial read after each five-second interval. The value
+starts with the ordinary Postcard `DrivingFrame` (at most 208 bytes). A trailer
+contains four ASCII bytes `BAT1` and one Postcard `BatteryTelemetry` (at most
+20 bytes), giving a 232-byte upper bound for the negotiated BLE value. Read
+Blob continuations retain the frozen value. Disconnect clears the opt-in.
+Older firmware rejects the opt-in write and continues returning plain frames.
+
+`BAT2` uses the same cadence and battery payload, with a `BAT2` tag and
+three additional bytes in charger die, IMU, then processor order. A byte
+is the whole Celsius reading plus 55. The value 255 means unavailable.
+The upper bound is 235 bytes. Existing `BAT1` clients keep their 232-byte
+bound.
+
+`BAT3` adds one source byte at the end of every live frame, after the optional
+`BAT2` trailer. Source codes are 0 waiting, 1 fused, 2 fused with weak position,
+3 IMU coasting, 4 GNSS only, and 5 holding the last reading. The maximum frame
+size is 236 bytes. The app retries `BAT2` and then `BAT1` on older receivers.
+
+`BAT4` reserves bit 7 of that same source byte for recent IMU saturation
+or an out-of-calibration-range sample. The lower seven bits carry the source.
+The bit stays set for two seconds after the latest clipping event. USB
+`status` and `display` report the flag as `imu_clipping`. The app tries
+`BAT4` before the other settings writes.
 
 The receiver accepts one client without pairing. A dropped connection leaves SD recording active.
 Full diagnostics, raw sample drains and file downloads use USB.

@@ -57,6 +57,18 @@ ThemeData aeviaTheme() => ThemeData(
 
 String number(dynamic value, [int digits = 1]) =>
     value is num && value.isFinite ? value.toStringAsFixed(digits) : '—';
+String? estimatedBatteryTime(Duration? duration) {
+  if (duration == null) return null;
+  final minutes = duration.inMinutes;
+  if (minutes == 0) return '<1 min';
+  if (minutes < 60) return '≈$minutes min';
+  return '≈${duration.inHours}h ${minutes % 60}m';
+}
+
+String? signedBatteryRate(double? rate) => rate == null
+    ? null
+    : '${rate > 0 ? '+' : ''}${rate.toStringAsFixed(1)} %/h';
+
 String elapsed(dynamic value) {
   if (value is! num || !value.isFinite) return '—';
   final minutes = value ~/ 60;

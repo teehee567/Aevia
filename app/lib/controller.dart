@@ -127,14 +127,6 @@ class AeviaController extends ChangeNotifier {
       connected &&
       !stale &&
       live['valid'] == true &&
-      ![
-        'none',
-        'invalid',
-        'no_fix',
-        'no fix',
-        'stale',
-        'unknown',
-      ].contains(device['fix_quality']?.toString().toLowerCase()) &&
       numeric(live['speed_mps']) != null;
 
   bool get receiverFresh =>
@@ -164,14 +156,75 @@ class AeviaController extends ChangeNotifier {
   final _batteryDrops = <({Duration at, int percent})>[];
   int? _previousPercent;
 
-  String? get batteryState =>
-      diagnosticsFresh ? object(device['battery'])['status']?.toString() : null;
+  Map<String, dynamic> get battery {
+    if (!receiverFresh) return {};
+    if (device.containsKey('battery_age_ms')) {
+      final age = numeric(device['battery_age_ms']);
+      if (age == null ||
+          age + _snapshotAgeMs > (numeric(device['battery_ttl_ms']) ?? 7000)) {
+        return {};
+      }
+    } else if (!diagnosticsFresh) {
+      return {};
+    }
+    return object(device['battery']);
+  }
 
-  bool get _canEstimateDischarge => switch (batteryState) {
-    'battery' || 'low' => true,
-    null => bluetooth, // Display frames carry only the gauge percentage.
-    _ => false,
+  double? get batteryPercent {
+    if (!receiverFresh) return null;
+    final value = numeric(device['battery_percent'] ?? battery['percent']);
+    return value != null && value >= 0 && value <= 100 ? value : null;
+  }
+
+  String? get batteryState => battery['status']?.toString();
+  double? get batteryRate => numeric(battery['rate_percent_per_hour']);
+
+  String? get chargeStageLabel => switch (battery['charge_stage']) {
+    'not_charging' => 'Not charging',
+    'constant_current' => 'Constant current',
+    'taper' => 'Taper charging',
+    'top_off' => 'Top-off',
+    _ => null,
   };
+
+  String? get temperatureZoneLabel => switch (battery['temperature_zone']) {
+    'normal' => 'Normal',
+    'warm' => 'Warm',
+    'hot' => 'Hot',
+    'cool' => 'Cool',
+    'precool' => 'Pre-cool',
+    'prewarm' => 'Pre-warm',
+    'cold_or_unpowered' => 'Cold or unpowered',
+    'bias_fault' => 'Thermistor bias fault',
+    _ => null,
+  };
+
+  Duration? get batteryTimeToFull {
+    final percent = batteryPercent, rate = batteryRate;
+    final charging = switch (battery['charge_stage']) {
+      'constant_current' || 'taper' || 'top_off' => true,
+      null => batteryState == 'charging',
+      _ => false,
+    };
+    if (!charging ||
+        battery['power_source'] != 'external' ||
+        battery['temperature_zone'] != 'normal' ||
+        percent == null ||
+        percent >= 100 ||
+        rate == null ||
+        rate <= 0) {
+      return null;
+    }
+    return Duration(minutes: ((100 - percent) * 60 / rate).round());
+  }
+
+  bool get _canEstimateDischarge =>
+      battery['power_source'] != 'external' &&
+      switch (batteryState) {
+        'battery' || 'low' => true,
+        null => bluetooth && device['battery_detail_supported'] != true,
+        _ => false,
+      };
 
   void _updateBatteryTrend() {
     final value = numeric(device['battery_percent']);
@@ -209,7 +262,13 @@ class AeviaController extends ChangeNotifier {
       (_now - _batteryDrops.last.at).inMilliseconds > 2 * _msPerPercent;
 
   Duration? get batteryTimeLeft {
-    if (!receiverFresh || _batteryDrops.length < 2) return null;
+    if (!receiverFresh || !_canEstimateDischarge) return null;
+    final rate = batteryRate, percent = batteryPercent;
+    if (rate != null) {
+      if (rate >= 0 || percent == null) return null;
+      return Duration(minutes: (percent * 60 / -rate).round());
+    }
+    if (_batteryDrops.length < 2) return null;
     final first = _batteryDrops.first, last = _batteryDrops.last;
     if (last.at - first.at < const Duration(minutes: 1) ||
         _dischargeTrendExpired) {
@@ -223,8 +282,8 @@ class AeviaController extends ChangeNotifier {
   static const gTrailDurationUs = 3000000;
 
   void _updateGTrail() {
-    final reading = imuAccelerationG;
-    final tUs = object(object(device['imu'])['latest'])['t_us'];
+    final reading = vehicleAccelerationG;
+    final tUs = live['epoch_us'];
     if (reading == null || tUs is! int) {
       _gTrail = const [];
       return;
@@ -236,31 +295,21 @@ class AeviaController extends ChangeNotifier {
         ..._gTrail
             .skip(_gTrail.length > 15 ? _gTrail.length - 15 : 0)
             .where((p) => tUs - p.tUs < gTrailDurationUs),
-      (tUs: tUs, x: reading.x, y: reading.y),
+      (tUs: tUs, x: -reading.lateral, y: reading.longitudinal),
     ]);
   }
 
-  ({double x, double y, double z})? get imuAccelerationG {
-    if (!sensorFresh('imu')) return null;
-    final sample = object(object(device['imu'])['latest']);
-    final acceleration = sample['accel'];
-    if (sample['valid'] != true ||
-        acceleration is! List ||
-        acceleration.length != 3) {
-      return null;
-    }
-    final x = numeric(acceleration[0]);
-    final y = numeric(acceleration[1]);
-    final z = numeric(acceleration[2]);
-    if (x == null || y == null || z == null) return null;
-
-    const standardGravity = 9.80665;
-    return (
-      x: x / standardGravity,
-      y: y / standardGravity,
-      z: z / standardGravity,
-    );
+  ({double lateral, double longitudinal})? get vehicleAccelerationG {
+    if (!valid) return null;
+    final lateral = numeric(live['accel_lat_g']);
+    final longitudinal = numeric(live['accel_long_g']);
+    if (lateral == null || longitudinal == null) return null;
+    return (lateral: lateral, longitudinal: longitudinal);
   }
+
+  Future<void> confirmMount(bool confirmed) => action(() async {
+    state = object(await request('mount', {'confirmed': confirmed}));
+  });
 
   void changed() {
     if (!_disposed) notifyListeners();

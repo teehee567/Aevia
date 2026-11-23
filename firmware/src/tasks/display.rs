@@ -62,9 +62,9 @@ pub async fn run(mut lcd: Lcd, mut backlight: Output<'static>, sclk: u32) {
                         12,
                         132,
                         if speed.is_some() {
-                            "GNSS FIX"
+                            "FUSED SPEED"
                         } else {
-                            "GNSS NO FIX"
+                            "NAV WAIT"
                         },
                         2,
                         if speed.is_some() { 0x07ff } else { 0xfd20 },
@@ -106,7 +106,7 @@ pub async fn run(mut lcd: Lcd, mut backlight: Output<'static>, sclk: u32) {
                 .await?;
                 backlight.set_high();
                 report("ready");
-                Timer::after_millis(250).await;
+                Timer::after_millis(200).await;
             }
         }
         .await;

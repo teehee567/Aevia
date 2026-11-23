@@ -1,140 +1,91 @@
-//! Bound initializer work to the lifetime of an accepted paired GNSS seed.
-
-use aevia_trajectory::observation::InputDisposition;
+//! Continuous mapping of receiver epochs to the IMU clock for development timing.
 
 #[derive(Default)]
-pub(super) struct InitializationGate {
-    oldest_seed_support_ns: Option<u64>,
-    expiry_observed: bool,
+pub(super) struct GnssClock {
+    last: Option<(u64, u64)>, // receiver milliseconds and local measurement microseconds
+    transport_delay_us: Option<u64>,
 }
 
-impl InitializationGate {
-    pub fn accepted_seed(&mut self, position_ns: u64, velocity_ns: u64) {
-        let oldest = position_ns.min(velocity_ns);
-        if self.oldest_seed_support_ns != Some(oldest) {
-            self.oldest_seed_support_ns = Some(oldest);
-            self.expiry_observed = false;
-        }
-    }
+pub(super) struct FixTime {
+    pub time_us: u64,
+    pub source: &'static str,
+    pub discontinuity: bool,
+}
 
-    pub fn permits_imu(&self, initializing: bool, support_ns: u64, maximum_age_ns: u64) -> bool {
-        if !initializing {
-            // An established navigation state must retain inertial propagation
-            // during a GNSS outage, including its degraded/dead-reckoning phase.
-            return true;
-        }
-        self.oldest_seed_support_ns.is_some_and(|seed| {
-            // A fresh GNSS update can lead the oldest queued IMU interval.
-            // Let the engine decide when that fix becomes usable; only stale
-            // evidence closes this gate. Feed the first expired real interval
-            // so the initializer itself evicts stale fixes and static means.
-            !self.expiry_observed || support_ns.saturating_sub(seed) <= maximum_age_ns
+impl GnssClock {
+    pub fn observe(&mut self, gps_ms: u64, received: u64, pps_us: Option<u64>) -> Option<FixTime> {
+        let elapsed = match self.last {
+            Some((gps, _)) if gps_ms <= gps => return None,
+            Some((gps, _)) => (gps_ms - gps).checked_mul(1000)?,
+            None => 0,
+        };
+        let pps = pps_us.filter(|t| *t <= received && received - *t <= 300_000);
+        let (target, source) = if let Some(epoch) = pps {
+            let delay = received - epoch;
+            self.transport_delay_us = Some(
+                self.transport_delay_us
+                    .map_or(delay, |old| (15 * old + delay) / 16),
+            );
+            (epoch, "pps-disciplined-development")
+        } else if let Some(delay) = self.transport_delay_us {
+            (received.saturating_sub(delay), "pps-holdover-development")
+        } else {
+            (received, "arrival-only-development")
+        };
+        let mut discontinuity = false;
+        let time_us = if let Some((_, previous)) = self.last {
+            // The receiver time of week advances through a PPS generation change.
+            // Bound clock slewing so changing the time reference cannot invent
+            // an abrupt velocity innovation or duplicate a measurement epoch.
+            let predicted = previous.checked_add(elapsed)?;
+            if predicted.abs_diff(target) > 300_000 {
+                discontinuity = true;
+                target
+            } else {
+                let slew = (elapsed / 100).clamp(1, 1000);
+                let correction = target.abs_diff(predicted).min(slew);
+                if target >= predicted {
+                    predicted + correction
+                } else {
+                    predicted - correction
+                }
+            }
+        } else {
+            target
+        };
+        self.last = Some((gps_ms, time_us));
+        Some(FixTime {
+            time_us,
+            source,
+            discontinuity,
         })
-    }
-
-    pub fn observe_imu_result(
-        &mut self,
-        initializing: bool,
-        support_ns: u64,
-        maximum_age_ns: u64,
-        disposition: Option<InputDisposition>,
-    ) {
-        if initializing
-            && matches!(
-                disposition,
-                Some(InputDisposition::InitializationOnly | InputDisposition::Fused)
-            )
-            && self
-                .oldest_seed_support_ns
-                .is_some_and(|seed| support_ns.saturating_sub(seed) > maximum_age_ns)
-        {
-            self.expiry_observed = true;
-        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    const AGE: u64 = 2_000_000_000;
-
     #[test]
-    fn no_seed_drains_raw_only_but_active_navigation_is_never_gated() {
-        let gate = InitializationGate::default();
-        assert!(!gate.permits_imu(true, 10 * AGE, AGE));
-        assert!(gate.permits_imu(false, 10 * AGE, AGE));
-    }
-
-    #[test]
-    fn expires_at_oldest_field_support_after_one_real_expiry_observation() {
-        let mut gate = InitializationGate::default();
-        gate.accepted_seed(10 * AGE, 9 * AGE);
-        assert!(gate.permits_imu(true, 10 * AGE, AGE));
-        gate.observe_imu_result(
-            true,
-            10 * AGE,
-            AGE,
-            Some(InputDisposition::InitializationOnly),
-        );
-        assert!(gate.permits_imu(true, 10 * AGE + 1, AGE));
-        gate.observe_imu_result(
-            true,
-            10 * AGE + 1,
-            AGE,
-            Some(InputDisposition::InitializationOnly),
-        );
-        assert!(!gate.permits_imu(true, 10 * AGE + 2, AGE));
-        assert!(gate.permits_imu(false, 100 * AGE, AGE));
-        // A duplicate support cannot repeatedly re-open an expired seed.
-        gate.accepted_seed(10 * AGE, 9 * AGE);
-        assert!(!gate.permits_imu(true, 10 * AGE + 2, AGE));
-    }
-
-    #[test]
-    fn queued_imu_before_a_new_seed_is_not_misclassified_as_stale() {
-        let mut gate = InitializationGate::default();
-        gate.accepted_seed(10 * AGE, 10 * AGE);
-        gate.observe_imu_result(
-            true,
-            12 * AGE,
-            AGE,
-            Some(InputDisposition::InitializationOnly),
-        );
-        assert!(!gate.permits_imu(true, 12 * AGE, AGE));
-        gate.accepted_seed(14 * AGE, 13 * AGE);
-        assert!(gate.permits_imu(true, 12 * AGE, AGE));
-        gate.observe_imu_result(
-            true,
-            12 * AGE,
-            AGE,
-            Some(InputDisposition::InitializationOnly),
-        );
-        assert!(gate.permits_imu(true, 14 * AGE, AGE));
-    }
-
-    #[test]
-    fn rejected_expiry_interval_does_not_claim_engine_observed_expiry() {
-        let mut gate = InitializationGate::default();
-        gate.accepted_seed(1, 1);
-        assert!(gate.permits_imu(true, 2 * AGE, AGE));
-        for disposition in [
-            None,
-            Some(InputDisposition::RetainedForOffline),
-            Some(InputDisposition::StatisticallyRejected),
-            Some(InputDisposition::TooLateForLive),
-            Some(InputDisposition::QueuedForFusion),
-            Some(InputDisposition::Downweighted),
-        ] {
-            gate.observe_imu_result(true, 2 * AGE, AGE, disposition);
-            assert!(gate.permits_imu(true, 2 * AGE + 1, AGE), "{disposition:?}");
+    fn clock_advances_during_pps_loss_and_reacquires_without_a_recording_restart() {
+        let mut c = GnssClock::default();
+        let first = c.observe(1000, 1_020_000, None).unwrap();
+        assert_eq!(first.source, "arrival-only-development");
+        let mut last = first.time_us;
+        for i in 1..=250 {
+            let t = 1_000_000 + i * 20_000;
+            let mapped = (!(101..=160).contains(&i)).then_some(t);
+            let f = c
+                .observe(1000 + i * 20, t + 17_000 + (i % 4) * 1200, mapped)
+                .unwrap();
+            assert!(!f.discontinuity && (19_800..=20_200).contains(&(f.time_us - last)));
+            if i == 150 {
+                assert_eq!(f.source, "pps-holdover-development");
+            }
+            last = f.time_us;
         }
-        gate.observe_imu_result(
-            true,
-            2 * AGE + 1,
-            AGE,
-            Some(InputDisposition::InitializationOnly),
-        );
-        assert!(!gate.permits_imu(true, 2 * AGE + 2, AGE));
+        assert!(last.abs_diff(6_000_000) < 1000);
+        assert!(c.observe(6000, 6_020_000, None).is_none());
+        let jumped = c.observe(6020, 7_000_000, None).unwrap();
+        assert!(jumped.discontinuity);
     }
 }

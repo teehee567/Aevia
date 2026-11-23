@@ -12,7 +12,7 @@ pub(super) const MAX_GNSS_AGE_NS: u64 = 2_000_000_000;
 
 pub(super) const FUSION_DELAY: DurationNs = DurationNs::from_ns(100_000_000);
 pub(super) const SMOOTHING_LAG: DurationNs = DurationNs::from_ns(20_000_000);
-pub(super) const SNAPSHOT_INTERVAL_US: u64 = 100_000;
+pub(super) const SNAPSHOT_INTERVAL_US: u64 = 200_000;
 
 #[cfg(any(target_arch = "riscv32", test))]
 pub(super) use configuration::{FRAME, engine};

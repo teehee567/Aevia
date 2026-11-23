@@ -270,6 +270,7 @@ struct Active {
     nonce: u64,
     index: u32,
     page: PageBuilder,
+    last_snapshot_us: u64,
     sequence: u64,
 }
 struct Writer {
@@ -322,6 +323,7 @@ impl Writer {
             nonce: (u64::from(rng.random()) << 32) | u64::from(rng.random()),
             index: 0,
             page: PageBuilder::new(),
+            last_snapshot_us: 0,
             sequence: 0,
         });
         self.raw_open = None;
@@ -350,6 +352,13 @@ impl Writer {
             Instant::now().duration_since_epoch().as_micros() * 1000,
             &metadata[..used],
         )?;
+        let setup_time = Instant::now().duration_since_epoch().as_micros() * 1000;
+        crate::navigation::race::visit_configuration(|command| {
+            let mut data = [0; 32];
+            let payload =
+                postcard::to_slice(&command, &mut data).map_err(|_| "driving-setup-size")?;
+            self.append(27, setup_time, payload)
+        })?;
         self.flush(false)?;
         update(|s| {
             s.file_id = Some(file.id());
@@ -396,6 +405,34 @@ impl Writer {
         progress();
         Ok(())
     }
+    fn driving_snapshot(&mut self, terminal: bool) -> Result<(), &'static str> {
+        let a = self.active.as_mut().ok_or("not-recording")?;
+        let published = crate::navigation::published_us();
+        if !terminal && a.last_snapshot_us == published {
+            return Ok(());
+        }
+        let (mut frame, _) = crate::app::display_frame(false);
+        let Some(start) = frame.started_at_us else {
+            return Ok(());
+        };
+        if terminal {
+            let Some(stop) = frame.stopped_at_us else {
+                return Ok(());
+            };
+            frame.uptime_us = stop;
+            frame.motion = None;
+        } else if !frame.recording || published < start {
+            return Ok(());
+        } else if frame.motion.is_some_and(|m| m.t_us < start) {
+            frame.motion = None;
+        }
+        a.last_snapshot_us = published;
+        let mut payload = [0; crate::display::MAX_DRIVING_FRAME_BYTES];
+        let bytes =
+            postcard::to_slice(&frame, &mut payload).map_err(|_| "driving-snapshot-size")?;
+        self.append(26, frame.uptime_us * 1000, bytes)
+    }
+
     fn sample(&mut self, sample: Sample) -> Result<(), &'static str> {
         // Leave room for an end record, then rotate without dropping the triggering sample.
         if self
@@ -615,8 +652,21 @@ pub fn run(slot: Slot<'static, 0, Blocking>) -> ! {
                         writer.raw(raw)?;
                     }
                 }
+                writer.driving_snapshot(false)?;
                 if !desired() && snapshot().pending == 0 {
-                    writer.close(true)?;
+                    // Let the IMU interval crossing Stop finalize interpolated timings.
+                    let awaiting = crate::app::recording_window().1.is_some_and(|stop| {
+                        crate::navigation::awaiting_stop(stop)
+                            && Instant::now()
+                                .duration_since_epoch()
+                                .as_micros()
+                                .saturating_sub(stop)
+                                < 300_000
+                    });
+                    if !awaiting {
+                        writer.driving_snapshot(true)?;
+                        writer.close(true)?;
+                    }
                 } else if Instant::now()
                     .duration_since_epoch()
                     .as_micros()

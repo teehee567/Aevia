@@ -89,6 +89,30 @@ fn rejected_rolling_segment_does_not_evict_committed_history() {
 }
 
 #[test]
+fn rolling_imu_history_remains_ordered_across_wrap() {
+    let mut trajectory = trajectory();
+    let second = |value| SessionTime::from_ns(value as i64 * 1_000_000_000);
+    let capacity = MAX_EMBEDDED_TRAJECTORY_SEGMENTS;
+    for index in 2..=capacity + 3 {
+        let start = trajectory.segments.last().unwrap().end;
+        let end = TrajectoryKnot {
+            time: second(index),
+            position_ecef: EcefPosition::new(6_378_137.0, index as f64 * 10.0, 0.0).unwrap(),
+            ..start
+        };
+        trajectory.push_rolling_imu_segment(start, end, [0.0; 3]).unwrap();
+    }
+    let span = trajectory.span().unwrap();
+    assert_eq!(span.start(), second(3));
+    assert_eq!(span.end(), second(capacity + 3));
+    assert_eq!(trajectory.segment_count(), capacity);
+    assert_eq!(trajectory.locate(second(3)), Ok((0, 0.0)));
+    assert_eq!(trajectory.locate(second(capacity)), Ok((capacity - 3, 0.0)));
+    assert_eq!(trajectory.locate(span.end()), Ok((capacity - 1, 1.0)));
+    assert!(trajectory.locate(second(2)).is_err());
+}
+
+#[test]
 fn query_outside_span_reports_actual_bounds() {
     let trajectory = trajectory();
     assert!(matches!(

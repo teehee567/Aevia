@@ -37,6 +37,7 @@ mod codec;
 #[cfg(feature = "offline")]
 mod coupled;
 mod dense;
+pub mod driving;
 mod enclosed;
 mod jets;
 mod math;
@@ -333,8 +334,7 @@ impl Trajectory {
     }
 
     /// Appends one live segment while retaining only the compiled rolling
-    /// horizon. Removal is bounded by the fixed V2 Mini capacity and occurs
-    /// only at the navigation cadence, never at the raw IMU rate.
+    /// horizon.
     #[cfg(test)]
     pub(crate) fn push_rolling_hermite_segment(
         &mut self,
@@ -350,15 +350,7 @@ impl Trajectory {
             }
         }
         let segment = DenseSegment::new(start, end)?;
-        if self.segments.len() == MAX_EMBEDDED_TRAJECTORY_SEGMENTS {
-            self.segments.remove(0);
-            #[cfg(feature = "offline")]
-            self.conditional_bridges.remove(0);
-        }
-        push_segment(&mut self.segments, segment)?;
-        #[cfg(feature = "offline")]
-        self.conditional_bridges.push(None);
-        Ok(())
+        self.push_rolling_segment(segment)
     }
 
     /// Appends one live segment whose nominal attitude came from corrected
@@ -376,10 +368,21 @@ impl Trajectory {
             }
         }
         let segment = DenseSegment::new_imu_conditioned(start, end, integrated_rotation_body)?;
+        self.push_rolling_segment(segment)
+    }
+
+    fn push_rolling_segment(&mut self, segment: DenseSegment) -> Result<(), ValidationError> {
         if self.segments.len() == MAX_EMBEDDED_TRAJECTORY_SEGMENTS {
-            self.segments.remove(0);
+            #[cfg(not(feature = "offline"))]
+            {
+                self.segments.replace_oldest(segment);
+                return Ok(());
+            }
             #[cfg(feature = "offline")]
-            self.conditional_bridges.remove(0);
+            {
+                self.segments.remove(0);
+                self.conditional_bridges.remove(0);
+            }
         }
         push_segment(&mut self.segments, segment)?;
         #[cfg(feature = "offline")]

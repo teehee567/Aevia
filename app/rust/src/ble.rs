@@ -2,7 +2,7 @@ use btleplug::{
     api::{Central, Characteristic, Manager as _, Peripheral as _, ScanFilter, WriteType},
     platform::{Adapter, Manager, Peripheral},
 };
-use std::time::Duration;
+use std::time::{Duration, Instant};
 use tokio::{
     runtime::Runtime,
     time::{sleep, timeout},
@@ -10,13 +10,17 @@ use tokio::{
 use uuid::Uuid;
 
 const LIVE: Uuid = Uuid::from_u128(0xcf2c0001_183e_4cd6_a712_c719ac51bd52);
-const FRAME: Uuid = Uuid::from_u128(0xcf2c0002_183e_4cd6_a712_c719ac51bd52);
+const FRAME: Uuid = Uuid::from_u128(0xcf2c0004_183e_4cd6_a712_c719ac51bd52);
+const SETTINGS: Uuid = Uuid::from_u128(0xcf2c0005_183e_4cd6_a712_c719ac51bd52);
 const RECORDING: Uuid = Uuid::from_u128(0xcf2c0003_183e_4cd6_a712_c719ac51bd52);
 
 pub struct Connection {
     device: Peripheral,
     frame: Characteristic,
     recording: Characteristic,
+    settings: Characteristic,
+    detail_version: u8,
+    battery_sample: Option<(Instant, serde_json::Value)>,
     _adapter: Adapter,
     runtime: Runtime,
 }
@@ -28,30 +32,64 @@ impl Connection {
             .enable_all()
             .build()
             .map_err(|e| e.to_string())?;
-        let (adapter, device, frame, recording) = runtime.block_on(async {
-            timeout(Duration::from_secs(45), discover())
-                .await
-                .map_err(|_| "Bluetooth timed out. Check Bluetooth permissions and try again.")?
-                .map_err(|e| e.to_string())
-        })?;
+        let (adapter, device, frame, recording, settings, detail_version) =
+            runtime.block_on(async {
+                timeout(Duration::from_secs(45), discover())
+                    .await
+                    .map_err(|_| "Bluetooth timed out. Check Bluetooth permissions and try again.")?
+                    .map_err(|e| e.to_string())
+            })?;
         Ok(Self {
             runtime,
             device,
             frame,
             recording,
+            settings,
+            detail_version,
+            battery_sample: None,
             _adapter: adapter,
         })
     }
 
-    pub fn read(&self) -> Result<Vec<u8>, String> {
-        self.runtime.block_on(async {
+    pub fn read(&mut self) -> Result<serde_json::Value, String> {
+        let bytes = self.runtime.block_on(async {
             timeout(Duration::from_secs(3), self.device.read(&self.frame))
                 .await
                 .map_err(|_| "Bluetooth display read timed out")?
                 .map_err(|e| e.to_string())
-        })
+        })?;
+        if self.detail_version == 0 {
+            return crate::driving::decode(&bytes);
+        }
+        let (mut reply, sample) =
+            crate::driving::decode_battery_display(&bytes, self.detail_version)?;
+        if let Some(sample) = sample {
+            self.battery_sample = Some((Instant::now(), sample));
+        }
+        if let Some((at, battery)) = &self.battery_sample {
+            reply["battery"] = battery.clone();
+            reply["battery_age_ms"] = serde_json::json!(at.elapsed().as_millis() as u64);
+        } else {
+            reply["battery"] = serde_json::Value::Null;
+            reply["battery_age_ms"] = serde_json::Value::Null;
+        }
+        Ok(reply)
     }
 
+    pub fn configure(&self, command: &crate::display::Configure) -> Result<(), String> {
+        let mut buf = [0; 32];
+        let data = postcard::to_slice(command, &mut buf).map_err(|e| e.to_string())?;
+        self.runtime.block_on(async {
+            timeout(
+                Duration::from_secs(3),
+                self.device
+                    .write(&self.settings, data, WriteType::WithResponse),
+            )
+            .await
+            .map_err(|_| "Bluetooth configuration timed out")?
+            .map_err(|e| e.to_string())
+        })
+    }
     pub fn record(&self, active: bool) -> Result<(), String> {
         self.runtime.block_on(async {
             timeout(
@@ -105,8 +143,17 @@ async fn find_receiver(adapter: &Adapter) -> Result<Peripheral, Box<dyn std::err
     Err("No V2 Mini found. Check receiver power and Bluetooth permission, then retry.".into())
 }
 
-async fn discover(
-) -> Result<(Adapter, Peripheral, Characteristic, Characteristic), Box<dyn std::error::Error>> {
+async fn discover() -> Result<
+    (
+        Adapter,
+        Peripheral,
+        Characteristic,
+        Characteristic,
+        Characteristic,
+        u8,
+    ),
+    Box<dyn std::error::Error>,
+> {
     let adapter = Manager::new()
         .await?
         .adapters()
@@ -133,12 +180,36 @@ async fn discover(
                 .cloned()
                 .ok_or("Install the matching V2 Mini Bluetooth firmware")
         };
-        Ok::<_, Box<dyn std::error::Error>>((get(FRAME)?, get(RECORDING)?))
+        let frame = get(FRAME)?;
+        let recording = get(RECORDING)?;
+        let settings = get(SETTINGS)?;
+        // Older peripherals reject the unknown settings command and continue
+        // serving their original percentage-only driving frames.
+        let mut detail_version = 0;
+        for (version, tag) in [
+            (4, crate::display::IMU_CLIPPING_TAG),
+            (3, crate::display::MOTION_SOURCE_TAG),
+            (2, crate::display::THERMAL_TELEMETRY_TAG),
+            (1, crate::display::BATTERY_TELEMETRY_TAG),
+        ] {
+            if timeout(
+                Duration::from_secs(3),
+                device.write(&settings, tag, WriteType::WithResponse),
+            )
+            .await
+            .map_err(|_| "Bluetooth telemetry negotiation timed out")?
+            .is_ok()
+            {
+                detail_version = version;
+                break;
+            }
+        }
+        Ok::<_, Box<dyn std::error::Error>>((frame, recording, settings, detail_version))
     }
     .await;
     if result.is_err() {
         let _ = device.disconnect().await;
     }
-    let (frame, recording) = result?;
-    Ok((adapter, device, frame, recording))
+    let (frame, recording, settings, detail_version) = result?;
+    Ok((adapter, device, frame, recording, settings, detail_version))
 }

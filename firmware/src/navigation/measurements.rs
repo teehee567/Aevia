@@ -1,9 +1,7 @@
-//! Preserve BESTNAV ellipsoid height, ENU velocity and axis-specific covariance.
-use aevia_trajectory::uncertainty::Covariance3;
+//! Convert a validated receiver measurement to the driving estimator's ECEF inputs.
+use aevia_trajectory::engine::driving::DrivingFix;
 
-pub fn prepare_gnss(
-    n: crate::gnss::BestNav<'_>,
-) -> Result<([f64; 3], [f64; 3], Covariance3, Covariance3), aevia_trajectory::ValidationError> {
+pub fn prepare_gnss(n: crate::gnss::BestNav<'_>, position_us: u64) -> DrivingFix {
     let lat = f64::from(n.latitude_e7) / 1e7 * core::f64::consts::PI / 180.0;
     let lon = f64::from(n.longitude_e7) / 1e7 * core::f64::consts::PI / 180.0;
     let (sl, cl, so, co) = (
@@ -32,38 +30,14 @@ pub fn prepare_gnss(
         [0.0, cl, sl],
     ];
     let velocity = rotation.map(|row| row[0] * enu[0] + row[1] * enu[1] + row[2] * enu[2]);
-    fn rotated(
-        r: [[f64; 3]; 3],
-        sigma: [f64; 3],
-    ) -> Result<Covariance3, aevia_trajectory::ValidationError> {
-        let mut c = [[0.0; 3]; 3];
-        for i in 0..3 {
-            for j in i..3 {
-                for k in 0..3 {
-                    c[i][j] += r[i][k] * r[j][k] * sigma[k] * sigma[k];
-                }
-                c[j][i] = c[i][j];
-            }
-        }
-        Covariance3::from_matrix(c)
+    DrivingFix {
+        position_us,
+        velocity_us: position_us.saturating_sub(u64::from(n.latency_ms) * 1000),
+        position_ecef_m: position,
+        velocity_ecef_mps: velocity,
+        speed_sigma_mps: n.horizontal_speed_sigma_mm_s as f32 * 0.001,
+        position_sigma_m: n.latitude_sigma_mm.max(n.longitude_sigma_mm) as f32 * 0.001,
     }
-    let pcov = rotated(
-        rotation,
-        [
-            f64::from(n.longitude_sigma_mm).max(20.0) / 1000.0,
-            f64::from(n.latitude_sigma_mm).max(20.0) / 1000.0,
-            f64::from(n.height_sigma_mm).max(20.0) / 1000.0,
-        ],
-    )?;
-    let vcov = rotated(
-        rotation,
-        [
-            f64::from(n.horizontal_speed_sigma_mm_s).max(30.0) / 1000.0,
-            f64::from(n.horizontal_speed_sigma_mm_s).max(30.0) / 1000.0,
-            f64::from(n.vertical_speed_sigma_mm_s).max(30.0) / 1000.0,
-        ],
-    )?;
-    Ok((position, velocity, pcov, vcov))
 }
 
 #[cfg(test)]
@@ -94,42 +68,30 @@ mod tests {
     }
     #[test]
     fn equator_uses_ellipsoid_height_and_east_north_up_axes() {
-        let (position, velocity, pcov, vcov) = prepare_gnss(fix()).unwrap();
+        let converted = prepare_gnss(fix(), 1_000_000);
+        let position = converted.position_ecef_m;
+        let velocity = converted.velocity_ecef_mps;
         assert!((position[0] - 6_378_177.0).abs() < 1e-8);
         assert_eq!(position[1], 0.0);
         assert_eq!(position[2], 0.0);
         assert!((velocity[0] - 2.0).abs() < 1e-12);
         assert!((velocity[1] - 10.0).abs() < 1e-12);
         assert!(velocity[2].abs() < 1e-12);
-        assert_eq!(pcov.upper_triangle(), [9.0, 0.0, 0.0, 1.0, 0.0, 4.0]);
-        assert_eq!(vcov.upper_triangle(), [9.0, 0.0, 0.0, 1.0, 0.0, 1.0]);
+        assert_eq!(converted.position_us, 1_000_000);
+        assert_eq!(converted.velocity_us, 950_000);
+        assert_eq!(converted.position_sigma_m, 2.0);
+        assert_eq!(converted.speed_sigma_mps, 1.0);
     }
     #[test]
-    fn southern_fix_rotates_anisotropic_covariance_without_losing_trace() {
+    fn southern_fix_rotates_velocity_without_changing_speed() {
         let mut nav = fix();
         nav.latitude_e7 = -338_500_000;
         nav.longitude_e7 = 1_512_000_000;
-        let (position, velocity, pcov, _) = prepare_gnss(nav).unwrap();
+        let converted = prepare_gnss(nav, 1_000_000);
+        let position = converted.position_ecef_m;
+        let velocity = converted.velocity_ecef_mps;
         assert!(position[0] < 0.0 && position[1] > 0.0 && position[2] < 0.0);
         let speed2 = velocity.into_iter().map(|v| v * v).sum::<f64>();
         assert!((speed2 - 104.0).abs() < 1e-10);
-        let matrix = pcov.to_matrix();
-        assert!((matrix[0][0] + matrix[1][1] + matrix[2][2] - 14.0).abs() < 1e-10);
-        assert!(matrix[0][1].abs() > 0.1);
-        assert_eq!(matrix[1][0], matrix[0][1]);
-    }
-    #[test]
-    fn receiver_zero_sigmas_do_not_claim_exact_position_or_velocity() {
-        let mut nav = fix();
-        nav.longitude_sigma_mm = 0;
-        nav.latitude_sigma_mm = 0;
-        nav.height_sigma_mm = 0;
-        nav.horizontal_speed_sigma_mm_s = 0;
-        nav.vertical_speed_sigma_mm_s = 0;
-        let (_, _, pcov, vcov) = prepare_gnss(nav).unwrap();
-        for axis in 0..3 {
-            assert!(pcov.variance(axis).unwrap() > 0.0);
-            assert!(vcov.variance(axis).unwrap() > 0.0);
-        }
     }
 }

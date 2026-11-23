@@ -9,6 +9,8 @@ pub struct Sample {
     pub speed_mps: Option<f64>,
     pub altitude_m: Option<f64>,
     pub heading_deg: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub course_deg: Option<f64>,
     pub accel_long_g: Option<f64>,
     pub accel_lat_g: Option<f64>,
     pub valid: bool,

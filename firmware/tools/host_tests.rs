@@ -19,6 +19,8 @@ pub mod preview_queue;
 pub mod imu;
 #[path = "../src/buttons.rs"]
 pub mod buttons;
+#[path = "../src/display.rs"]
+pub mod display;
 #[path = "../src/battery.rs"]
 pub mod battery;
 #[path = "../src/storage/mod.rs"]

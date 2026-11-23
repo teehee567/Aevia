@@ -78,24 +78,14 @@ class DiagnosticsView extends StatelessWidget {
       );
     }
 
-    if (c.bluetooth) {
-      return EmptyState(
-        'Full diagnostics use USB',
-        'Live telemetry is available in Live.',
-        icon: Icons.bluetooth_connected,
-        action: OutlinedButton(
-          onPressed: () => c.navigate(0),
-          child: const Text('Open Live'),
-        ),
-      );
-    }
     final device = c.device;
     final recordingMax = c.recording
         ? object(c.live['analysis'])['max_speed_mps']
         : null;
     // Compact drains update sensor samples between full diagnostic reports.
     final status = c.diagnosticsFresh ? device : <String, dynamic>{};
-    final battery = object(status['battery']);
+    final battery = c.battery;
+    final temperatures = battery['temperatures_c'];
     final imuHealth = object(status['imu']);
     final imuDiagnostics = object(status['imu_diagnostics']);
     final timing = object(status['capture_timing']);
@@ -122,10 +112,7 @@ class DiagnosticsView extends StatelessWidget {
           'Cell voltage',
           _reading(_scaled(battery['millivolts'], 0.001), 'V', 3),
         ),
-        (
-          'State of charge',
-          _reading(battery['percent'] ?? status['battery_percent'], '%', 0),
-        ),
+        ('State of charge', _reading(c.batteryPercent, '%', 0)),
         (
           'Power state',
           switch (battery['status']) {
@@ -136,17 +123,64 @@ class DiagnosticsView extends StatelessWidget {
             final value => value,
           },
         ),
-        ('Power read errors', battery['errors']),
         (
-          'Charger fault register',
-          fault is int
-              ? '0x${fault.toRadixString(16).padLeft(2, '0').toUpperCase()}'
-              : null,
+          'Power source',
+          switch (battery['power_source']) {
+            'external' => 'External input',
+            'battery' => 'Battery',
+            _ => null,
+          },
         ),
-        ('Charger error', _error(battery, 'charger_error')),
-        ('Fuel gauge error', _error(battery, 'gauge_error')),
+        ('Charger stage', c.chargeStageLabel),
+        ('Charger temperature zone', c.temperatureZoneLabel),
+        if (temperatures is List && temperatures.length == 3) ...[
+          (
+            'Charger chip temperature',
+            temperatures[0] == null
+                ? 'USB bench sample needed'
+                : _reading(temperatures[0], '°C', 0),
+          ),
+          ('IMU temperature', _reading(temperatures[1], '°C', 0)),
+          ('Processor temperature', _reading(temperatures[2], '°C', 0)),
+        ],
+        ('State-of-charge rate', signedBatteryRate(c.batteryRate)),
+        (
+          'Time to full at current rate',
+          estimatedBatteryTime(c.batteryTimeToFull),
+        ),
+        ('Estimated runtime', estimatedBatteryTime(c.batteryTimeLeft)),
+        if (!c.bluetooth) ...[
+          ('Power read errors', battery['errors']),
+          (
+            'Charger fault register',
+            fault is int
+                ? '0x${fault.toRadixString(16).padLeft(2, '0').toUpperCase()}'
+                : null,
+          ),
+          ('Charger error', _error(battery, 'charger_error')),
+          ('Fuel gauge error', _error(battery, 'gauge_error')),
+        ],
       ]),
     );
+
+    if (c.bluetooth) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          power,
+          const SizedBox(height: 16),
+          EmptyState(
+            'Full diagnostics use USB',
+            'Open Live for driving telemetry.',
+            icon: Icons.bluetooth_connected,
+            action: OutlinedButton(
+              onPressed: () => c.navigate(0),
+              child: const Text('Open Live'),
+            ),
+          ),
+        ],
+      );
+    }
 
     final logging = Section(
       title: 'Timing & recording',

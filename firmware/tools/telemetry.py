@@ -214,10 +214,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seconds", type=float, default=0, help="Capture duration; zero only reads status")
     parser.add_argument("--output", type=Path, help="Save bounded capture responses as JSONL")
+    parser.add_argument("--power-sample", action="store_true",
+                        help="Explicitly trigger one bench ADC conversion; can arm the charger watchdog")
     args = parser.parse_args()
+    if args.power_sample and (args.seconds or args.output):
+        parser.error("--power-sample is a standalone bench operation")
     link, _ = upload.connect(upload.APP_PID)
     stream = None
     try:
+        if args.power_sample:
+            print(json.dumps(request(link, "power_sample"), indent=2))
+            return
         print(json.dumps(request(link, "status"), indent=2))
         if args.seconds <= 0:
             return

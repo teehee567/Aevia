@@ -1,0 +1,106 @@
+{
+  "before": {
+    "utc": "2026-11-21T17:53:20+00:00",
+    "battery": {
+      "status": "bypass",
+      "percent": 98,
+      "millivolts": 4178,
+      "power_source": "external",
+      "charge_stage": "not_charging",
+      "rate_percent_per_hour": 1.664,
+      "temperature_zone": "prewarm",
+      "charger_error": null,
+      "gauge_error": null,
+      "faults": 6,
+      "errors": 1
+    },
+    "gnss": "ready",
+    "imu": "ready",
+    "recording": false,
+    "power": {
+      "at_us": 128874638,
+      "charger_part": 26,
+      "configuration": {
+        "charge_current_limit_ma": 80,
+        "termination_current_ma": 60,
+        "termination_enabled": true,
+        "regulation_voltage_mv": 4200,
+        "watchdog_seconds": 50,
+        "mode": "default"
+      },
+      "adc": null,
+      "adc_unavailable_reason": "watchdog-enabled"
+    }
+  },
+  "sample": {
+    "utc": "2026-11-21T17:53:20+00:00",
+    "battery": {
+      "status": "bypass",
+      "percent": 98,
+      "millivolts": 4178,
+      "power_source": "external",
+      "charge_stage": "not_charging",
+      "rate_percent_per_hour": 1.664,
+      "temperature_zone": "prewarm",
+      "charger_error": null,
+      "gauge_error": null,
+      "faults": 6,
+      "errors": 1
+    },
+    "gnss": "ready",
+    "imu": "ready",
+    "recording": false,
+    "power": {
+      "at_us": 129297211,
+      "charger_part": 26,
+      "configuration": {
+        "charge_current_limit_ma": 80,
+        "termination_current_ma": 60,
+        "termination_enabled": true,
+        "regulation_voltage_mv": 4200,
+        "watchdog_seconds": 50,
+        "mode": "default"
+      },
+      "adc": {
+        "input_mv": 5201,
+        "input_ma": 262,
+        "battery_mv": 4185,
+        "battery_ma": 0
+      },
+      "adc_unavailable_reason": null
+    }
+  },
+  "after": {
+    "utc": "2026-11-21T17:54:21+00:00",
+    "battery": {
+      "status": "bypass",
+      "percent": 98,
+      "millivolts": 4179,
+      "power_source": "external",
+      "charge_stage": "not_charging",
+      "rate_percent_per_hour": 1.04,
+      "temperature_zone": "prewarm",
+      "charger_error": null,
+      "gauge_error": null,
+      "faults": 6,
+      "errors": 1
+    },
+    "gnss": "ready",
+    "imu": "ready",
+    "recording": false,
+    "power": {
+      "at_us": 189506800,
+      "charger_part": 26,
+      "configuration": {
+        "charge_current_limit_ma": 80,
+        "termination_current_ma": 60,
+        "termination_enabled": true,
+        "regulation_voltage_mv": 4200,
+        "watchdog_seconds": 50,
+        "mode": "default"
+      },
+      "adc": null,
+      "adc_unavailable_reason": "watchdog-enabled"
+    }
+  }
+}

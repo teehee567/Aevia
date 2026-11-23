@@ -12,6 +12,7 @@ use crate::quality::{DiagnosticCounts, EstimateQuality, ObservabilityReport};
 use crate::time::{SessionTime, TimeSpan};
 
 mod bindings;
+pub mod driving;
 mod digest;
 mod live;
 mod process;

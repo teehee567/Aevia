@@ -25,6 +25,13 @@ class _LiveViewState extends State<LiveView> {
   Widget build(BuildContext context) {
     final c = widget.controller, live = widget.controller.live;
     final good = c.valid;
+    final drag = object(live['drag_config']);
+    final speedTarget = drag.isEmpty
+        ? 'Speed target'
+        : "${number(drag['start_kph'], 0)}–${number(drag['end_kph'], 0)} km/h";
+    final distanceTarget = drag.isEmpty
+        ? 'Distance target'
+        : "${number(drag['distance_m'], 3)} m";
     final delta = c.stale ? null : numeric(live['delta_s']);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -44,8 +51,18 @@ class _LiveViewState extends State<LiveView> {
                   ? c.stale
                         ? 'STALE · WAITING FOR DATA'
                         : good
-                        ? 'LIVE · VALID FIX'
-                        : 'CONNECTED · NO VALID FIX'
+                        ? switch (live['motion_source']) {
+                            'gnss' => 'LIVE · GPS ONLY',
+                            'inertial' => 'LIVE · IMU COASTING',
+                            'held' => 'LIVE · LAST READING',
+                            'position_degraded' =>
+                              'FUSED · LOW POSITION ACCURACY',
+                            _ =>
+                              live['degraded'] == true
+                                  ? 'LIVE · LIMITED'
+                                  : 'LIVE · FUSED',
+                          }
+                        : 'CONNECTED · WAITING FOR MOTION'
                   : 'DISCONNECTED',
               color: good
                   ? accent
@@ -53,6 +70,8 @@ class _LiveViewState extends State<LiveView> {
                   ? warning
                   : muted,
             ),
+            if (c.receiverFresh && live['imu_clipping'] == true)
+              const Status('IMU CLIPPING', color: warning),
             Text(
               c.connected
                   ? '${c.device['satellites'] ?? '—'} satellites  ·  ${number(c.device['gnss_hz'], 1)} Hz  ·  ${c.device['fix_quality'] ?? 'Unknown fix'}'
@@ -102,18 +121,16 @@ class _LiveViewState extends State<LiveView> {
                 children: [
                   Metric(
                     'Speed',
-                    good
-                        ? number((numeric(live['speed_mps']) ?? 0) * 3.6, 0)
-                        : '—',
+                    good ? number(numeric(live['speed_mps'])! * 3.6, 0) : '—',
                     unit: 'km/h',
                     large: true,
                     note: good
-                        ? 'GNSS speed'
+                        ? 'Fused horizontal speed'
                         : !c.connected
                         ? 'Waiting for receiver'
                         : c.stale
-                        ? 'Last fix is stale'
-                        : 'Waiting for a valid fix',
+                        ? 'Estimate is stale'
+                        : 'Waiting for a fused estimate',
                   ),
                   Metric(
                     'Current lap',
@@ -122,7 +139,7 @@ class _LiveViewState extends State<LiveView> {
                     note: 'Lap ${live['lap'] ?? '—'}',
                   ),
                   Metric(
-                    'Delta to best',
+                    'Last lap vs best',
                     delta == null
                         ? '—'
                         : '${delta >= 0 ? '+' : ''}${number(delta, 3)}',
@@ -134,15 +151,15 @@ class _LiveViewState extends State<LiveView> {
                         ? accent
                         : warning,
                     note: delta == null
-                        ? 'Predictive timing unavailable'
+                        ? 'Waiting for a completed lap'
                         : delta <= 0
-                        ? 'Ahead of reference'
-                        : 'Behind reference',
+                        ? 'Best lap'
+                        : 'Behind best',
                   ),
                 ],
               );
               final meter = LiveGMeter(
-                acceleration: c.imuAccelerationG,
+                acceleration: c.vehicleAccelerationG,
                 connected: c.connected,
                 trail: c.gTrail,
               );
@@ -251,11 +268,23 @@ class _LiveViewState extends State<LiveView> {
                 ],
               ),
               const SizedBox(height: 12),
+              if (c.device['display_v2'] == true)
+                CheckboxListTile(
+                  value: c.device['mounted'] == true,
+                  onChanged: c.storageBusy || c.busy
+                      ? null
+                      : (v) => c.confirmMount(v == true),
+                  title: const Text('Vehicle axes aligned'),
+                  subtitle: const Text(
+                    'Confirm the configured mounting has +X forward, +Y left and +Z up to enable vehicle G and heading.',
+                  ),
+                ),
               if (c.bluetooth)
                 const Text(
                   'Recording saves full-rate data on the receiver SD card and a 5 Hz session in the app.',
                 )
-              else if (c.device['display_v1'] == true)
+              else if (c.device['display_v2'] == true ||
+                  c.device['display_v1'] == true)
                 CheckboxListTile(
                   value: c.recording
                       ? live['full_rate_copy'] == true
@@ -280,6 +309,29 @@ class _LiveViewState extends State<LiveView> {
         MetricGrid(
           minimumWidth: 150,
           children: [
+            Metric(
+              speedTarget,
+              elapsed(live['drag_speed_s']),
+              note: drag['rollout'] == true
+                  ? 'Estimated · 1 ft rollout'
+                  : 'Estimated time',
+            ),
+            Metric(
+              distanceTarget,
+              elapsed(live['drag_distance_s']),
+              note: 'Estimated time',
+            ),
+            Metric('Last sector', elapsed(live['last_sector_s'])),
+            Metric(
+              'Peak speed',
+              number(
+                numeric(live['max_speed_mps']) == null
+                    ? null
+                    : numeric(live['max_speed_mps'])! * 3.6,
+                1,
+              ),
+              unit: 'km/h',
+            ),
             Metric('Best lap', elapsed(live['best_lap_s'])),
             Metric('Last lap', elapsed(live['last_lap_s'])),
             Metric(
@@ -303,13 +355,13 @@ class _LiveViewState extends State<LiveView> {
               unit: 'm',
             ),
             Metric(
-              'Heading',
-              good ? number(live['heading_deg'], 0) : '—',
+              'Course over ground',
+              good ? number(live['course_deg'], 0) : '—',
               unit: '°',
             ),
             Metric(
               'Receiver battery',
-              c.receiverFresh ? number(c.device['battery_percent'], 0) : '—',
+              number(c.batteryPercent, 0),
               unit: '%',
               note: _batteryNote(c),
             ),
@@ -347,23 +399,35 @@ class _LiveViewState extends State<LiveView> {
   }
 
   String? _batteryNote(AeviaController c) {
-    if (!c.receiverFresh || numeric(c.device['battery_percent']) == null) {
-      return null;
-    }
-    final remaining = c.batteryTimeLeft;
-    if (remaining != null) {
-      final hours = remaining.inHours;
-      final minutes = remaining.inMinutes.remainder(60);
-      if (hours > 0) return 'About ${hours}h ${minutes}m left';
-      return minutes == 0 ? 'Less than 1m left' : 'About ${minutes}m left';
-    }
-    return switch (c.batteryState) {
+    if (!c.receiverFresh) return null;
+    final full = estimatedBatteryTime(c.batteryTimeToFull);
+    final left = estimatedBatteryTime(c.batteryTimeLeft);
+    final label = switch (c.batteryState) {
       'charging' => 'Charging',
-      'bypass' => 'USB power',
-      'battery' || 'low' => 'Estimating time left…',
-      null when c.usbConnected => 'USB power',
-      null when c.bluetooth => 'Waiting for discharge trend',
-      _ => 'Time left unavailable',
+      'bypass'
+          when c.batteryPercent == 100 &&
+              c.battery['charge_stage'] == 'not_charging' =>
+        'Fully charged',
+      'bypass' => 'External power',
+      'low' => 'Low battery',
+      'battery' => 'On battery',
+      _ => null,
     };
+    final parts = [
+      if (label != null) label,
+      if (c.battery['power_source'] == 'external' &&
+          c.temperatureZoneLabel != null &&
+          c.battery['temperature_zone'] != 'normal')
+        '${c.temperatureZoneLabel} · full-charge ETA unavailable',
+      if (signedBatteryRate(c.batteryRate) case final rate?) rate,
+      if (full != null) '$full to full at this rate',
+      if (left != null) '$left left',
+    ];
+    if (parts.isEmpty) {
+      return c.bluetooth && c.batteryPercent != null
+          ? 'Waiting for discharge trend'
+          : null;
+    }
+    return parts.join(' · ');
   }
 }
